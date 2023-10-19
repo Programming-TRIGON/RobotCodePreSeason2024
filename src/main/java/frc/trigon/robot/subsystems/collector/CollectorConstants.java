@@ -1,5 +1,6 @@
 package frc.trigon.robot.subsystems.collector;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -8,13 +9,12 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 public class CollectorConstants {
 
     private static final int MOTOR_ID = 1;
-    private static final NeutralModeValue NEUTRAL_MODE_VALUE = NeutralModeValue.Brake;
-    private static final InvertedValue INVERTED_VALUE = InvertedValue.CounterClockwise_Positive;
+    private static final NeutralMode NEUTRAL_MODE_VALUE = NeutralMode.Brake;
+    private static final boolean inverted = true;
     static final TalonSRX MOTOR = new TalonSRX(MOTOR_ID);
     static {
-        TalonSRXConfiguration config = new TalonSRXConfiguration();
-
-        MOTOR.getAllConfigs(config);
+        MOTOR.setNeutralMode(NEUTRAL_MODE_VALUE);
+        MOTOR.setInverted(inverted);
     }
 
     public enum CollectorStates{
