@@ -10,6 +10,7 @@ public class CollectorConstants {
     static final TalonSRX MOTOR = new TalonSRX(MOTOR_ID);
 
     static {
+        MOTOR.configFactoryDefault();
         MOTOR.setNeutralMode(NEUTRAL_MODE_VALUE);
         MOTOR.setInverted(INVERTED);
     }
