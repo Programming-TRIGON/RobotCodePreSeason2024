@@ -1,6 +1,9 @@
 package frc.trigon.robot.subsystems.collector;
 
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 public class CollectorSubsystem extends SubsystemBase {
     private final static CollectorSubsystem INSTANCE = new CollectorSubsystem();
 
@@ -10,5 +13,7 @@ public class CollectorSubsystem extends SubsystemBase {
 
     private CollectorSubsystem() {
     }
+
+    
 }
 
