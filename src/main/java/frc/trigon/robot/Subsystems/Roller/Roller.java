@@ -47,7 +47,18 @@ public class Roller extends SubsystemBase {
         );
     }
 
-    
+    public CommandBase fullOpeningCommand() {
+        return new ParallelCommandGroup(
+                getOpenRollerCommand(),
+                getCollectCommand()
+        );
+    }
+    public CommandBase fullStopCommand()    {
+        return new ParallelCommandGroup(
+                getCloseRollerCommand(),
+                getStopCollectCommand()
+        );
+    }
     private void openRoller()    {
         angleMotor.set(ControlMode.PercentOutput, RollerConstants.OPEN_POWER);
     }
