@@ -1,6 +1,7 @@
 package frc.trigon.robot.subsystems.collector;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
@@ -17,13 +18,15 @@ public class CollectorSubsystem extends SubsystemBase {
         return INSTANCE;
     }
 
+
+
     private CollectorSubsystem() {
     }
 
     public CommandBase setCollectorStateCommand(CollectorConstants.CollectorStates state){
         return new FunctionalCommand(
                 () -> {},
-                () -> motor.setIntegralAccumulator(state.power),
+                () -> motor.set(ControlMode.PercentOutput, power),
                 (interrupted) -> stop(),
                 () -> false,
                 this
