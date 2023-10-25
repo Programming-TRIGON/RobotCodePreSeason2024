@@ -7,8 +7,6 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import java.util.function.Supplier;
-
 public class CollectorSubsystem extends SubsystemBase {
     private final static CollectorSubsystem INSTANCE = new CollectorSubsystem();
     private final TalonSRX motor = CollectorConstants.MOTOR;
@@ -17,9 +15,7 @@ public class CollectorSubsystem extends SubsystemBase {
     public static CollectorSubsystem getInstance() {
         return INSTANCE;
     }
-
-
-
+    
     private CollectorSubsystem() {
     }
 
