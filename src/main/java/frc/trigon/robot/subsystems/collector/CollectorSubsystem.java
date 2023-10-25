@@ -23,10 +23,11 @@ public class CollectorSubsystem extends SubsystemBase {
     private CollectorSubsystem() {
     }
 
+
     public CommandBase setCollectorStateCommand(CollectorConstants.CollectorStates state){
         return new FunctionalCommand(
                 () -> {},
-                () -> motor.set(ControlMode.PercentOutput, power),
+                () -> motor.set(ControlMode.PercentOutput, state.power),
                 (interrupted) -> stop(),
                 () -> false,
                 this
