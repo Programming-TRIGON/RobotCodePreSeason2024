@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class CollectorSubsystem extends SubsystemBase {
@@ -25,12 +26,9 @@ public class CollectorSubsystem extends SubsystemBase {
      * @return the command
      */
     public CommandBase setCollectorStateCommand(CollectorConstants.CollectorStates state) {
-        return new FunctionalCommand(
-                () -> {
-                },
+        return new StartEndCommand(
                 () -> motor.set(ControlMode.PercentOutput, state.power),
-                (interrupted) -> stop(),
-                () -> false,
+                () -> {},
                 this
         );
     }
