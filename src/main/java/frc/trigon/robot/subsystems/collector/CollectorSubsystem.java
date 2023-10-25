@@ -23,7 +23,11 @@ public class CollectorSubsystem extends SubsystemBase {
     private CollectorSubsystem() {
     }
 
-
+    /**
+     * creates a command that gives power to the motor according to the inputted state.
+     * @param state the inputted state
+     * @return the command
+     */
     public CommandBase setCollectorStateCommand(CollectorConstants.CollectorStates state){
         return new FunctionalCommand(
                 () -> {},
