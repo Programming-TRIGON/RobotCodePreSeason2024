@@ -8,17 +8,17 @@ import edu.wpi.first.wpilibj2.command.NotifierCommand;
 import java.util.function.Supplier;
 
 public class CurrentWatcher {
-    double prevTime;
+    private double previousTime;
 
     public void currentWatcher(Runnable runnable, Supplier<Integer> current, int maxCurrent, Supplier<Double> time){
         Notifier notifier = new Notifier(runnable);
         notifier.startPeriodic(0.02);
         if (current.get() < maxCurrent){
-            this.prevTime = time.get();
+            this.previousTime = time.get();
             return;
         }
         double currentTime = time.get();
-        double difference = currentTime - prevTime;
+        double difference = currentTime - previousTime;
 
     }
 }
