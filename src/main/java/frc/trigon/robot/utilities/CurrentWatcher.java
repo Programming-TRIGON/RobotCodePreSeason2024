@@ -10,14 +10,14 @@ import java.util.function.Supplier;
 public class CurrentWatcher {
     private double previousTime;
 
-    public void currentWatcher(Runnable runnable, Supplier<Integer> currentSupplier, int maxCurrent, Supplier<Double> timeThreshold){
+    public void currentWatcher(Runnable runnable, Supplier<Integer> currentSupplier, int maxCurrent, double timeThreshold){
         Notifier notifier = new Notifier(runnable);
         notifier.startPeriodic(0.02);
         if (currentSupplier.get() < maxCurrent){
-            this.previousTime = timeThreshold.get();
+            this.previousTime = timeThreshold;
             return;
         }
-        double currentTime = timeThreshold.get();
+        double currentTime = timeThreshold;
         double difference = currentTime - previousTime;
 
     }
