@@ -4,7 +4,6 @@ package frc.trigon.robot.Subsystems.Roller;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.*;
 
 public class Roller extends SubsystemBase {
@@ -21,19 +20,20 @@ public class Roller extends SubsystemBase {
     }
 
     /**
-     * @return Opens roller
+     * @return a command that opens only the angle of the roller
      */
     public CommandBase getOpenRollerCommand()   {
         return new FunctionalCommand(
                 this::openRoller,
                 ()-> {},
                 (interrupted)-> stopAngle(),
-                this::isOpen
+                this::isOpen,
+                this
         );
     }
 
     /**
-     * @return Closes roller
+     * @return a command that closes only the angle of the roller
      */
     public CommandBase getCloseRollerCommand()  {
         return new FunctionalCommand(
@@ -45,41 +45,52 @@ public class Roller extends SubsystemBase {
     }
 
     /**
-     * @return Starts roller
+     * @return a command that activates the collection motor with collection power
      */
     public CommandBase getCollectCommand() {
         return new StartEndCommand(
                 this::collect,
-                this::stopCollect
+                this::stopCollect,
+                this
         );
     }
 
     /**
-     * @return stops roller
+     * @return a command that stops the collection motor
      */
     public CommandBase getStopCollectCommand()  {
         return new InstantCommand(
-                this::stopCollect
+                this::stopCollect,
+                this
         );
     }
 
     /**
-     * @return Opens and starts roller
+     * @return a command that opens the angle of the roller and activates the collection motor
      */
     public CommandBase fullOpeningCommand() {
         return new ParallelCommandGroup(
                 getOpenRollerCommand(),
-                getCollectCommand()
+                removeRequirement(getCollectCommand())
         );
     }
 
     /**
-     * @return Closes and stops roller
+     * @return a command that closes the angle of the roller and stops the collection motor
      */
     public CommandBase fullStopCommand()    {
         return new ParallelCommandGroup(
                 getCloseRollerCommand(),
-                getStopCollectCommand()
+                removeRequirement(getStopCollectCommand())
+        );
+    }
+
+    private CommandBase removeRequirement(CommandBase command)  {
+        return new FunctionalCommand(
+                command::initialize,
+                command::execute,
+                command::end,
+                command::isFinished
         );
     }
 
