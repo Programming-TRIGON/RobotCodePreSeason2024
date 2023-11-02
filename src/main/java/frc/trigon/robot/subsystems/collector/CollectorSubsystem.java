@@ -3,14 +3,16 @@ package frc.trigon.robot.subsystems.collector;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.trigon.robot.utilities.CurrentWatcher;
+import java.util.function.Supplier;
 
 public class CollectorSubsystem extends SubsystemBase {
     private final static CollectorSubsystem INSTANCE = new CollectorSubsystem();
     private final TalonSRX motor = CollectorConstants.MOTOR;
-    // motor.getSupplyCurrent
+    private final Supplier<Double> motorCurrent = CollectorConstants.MOTOR_CURRENT;
+    private final CurrentWatcher currentWatcher = new CurrentWatcher(this::stop, motorCurrent, CollectorConstants.maxCurrent, CollectorConstants.maxTime);
 
     public static CollectorSubsystem getInstance() {
         return INSTANCE;
