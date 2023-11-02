@@ -12,8 +12,8 @@ public class CurrentWatcher {
     private final Runnable runnable;
     private final Supplier<Integer> currentSupplier;
     private final int maxCurrent;
-    private final double timeThreshold;
-    private double belowCurrentTime;
+    private final double maxTime;
+    private double belowCurrentTimeStamp;
 
     /**
      * Constructs a new CurrentWatcher that checks the current every 0.02 seconds, and if the current passes the current limit runs a runnable.
@@ -21,20 +21,20 @@ public class CurrentWatcher {
      * @param runnable        what will run if the current passes it's limit
      * @param currentSupplier a supplier for the motor's current
      * @param maxCurrent      the current limit
-     * @param timeThreshold   the time since the current watcher began checking
+     * @param maxTime         the time that the current exceeds the current limit needed to execute the corresponding runnable
      */
-    public CurrentWatcher(Runnable runnable, Supplier<Integer> currentSupplier, int maxCurrent, double timeThreshold) {
+    public CurrentWatcher(Runnable runnable, Supplier<Integer> currentSupplier, int maxCurrent, double maxTime) {
         this.runnable = runnable;
         this.currentSupplier = currentSupplier;
         this.maxCurrent = maxCurrent;
-        this.timeThreshold = timeThreshold;
+        this.maxTime = maxTime;
 
         new Notifier(this::checkCurrent).startPeriodic(0.02);
     }
 
     private void checkCurrent() {
         if (isBelowCurrentLimit()) {
-            belowCurrentTime = Timer.getFPGATimestamp();
+            belowCurrentTimeStamp = Timer.getFPGATimestamp();
             return;
         }
 
@@ -47,7 +47,7 @@ public class CurrentWatcher {
     }
 
     private boolean didPassTimeThreshold() {
-        double timeDifference = Timer.getFPGATimestamp() - belowCurrentTime;
-        return timeThreshold > timeDifference;
+        double timeDifference = Timer.getFPGATimestamp() - belowCurrentTimeStamp;
+        return maxTime > timeDifference;
     }
 }
