@@ -21,7 +21,7 @@ public class CurrentWatcher {
      * @param runnable        the runnable to run if the current passes it's limit
      * @param currentSupplier a supplier for the motor's current
      * @param maxCurrent      the current limit
-     * @param maxTime         the time that the current exceeds the current limit needed to execute the corresponding runnable
+     * @param maxTime         the time needed for the current to exceed its limit, in order to run the runnable
      */
     public CurrentWatcher(Runnable runnable, Supplier<Integer> currentSupplier, int maxCurrent, double maxTime) {
         this.runnable = runnable;
