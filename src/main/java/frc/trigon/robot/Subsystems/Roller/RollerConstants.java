@@ -1,4 +1,4 @@
-package frc.trigon.robot.Subsystems.Roller;
+package frc.trigon.robot.subsystems.roller;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -33,7 +33,6 @@ public class RollerConstants {
 
     static {
         configureAngleMotor();
-
         configureCollectionMotor();
     }
     private static void configureAngleMotor()  {

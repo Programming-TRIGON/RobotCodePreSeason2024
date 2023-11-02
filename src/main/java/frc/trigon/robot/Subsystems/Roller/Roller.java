@@ -1,4 +1,4 @@
-package frc.trigon.robot.Subsystems.Roller;
+package frc.trigon.robot.subsystems.roller;
 
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -7,7 +7,6 @@ import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj2.command.*;
 
 public class Roller extends SubsystemBase {
-
     private final static Roller INSTANCE = new Roller();
     private final TalonSRX angleMotor = RollerConstants.ANGLE_MOTOR;
     private final CANSparkMax collectionMotor = RollerConstants.COLLECTION_MOTOR;
@@ -27,7 +26,7 @@ public class Roller extends SubsystemBase {
                 this::openRoller,
                 () -> {
                 },
-                (interrupted) -> stopAngle(),
+                (interrupted) -> stopAngleMotor(),
                 this::isOpen,
                 this
         );
@@ -41,7 +40,7 @@ public class Roller extends SubsystemBase {
                 this::closeRoller,
                 () -> {
                 },
-                (interrupted) -> stopAngle(),
+                (interrupted) -> stopAngleMotor(),
                 this::isClosed
         );
     }
@@ -52,7 +51,7 @@ public class Roller extends SubsystemBase {
     public CommandBase getCollectCommand() {
         return new StartEndCommand(
                 this::collect,
-                this::stopCollect,
+                this::stopCollection,
                 this
         );
     }
@@ -60,9 +59,9 @@ public class Roller extends SubsystemBase {
     /**
      * @return a command that stops the collection motor
      */
-    public CommandBase getStopCollectCommand() {
+    public CommandBase getStopCollectionCommand() {
         return new InstantCommand(
-                this::stopCollect,
+                this::stopCollection,
                 this
         );
     }
@@ -70,31 +69,23 @@ public class Roller extends SubsystemBase {
     /**
      * @return a command that opens the angle of the roller and activates the collection motor
      */
-    public CommandBase fullOpeningCommand() {
+    public CommandBase getFullOpeningCommand() {
         return new ParallelCommandGroup(
                 getOpenRollerCommand(),
-                removeRequirement(getCollectCommand())
+                frc.trigon.robot.utilities.Commands.removeRequirements(getCollectCommand())
         );
     }
 
     /**
      * @return a command that closes the angle of the roller and stops the collection motor
      */
-    public CommandBase fullStopCommand() {
+    public CommandBase getFullStopCommand() {
         return new ParallelCommandGroup(
                 getCloseRollerCommand(),
-                removeRequirement(getStopCollectCommand())
+                frc.trigon.robot.utilities.Commands.removeRequirements(getStopCollectionCommand())
         );
     }
 
-    private CommandBase removeRequirement(CommandBase command) {
-        return new FunctionalCommand(
-                command::initialize,
-                command::execute,
-                command::end,
-                command::isFinished
-        );
-    }
 
     private void openRoller() {
         angleMotor.set(ControlMode.PercentOutput, RollerConstants.OPEN_POWER);
@@ -108,11 +99,11 @@ public class Roller extends SubsystemBase {
         collectionMotor.set(RollerConstants.COLLECTION_MOTOR_SPEED);
     }
 
-    private void stopCollect() {
+    private void stopCollection() {
         collectionMotor.stopMotor();
     }
 
-    private void stopAngle() {
+    private void stopAngleMotor() {
         angleMotor.set(ControlMode.Disabled, 0);
     }
 
