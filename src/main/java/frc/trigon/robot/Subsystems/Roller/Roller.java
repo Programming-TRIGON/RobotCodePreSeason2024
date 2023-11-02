@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.*;
 
 public class Roller extends SubsystemBase {
+
     private final static Roller INSTANCE = new Roller();
     private final TalonSRX angleMotor = RollerConstants.ANGLE_MOTOR;
     private final CANSparkMax collectionMotor = RollerConstants.COLLECTION_MOTOR;
@@ -19,6 +20,9 @@ public class Roller extends SubsystemBase {
     private Roller() {
     }
 
+    /**
+     * @return Opens roller
+     */
     public CommandBase getOpenRollerCommand()   {
         return new FunctionalCommand(
                 this::openRoller,
@@ -27,6 +31,10 @@ public class Roller extends SubsystemBase {
                 this::isOpen
         );
     }
+
+    /**
+     * @return Closes roller
+     */
     public CommandBase getCloseRollerCommand()  {
         return new FunctionalCommand(
                 this::closeRoller,
@@ -35,30 +43,46 @@ public class Roller extends SubsystemBase {
                 this::isClosed
         );
     }
+
+    /**
+     * @return Starts roller
+     */
     public CommandBase getCollectCommand() {
         return new StartEndCommand(
                 this::collect,
                 this::stopCollect
         );
     }
+
+    /**
+     * @return stops roller
+     */
     public CommandBase getStopCollectCommand()  {
         return new InstantCommand(
                 this::stopCollect
         );
     }
 
+    /**
+     * @return Opens and starts roller
+     */
     public CommandBase fullOpeningCommand() {
         return new ParallelCommandGroup(
                 getOpenRollerCommand(),
                 getCollectCommand()
         );
     }
+
+    /**
+     * @return Closes and stops roller
+     */
     public CommandBase fullStopCommand()    {
         return new ParallelCommandGroup(
                 getCloseRollerCommand(),
                 getStopCollectCommand()
         );
     }
+
     private void openRoller()    {
         angleMotor.set(ControlMode.PercentOutput, RollerConstants.OPEN_POWER);
     }
@@ -86,6 +110,5 @@ public class Roller extends SubsystemBase {
     private boolean isClosed() {
         return !RollerConstants.BACKWARD_LIMIT_SWITCH.get();
     }
-
 }
 

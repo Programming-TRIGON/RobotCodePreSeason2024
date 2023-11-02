@@ -32,13 +32,19 @@ public class RollerConstants {
     static final DigitalInput BACKWARD_LIMIT_SWITCH = new DigitalInput(BACKWARD_LIMIT_SWITCH_CHANNEL);
 
     static {
+        configureAngleMotor();
+
+        configureCollectionMotor();
+    }
+    private static void configureAngleMotor()  {
         ANGLE_MOTOR.configFactoryDefault();
         ANGLE_MOTOR.setInverted(ANGLE_MOTOR_INVERTED);
         ANGLE_MOTOR.setNeutralMode(ANGLE_MOTOR_NEUTRAL_MODE);
 
         ANGLE_MOTOR.configVoltageCompSaturation(ANGLE_VOLTAGE_COMPENSATION_SATURATION);
         ANGLE_MOTOR.enableVoltageCompensation(true);
-
+    }
+    private static void configureCollectionMotor()    {
         COLLECTION_MOTOR.restoreFactoryDefaults();
         COLLECTION_MOTOR.setInverted(COLLECTION_MOTOR_INVERTED);
         COLLECTION_MOTOR.setIdleMode(COLLECTION_MOTOR_IDLE_MODE);
