@@ -18,7 +18,7 @@ public class CurrentWatcher {
     /**
      * Constructs a new CurrentWatcher that checks the current every 0.02 seconds, and if the current passes the current limit runs a runnable.
      *
-     * @param runnable        what will run if the current passes it's limit
+     * @param runnable        the runnable to run if the current passes it's limit
      * @param currentSupplier a supplier for the motor's current
      * @param maxCurrent      the current limit
      * @param maxTime         the time that the current exceeds the current limit needed to execute the corresponding runnable
