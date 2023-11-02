@@ -6,22 +6,22 @@ import edu.wpi.first.wpilibj.Timer;
 import java.util.function.Supplier;
 
 /**
- * A class that checks if the current past a certain limit for a certain amount of time.
+ * A clas that checks if the current passed a certain current limit for a certain amount of time and if so, runs a runnable.
  */
 public class CurrentWatcher {
-    private double bellowCurrentTime;
     private final Runnable runnable;
     private final Supplier<Integer> currentSupplier;
     private final int maxCurrent;
     private final double timeThreshold;
+    private double bellowCurrentTime;
 
     /**
-     * Checks the current every 0.02 seconds, and it passes runs a runnable.
+     * Construct a new CurrentWatcher that will Check the current every 0.02 seconds, and if the current passes runs a runnable.
      *
      * @param runnable        what will run if the current passes it's limit
-     * @param currentSupplier the current
+     * @param currentSupplier a supplier for the motor's current
      * @param maxCurrent      the current limit
-     * @param timeThreshold   the time
+     * @param timeThreshold   the time since the motor was started
      */
     public CurrentWatcher(Runnable runnable, Supplier<Integer> currentSupplier, int maxCurrent, double timeThreshold) {
         this.runnable = runnable;
@@ -33,15 +33,16 @@ public class CurrentWatcher {
     }
 
     private void checkCurrent() {
-        if (isBellowCurrentLimit()) {
+        if (isBelowCurrentLimit()) {
             bellowCurrentTime = Timer.getFPGATimestamp();
             return;
         }
+        
         if (didPassTimeThreshold())
             runnable.run();
     }
 
-    private boolean isBellowCurrentLimit() {
+    private boolean isBelowCurrentLimit() {
         return currentSupplier.get() <= maxCurrent;
     }
 
@@ -49,6 +50,4 @@ public class CurrentWatcher {
         double timeDifference = Timer.getFPGATimestamp() - bellowCurrentTime;
         return timeThreshold > timeDifference;
     }
-
-
 }
