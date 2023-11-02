@@ -6,22 +6,22 @@ import edu.wpi.first.wpilibj.Timer;
 import java.util.function.Supplier;
 
 /**
- * A clas that checks if the current passed a certain current limit for a certain amount of time and if so, runs a runnable.
+ * A class that checks if the motor's current passed a certain current limit for a certain amount of time. If so, runs a runnable.
  */
 public class CurrentWatcher {
     private final Runnable runnable;
     private final Supplier<Integer> currentSupplier;
     private final int maxCurrent;
     private final double timeThreshold;
-    private double bellowCurrentTime;
+    private double belowCurrentTime;
 
     /**
-     * Construct a new CurrentWatcher that will Check the current every 0.02 seconds, and if the current passes runs a runnable.
+     * Constructs a new CurrentWatcher that checks the current every 0.02 seconds, and if the current passes the current limit runs a runnable.
      *
      * @param runnable        what will run if the current passes it's limit
      * @param currentSupplier a supplier for the motor's current
      * @param maxCurrent      the current limit
-     * @param timeThreshold   the time since the motor was started
+     * @param timeThreshold   the time since the current watcher began checking
      */
     public CurrentWatcher(Runnable runnable, Supplier<Integer> currentSupplier, int maxCurrent, double timeThreshold) {
         this.runnable = runnable;
@@ -34,10 +34,10 @@ public class CurrentWatcher {
 
     private void checkCurrent() {
         if (isBelowCurrentLimit()) {
-            bellowCurrentTime = Timer.getFPGATimestamp();
+            belowCurrentTime = Timer.getFPGATimestamp();
             return;
         }
-        
+
         if (didPassTimeThreshold())
             runnable.run();
     }
@@ -47,7 +47,7 @@ public class CurrentWatcher {
     }
 
     private boolean didPassTimeThreshold() {
-        double timeDifference = Timer.getFPGATimestamp() - bellowCurrentTime;
+        double timeDifference = Timer.getFPGATimestamp() - belowCurrentTime;
         return timeThreshold > timeDifference;
     }
 }
