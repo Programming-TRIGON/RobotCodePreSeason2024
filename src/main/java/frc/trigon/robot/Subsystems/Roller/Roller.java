@@ -22,11 +22,12 @@ public class Roller extends SubsystemBase {
     /**
      * @return a command that opens only the angle of the roller
      */
-    public CommandBase getOpenRollerCommand()   {
+    public CommandBase getOpenRollerCommand() {
         return new FunctionalCommand(
                 this::openRoller,
-                ()-> {},
-                (interrupted)-> stopAngle(),
+                () -> {
+                },
+                (interrupted) -> stopAngle(),
                 this::isOpen,
                 this
         );
@@ -35,11 +36,12 @@ public class Roller extends SubsystemBase {
     /**
      * @return a command that closes only the angle of the roller
      */
-    public CommandBase getCloseRollerCommand()  {
+    public CommandBase getCloseRollerCommand() {
         return new FunctionalCommand(
                 this::closeRoller,
-                ()->{},
-                (interrupted)-> stopAngle(),
+                () -> {
+                },
+                (interrupted) -> stopAngle(),
                 this::isClosed
         );
     }
@@ -58,7 +60,7 @@ public class Roller extends SubsystemBase {
     /**
      * @return a command that stops the collection motor
      */
-    public CommandBase getStopCollectCommand()  {
+    public CommandBase getStopCollectCommand() {
         return new InstantCommand(
                 this::stopCollect,
                 this
@@ -78,14 +80,14 @@ public class Roller extends SubsystemBase {
     /**
      * @return a command that closes the angle of the roller and stops the collection motor
      */
-    public CommandBase fullStopCommand()    {
+    public CommandBase fullStopCommand() {
         return new ParallelCommandGroup(
                 getCloseRollerCommand(),
                 removeRequirement(getStopCollectCommand())
         );
     }
 
-    private CommandBase removeRequirement(CommandBase command)  {
+    private CommandBase removeRequirement(CommandBase command) {
         return new FunctionalCommand(
                 command::initialize,
                 command::execute,
@@ -94,19 +96,19 @@ public class Roller extends SubsystemBase {
         );
     }
 
-    private void openRoller()    {
+    private void openRoller() {
         angleMotor.set(ControlMode.PercentOutput, RollerConstants.OPEN_POWER);
     }
 
-    private void closeRoller()   {
+    private void closeRoller() {
         angleMotor.set(ControlMode.PercentOutput, RollerConstants.CLOSE_POWER);
     }
 
-    private void collect()  {
+    private void collect() {
         collectionMotor.set(RollerConstants.COLLECTION_MOTOR_SPEED);
     }
 
-    private void stopCollect()  {
+    private void stopCollect() {
         collectionMotor.stopMotor();
     }
 
@@ -114,7 +116,7 @@ public class Roller extends SubsystemBase {
         angleMotor.set(ControlMode.Disabled, 0);
     }
 
-    private boolean isOpen()   {
+    private boolean isOpen() {
         return !RollerConstants.FORWARD_LIMIT_SWITCH.get();
     }
 
