@@ -6,7 +6,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj2.command.*;
 
-import static frc.trigon.robot.utilities.Commands.removeRequirements;
+import frc.trigon.robot.utilities.Commands;
 
 public class Roller extends SubsystemBase {
     private final static Roller INSTANCE = new Roller();
@@ -21,7 +21,7 @@ public class Roller extends SubsystemBase {
     }
 
     /**
-     * @return a command that opens only the angle of the roller
+     * @return a command that only opens the angle of the roller
      */
     public CommandBase getOpenRollerCommand() {
         return new FunctionalCommand(
@@ -35,7 +35,7 @@ public class Roller extends SubsystemBase {
     }
 
     /**
-     * @return a command that closes only the angle of the roller
+     * @return a command that only closes the angle of the roller
      */
     public CommandBase getCloseRollerCommand() {
         return new FunctionalCommand(
@@ -74,7 +74,7 @@ public class Roller extends SubsystemBase {
     public CommandBase getFullOpeningCommand() {
         return new ParallelCommandGroup(
                 getOpenRollerCommand(),
-                removeRequirements(getCollectCommand())
+                Commands.removeRequirements(getCollectCommand())
         );
     }
 
@@ -84,7 +84,7 @@ public class Roller extends SubsystemBase {
     public CommandBase getFullStopCommand() {
         return new ParallelCommandGroup(
                 getCloseRollerCommand(),
-                removeRequirements(getStopCollectionCommand())
+                Commands.removeRequirements(getStopCollectionCommand())
         );
     }
 

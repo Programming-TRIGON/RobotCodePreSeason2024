@@ -35,7 +35,8 @@ public class RollerConstants {
         configureAngleMotor();
         configureCollectionMotor();
     }
-    private static void configureAngleMotor()  {
+
+    private static void configureAngleMotor() {
         ANGLE_MOTOR.configFactoryDefault();
         ANGLE_MOTOR.setInverted(ANGLE_MOTOR_INVERTED);
         ANGLE_MOTOR.setNeutralMode(ANGLE_MOTOR_NEUTRAL_MODE);
@@ -43,7 +44,8 @@ public class RollerConstants {
         ANGLE_MOTOR.configVoltageCompSaturation(ANGLE_VOLTAGE_COMPENSATION_SATURATION);
         ANGLE_MOTOR.enableVoltageCompensation(true);
     }
-    private static void configureCollectionMotor()    {
+
+    private static void configureCollectionMotor() {
         COLLECTION_MOTOR.restoreFactoryDefaults();
         COLLECTION_MOTOR.setInverted(COLLECTION_MOTOR_INVERTED);
         COLLECTION_MOTOR.setIdleMode(COLLECTION_MOTOR_IDLE_MODE);
