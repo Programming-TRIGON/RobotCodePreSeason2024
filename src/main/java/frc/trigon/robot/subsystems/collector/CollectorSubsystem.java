@@ -11,8 +11,13 @@ import java.util.function.Supplier;
 public class CollectorSubsystem extends SubsystemBase {
     private final static CollectorSubsystem INSTANCE = new CollectorSubsystem();
     private final TalonSRX motor = CollectorConstants.MOTOR;
-    private final Supplier<Double> motorCurrent = CollectorConstants.MOTOR_CURRENT;
-    private final CurrentWatcher currentWatcher = new CurrentWatcher(this::stop, motorCurrent, CollectorConstants.maxCurrent, CollectorConstants.maxTime);
+    private final Supplier<Double> motorCurrent = motor::getSupplyCurrent;
+    private final CurrentWatcher currentWatcher = new CurrentWatcher(
+            this::stop,
+            motorCurrent,
+            CollectorConstants.MAX_CURRENT,
+            CollectorConstants.TIME_THRESHOLD
+    );
 
     public static CollectorSubsystem getInstance() {
         return INSTANCE;
