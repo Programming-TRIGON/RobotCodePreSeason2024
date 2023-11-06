@@ -2,6 +2,7 @@ package frc.trigon.robot.subsystems.collector;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -16,7 +17,7 @@ public class CollectorSubsystem extends SubsystemBase {
             this::stop,
             motorCurrent,
             CollectorConstants.MAX_CURRENT,
-            CollectorConstants.TIME_THRESHOLD
+            CollectorConstants.MAX_CURRENT_TIME
     );
 
     public static CollectorSubsystem getInstance() {
@@ -32,7 +33,7 @@ public class CollectorSubsystem extends SubsystemBase {
      * @param state the target state
      * @return the command
      */
-    public CommandBase setCollectorStateCommand(CollectorConstants.CollectorStates state) {
+    public Command setCollectorStateCommand(CollectorConstants.CollectorStates state) {
         return new StartEndCommand(
                 () -> motor.set(ControlMode.PercentOutput, state.power),
                 () -> {},
