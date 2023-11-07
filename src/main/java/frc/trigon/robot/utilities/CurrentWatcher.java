@@ -2,7 +2,6 @@ package frc.trigon.robot.utilities;
 
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.Timer;
-
 import java.util.function.Supplier;
 
 /**
@@ -10,7 +9,7 @@ import java.util.function.Supplier;
  */
 public class CurrentWatcher {
     private final Runnable runnable;
-    private final Supplier<Integer> currentSupplier;
+    private final Supplier<Double> currentSupplier;
     private final int maxCurrent;
     private final double maxTime;
     private double belowCurrentTimeStamp;
@@ -23,7 +22,7 @@ public class CurrentWatcher {
      * @param maxCurrent      the current limit
      * @param maxTime         the time needed for the current to exceed its limit, in order to run the runnable
      */
-    public CurrentWatcher(Runnable runnable, Supplier<Integer> currentSupplier, int maxCurrent, double maxTime) {
+    public CurrentWatcher(Runnable runnable, Supplier<Double> currentSupplier, int maxCurrent, double maxTime) {
         this.runnable = runnable;
         this.currentSupplier = currentSupplier;
         this.maxCurrent = maxCurrent;
