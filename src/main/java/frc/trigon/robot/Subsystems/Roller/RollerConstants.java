@@ -6,7 +6,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj.DigitalInput;
 
-public class RollerConstants {
+public class rollerConstants {
     private static final int
             ANGLE_MOTOR_ID = 0,
             COLLECTION_MOTOR_ID = 1,
@@ -21,7 +21,7 @@ public class RollerConstants {
             ANGLE_MOTOR_INVERTED = false,
             COLLECTION_MOTOR_INVERTED = false;
     private static final NeutralMode ANGLE_MOTOR_NEUTRAL_MODE = NeutralMode.Brake;
-    private static final CANSparkMax.IdleMode COLLECTION_MOTOR_IDLE_MODE = CANSparkMax.IdleMode.kBrake;
+    private static final CANSparkMax.IdleMode COLLECTION_MOTOR_IDLE_MODE = CANSparkMax.IdleMode.kCoast;
     private static final int
             ANGLE_VOLTAGE_COMPENSATION_SATURATION = 12,
             COLLECTION_VOLTAGE_COMPENSATION_SATURATION = 12;

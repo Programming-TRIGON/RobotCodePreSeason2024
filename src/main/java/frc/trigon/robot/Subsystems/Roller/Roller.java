@@ -8,16 +8,16 @@ import edu.wpi.first.wpilibj2.command.*;
 
 import frc.trigon.robot.utilities.Commands;
 
-public class Roller extends SubsystemBase {
-    private final static Roller INSTANCE = new Roller();
-    private final TalonSRX angleMotor = RollerConstants.ANGLE_MOTOR;
-    private final CANSparkMax collectionMotor = RollerConstants.COLLECTION_MOTOR;
+public class roller extends SubsystemBase {
+    private final static roller INSTANCE = new roller();
+    private final TalonSRX angleMotor = rollerConstants.ANGLE_MOTOR;
+    private final CANSparkMax collectionMotor = rollerConstants.COLLECTION_MOTOR;
 
-    public static Roller getInstance() {
+    public static roller getInstance() {
         return INSTANCE;
     }
 
-    private Roller() {
+    private roller() {
     }
 
     /**
@@ -89,15 +89,15 @@ public class Roller extends SubsystemBase {
     }
 
     private void openRoller() {
-        angleMotor.set(ControlMode.PercentOutput, RollerConstants.OPEN_POWER);
+        angleMotor.set(ControlMode.PercentOutput, rollerConstants.OPEN_POWER);
     }
 
     private void closeRoller() {
-        angleMotor.set(ControlMode.PercentOutput, RollerConstants.CLOSE_POWER);
+        angleMotor.set(ControlMode.PercentOutput, rollerConstants.CLOSE_POWER);
     }
 
     private void collect() {
-        collectionMotor.set(RollerConstants.COLLECTION_MOTOR_SPEED);
+        collectionMotor.set(rollerConstants.COLLECTION_MOTOR_SPEED);
     }
 
     private void stopCollection() {
@@ -109,11 +109,11 @@ public class Roller extends SubsystemBase {
     }
 
     private boolean isOpen() {
-        return !RollerConstants.FORWARD_LIMIT_SWITCH.get();
+        return !rollerConstants.FORWARD_LIMIT_SWITCH.get();
     }
 
     private boolean isClosed() {
-        return !RollerConstants.BACKWARD_LIMIT_SWITCH.get();
+        return !rollerConstants.BACKWARD_LIMIT_SWITCH.get();
     }
 }
 
