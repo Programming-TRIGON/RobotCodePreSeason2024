@@ -23,7 +23,7 @@ public class Roller extends SubsystemBase {
     /**
      * @return a command that only opens the angle of the roller
      */
-    public CommandBase getOpenRollerCommand() {
+    public Command getOpenRollerCommand() {
         return new FunctionalCommand(
                 this::openRoller,
                 () -> {
@@ -37,7 +37,7 @@ public class Roller extends SubsystemBase {
     /**
      * @return a command that only closes the angle of the roller
      */
-    public CommandBase getCloseRollerCommand() {
+    public Command getCloseRollerCommand() {
         return new FunctionalCommand(
                 this::closeRoller,
                 () -> {
@@ -50,7 +50,7 @@ public class Roller extends SubsystemBase {
     /**
      * @return a command that activates the collection motor with collection power
      */
-    public CommandBase getCollectCommand() {
+    public Command getCollectCommand() {
         return new StartEndCommand(
                 this::collect,
                 this::stopCollection,
@@ -61,7 +61,7 @@ public class Roller extends SubsystemBase {
     /**
      * @return a command that stops the collection motor
      */
-    public CommandBase getStopCollectionCommand() {
+    public Command getStopCollectionCommand() {
         return new InstantCommand(
                 this::stopCollection,
                 this
@@ -71,7 +71,7 @@ public class Roller extends SubsystemBase {
     /**
      * @return a command that opens the angle of the roller and activates the collection motor
      */
-    public CommandBase getFullOpeningCommand() {
+    public Command getFullOpeningCommand() {
         return new ParallelCommandGroup(
                 getOpenRollerCommand(),
                 Commands.removeRequirements(getCollectCommand())
@@ -81,7 +81,7 @@ public class Roller extends SubsystemBase {
     /**
      * @return a command that closes the angle of the roller and stops the collection motor
      */
-    public CommandBase getFullStopCommand() {
+    public Command getFullStopCommand() {
         return new ParallelCommandGroup(
                 getCloseRollerCommand(),
                 Commands.removeRequirements(getStopCollectionCommand())
