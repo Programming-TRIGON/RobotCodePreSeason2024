@@ -6,7 +6,7 @@ import java.util.function.Supplier;
 
 public class CollectorConstants {
     private static final int MOTOR_ID = 1;
-    private static final NeutralMode NEUTRAL_MODE_VALUE = NeutralMode.Brake;
+    private static final NeutralMode NEUTRAL_MODE_VALUE = NeutralMode.Coast;
     private static final boolean INVERTED = false;
     private static final int VOLTAGE_COMPENSATION_SATURATION = 12;
     static final TalonSRX MOTOR = new TalonSRX(MOTOR_ID);

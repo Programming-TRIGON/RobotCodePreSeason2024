@@ -10,12 +10,6 @@ import frc.trigon.robot.utilities.CurrentWatcher;
 public class Collector extends SubsystemBase {
     private final static Collector INSTANCE = new Collector();
     private final TalonSRX motor = CollectorConstants.MOTOR;
-    private final CurrentWatcher currentWatcher = new CurrentWatcher(
-            this::stop,
-            motor::getSupplyCurrent,
-            CollectorConstants.MAX_CURRENT,
-            CollectorConstants.MAX_CURRENT_TIME
-    );
 
     public static Collector getInstance() {
         return INSTANCE;
