@@ -5,7 +5,6 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj2.command.*;
-
 import frc.trigon.robot.utilities.Commands;
 
 public class Roller extends SubsystemBase {
