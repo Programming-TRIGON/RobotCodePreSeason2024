@@ -6,7 +6,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj.DigitalInput;
 
-public class rollerConstants {
+public class RollerConstants {
     private static final int
             ANGLE_MOTOR_ID = 0,
             COLLECTION_MOTOR_ID = 1,

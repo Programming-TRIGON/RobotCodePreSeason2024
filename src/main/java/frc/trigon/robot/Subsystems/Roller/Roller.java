@@ -5,19 +5,18 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj2.command.*;
-
 import frc.trigon.robot.utilities.Commands;
 
-public class roller extends SubsystemBase {
-    private final static roller INSTANCE = new roller();
-    private final TalonSRX angleMotor = rollerConstants.ANGLE_MOTOR;
-    private final CANSparkMax collectionMotor = rollerConstants.COLLECTION_MOTOR;
+public class Roller extends SubsystemBase {
+    private final static Roller INSTANCE = new Roller();
+    private final TalonSRX angleMotor = RollerConstants.ANGLE_MOTOR;
+    private final CANSparkMax collectionMotor = RollerConstants.COLLECTION_MOTOR;
 
-    public static roller getInstance() {
+    public static Roller getInstance() {
         return INSTANCE;
     }
 
-    private roller() {
+    private Roller() {
     }
 
     /**
@@ -89,15 +88,15 @@ public class roller extends SubsystemBase {
     }
 
     private void openRoller() {
-        angleMotor.set(ControlMode.PercentOutput, rollerConstants.OPEN_POWER);
+        angleMotor.set(ControlMode.PercentOutput, RollerConstants.OPEN_POWER);
     }
 
     private void closeRoller() {
-        angleMotor.set(ControlMode.PercentOutput, rollerConstants.CLOSE_POWER);
+        angleMotor.set(ControlMode.PercentOutput, RollerConstants.CLOSE_POWER);
     }
 
     private void collect() {
-        collectionMotor.set(rollerConstants.COLLECTION_MOTOR_SPEED);
+        collectionMotor.set(RollerConstants.COLLECTION_MOTOR_SPEED);
     }
 
     private void stopCollection() {
@@ -109,11 +108,11 @@ public class roller extends SubsystemBase {
     }
 
     private boolean isOpen() {
-        return !rollerConstants.FORWARD_LIMIT_SWITCH.get();
+        return !RollerConstants.FORWARD_LIMIT_SWITCH.get();
     }
 
     private boolean isClosed() {
-        return !rollerConstants.BACKWARD_LIMIT_SWITCH.get();
+        return !RollerConstants.BACKWARD_LIMIT_SWITCH.get();
     }
 }
 
