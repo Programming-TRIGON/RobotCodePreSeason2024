@@ -26,7 +26,9 @@ public class ArmConstants {
     private static final boolean inverted = false;
     private static final SensorDirectionValue angleEncoderDirection = SensorDirectionValue.CounterClockwise_Positive;
     private static final boolean ELEVATOR_ENCODER_PHASE = false;
-    private static final int ANGLE_ENCODER_OFFSET = 5;
+    private static final int
+            ELEVATOR_ENCODER_OFFSET = 5,
+            ANGLE_ENCODER_OFFSET = 5;
     private static final AbsoluteSensorRangeValue ANGLE_ENCODER_RANGE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
 
     static final double
@@ -86,7 +88,7 @@ public class ArmConstants {
 
     private static void configureElevatorEncoder() {
         ELEVATOR_ENCODER.configFactoryDefault();
-        ELEVATOR_ENCODER.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
+        ELEVATOR_ENCODER.setSelectedSensorPosition(ELEVATOR_ENCODER.getSelectedSensorPosition() - ELEVATOR_ENCODER_OFFSET);
         ELEVATOR_ENCODER.setSensorPhase(ELEVATOR_ENCODER_PHASE);
     }
 }
