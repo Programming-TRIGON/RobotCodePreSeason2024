@@ -67,7 +67,8 @@ public class ArmConstants {
 
         Rotation2d angle;
         double elevatorPosition;
-        ArmState(Rotation2d angle, double elevatorPosition)  {
+
+        ArmState(Rotation2d angle, double elevatorPosition) {
             this.angle = angle;
             this.elevatorPosition = elevatorPosition;
         }
