@@ -15,12 +15,12 @@ import edu.wpi.first.math.controller.PIDController;
 
 public class ArmConstants {
     private static final int
-        MASTER_ANGLE_MOTOR_ID = 0,
-        FOLLOWER_ANGLE_MOTOR_ID = 1,
-        MASTER_ELEVATOR_MOTOR_ID = 2,
-        FOLLOWER_ELEVATOR_MOTOR_ID = 3,
-        MAG_ENCODER_ID = 4,
-        ANGLE_CANCODER_ID = 5;
+            MASTER_ANGLE_MOTOR_ID = 0,
+            FOLLOWER_ANGLE_MOTOR_ID = 1,
+            MASTER_ELEVATOR_MOTOR_ID = 2,
+            FOLLOWER_ELEVATOR_MOTOR_ID = 3,
+            MAG_ENCODER_ID = 4,
+            ANGLE_CANCODER_ID = 5;
 
     private static final double
             MASTER_ANGLE_OFFSET_VALUE = 0.0,
@@ -39,27 +39,27 @@ public class ArmConstants {
     private static final SensorDirectionValue CANCODER_INVERTED_VALUE = SensorDirectionValue.Clockwise_Positive;
 
     private static final double
-        P = 1.32,
-        I = 3.1,
-        D = 0;
-    PIDController PID_CONTROLLER = new PIDController(P,I,D);
+            P = 1.32,
+            I = 3.1,
+            D = 0;
+    PIDController PID_CONTROLLER = new PIDController(P, I, D);
 
     private static final CANSparkMax.IdleMode
-        MASTER_ANGLE_NEUTRAL_MODE_VALUE  = CANSparkMax.IdleMode.kBrake,
-        FOLLOWER_ANGLE_NEUTRAL_MODE_VALUE = CANSparkMax.IdleMode.kBrake,
-        MASTER_ELEVATOR_NEUTRAL_MODE_VALUE = CANSparkMax.IdleMode.kBrake,
-        FOLLOWER_ELEVATOR_NEUTRAL_MODE_VALUE = CANSparkMax.IdleMode.kBrake;
+            MASTER_ANGLE_NEUTRAL_MODE_VALUE = CANSparkMax.IdleMode.kBrake,
+            FOLLOWER_ANGLE_NEUTRAL_MODE_VALUE = CANSparkMax.IdleMode.kBrake,
+            MASTER_ELEVATOR_NEUTRAL_MODE_VALUE = CANSparkMax.IdleMode.kBrake,
+            FOLLOWER_ELEVATOR_NEUTRAL_MODE_VALUE = CANSparkMax.IdleMode.kBrake;
     private static final AbsoluteSensorRangeValue ANGLE_ENCODER_SENSOR_RANGE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
 
     private static final CANSparkMax
-        MASTER_ANGLE_MOTOR = new CANSparkMax(MASTER_ANGLE_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless),
-        FOLLOWER_ANGLE_MOTOR = new CANSparkMax(FOLLOWER_ANGLE_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless),
-        MASTER_ELEVATOR_MOTOR = new CANSparkMax(MASTER_ELEVATOR_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless),
-        FOLLOWER_ELEVATOR_MOTOR = new CANSparkMax(FOLLOWER_ELEVATOR_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless);
+            MASTER_ANGLE_MOTOR = new CANSparkMax(MASTER_ANGLE_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless),
+            FOLLOWER_ANGLE_MOTOR = new CANSparkMax(FOLLOWER_ANGLE_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless),
+            MASTER_ELEVATOR_MOTOR = new CANSparkMax(MASTER_ELEVATOR_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless),
+            FOLLOWER_ELEVATOR_MOTOR = new CANSparkMax(FOLLOWER_ELEVATOR_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless);
     private static final TalonSRX MAG_ENCODER = new TalonSRX(MAG_ENCODER_ID);
     private static final CANcoder CANCODER = new CANcoder(ANGLE_CANCODER_ID);
 
-    private static void config_elevator_motors(){
+    private static void config_elevator_motors() {
         MASTER_ELEVATOR_MOTOR.setInverted(MASTER_ELEVATOR_INVERTED_VALUE);
         MASTER_ELEVATOR_MOTOR.setIdleMode(MASTER_ANGLE_NEUTRAL_MODE_VALUE);
 
@@ -71,7 +71,7 @@ public class ArmConstants {
 
     }
 
-    private static void config_angle_motors(){
+    private static void config_angle_motors() {
         MASTER_ANGLE_MOTOR.setInverted(MASTER_ELEVATOR_INVERTED_VALUE);
         MASTER_ANGLE_MOTOR.setIdleMode(MASTER_ANGLE_NEUTRAL_MODE_VALUE);
 
@@ -89,6 +89,7 @@ public class ArmConstants {
         config_angle_motors();
         config_elevator_motors();
     }
+
     public enum ArmStates {
         FIRST_STATE(43, 1),
         SECOND_STATE(50, 2),
@@ -96,7 +97,7 @@ public class ArmConstants {
         final double rotation2d;
         final int elevatorPosition;
 
-        ArmStates(double rotation2d, int elevatorPosition){
+        ArmStates(double rotation2d, int elevatorPosition) {
             this.elevatorPosition = elevatorPosition;
             this.rotation2d = rotation2d;
         }
