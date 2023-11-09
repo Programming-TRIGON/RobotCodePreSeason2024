@@ -10,7 +10,6 @@ import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.math.controller.PIDController;
 
 public class ArmConstants {
-
     private static final int
             ANGLE_MOTOR_ID = 1,
             ELEVATOR_MOTOR_ID = 2,
