@@ -1,5 +1,7 @@
 package frc.trigon.robot.subsystems.arm;
 
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkMax;
@@ -72,6 +74,8 @@ public class ArmConstants {
     static {
         configureAngleMotors();
         configureElevatorMotors();
+        configureAngleEncoder();
+        configureElevatorEncoder();
     }
 
     private static void configureAngleMotors() {
@@ -96,5 +100,16 @@ public class ArmConstants {
         ELEVATOR_MOTOR_FOLLOWER.setInverted(ELEVATOR_MOTOR_FOLLOWER_INVERTED);
         ELEVATOR_MOTOR_FOLLOWER.setIdleMode(ELEVATOR_MOTORS_IDLE_MODE);
         ELEVATOR_MOTOR_FOLLOWER.enableVoltageCompensation(VOLTAGE_COMPENSATION_SATURATION);
+    }
+
+    private static void configureAngleEncoder() {
+        CANcoderConfiguration config = new CANcoderConfiguration();
+        config.MagnetSensor.MagnetOffset = config.MagnetSensor.SensorDirection.value;
+    }
+
+    private static void configureElevatorEncoder() {
+        TalonFXConfiguration config = new TalonFXConfiguration();
+        config.Audio.BeepOnConfig = false;
+        config.Audio.BeepOnBoot = false;
     }
 }
