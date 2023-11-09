@@ -2,7 +2,9 @@ package frc.trigon.robot.subsystems.arm;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.CANcoderConfigurator;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkMax;
@@ -15,8 +17,7 @@ public class ArmConstants {
             ELEVATOR_MASTER_MOTOR_ID = 2,
             ANGLE_FOLLOWER_MOTOR_ID = 3,
             ELEVATOR_FOLLOWER_MOTOR_ID = 4,
-            TALON_SRX_ID = 5,
-            ANGLE_ENCODER_ID = 6;
+            ANGLE_ENCODER_ID = 5;
 
     private static final CANSparkMax
             ANGLE_MASTER_MOTOR = new CANSparkMax(ANGLE_MASTER_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless),
@@ -28,16 +29,13 @@ public class ArmConstants {
             ANGLE_MASTER_IDLE_MODE = CANSparkMax.IdleMode.kCoast,
             ELEVATOR_FOLLOWER_IDLE_MODE = CANSparkMax.IdleMode.kCoast,
             ANGLE_FOLLOWER_IDLE_MODE = CANSparkMax.IdleMode.kCoast;
-    private static final TalonSRX TALON_SRX = new TalonSRX(TALON_SRX_ID);
+    private static final TalonSRXConfiguration TALON_SRX_CONFIGURATION = new TalonSRXConfiguration();
     private static final CANcoder ANGLE_ENCODER = new CANcoder(ANGLE_ENCODER_ID);
-    private static final NeutralMode TALON_SRX_NEUTRAL_MODE_VALUE = NeutralMode.Coast;
-    private static final boolean TALON_SRX_INVERTED = false;
     private static final int
             ANGLE_MASTER_MOTOR_VOLTAGE_COMPENSATION_SATURATION = 12,
             ELEVATOR_MASTER_MOTOR_VOLTAGE_COMPENSATION_SATURATION = 12,
             ANGLE_FOLLOWER_MOTOR_VOLTAGE_COMPENSATION_SATURATION = 12,
-            ELEVATOR_FOLLOWER_MOTOR_VOLTAGE_COMPENSATION_SATURATION = 12,
-            TALON_SRX_VOLTAGE_COMPENSATION_SATURATION = 12;
+            ELEVATOR_FOLLOWER_MOTOR_VOLTAGE_COMPENSATION_SATURATION = 12;
     private static final boolean
             ELEVATOR_MASTER_INVERTED = false,
             ANGLE_MASTER_INVERTED = false,
@@ -58,13 +56,7 @@ public class ArmConstants {
         configureElevatorMasterMotor();
         configureAngleFollowerMotor();
         configureElevatorFollowerMotor();
-
-        TALON_SRX.configFactoryDefault();
-        TALON_SRX.configVoltageCompSaturation(TALON_SRX_VOLTAGE_COMPENSATION_SATURATION);
-        TALON_SRX.enableVoltageCompensation(true);
-        TALON_SRX.setNeutralMode(TALON_SRX_NEUTRAL_MODE_VALUE);
-        TALON_SRX.setInverted(TALON_SRX_INVERTED);
-
+        
         configureAngleEncoder();
     }
 
@@ -107,8 +99,7 @@ public class ArmConstants {
     }
 
     private static void configureAngleEncoder(){
-        CANcoderConfigurator angelEncoderConfig = ANGLE_ENCODER.getConfigurator();
-
+        CANcoderConfigurator angleEncoderConfig = ANGLE_ENCODER.getConfigurator();
 
     }
 }
