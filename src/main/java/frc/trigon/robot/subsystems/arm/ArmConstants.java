@@ -1,10 +1,11 @@
 package frc.trigon.robot.subsystems.arm;
 
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
 
 public class ArmConstants {
     // 2 motors for angle - CANSparkMax, Neo (Brushless)
@@ -52,15 +53,35 @@ public class ArmConstants {
     private static final PIDController PID_CONTROLLER = new PIDController(P, I, D);
     private static final int
             ANGLE_ENCODER_DIRECTION = 0,
-            ELEVATOR_ENCODER_PHASE = 0;
+            ELEVATOR_ENCODER_DIRECTION = 0;
     private static final CANcoder ANGLE_ENCODER = new CANcoder(ANGLE_ENCODER_ID);
-    private static final TalonSRX ELEVATOR_ENCODER = new TalonSRX(ELEVATOR_ENCODER_ID);
+    private static final TalonFX ELEVATOR_ENCODER = new TalonFX(ELEVATOR_ENCODER_ID);
+
+    enum ArmState {
+        DEFAULT(Rotation2d.fromDegrees(0), 0),
+        TAKE_HIGH_CONE(Rotation2d.fromDegrees(60), 10),
+        TAKE_GROUND_CONE(Rotation2d.fromDegrees(0), 0),
+        PLACE_LOW_CONE(Rotation2d.fromDegrees(20), 3),
+        PLACE_MEDIUM_CONE(Rotation2d.fromDegrees(50), 7),
+        PLACE_HIGH_CONE(Rotation2d.fromDegrees(70), 10);
+
+        Rotation2d angle;
+        double elevatorPosition;
+        ArmState(Rotation2d angle, double elevatorPosition)  {
+            this.angle = angle;
+            this.elevatorPosition = elevatorPosition;
+        }
+    }
+
 
     static {
         configureAngleMotorCANSparkMax();
         configureAngleMotorNeo();
         configureElevatorMotorCANSparkMax();
         configureElevatorMotorNeo();
+
+        ANGLE_ENCODER.setPosition(0);
+        ELEVATOR_ENCODER.setPosition(0);
     }
 
     private static void configureAngleMotorCANSparkMax() {
