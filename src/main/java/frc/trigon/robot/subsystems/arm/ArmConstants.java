@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
+import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.math.controller.PIDController;
@@ -23,6 +24,8 @@ public class ArmConstants {
             ANGLE_IDLE_MODE = CANSparkMax.IdleMode.kBrake;
     private static final int VOLTAGE_COMPANSATION_SATURATION = 12;
     private static final boolean inverted = false;
+    private static final SensorDirectionValue angleEncoderDirection =  SensorDirectionValue.CounterClockwise_Positive;
+    private static final boolean ELEVATOR_ENCODER_PHASE = false;
     private static final int ANGLE_ENCODER_OFFSET = 5;
     private static final AbsoluteSensorRangeValue ANGLE_ENCODER_RANGE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
 
@@ -37,7 +40,7 @@ public class ArmConstants {
             FOLLOWER_ANGLE_MOTOR = new CANSparkMax(FOLLOWER_ANGLE_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless),
             FOLLOWER_ELEVATOR_MOTOR = new CANSparkMax(FOLLOWER_ELEVATOR_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless);
     private static final CANcoder ANGLE_ENCODER = new CANcoder(ANGLE_ENCODER_ID);
-    private static final TalonSRX ELEVATOR_ENCODER = new TalonSRX(ELEVATOR_ENCODER_ID);                                     
+    private static final TalonSRX ELEVATOR_ENCODER = new TalonSRX(ELEVATOR_ENCODER_ID);
 
     static {
         configureAngleEncoder();
@@ -49,12 +52,12 @@ public class ArmConstants {
     }
 
     public enum ArmState {
-        ANGLE( new Rotation2d(5)),
+        ANGLE(new Rotation2d(5)),
         ELEVATOR_POSITION(new Rotation2d(7));
 
         final Rotation2d elevatorPosition;
-        
-        ArmState( Rotation2d elevatorPosition) {
+
+        ArmState(Rotation2d elevatorPosition) {
             this.elevatorPosition = elevatorPosition;
         }
     }
@@ -77,11 +80,13 @@ public class ArmConstants {
         CANcoderConfiguration angleEncoderConfig = new CANcoderConfiguration();
         angleEncoderConfig.MagnetSensor.MagnetOffset = ANGLE_ENCODER_OFFSET;
         angleEncoderConfig.MagnetSensor.AbsoluteSensorRange = ANGLE_ENCODER_RANGE;
+        angleEncoderConfig.MagnetSensor.SensorDirection = angleEncoderDirection;
         ANGLE_ENCODER.getConfigurator().apply(angleEncoderConfig);
     }
 
     private static void configureElevatorEncoder() {
         ELEVATOR_ENCODER.configFactoryDefault();
         ELEVATOR_ENCODER.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
+        ELEVATOR_ENCODER.setSensorPhase(ELEVATOR_ENCODER_PHASE);
     }
 }
