@@ -18,14 +18,6 @@ public class ArmConstants {
             FOLLOWER_ELEVATOR_MOTOR_ID = 4,
             ANGLE_ENCODER_ID = 5,
             ELEVATOR_ENCODER_ID = 6;
-
-    private static final CANSparkMax
-            MASTER_ANGLE_MOTOR = new CANSparkMax(MASTER_ANGLE_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless),
-            MASTER_ELEVATOR_MOTOR = new CANSparkMax(MASTER_ELEVATOR_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless),
-            FOLLOWER_ANGLE_MOTOR = new CANSparkMax(FOLLOWER_ANGLE_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless),
-            FOLLOWER_ELEVATOR_MOTOR = new CANSparkMax(FOLLOWER_ELEVATOR_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless);
-    private static final CANcoder ANGLE_ENCODER = new CANcoder(ANGLE_ENCODER_ID);
-    private static final TalonSRX ELEVATOR_ENCODER = new TalonSRX(ELEVATOR_ENCODER_ID);
     private static final CANSparkMax.IdleMode
             ELEVATOR_IDLE_MODE = CANSparkMax.IdleMode.kBrake,
             ANGLE_IDLE_MODE = CANSparkMax.IdleMode.kBrake;
@@ -39,6 +31,13 @@ public class ArmConstants {
             I = 0,
             D = 0;
     static final PIDController PID_CONTROLLER = new PIDController(P, I, D);
+    private static final CANSparkMax
+            MASTER_ANGLE_MOTOR = new CANSparkMax(MASTER_ANGLE_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless),
+            MASTER_ELEVATOR_MOTOR = new CANSparkMax(MASTER_ELEVATOR_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless),
+            FOLLOWER_ANGLE_MOTOR = new CANSparkMax(FOLLOWER_ANGLE_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless),
+            FOLLOWER_ELEVATOR_MOTOR = new CANSparkMax(FOLLOWER_ELEVATOR_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless);
+    private static final CANcoder ANGLE_ENCODER = new CANcoder(ANGLE_ENCODER_ID);
+    private static final TalonSRX ELEVATOR_ENCODER = new TalonSRX(ELEVATOR_ENCODER_ID);                                     
 
     static {
         configureAngleEncoder();
@@ -50,8 +49,8 @@ public class ArmConstants {
     }
 
     public enum ArmState {
-        ANGLE( 7),
-        ELEVATOR_POSITION( 5);
+        ANGLE( new Rotation2d(5)),
+        ELEVATOR_POSITION(new Rotation2d(7));
 
         final Rotation2d elevatorPosition;
         
