@@ -1,15 +1,13 @@
 package frc.trigon.robot.subsystems.arm;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
-import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.CANcoderConfigurator;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.Encoder;
 
 public class ArmConstants {
     private static final int
@@ -30,6 +28,7 @@ public class ArmConstants {
             ELEVATOR_FOLLOWER_IDLE_MODE = CANSparkMax.IdleMode.kCoast,
             ANGLE_FOLLOWER_IDLE_MODE = CANSparkMax.IdleMode.kCoast;
     private static final TalonSRXConfiguration TALON_SRX_CONFIGURATION = new TalonSRXConfiguration();
+    private static final Encoder ELEVATOR_ENCODER = new Encoder(0, 1, false);
     private static final CANcoder ANGLE_ENCODER = new CANcoder(ANGLE_ENCODER_ID);
     private static final int
             ANGLE_MASTER_MOTOR_VOLTAGE_COMPENSATION_SATURATION = 12,
@@ -56,8 +55,8 @@ public class ArmConstants {
         configureElevatorMasterMotor();
         configureAngleFollowerMotor();
         configureElevatorFollowerMotor();
-        
         configureAngleEncoder();
+
     }
 
     public enum ArmState{
@@ -101,5 +100,9 @@ public class ArmConstants {
     private static void configureAngleEncoder(){
         CANcoderConfigurator angleEncoderConfig = ANGLE_ENCODER.getConfigurator();
 
+    }
+
+    private static void configureElevatorEncoder(){
+        ELEVATOR_ENCODER.reset();
     }
 }
