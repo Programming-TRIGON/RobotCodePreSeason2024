@@ -26,21 +26,18 @@ public class ArmConstants {
             ANGLE_IDLE_MODE = CANSparkMax.IdleMode.kCoast;
     private static final TalonSRX TALON_SRX = new TalonSRX(TALON_SRX_ID);
     private static final CANCoder ANGLE_ENCODER = new CANCoder(ANGLE_ENCODER_ID);
-
     private static final NeutralMode TALON_SRX_NEUTRAL_MODE_VALUE = NeutralMode.Coast;
     private static final boolean TALON_SRX_INVERTED = false;
     private static final int
             ANGLE_MOTOR_VOLTAGE_COMPENSATION_SATURATION = 12,
             ELEVATOR_MOTOR_VOLTAGE_COMPENSATION_SATURATION = 12,
             TALON_SRX_VOLTAGE_COMPENSATION_SATURATION = 12;
-
     private static final boolean
             ELEVATOR_INVERTED = false,
             ANGLE_INVERTED = false,
             ANGLE_ENCODER_DIRECTION = false;
-    private static final AbsoluteSensorRange ANGLE_ENCODER_RANGE = new AbsoluteSensorRange(0.5, -0.5);
+    private static final AbsoluteSensorRange ANGLE_ENCODER_RANGE = AbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
     private static final double ANGLE_ENCODER_OFFSET = 10;
-
     static final double
             P = 1,
             I = 0,
