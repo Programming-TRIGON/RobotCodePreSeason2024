@@ -10,6 +10,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+import edu.wpi.first.math.controller.PIDController;
 
 public class SideShooterConstants {
     private static final double VOLTAGE_COMPENSATION = 12;
@@ -31,6 +32,12 @@ public class SideShooterConstants {
     static final TalonFX SHOOTING_MOTOR = new TalonFX(SHOOTING_MOTOR_ID);
     static final CANSparkMax ANGLE_MOTOR = new CANSparkMax(ANGLE_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless);
     static final CANcoder ANGLE_ENCODER = new CANcoder(ANGLE_ENCODER_ID);
+
+    private static final double
+            P = 1,
+            I = 0,
+            D = 0;
+    static final PIDController PID_CONTROLLER = new PIDController(P, I, D);
 
     static {
         configureAngleEncoder();
