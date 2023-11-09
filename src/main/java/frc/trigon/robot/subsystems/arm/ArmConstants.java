@@ -3,8 +3,10 @@ package frc.trigon.robot.subsystems.arm;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.CANcoderConfigurator;
 import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.math.controller.PIDController;
@@ -41,6 +43,9 @@ public class ArmConstants {
             ANGLE_MASTER_INVERTED = false,
             ELEVATOR_FOLLOWER_INVERTED = false,
             ANGLE_FOLLOWER_INVERTED = false;
+    private static final int ANGLE_ENCODER_OFFSET = 5;
+    private static final AbsoluteSensorRangeValue ANGLE_ENCODER_RANGE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
+
     static final double
             P = 1,
             I = 0,
@@ -98,8 +103,10 @@ public class ArmConstants {
     }
 
     private static void configureAngleEncoder(){
-        CANcoderConfigurator angleEncoderConfig = ANGLE_ENCODER.getConfigurator();
-
+        CANcoderConfiguration angleEncoderConfig = new CANcoderConfiguration();
+        angleEncoderConfig.MagnetSensor.MagnetOffset = ANGLE_ENCODER_OFFSET;
+        angleEncoderConfig.MagnetSensor.AbsoluteSensorRange = ANGLE_ENCODER_RANGE;
+        ANGLE_ENCODER.getConfigurator().apply(angleEncoderConfig);
     }
 
     private static void configureElevatorEncoder(){
