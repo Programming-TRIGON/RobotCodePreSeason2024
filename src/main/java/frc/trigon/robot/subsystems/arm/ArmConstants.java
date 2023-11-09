@@ -24,7 +24,7 @@ public class ArmConstants {
             ANGLE_IDLE_MODE = CANSparkMax.IdleMode.kBrake;
     private static final int VOLTAGE_COMPANSATION_SATURATION = 12;
     private static final boolean inverted = false;
-    private static final SensorDirectionValue angleEncoderDirection =  SensorDirectionValue.CounterClockwise_Positive;
+    private static final SensorDirectionValue angleEncoderDirection = SensorDirectionValue.CounterClockwise_Positive;
     private static final boolean ELEVATOR_ENCODER_PHASE = false;
     private static final int ANGLE_ENCODER_OFFSET = 5;
     private static final AbsoluteSensorRangeValue ANGLE_ENCODER_RANGE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
