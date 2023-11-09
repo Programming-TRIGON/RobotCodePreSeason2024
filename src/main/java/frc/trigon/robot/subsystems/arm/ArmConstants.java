@@ -39,10 +39,7 @@ public class ArmConstants {
             ELEVATOR_MASTER_INVERTED = false,
             ANGLE_MASTER_INVERTED = false,
             ELEVATOR_FOLLOWER_INVERTED = false,
-            ANGLE_FOLLOWER_INVERTED = false,
-            ANGLE_ENCODER_DIRECTION = false;
-    private static final AbsoluteSensorRange ANGLE_ENCODER_RANGE = AbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
-    private static final double ANGLE_ENCODER_OFFSET = 10;
+            ANGLE_FOLLOWER_INVERTED = false;
     static final double
             P = 1,
             I = 0,
