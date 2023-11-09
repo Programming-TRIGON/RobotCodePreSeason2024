@@ -62,8 +62,13 @@ public class ArmConstants {
     }
 
     public enum ArmState{
-        ANGLE,
-        ELEVATOR_POSITION
+        ANGLE(0.5),
+        ELEVATOR_POSITION(-0.5);
+
+        final double rotation2d;
+        ArmState(double rotation2d){
+            this.rotation2d = rotation2d;
+        }
     }
 
     private static void configureElevatorMotor(){
