@@ -71,7 +71,6 @@ public class ArmConstants {
 
     }
 
-
     private static void config_angle_motors(){
         MASTER_ANGLE_MOTOR.setInverted(MASTER_ELEVATOR_INVERTED_VALUE);
         MASTER_ANGLE_MOTOR.setIdleMode(MASTER_ANGLE_NEUTRAL_MODE_VALUE);
