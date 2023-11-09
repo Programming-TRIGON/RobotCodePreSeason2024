@@ -1,5 +1,6 @@
 package frc.trigon.robot.subsystems.arm;
 
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix6.configs.CANcoderConfigurator;
@@ -15,21 +16,21 @@ public class ArmConstants {
             ELEVATOR_MASTER_MOTOR_ID = 2,
             ANGLE_FOLLOWER_MOTOR_ID = 3,
             ELEVATOR_FOLLOWER_MOTOR_ID = 4,
-            ANGLE_ENCODER_ID = 5;
+            ANGLE_ENCODER_ID = 5,
+            ELEVATOR_ENCODER_ID = 6;
 
     private static final CANSparkMax
             ANGLE_MASTER_MOTOR = new CANSparkMax(ANGLE_MASTER_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless),
             ELEVATOR_MASTER_MOTOR = new CANSparkMax(ELEVATOR_MASTER_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless),
             ANGLE_FOLLOWER_MOTOR = new CANSparkMax(ANGLE_FOLLOWER_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless),
             ELEVATOR_FOLLOWER_MOTOR = new CANSparkMax(ELEVATOR_FOLLOWER_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless);
+    private static final CANcoder ANGLE_ENCODER = new CANcoder(ANGLE_ENCODER_ID);
+    private static final TalonSRX ELEVATOR_ENCODER = new TalonSRX(ELEVATOR_ENCODER_ID);
     private static final CANSparkMax.IdleMode
             ELEVATOR_MASTER_IDLE_MODE = CANSparkMax.IdleMode.kCoast,
             ANGLE_MASTER_IDLE_MODE = CANSparkMax.IdleMode.kCoast,
             ELEVATOR_FOLLOWER_IDLE_MODE = CANSparkMax.IdleMode.kCoast,
             ANGLE_FOLLOWER_IDLE_MODE = CANSparkMax.IdleMode.kCoast;
-    private static final TalonSRXConfiguration TALON_SRX_CONFIGURATION = new TalonSRXConfiguration();
-    private static final Encoder ELEVATOR_ENCODER = new Encoder(0, 1, false);
-    private static final CANcoder ANGLE_ENCODER = new CANcoder(ANGLE_ENCODER_ID);
     private static final int
             ANGLE_MASTER_MOTOR_VOLTAGE_COMPENSATION_SATURATION = 12,
             ELEVATOR_MASTER_MOTOR_VOLTAGE_COMPENSATION_SATURATION = 12,
@@ -57,12 +58,14 @@ public class ArmConstants {
     }
 
     public enum ArmState{
-        ANGLE(0.5),
-        ELEVATOR_POSITION(-0.5);
+        ANGLE(0.5, 7),
+        ELEVATOR_POSITION(-0.5, 5);
 
         final double rotation2d;
-        ArmState(double rotation2d){
+        final double elevatorPosition;
+        ArmState(double rotation2d, double elevatorPosition){
             this.rotation2d = rotation2d;
+            this.elevatorPosition = elevatorPosition;
         }
     }
 
@@ -100,6 +103,6 @@ public class ArmConstants {
     }
 
     private static void configureElevatorEncoder(){
-        ELEVATOR_ENCODER.reset();
+        ELEVATOR_ENCODER.configFactoryDefault();
     }
 }
