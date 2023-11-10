@@ -1,5 +1,6 @@
 package frc.trigon.robot.subsystems.arm;
 
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -22,8 +23,12 @@ public class ArmConstants {
     private static final CANSparkMax.IdleMode
             ELEVATOR_IDLE_MODE = CANSparkMax.IdleMode.kBrake,
             ANGLE_IDLE_MODE = CANSparkMax.IdleMode.kBrake;
-    private static final int VOLTAGE_COMPANSATION_SATURATION = 12;
-    private static final boolean INVERTED_VALUE = false;
+    private static final int
+            ANGLE_VOLTAGE_COMPANSATION_SATURATION = 12,
+            ELEVATOR_VOLTAGE_COMPANSATION_SATURATION = 12;
+    private static final boolean
+            ANGLE_INVERTED = false,
+            ELEVATOR_INVERTED = false;
     private static final SensorDirectionValue ANGLE_ENCODER_DIRECTION = SensorDirectionValue.CounterClockwise_Positive;
     private static final boolean ELEVATOR_ENCODER_PHASE = false;
     private static final int
@@ -53,8 +58,8 @@ public class ArmConstants {
     }
 
     public enum ArmState {
-        ANGLE(new Rotation2d(5), 7),
-        ELEVATOR_POSITION(new Rotation2d(7), 5);
+        FIRST_STATE(Rotation2d.fromDegrees(100), 7),
+        SECOND_STATE(Rotation2d.fromDegrees(70), 5);
 
         final Rotation2d angle;
         final double elevatorPosition;
@@ -68,15 +73,15 @@ public class ArmConstants {
     private static void configureElevatorMotor(CANSparkMax motor) {
         motor.restoreFactoryDefaults();
         motor.setIdleMode(ELEVATOR_IDLE_MODE);
-        motor.setInverted(INVERTED_VALUE);
-        motor.enableVoltageCompensation(VOLTAGE_COMPANSATION_SATURATION);
+        motor.setInverted(ELEVATOR_INVERTED);
+        motor.enableVoltageCompensation(ELEVATOR_VOLTAGE_COMPANSATION_SATURATION);
     }
 
     private static void configureAngleMotor(CANSparkMax motor) {
         motor.restoreFactoryDefaults();
         motor.setIdleMode(ANGLE_IDLE_MODE);
-        motor.setInverted(INVERTED_VALUE);
-        motor.enableVoltageCompensation(VOLTAGE_COMPANSATION_SATURATION);
+        motor.setInverted(ANGLE_INVERTED);
+        motor.enableVoltageCompensation(ANGLE_VOLTAGE_COMPANSATION_SATURATION);
     }
 
     private static void configureAngleEncoder() {
@@ -88,6 +93,7 @@ public class ArmConstants {
     }
 
     private static void configureElevatorEncoder() {
+        ELEVATOR_ENCODER.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
         ELEVATOR_ENCODER.configFactoryDefault();
         ELEVATOR_ENCODER.setSensorPhase(ELEVATOR_ENCODER_PHASE);
         ELEVATOR_ENCODER.setSelectedSensorPosition(offsetRead(ELEVATOR_ENCODER.getSelectedSensorPosition(), ELEVATOR_ENCODER_OFFSET));
