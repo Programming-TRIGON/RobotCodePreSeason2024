@@ -24,11 +24,12 @@ public class ArmConstants {
             ELEVATOR_IDLE_MODE = CANSparkMax.IdleMode.kBrake,
             ANGLE_IDLE_MODE = CANSparkMax.IdleMode.kBrake;
     private static final int
-            ANGLE_VOLTAGE_COMPANSATION_SATURATION = 12,
-            ELEVATOR_VOLTAGE_COMPANSATION_SATURATION = 12;
+            VOLTAGE_COMPANSATION_SATURATION = 12;
     private static final boolean
-            ANGLE_INVERTED = false,
-            ELEVATOR_INVERTED = false;
+            MASTER_ANGLE_INVERTED = false,
+            MASTER_ELEVATOR_INVERTED = false,
+            FOLLOWER_ANGLE_INVERTED = false,
+            FOLLOWER_ELEVATOR_INVERTED = false;
     private static final SensorDirectionValue ANGLE_ENCODER_DIRECTION = SensorDirectionValue.CounterClockwise_Positive;
     private static final boolean ELEVATOR_ENCODER_PHASE = false;
     private static final int
@@ -43,46 +44,47 @@ public class ArmConstants {
     private static final CANcoder ANGLE_ENCODER = new CANcoder(ANGLE_ENCODER_ID);
     private static final TalonSRX ELEVATOR_ENCODER = new TalonSRX(ELEVATOR_ENCODER_ID);
     static final double
-            P = 1,
-            I = 0,
-            D = 0;
-    static final PIDController PID_CONTROLLER = new PIDController(P, I, D);
+            ANGLE_P = 1,
+            ELEVATOR_P = 1,
+            ANGLE_I = 0,
+            ELEVATOR_I = 0,
+            ANGLE_D = 0,
+            ELEVATOR_D = 0;
+    static final PIDController
+            ANGLE_PID_CONTROLLER = new PIDController(ANGLE_P, ANGLE_I, ANGLE_D),
+            ELEVATOR_PID_CONTROLLER = new PIDController(ELEVATOR_P, ELEVATOR_I, ELEVATOR_D);
 
     static {
         configureAngleEncoder();
         configureElevatorEncoder();
-        configureAngleMotor(MASTER_ANGLE_MOTOR);
-        configureAngleMotor(FOLLOWER_ANGLE_MOTOR);
-        configureElevatorMotor(MASTER_ELEVATOR_MOTOR);
-        configureElevatorMotor(FOLLOWER_ELEVATOR_MOTOR);
+        configureElevatorMotors();
+        configureAngleMotors();
     }
 
-    public enum ArmState {
-        FIRST_STATE(Rotation2d.fromDegrees(100), 7),
-        SECOND_STATE(Rotation2d.fromDegrees(70), 5);
+    private static void configureElevatorMotors() {
+        MASTER_ELEVATOR_MOTOR.restoreFactoryDefaults();
+        MASTER_ELEVATOR_MOTOR.setIdleMode(ELEVATOR_IDLE_MODE);
+        MASTER_ELEVATOR_MOTOR.setInverted(MASTER_ELEVATOR_INVERTED);
+        MASTER_ELEVATOR_MOTOR.enableVoltageCompensation(VOLTAGE_COMPANSATION_SATURATION);
 
-        final Rotation2d angle;
-        final double elevatorPosition;
-
-        ArmState(Rotation2d angle, double elevatorPosition) {
-            this.angle = angle;
-            this.elevatorPosition = elevatorPosition;
-        }
+        FOLLOWER_ELEVATOR_MOTOR.restoreFactoryDefaults();
+        FOLLOWER_ELEVATOR_MOTOR.setIdleMode(ELEVATOR_IDLE_MODE);
+        FOLLOWER_ELEVATOR_MOTOR.setInverted(FOLLOWER_ELEVATOR_INVERTED);
+        FOLLOWER_ELEVATOR_MOTOR.enableVoltageCompensation(VOLTAGE_COMPANSATION_SATURATION);
     }
 
-    private static void configureElevatorMotor(CANSparkMax motor) {
-        motor.restoreFactoryDefaults();
-        motor.setIdleMode(ELEVATOR_IDLE_MODE);
-        motor.setInverted(ELEVATOR_INVERTED);
-        motor.enableVoltageCompensation(ELEVATOR_VOLTAGE_COMPANSATION_SATURATION);
+    private static void configureAngleMotors() {
+        MASTER_ANGLE_MOTOR.restoreFactoryDefaults();
+        MASTER_ANGLE_MOTOR.setIdleMode(ANGLE_IDLE_MODE);
+        MASTER_ANGLE_MOTOR.setInverted(MASTER_ANGLE_INVERTED);
+        MASTER_ANGLE_MOTOR.enableVoltageCompensation(VOLTAGE_COMPANSATION_SATURATION);
+
+        FOLLOWER_ANGLE_MOTOR.restoreFactoryDefaults();
+        FOLLOWER_ANGLE_MOTOR.setIdleMode(ANGLE_IDLE_MODE);
+        FOLLOWER_ANGLE_MOTOR.setInverted(FOLLOWER_ANGLE_INVERTED);
+        FOLLOWER_ANGLE_MOTOR.enableVoltageCompensation(VOLTAGE_COMPANSATION_SATURATION);
     }
 
-    private static void configureAngleMotor(CANSparkMax motor) {
-        motor.restoreFactoryDefaults();
-        motor.setIdleMode(ANGLE_IDLE_MODE);
-        motor.setInverted(ANGLE_INVERTED);
-        motor.enableVoltageCompensation(ANGLE_VOLTAGE_COMPANSATION_SATURATION);
-    }
 
     private static void configureAngleEncoder() {
         CANcoderConfiguration angleEncoderConfig = new CANcoderConfiguration();
@@ -97,5 +99,18 @@ public class ArmConstants {
         ELEVATOR_ENCODER.configFactoryDefault();
         ELEVATOR_ENCODER.setSensorPhase(ELEVATOR_ENCODER_PHASE);
         ELEVATOR_ENCODER.setSelectedSensorPosition(offsetRead(ELEVATOR_ENCODER.getSelectedSensorPosition(), ELEVATOR_ENCODER_OFFSET));
+    }
+
+    public enum ArmState {
+        FIRST_STATE(Rotation2d.fromDegrees(100), 7),
+        SECOND_STATE(Rotation2d.fromDegrees(70), 5);
+
+        final Rotation2d angle;
+        final double elevatorPosition;
+
+        ArmState(Rotation2d angle, double elevatorPosition) {
+            this.angle = angle;
+            this.elevatorPosition = elevatorPosition;
+        }
     }
 }
