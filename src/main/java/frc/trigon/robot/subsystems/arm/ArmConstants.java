@@ -63,7 +63,6 @@ public class ArmConstants {
         }
     }
 
-
     static {
         configureAngleMotors();
         configureElevatorMotors();
