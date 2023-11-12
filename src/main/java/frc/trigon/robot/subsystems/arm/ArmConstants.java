@@ -94,7 +94,7 @@ public class ArmConstants {
         ELEVATOR_ENCODER.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
         ELEVATOR_ENCODER.configFactoryDefault();
         ELEVATOR_ENCODER.setSensorPhase(ELEVATOR_MOTOR_PHASE);
-        ELEVATOR_ENCODER.setSelectedSensorPosition(ELEVATOR_ENCODER.getSelectedSensorPosition() - Conversions.offsetRead(0, ELEVATOR_MOTOR_OFFSET));
+        ELEVATOR_ENCODER.setSelectedSensorPosition(Conversions.offsetRead(ELEVATOR_ENCODER.getSelectedSensorPosition(), ELEVATOR_MOTOR_OFFSET));
     }
 
     public enum ArmState {
