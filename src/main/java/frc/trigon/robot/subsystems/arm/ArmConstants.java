@@ -11,17 +11,36 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 
 public class ArmConstants {
-    private static final int MASTER_ANGLE_MOTOR_ID = 0, FOLLOWER_ANGLE_MOTOR_ID = 1, MASTER_ELEVATOR_MOTOR_ID = 0, FOLLOWER_ELEVATOR_MOTOR_ID = 1, ANGLE_ENCODER_ID = 0, ELEVATOR_ENCODER_ID = 1;
-    private static final boolean MASTER_ANGLE_MOTOR_INVERTED = false, FOLLOWER_ANGLE_MOTOR_INVERTED = false, MASTER_ELEVATOR_MOTOR_INVERTED = false, FOLLOWER_ELEVATOR_MOTOR_INVERTED = false;
-    private static final CANSparkMax.IdleMode ANGLE_MOTORS_IDLE_MODE = CANSparkMax.IdleMode.kBrake, ELEVATOR_MOTORS_IDLE_MODE = CANSparkMax.IdleMode.kBrake;
+    private static final int
+            MASTER_ANGLE_MOTOR_ID = 0,
+            FOLLOWER_ANGLE_MOTOR_ID = 1,
+            MASTER_ELEVATOR_MOTOR_ID = 0,
+            FOLLOWER_ELEVATOR_MOTOR_ID = 1,
+            ANGLE_ENCODER_ID = 0,
+            ELEVATOR_ENCODER_ID = 1;
+    private static final boolean
+            MASTER_ANGLE_MOTOR_INVERTED = false,
+            FOLLOWER_ANGLE_MOTOR_INVERTED = false,
+            MASTER_ELEVATOR_MOTOR_INVERTED = false,
+            FOLLOWER_ELEVATOR_MOTOR_INVERTED = false;
+    private static final CANSparkMax.IdleMode ANGLE_MOTORS_IDLE_MODE =
+            CANSparkMax.IdleMode.kBrake,
+            ELEVATOR_MOTORS_IDLE_MODE = CANSparkMax.IdleMode.kBrake;
     private static final int VOLTAGE_COMPENSATION_SATURATION = 12;
-    private static final CANSparkMax MASTER_ANGLE_MOTOR = new CANSparkMax(MASTER_ANGLE_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless), FOLLOWER_ANGLE_MOTOR = new CANSparkMax(FOLLOWER_ANGLE_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless), MASTER_ELEVATOR_MOTOR = new CANSparkMax(MASTER_ELEVATOR_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless), FOLLOWER_ELEVATOR_MOTOR = new CANSparkMax(FOLLOWER_ELEVATOR_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless);
+    private static final CANSparkMax
+            MASTER_ANGLE_MOTOR = new CANSparkMax(MASTER_ANGLE_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless),
+            FOLLOWER_ANGLE_MOTOR = new CANSparkMax(FOLLOWER_ANGLE_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless),
+            MASTER_ELEVATOR_MOTOR = new CANSparkMax(MASTER_ELEVATOR_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless),
+            FOLLOWER_ELEVATOR_MOTOR = new CANSparkMax(FOLLOWER_ELEVATOR_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless);
     private static final CANcoder ANGLE_ENCODER = new CANcoder(ANGLE_ENCODER_ID);
     private static final TalonFX ELEVATOR_ENCODER = new TalonFX(ELEVATOR_ENCODER_ID);
     private static final double ANGLE_MOTOR_OFFSET = 1;
     private static final SensorDirectionValue ANGLE_MOTOR_DIRECTION = SensorDirectionValue.Clockwise_Positive;
     private static final AbsoluteSensorRangeValue ANGLE_MOTOR_RANGE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
-    private static final int P = 0, I = 0, D = 0;
+    private static final int
+            P = 0,
+            I = 0,
+            D = 0;
     private static final PIDController PID_CONTROLLER_ANGLE = new PIDController(P, I, D);
     private static final PIDController PID_CONTROLLER_ELEVATOR = new PIDController(P, I, D);
 
