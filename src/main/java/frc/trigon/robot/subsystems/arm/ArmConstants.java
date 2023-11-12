@@ -10,7 +10,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
-import static frc.trigon.robot.utilities.Conversions.offsetRead;
+import frc.trigon.robot.utilities.Conversions;
 
 public class ArmConstants {
     private static final int
@@ -94,9 +94,9 @@ public class ArmConstants {
 
     private static void configureElevatorEncoder() {
         ELEVATOR_ENCODER.configFactoryDefault();
-        ELEVATOR_ENCODER.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
+        ELEVATOR_ENCODER.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
         ELEVATOR_ENCODER.setSensorPhase(ELEVATOR_ENCODER_PHASE);
-        ELEVATOR_ENCODER.setSelectedSensorPosition(offsetRead(ELEVATOR_ENCODER.getSelectedSensorPosition(), ELEVATOR_ENCODER_OFFSET));
+        ELEVATOR_ENCODER.setSelectedSensorPosition(Conversions.offsetRead(ELEVATOR_ENCODER.getSelectedSensorPosition(), ELEVATOR_ENCODER_OFFSET));
     }
 
     public enum ArmState {
