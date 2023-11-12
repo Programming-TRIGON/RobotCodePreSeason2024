@@ -10,6 +10,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.trigon.robot.utilities.Conversions;
 
 public class ArmConstants {
@@ -35,6 +36,17 @@ public class ArmConstants {
     private static final int
             ELEVATOR_ENCODER_OFFSET = 5,
             ANGLE_ENCODER_OFFSET = 5;
+    private static final double
+            MAX_ANGLE_VELOCITY = 100,
+            MAX_ANGLE_ACCELERATION = 100,
+            MAX_ELEVATOR_VELOCITY = 100,
+            MAX_ELEVATOR_ACCELERATION = 100;
+    static final TrapezoidProfile.Constraints ANGLE_CONSTRAINTS = new TrapezoidProfile.Constraints(
+            MAX_ANGLE_VELOCITY, MAX_ANGLE_ACCELERATION
+    );
+    static final TrapezoidProfile.Constraints ELEVATOR_CONSTRAINTS = new TrapezoidProfile.Constraints(
+            MAX_ELEVATOR_VELOCITY, MAX_ELEVATOR_ACCELERATION
+    );
     private static final AbsoluteSensorRangeValue ANGLE_ENCODER_RANGE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
     private static final CANSparkMax
             MASTER_ANGLE_MOTOR = new CANSparkMax(MASTER_ANGLE_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless),
