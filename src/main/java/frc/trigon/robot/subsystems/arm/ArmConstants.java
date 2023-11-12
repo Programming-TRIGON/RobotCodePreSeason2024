@@ -1,8 +1,9 @@
 package frc.trigon.robot.subsystems.arm;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
-import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.CANSparkMax;
@@ -33,16 +34,22 @@ public class ArmConstants {
             MASTER_ELEVATOR_MOTOR = new CANSparkMax(MASTER_ELEVATOR_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless),
             FOLLOWER_ELEVATOR_MOTOR = new CANSparkMax(FOLLOWER_ELEVATOR_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless);
     private static final CANcoder ANGLE_ENCODER = new CANcoder(ANGLE_ENCODER_ID);
-    private static final TalonFX ELEVATOR_ENCODER = new TalonFX(ELEVATOR_ENCODER_ID);
-    private static final double ANGLE_MOTOR_OFFSET = 1;
+    private static final TalonSRX ELEVATOR_ENCODER = new TalonSRX(ELEVATOR_ENCODER_ID);
+    private static final double
+            ANGLE_MOTOR_OFFSET = 1,
+            ELEVATOR_MOTOR_OFFSET = 1;
     private static final SensorDirectionValue ANGLE_MOTOR_DIRECTION = SensorDirectionValue.Clockwise_Positive;
+    private static final boolean ELEVATOR_MOTOR_PHASE = true;
     private static final AbsoluteSensorRangeValue ANGLE_MOTOR_RANGE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
     private static final int
-            P = 0,
-            I = 0,
-            D = 0;
-    private static final PIDController PID_CONTROLLER_ANGLE = new PIDController(P, I, D);
-    private static final PIDController PID_CONTROLLER_ELEVATOR = new PIDController(P, I, D);
+            ANGLE_P = 0,
+            ELEVATOR_P = 0,
+            ANGLE_I = 0,
+            ELEVATOR_I = 0,
+            ANGLE_D = 0,
+            ELEVATOR_D = 0;
+    private static final PIDController PID_CONTROLLER_ANGLE = new PIDController(ANGLE_P, ANGLE_I, ANGLE_D);
+    private static final PIDController PID_CONTROLLER_ELEVATOR = new PIDController(ELEVATOR_P, ELEVATOR_I, ELEVATOR_D);
 
     public enum ArmState {
         DEFAULT(Rotation2d.fromDegrees(0), 0), TAKE_HIGH_CONE(Rotation2d.fromDegrees(60), 10), TAKE_GROUND_CONE(Rotation2d.fromDegrees(0), 0), PLACE_LOW_CONE(Rotation2d.fromDegrees(20), 3), PLACE_MEDIUM_CONE(Rotation2d.fromDegrees(50), 7), PLACE_HIGH_CONE(Rotation2d.fromDegrees(70), 10);
@@ -95,6 +102,8 @@ public class ArmConstants {
     }
 
     private static void configureElevatorEncoder() {
-
+        ELEVATOR_ENCODER.configFactoryDefault();
+        ELEVATOR_ENCODER.setSensorPhase(ELEVATOR_MOTOR_PHASE);
+        ELEVATOR_ENCODER.set(ControlMode.Position, ControlMode.Position.value - ELEVATOR_MOTOR_OFFSET);
     }
 }
