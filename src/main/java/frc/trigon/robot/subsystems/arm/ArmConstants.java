@@ -1,5 +1,6 @@
 package frc.trigon.robot.subsystems.arm;
 
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -9,6 +10,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
+import frc.trigon.robot.utilities.Conversions;
 
 public class ArmConstants {
     private static final int
@@ -38,7 +40,7 @@ public class ArmConstants {
             ANGLE_MOTOR_OFFSET = 0,
             ELEVATOR_MOTOR_OFFSET = 0;
     private static final SensorDirectionValue ANGLE_MOTOR_DIRECTION = SensorDirectionValue.Clockwise_Positive;
-    private static final boolean ELEVATOR_MOTOR_PHASE = true;
+    private static final boolean ELEVATOR_MOTOR_PHASE = false;
     private static final AbsoluteSensorRangeValue ANGLE_MOTOR_RANGE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
     private static final int
             ANGLE_P = 0,
@@ -47,8 +49,9 @@ public class ArmConstants {
             ELEVATOR_P = 0,
             ELEVATOR_I = 0,
             ELEVATOR_D = 0;
-    private static final PIDController PID_CONTROLLER_ANGLE = new PIDController(ANGLE_P, ANGLE_I, ANGLE_D);
-    private static final PIDController PID_CONTROLLER_ELEVATOR = new PIDController(ELEVATOR_P, ELEVATOR_I, ELEVATOR_D);
+    private static final PIDController
+            ANGLE_PID_CONTROLLER = new PIDController(ANGLE_P, ANGLE_I, ANGLE_D),
+            ELEVATOR_PID_CONTROLLER = new PIDController(ELEVATOR_P, ELEVATOR_I, ELEVATOR_D);
 
     static {
         configureAngleMotors();
@@ -88,9 +91,10 @@ public class ArmConstants {
     }
 
     private static void configureElevatorEncoder() {
+        ELEVATOR_ENCODER.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
         ELEVATOR_ENCODER.configFactoryDefault();
         ELEVATOR_ENCODER.setSensorPhase(ELEVATOR_MOTOR_PHASE);
-        ELEVATOR_ENCODER.setSelectedSensorPosition(ELEVATOR_ENCODER.getSelectedSensorPosition() - ELEVATOR_MOTOR_OFFSET);
+        ELEVATOR_ENCODER.setSelectedSensorPosition(ELEVATOR_ENCODER.getSelectedSensorPosition() - Conversions.offsetRead(0, ELEVATOR_MOTOR_OFFSET));
     }
 
     public enum ArmState {
