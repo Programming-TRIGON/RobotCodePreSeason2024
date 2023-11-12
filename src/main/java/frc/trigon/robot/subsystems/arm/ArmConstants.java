@@ -45,10 +45,10 @@ public class ArmConstants {
     private static final TalonSRX ELEVATOR_ENCODER = new TalonSRX(ELEVATOR_ENCODER_ID);
     static final double
             ANGLE_P = 1,
-            ELEVATOR_P = 1,
             ANGLE_I = 0,
-            ELEVATOR_I = 0,
             ANGLE_D = 0,
+            ELEVATOR_P = 1,
+            ELEVATOR_I = 0,
             ELEVATOR_D = 0;
     static final PIDController
             ANGLE_PID_CONTROLLER = new PIDController(ANGLE_P, ANGLE_I, ANGLE_D),
@@ -63,25 +63,23 @@ public class ArmConstants {
 
     private static void configureElevatorMotors() {
         MASTER_ELEVATOR_MOTOR.restoreFactoryDefaults();
-        MASTER_ELEVATOR_MOTOR.setIdleMode(ELEVATOR_IDLE_MODE);
-        MASTER_ELEVATOR_MOTOR.setInverted(MASTER_ELEVATOR_INVERTED);
-        MASTER_ELEVATOR_MOTOR.enableVoltageCompensation(VOLTAGE_COMPANSATION_SATURATION);
-
         FOLLOWER_ELEVATOR_MOTOR.restoreFactoryDefaults();
+        MASTER_ELEVATOR_MOTOR.setIdleMode(ELEVATOR_IDLE_MODE);
         FOLLOWER_ELEVATOR_MOTOR.setIdleMode(ELEVATOR_IDLE_MODE);
+        MASTER_ELEVATOR_MOTOR.setInverted(MASTER_ELEVATOR_INVERTED);
         FOLLOWER_ELEVATOR_MOTOR.setInverted(FOLLOWER_ELEVATOR_INVERTED);
+        MASTER_ELEVATOR_MOTOR.enableVoltageCompensation(VOLTAGE_COMPANSATION_SATURATION);
         FOLLOWER_ELEVATOR_MOTOR.enableVoltageCompensation(VOLTAGE_COMPANSATION_SATURATION);
     }
 
     private static void configureAngleMotors() {
         MASTER_ANGLE_MOTOR.restoreFactoryDefaults();
-        MASTER_ANGLE_MOTOR.setIdleMode(ANGLE_IDLE_MODE);
-        MASTER_ANGLE_MOTOR.setInverted(MASTER_ANGLE_INVERTED);
-        MASTER_ANGLE_MOTOR.enableVoltageCompensation(VOLTAGE_COMPANSATION_SATURATION);
-
         FOLLOWER_ANGLE_MOTOR.restoreFactoryDefaults();
+        MASTER_ANGLE_MOTOR.setIdleMode(ANGLE_IDLE_MODE);
         FOLLOWER_ANGLE_MOTOR.setIdleMode(ANGLE_IDLE_MODE);
+        MASTER_ANGLE_MOTOR.setInverted(MASTER_ANGLE_INVERTED);
         FOLLOWER_ANGLE_MOTOR.setInverted(FOLLOWER_ANGLE_INVERTED);
+        MASTER_ANGLE_MOTOR.enableVoltageCompensation(VOLTAGE_COMPANSATION_SATURATION);
         FOLLOWER_ANGLE_MOTOR.enableVoltageCompensation(VOLTAGE_COMPANSATION_SATURATION);
     }
 
@@ -95,8 +93,8 @@ public class ArmConstants {
     }
 
     private static void configureElevatorEncoder() {
-        ELEVATOR_ENCODER.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
         ELEVATOR_ENCODER.configFactoryDefault();
+        ELEVATOR_ENCODER.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
         ELEVATOR_ENCODER.setSensorPhase(ELEVATOR_ENCODER_PHASE);
         ELEVATOR_ENCODER.setSelectedSensorPosition(offsetRead(ELEVATOR_ENCODER.getSelectedSensorPosition(), ELEVATOR_ENCODER_OFFSET));
     }
