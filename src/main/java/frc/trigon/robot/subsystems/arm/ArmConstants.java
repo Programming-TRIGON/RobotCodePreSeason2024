@@ -1,27 +1,16 @@
 package frc.trigon.robot.subsystems.arm;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
+import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 
 public class ArmConstants {
-    // 2 motors for angle - CANSparkMax, Neo (Brushless)
-    // 2 motors for elevator/opening - CANSparkMax, Neo (Brushless)
-    // CANcoder - angle encoder
-    // TalonSRX, mag encoder - elevator encoder
-    // PIDController
-    // Enum arm state (angle, elevatorPosition)
-
-    // configs:
-    // encoders:
-    // direction / phase
-    // offset
-    // (only cancoder) range
     private static final int
             MASTER_ANGLE_MOTOR_ID = 0,
             FOLLOWER_ANGLE_MOTOR_ID = 1,
@@ -42,16 +31,20 @@ public class ArmConstants {
             FOLLOWER_ANGLE_MOTOR = new CANSparkMax(FOLLOWER_ANGLE_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless),
             MASTER_ELEVATOR_MOTOR = new CANSparkMax(MASTER_ELEVATOR_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless),
             FOLLOWER_ELEVATOR_MOTOR = new CANSparkMax(FOLLOWER_ELEVATOR_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless);
+    private static final CANcoder ANGLE_ENCODER = new CANcoder(ANGLE_ENCODER_ID);
+    private static final TalonFX ELEVATOR_ENCODER = new TalonFX(ELEVATOR_ENCODER_ID);
+
+
+    //                                               |
+    //I need help with this one                      V
+    private static final double ANGLE_MOTOR_OFFSET = 0;
+    private static final SensorDirectionValue ANGLE_MOTOR_DIRECTION = SensorDirectionValue.Clockwise_Positive;
+    private static final AbsoluteSensorRangeValue ANGLE_MOTOR_RANGE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
     private static final int
             P = 0,
             I = 0,
             D = 0;
     private static final PIDController PID_CONTROLLER = new PIDController(P, I, D);
-    private static final int
-            ANGLE_ENCODER_DIRECTION = 0,
-            ELEVATOR_ENCODER_DIRECTION = 0;
-    private static final CANcoder ANGLE_ENCODER = new CANcoder(ANGLE_ENCODER_ID);
-    private static final TalonFX ELEVATOR_ENCODER = new TalonFX(ELEVATOR_ENCODER_ID);
 
     public enum ArmState {
         DEFAULT(Rotation2d.fromDegrees(0), 0),
@@ -102,12 +95,13 @@ public class ArmConstants {
 
     private static void configureAngleEncoder() {
         CANcoderConfiguration config = new CANcoderConfiguration();
-        config.MagnetSensor.MagnetOffset = config.MagnetSensor.SensorDirection.value;
+        config.MagnetSensor.MagnetOffset = ANGLE_MOTOR_OFFSET;
+        config.MagnetSensor.SensorDirection.value = ANGLE_MOTOR_DIRECTION;
+        config.MagnetSensor.AbsoluteSensorRange.value = ANGLE_MOTOR_RANGE;
+        ANGLE_ENCODER.getConfigurator().apply(config);
     }
 
     private static void configureElevatorEncoder() {
-        TalonFXConfiguration config = new TalonFXConfiguration();
-        config.Audio.BeepOnConfig = false;
-        config.Audio.BeepOnBoot = false;
+
     }
 }
