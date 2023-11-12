@@ -23,8 +23,8 @@ public class ArmConstants {
             FOLLOWER_ANGLE_MOTOR_INVERTED = false,
             MASTER_ELEVATOR_MOTOR_INVERTED = false,
             FOLLOWER_ELEVATOR_MOTOR_INVERTED = false;
-    private static final CANSparkMax.IdleMode ANGLE_MOTORS_IDLE_MODE =
-            CANSparkMax.IdleMode.kBrake,
+    private static final CANSparkMax.IdleMode
+            ANGLE_MOTORS_IDLE_MODE = CANSparkMax.IdleMode.kBrake,
             ELEVATOR_MOTORS_IDLE_MODE = CANSparkMax.IdleMode.kBrake;
     private static final int VOLTAGE_COMPENSATION_SATURATION = 12;
     private static final CANSparkMax
