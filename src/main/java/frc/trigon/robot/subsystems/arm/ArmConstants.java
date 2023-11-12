@@ -52,6 +52,11 @@ public class ArmConstants {
     private static final PIDController
             ANGLE_PID_CONTROLLER = new PIDController(ANGLE_P, ANGLE_I, ANGLE_D),
             ELEVATOR_PID_CONTROLLER = new PIDController(ELEVATOR_P, ELEVATOR_I, ELEVATOR_D);
+    private static final double
+        MAX_ANGLE_VELOCITY = 100,
+        MAX_ELEVATOR_VELOCITY = 100,
+        MAX_ANGLE_ACCELERATION = 100,
+        MAX_ELEVATOR_ACCELERATION = 100;
 
     static {
         configureAngleMotors();
