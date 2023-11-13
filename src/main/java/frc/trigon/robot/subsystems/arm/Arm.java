@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.trigon.robot.utilities.Conversions;
 
 public class Arm extends SubsystemBase {
     private final static Arm INSTANCE = new Arm();
@@ -71,7 +72,7 @@ public class Arm extends SubsystemBase {
             return;
         }
 
-        final TrapezoidProfile.State targetState = elevatorMotorProfile.calculate(getElevatorMotorProfileTime());
+        TrapezoidProfile.State targetState = elevatorMotorProfile.calculate(getElevatorMotorProfileTime());
         masterElevatorMotor.getPIDController().setReference(targetState.position, CANSparkMax.ControlType.kPosition);
     }
 
@@ -79,7 +80,7 @@ public class Arm extends SubsystemBase {
         angleMotorProfile = new TrapezoidProfile(
                 ArmConstants.ANGLE_CONSTRAINTS,
                 new TrapezoidProfile.State(targetAngle.getDegrees(),0),
-                new TrapezoidProfile.State(getAngleMotorPosition().getDegrees(), getAngleMotorVelocity())
+                new TrapezoidProfile.State(getAngleMotorPosition().getDegrees(), getAngleMotorVelocityRevolutionsPerSecond())
         );
 
         lastAngleMotorProfileGenerationTime = Timer.getFPGATimestamp();
@@ -111,12 +112,12 @@ public class Arm extends SubsystemBase {
         return Rotation2d.fromDegrees(elevatorEncoder.getSelectedSensorPosition()).getRotations();
     }
 
-    private double getAngleMotorVelocity(){
-        return angleEncoder.getVelocity().getValue() / ArmConstants.ENCODER_TICS_PER_REVOLUTION * 10 / 100;
+    private double getAngleMotorVelocityRevolutionsPerSecond(){
+        return angleEncoder.getVelocity().getValue();
     }
 
     private double getElevatorVelocityRevolutionsPerSecond(){
-        return elevatorEncoder.getSelectedSensorVelocity() / ArmConstants.ENCODER_TICS_PER_REVOLUTION * 10 / 100;
+        return Conversions.magTicksToRevolutions(elevatorEncoder.getSelectedSensorVelocity());
     }
 
     private void stopAngleMotors(){
