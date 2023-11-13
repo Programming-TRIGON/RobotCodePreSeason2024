@@ -11,6 +11,9 @@ import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+
 
 public class SideShooterConstants {
 
@@ -20,22 +23,31 @@ public class SideShooterConstants {
             ANGLE_MOTOR_ID = 1,
             ANGLE_ENCODER_ID = 2;
 
-    static final CANSparkMax ANGLE_MOTOR = new CANSparkMax(ANGLE_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless);
-    static final CANcoder ANGLE_ENCODER = new CANcoder(ANGLE_ENCODER_ID);
 
-    static final TalonFX SHOOTING_MOTOR = new TalonFX(SHOOTING_MOTOR_ID);
     private static final double ANGLE_ENCODER_OFFSET = 0;
     private static final AbsoluteSensorRangeValue ANGLE_ENCODER_RANGE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
     private static final InvertedValue SHOOTING_MOTOR_INVERTED_VALUE = InvertedValue.CounterClockwise_Positive;
     private static final boolean ANGLE_MOTOR_INVERTED = false;
+
     private static final SensorDirectionValue ANGLE_ENCODER_DIRECTION = SensorDirectionValue.Clockwise_Positive;
     private static final NeutralModeValue SHOOTING_NEUTRAL_MODE_VALUE = NeutralModeValue.Coast;
     private static final CANSparkMax.IdleMode ANGLE_MOTOR_IDLE_MODE = CANSparkMax.IdleMode.kBrake;
+
+    static final CANSparkMax ANGLE_MOTOR = new CANSparkMax(ANGLE_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless);
+    static final CANcoder ANGLE_ENCODER = new CANcoder(ANGLE_ENCODER_ID);
+    static final TalonFX SHOOTING_MOTOR = new TalonFX(SHOOTING_MOTOR_ID);
+
     private static final double
-            P = 1,
-            I = 0,
-            D = 0;
-    static final PIDController PID_CONTROLLER = new PIDController(P, I, D);
+        MAX_ANGLE_VELOCITY = 600,
+        MAX_ANGLE_ACCELERATION = 500;
+
+    static final TrapezoidProfile.Constraints ANGLE_CONSTRAINTS = new TrapezoidProfile.Constraints(MAX_ANGLE_VELOCITY, MAX_ANGLE_ACCELERATION);
+
+    private static final double
+            ANGLE_MOTOR_P = 1,
+            ANGLE_MOTOR_I = 0,
+            ANGLE_MOTOR_D = 0;
+    static final PIDController ANGLE_PID_CONTROLLER = new PIDController(ANGLE_MOTOR_P, ANGLE_MOTOR_I, ANGLE_MOTOR_D);
 
     static {
         configureAngleEncoder();
@@ -68,13 +80,14 @@ public class SideShooterConstants {
     }
 
     public enum SideShooter {
-        COLLECTOR(-15, -5),
-        MIDDLE(30, 5),
-        HIGH(60, 10);
+        COLLECTION(new Rotation2d(-15), -5),
+        MIDDLE(new Rotation2d(30), 5),
+        HIGH(new Rotation2d(60), 10);
 
-        final double angle, power;
+        final Rotation2d angle;
+        final double power;
 
-        SideShooter(double angle, double power) {
+        SideShooter(Rotation2d angle, double power) {
             this.angle = angle;
             this.power = power;
         }
