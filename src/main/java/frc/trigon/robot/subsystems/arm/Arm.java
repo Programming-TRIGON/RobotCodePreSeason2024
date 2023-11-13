@@ -45,7 +45,7 @@ public class Arm extends SubsystemBase {
         );
     }
 
-    public Command getSetElevatorTargetCommand((){
+    public Command getSetElevatorTargetCommand(Rotation2d angle){
         return new FunctionalCommand(
                 () -> generateElevatorMotorProfile(angle),
                 this::setTargetElevatorFromProfile,
@@ -111,8 +111,8 @@ public class Arm extends SubsystemBase {
         return Rotation2d.fromDegrees(elevatorEncoder.getSelectedSensorPosition()).getRotations();
     }
 
-    private double getAngleMotorVelocity(){
-        return angleEncoder.getVelocity().getValue();
+    private Rotation2d getAngleMotorVelocity(){
+        return Rotation2d.fromRotations(angleEncoder.getVelocity().getValue());
     }
 
     private double getElevatorVelocityRevolutionsPerSecond(){
