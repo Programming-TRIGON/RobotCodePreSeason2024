@@ -34,8 +34,8 @@ public class ArmConstants {
     private static final SensorDirectionValue ANGLE_ENCODER_DIRECTION = SensorDirectionValue.CounterClockwise_Positive;
     private static final boolean ELEVATOR_ENCODER_PHASE = false;
     private static final int
-            ELEVATOR_ENCODER_OFFSET = 5,
-            ANGLE_ENCODER_OFFSET = 5;
+            ELEVATOR_ENCODER_OFFSET = 0,
+            ANGLE_ENCODER_OFFSET = 0;
     private static final AbsoluteSensorRangeValue ANGLE_ENCODER_RANGE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
     private static final CANSparkMax
             MASTER_ANGLE_MOTOR = new CANSparkMax(MASTER_ANGLE_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless),
@@ -106,7 +106,7 @@ public class ArmConstants {
 
     private static void configureElevatorEncoder() {
         ELEVATOR_ENCODER.configFactoryDefault();
-        ELEVATOR_ENCODER.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
+        ELEVATOR_ENCODER.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0, 0);
         ELEVATOR_ENCODER.setSensorPhase(ELEVATOR_ENCODER_PHASE);
         ELEVATOR_ENCODER.setSelectedSensorPosition(Conversions.offsetRead(ELEVATOR_ENCODER.getSelectedSensorPosition(), ELEVATOR_ENCODER_OFFSET));
     }
