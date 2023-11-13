@@ -33,10 +33,10 @@ public class ArmConstants {
     private static final SensorDirectionValue ANGLE_CANCODER_SENSOR_DIRECTION = SensorDirectionValue.Clockwise_Positive;
 
     private static final double
-        MAX_ANGLE_VELOCITY = 600,
-        MAX_ANGLE_ACCELERATION = 500,
-        MAX_ELEVATOR_VELOCITY = 900,
-        MAX_ELEVATOR_ACCELERATION = 550;
+        MAX_ANGLE_VELOCITY = 100,
+        MAX_ANGLE_ACCELERATION = 100,
+        MAX_ELEVATOR_VELOCITY = 100,
+        MAX_ELEVATOR_ACCELERATION = 100;
     static final TrapezoidProfile.Constraints ANGLE_CONSTRAINS = new TrapezoidProfile.Constraints(MAX_ANGLE_VELOCITY, MAX_ANGLE_ACCELERATION);
     static final TrapezoidProfile.Constraints ELEVATOR_CONSTRAINS = new TrapezoidProfile.Constraints(MAX_ELEVATOR_VELOCITY, MAX_ELEVATOR_ACCELERATION);
     
@@ -71,7 +71,7 @@ public class ArmConstants {
     private static void configureElevatorMotors() {
         MASTER_ELEVATOR_MOTOR.restoreFactoryDefaults();
         FOLLOWER_ELEVATOR_MOTOR.restoreFactoryDefaults();
-        
+
         MASTER_ELEVATOR_MOTOR.enableVoltageCompensation(VOLTAGE_COMPENSATION_SATURATION);
         FOLLOWER_ELEVATOR_MOTOR.enableVoltageCompensation(VOLTAGE_COMPENSATION_SATURATION);
 
