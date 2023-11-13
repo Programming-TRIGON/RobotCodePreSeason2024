@@ -2,7 +2,6 @@ package frc.trigon.robot.subsystems.collector;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import java.util.function.Supplier;
 
 public class CollectorConstants {
     private static final int MOTOR_ID = 1;
