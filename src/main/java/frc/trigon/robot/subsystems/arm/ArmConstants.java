@@ -59,6 +59,8 @@ public class ArmConstants {
             D = 0;
     private static final PIDController PID_CONTROLLER = new PIDController(P, I, D);
 
+    private static final double VOLTAGE_COMPENSATION_SATURATION = 12;
+
     static {
         configureAngleMotors();
         configureElevatorMotors();
@@ -69,6 +71,10 @@ public class ArmConstants {
     private static void configureElevatorMotors() {
         MASTER_ELEVATOR_MOTOR.restoreFactoryDefaults();
         FOLLOWER_ELEVATOR_MOTOR.restoreFactoryDefaults();
+        
+        MASTER_ELEVATOR_MOTOR.enableVoltageCompensation(VOLTAGE_COMPENSATION_SATURATION);
+        FOLLOWER_ELEVATOR_MOTOR.enableVoltageCompensation(VOLTAGE_COMPENSATION_SATURATION);
+
 
         MASTER_ELEVATOR_MOTOR.setInverted(MASTER_ELEVATOR_INVERTED);
         FOLLOWER_ELEVATOR_MOTOR.setInverted(FOLLOWER_ELEVATOR_INVERTED);
@@ -79,6 +85,7 @@ public class ArmConstants {
 
 
     private static void configureElevatorEncoder() {
+        ELEVATOR_ENCODER.configFactoryDefault();
         ELEVATOR_ENCODER.setSelectedSensorPosition(ELEVATOR_ENCODER.getSelectedSensorPosition() - ELEVATOR_MAG_ENCODER_OFFSET);
         ELEVATOR_ENCODER.setSensorPhase(ELEVATOR_MAG_ENCODER_PHASE);
     }
@@ -88,13 +95,15 @@ public class ArmConstants {
         MASTER_ANGLE_MOTOR.restoreFactoryDefaults();
         FOLLOWER_ANGLE_MOTOR.restoreFactoryDefaults();
 
+        MASTER_ANGLE_MOTOR.enableVoltageCompensation(VOLTAGE_COMPENSATION_SATURATION);
+        FOLLOWER_ANGLE_MOTOR.enableVoltageCompensation(VOLTAGE_COMPENSATION_SATURATION);
+
         MASTER_ANGLE_MOTOR.setInverted(MASTER_ANGLE_INVERTED);
         FOLLOWER_ANGLE_MOTOR.setInverted(FOLLOWER_ANGLE_INVERTED);
 
         MASTER_ANGLE_MOTOR.setIdleMode(ANGLE_IDLE_MODE_VALUE);
         FOLLOWER_ANGLE_MOTOR.setIdleMode(ANGLE_IDLE_MODE_VALUE);
     }
-
 
     private static void configureAngleEncoder() {
         CANcoderConfiguration configureAngleEncoder = new CANcoderConfiguration();
@@ -104,13 +113,10 @@ public class ArmConstants {
         ANGLE_ENCODER.getConfigurator().apply(configureAngleEncoder);
     }
 
-
-
-
         public enum ArmStates {
-        FIRST_STATE(new Rotation2d(30), 1),
-        SECOND_STATE(new Rotation2d(50), 2),
-        THIRD_STATE(new Rotation2d(100), 3);
+        FIRST_STATE(Rotation2d.fromDegrees(30), 1),
+        SECOND_STATE(Rotation2d.fromDegrees(50), 2),
+        THIRD_STATE(Rotation2d.fromDegrees(100), 3);
 
         final Rotation2d angle;
         final double elevatorPosition;
