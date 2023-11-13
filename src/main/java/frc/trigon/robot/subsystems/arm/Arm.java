@@ -12,21 +12,13 @@ import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Arm extends SubsystemBase {
-
     private final static Arm INSTANCE = new Arm();
 
-    public static Arm getInstance() {
-        return INSTANCE;
-    }
-
-    private Arm() {
-    }
-
     private final CANSparkMax
-        masterAngleMotor = ArmConstants.MASTER_ANGLE_MOTOR,
-        followerAngleMotor = ArmConstants.FOLLOWER_ANGLE_MOTOR,
-        masterElevatorMotor = ArmConstants.MASTER_ELEVATOR_MOTOR,
-        followerElevatorMotor = ArmConstants.FOLLOWER_ELEVATOR_MOTOR;
+            masterAngleMotor = ArmConstants.MASTER_ANGLE_MOTOR,
+            followerAngleMotor = ArmConstants.FOLLOWER_ANGLE_MOTOR,
+            masterElevatorMotor = ArmConstants.MASTER_ELEVATOR_MOTOR,
+            followerElevatorMotor = ArmConstants.FOLLOWER_ELEVATOR_MOTOR;
     private final CANcoder angleEncoder = ArmConstants.ANGLE_ENCODER;
     private final TalonSRX elevatorEncoder = ArmConstants.ELEVATOR_ENCODER;
     private TrapezoidProfile
@@ -35,6 +27,13 @@ public class Arm extends SubsystemBase {
     private double
             lastAngleMotorProfileGenerationTime,
             lastElevatorMotorProfileGenerationTime;
+
+    public static Arm getInstance() {
+        return INSTANCE;
+    }
+
+    private Arm() {
+    }
 
     public Command getSetTargetAngleCommand(Rotation2d angle){
         return new FunctionalCommand(
@@ -46,7 +45,7 @@ public class Arm extends SubsystemBase {
         );
     }
 
-    public Command getSetTargetElevatorCommand(Rotation2d angle){
+    public Command getSetElevatorTargetCommand((){
         return new FunctionalCommand(
                 () -> generateElevatorMotorProfile(angle),
                 this::setTargetElevatorFromProfile,
@@ -80,7 +79,7 @@ public class Arm extends SubsystemBase {
         angleMotorProfile = new TrapezoidProfile(
                 ArmConstants.ANGLE_CONSTRAINTS,
                 new TrapezoidProfile.State(targetAngle.getDegrees(),0),
-                new TrapezoidProfile.State(getAngleMotorPositionDegrees(), getAngleMotorVelocity())
+                new TrapezoidProfile.State(getAngleMotorPosition().getDegrees(), getAngleMotorVelocity())
         );
 
         lastAngleMotorProfileGenerationTime = Timer.getFPGATimestamp();
@@ -90,7 +89,7 @@ public class Arm extends SubsystemBase {
         angleMotorProfile = new TrapezoidProfile(
                 ArmConstants.ELEVATOR_CONSTRAINTS,
                 new TrapezoidProfile.State(targetAngle.getDegrees(),0),
-                new TrapezoidProfile.State(getElevatorMotorPositionDegrees(), getElevatorMotorVelocity())
+                new TrapezoidProfile.State(getElevatorMotorPositionDegrees(), getElevatorVelocityRevolutionsPerSecond())
         );
 
         lastElevatorMotorProfileGenerationTime = Timer.getFPGATimestamp();
@@ -104,20 +103,20 @@ public class Arm extends SubsystemBase {
         return Timer.getFPGATimestamp() - lastElevatorMotorProfileGenerationTime;
     }
 
-    private double getAngleMotorPositionDegrees(){
-        return Rotation2d.fromDegrees(angleEncoder.getPosition().getValue()).getDegrees();
+    private Rotation2d getAngleMotorPosition (){
+        return Rotation2d.fromRotations(angleEncoder.getPosition().getValue());
     }
 
     private double getElevatorMotorPositionDegrees(){
-        return Rotation2d.fromDegrees(elevatorEncoder.getSelectedSensorPosition()).getDegrees();
+        return Rotation2d.fromDegrees(elevatorEncoder.getSelectedSensorPosition()).getRotations();
     }
 
     private double getAngleMotorVelocity(){
         return angleEncoder.getVelocity().getValue();
     }
 
-    private double getElevatorMotorVelocity(){
-        return elevatorEncoder.getSelectedSensorVelocity();
+    private double getElevatorVelocityRevolutionsPerSecond(){
+        return elevatorEncoder.getSelectedSensorVelocity() / ArmConstants.ENCODER_TICS_PER_REVOLUTION * 10 / 100;
     }
 
     private void stopAngleMotors(){
@@ -129,6 +128,5 @@ public class Arm extends SubsystemBase {
         masterElevatorMotor.stopMotor();
         followerElevatorMotor.stopMotor();
     }
-
 }
 
