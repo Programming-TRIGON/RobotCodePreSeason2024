@@ -13,26 +13,24 @@ import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.math.controller.PIDController;
 
 public class SideShooterConstants {
+
     private static final double VOLTAGE_COMPENSATION = 12;
     private static final int
             SHOOTING_MOTOR_ID = 0,
             ANGLE_MOTOR_ID = 1,
             ANGLE_ENCODER_ID = 2;
 
-    private static final double ANGLE_ENCODER_OFFSET = 0;
-    private static final  AbsoluteSensorRangeValue ANGLE_ENCODER_RANGE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
-
-    private static final InvertedValue SHOOTING_MOTOR_INVERTED_VALUE = InvertedValue.CounterClockwise_Positive;
-    private static final boolean ANGLE_MOTOR_INVERTED = true;
-    private static final SensorDirectionValue ANGLE_ENCODER_INVERTED = SensorDirectionValue.Clockwise_Positive;
-
-    private static final NeutralModeValue SHOOTING_NEUTRAL_MODE_VALUE = NeutralModeValue.Brake;
-    private static final CANSparkMax.IdleMode ANGLE_MOTOR_IDLE_MODE = CANSparkMax.IdleMode.kBrake;
-
-    static final TalonFX SHOOTING_MOTOR = new TalonFX(SHOOTING_MOTOR_ID);
     static final CANSparkMax ANGLE_MOTOR = new CANSparkMax(ANGLE_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless);
     static final CANcoder ANGLE_ENCODER = new CANcoder(ANGLE_ENCODER_ID);
 
+    static final TalonFX SHOOTING_MOTOR = new TalonFX(SHOOTING_MOTOR_ID);
+    private static final double ANGLE_ENCODER_OFFSET = 0;
+    private static final AbsoluteSensorRangeValue ANGLE_ENCODER_RANGE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
+    private static final InvertedValue SHOOTING_MOTOR_INVERTED_VALUE = InvertedValue.CounterClockwise_Positive;
+    private static final boolean ANGLE_MOTOR_INVERTED = false;
+    private static final SensorDirectionValue ANGLE_ENCODER_DIRECTION = SensorDirectionValue.Clockwise_Positive;
+    private static final NeutralModeValue SHOOTING_NEUTRAL_MODE_VALUE = NeutralModeValue.Coast;
+    private static final CANSparkMax.IdleMode ANGLE_MOTOR_IDLE_MODE = CANSparkMax.IdleMode.kBrake;
     private static final double
             P = 1,
             I = 0,
@@ -60,25 +58,26 @@ public class SideShooterConstants {
         ANGLE_MOTOR.setInverted(ANGLE_MOTOR_INVERTED);
         ANGLE_MOTOR.enableVoltageCompensation(VOLTAGE_COMPENSATION);
     }
-    private static void configureAngleEncoder(){
+
+    private static void configureAngleEncoder() {
         CANcoderConfiguration config = new CANcoderConfiguration();
         config.MagnetSensor.AbsoluteSensorRange = ANGLE_ENCODER_RANGE;
         config.MagnetSensor.MagnetOffset = ANGLE_ENCODER_OFFSET;
-        config.MagnetSensor.SensorDirection = ANGLE_ENCODER_INVERTED;
+        config.MagnetSensor.SensorDirection = ANGLE_ENCODER_DIRECTION;
         ANGLE_ENCODER.getConfigurator().apply(config);
     }
 
-    enum SideShooter{
-            COLLECTOR(-15, -5),
-            MIDDLE(30, 5),
-            HIGH(60, 10);
+    public enum SideShooter {
+        COLLECTOR(-15, -5),
+        MIDDLE(30, 5),
+        HIGH(60, 10);
 
-            private double angle, power;
+        final double angle, power;
 
-            SideShooter(double angle, double power) {
-                this.angle = angle;
-                this.power = power;
-            }
+        SideShooter(double angle, double power) {
+            this.angle = angle;
+            this.power = power;
+        }
     }
 }
 
