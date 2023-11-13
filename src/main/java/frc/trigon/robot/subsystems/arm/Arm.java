@@ -7,6 +7,8 @@ import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Arm extends SubsystemBase {
@@ -33,6 +35,26 @@ public class Arm extends SubsystemBase {
     private double
             lastAngleMotorProfileGenerationTime,
             lastElevatorMotorProfileGenerationTime;
+
+    public Command getSetTargetAngleCommand(Rotation2d angle){
+        return new FunctionalCommand(
+                () -> generateAngleMotorProfile(angle),
+                this::setTargetAngleFromProfile,
+                (interrupted) -> {},
+                () -> false,
+                this
+        );
+    }
+
+    public Command getSetTargetElevatorCommand(Rotation2d angle){
+        return new FunctionalCommand(
+                () -> generateElevatorMotorProfile(angle),
+                this::setTargetElevatorFromProfile,
+                (interrupted) -> {},
+                () -> false,
+                this
+        );
+    }
 
     private void setTargetAngleFromProfile(){
         if (angleMotorProfile == null){
