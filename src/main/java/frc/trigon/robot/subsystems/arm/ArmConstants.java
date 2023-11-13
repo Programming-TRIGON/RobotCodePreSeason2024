@@ -24,8 +24,7 @@ public class ArmConstants {
     private static final CANSparkMax.IdleMode
             ELEVATOR_IDLE_MODE = CANSparkMax.IdleMode.kBrake,
             ANGLE_IDLE_MODE = CANSparkMax.IdleMode.kBrake;
-    private static final int
-            VOLTAGE_COMPENSATION_SATURATION = 12;
+    private static final int VOLTAGE_COMPENSATION_SATURATION = 12;
     private static final boolean
             MASTER_ANGLE_INVERTED = false,
             MASTER_ELEVATOR_INVERTED = false,
@@ -94,7 +93,7 @@ public class ArmConstants {
         MASTER_ANGLE_MOTOR.enableVoltageCompensation(VOLTAGE_COMPENSATION_SATURATION);
         FOLLOWER_ANGLE_MOTOR.enableVoltageCompensation(VOLTAGE_COMPENSATION_SATURATION);
     }
-    
+
     private static void configureAngleEncoder() {
         CANcoderConfiguration angleEncoderConfig = new CANcoderConfiguration();
         angleEncoderConfig.MagnetSensor.MagnetOffset = ANGLE_ENCODER_OFFSET;
