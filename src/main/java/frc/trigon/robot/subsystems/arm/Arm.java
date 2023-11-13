@@ -45,9 +45,9 @@ public class Arm extends SubsystemBase {
         );
     }
 
-    public Command getSetElevatorTargetCommand(Rotation2d angle){
+    public Command getSetElevatorTargetCommand(double rotations){
         return new FunctionalCommand(
-                () -> generateElevatorMotorProfile(angle),
+                () -> generateElevatorMotorProfile(rotations),
                 this::setTargetElevatorFromProfile,
                 (interrupted) -> {},
                 () -> false,
@@ -85,10 +85,10 @@ public class Arm extends SubsystemBase {
         lastAngleMotorProfileGenerationTime = Timer.getFPGATimestamp();
     }
 
-    private void generateElevatorMotorProfile(Rotation2d targetAngle){
+    private void generateElevatorMotorProfile(double targetAngle){
         angleMotorProfile = new TrapezoidProfile(
                 ArmConstants.ELEVATOR_CONSTRAINTS,
-                new TrapezoidProfile.State(targetAngle.getDegrees(),0),
+                new TrapezoidProfile.State(targetAngle,0),
                 new TrapezoidProfile.State(getElevatorMotorPositionDegrees(), getElevatorVelocityRevolutionsPerSecond())
         );
 
