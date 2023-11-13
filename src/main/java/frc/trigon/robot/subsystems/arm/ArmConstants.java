@@ -41,6 +41,8 @@ public class ArmConstants {
     private static final SensorDirectionValue ANGLE_MOTOR_DIRECTION = SensorDirectionValue.Clockwise_Positive;
     private static final boolean ELEVATOR_MOTOR_PHASE = false;
     private static final AbsoluteSensorRangeValue ANGLE_MOTOR_RANGE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
+    static final CANcoder ANGLE_ENCODER = new CANcoder(ANGLE_ENCODER_ID);
+    static final TalonSRX ELEVATOR_ENCODER = new TalonSRX(ELEVATOR_ENCODER_ID);
     private static final int
             ANGLE_P = 0,
             ANGLE_I = 0,
@@ -48,8 +50,6 @@ public class ArmConstants {
             ELEVATOR_P = 0,
             ELEVATOR_I = 0,
             ELEVATOR_D = 0;
-    static final CANcoder ANGLE_ENCODER = new CANcoder(ANGLE_ENCODER_ID);
-    static final TalonSRX ELEVATOR_ENCODER = new TalonSRX(ELEVATOR_ENCODER_ID);
     private static final PIDController
             ANGLE_PID_CONTROLLER = new PIDController(ANGLE_P, ANGLE_I, ANGLE_D),
             ELEVATOR_PID_CONTROLLER = new PIDController(ELEVATOR_P, ELEVATOR_I, ELEVATOR_D);
@@ -58,8 +58,8 @@ public class ArmConstants {
             MAX_ELEVATOR_VELOCITY = 100,
             MAX_ANGLE_ACCELERATION = 100,
             MAX_ELEVATOR_ACCELERATION = 100;
-    static final TrapezoidProfile.Constraints ANGLE_CONSTRAINTS = new TrapezoidProfile.Constraints(MAX_ANGLE_VELOCITY, MAX_ANGLE_ACCELERATION);
-    static final TrapezoidProfile.Constraints ELEVATOR_CONSTRAINTS = new TrapezoidProfile.Constraints(MAX_ELEVATOR_VELOCITY, MAX_ELEVATOR_ACCELERATION);
+    static final TrapezoidProfile.Constraints ANGLE_CONSTRAINTS = new TrapezoidProfile.Constraints(MAX_ANGLE_VELOCITY, MAX_ANGLE_ACCELERATION),
+            ELEVATOR_CONSTRAINTS = new TrapezoidProfile.Constraints(MAX_ELEVATOR_VELOCITY, MAX_ELEVATOR_ACCELERATION);
 
     static {
         configureAngleMotors();
@@ -121,5 +121,4 @@ public class ArmConstants {
             this.elevatorPosition = elevatorPosition;
         }
     }
-    static final double ELEVATOR_MOTOR_RATIO = 10.5;
 }
