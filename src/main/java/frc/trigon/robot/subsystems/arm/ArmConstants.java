@@ -94,8 +94,7 @@ public class ArmConstants {
         MASTER_ANGLE_MOTOR.enableVoltageCompensation(VOLTAGE_COMPENSATION_SATURATION);
         FOLLOWER_ANGLE_MOTOR.enableVoltageCompensation(VOLTAGE_COMPENSATION_SATURATION);
     }
-
-
+    
     private static void configureAngleEncoder() {
         CANcoderConfiguration angleEncoderConfig = new CANcoderConfiguration();
         angleEncoderConfig.MagnetSensor.MagnetOffset = ANGLE_ENCODER_OFFSET;
