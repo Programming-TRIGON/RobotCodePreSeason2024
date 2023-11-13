@@ -25,18 +25,12 @@ public class ArmConstants {
             ANGLE_CANCODER_OFFSET = 0.0;
 
     private static final boolean
-            MASTER_ANGLE_INVERTED_VALUE = false,
-            FOLLOWER_ANGLE_INVERTED_VALUE = false,
-            MASTER_ELEVATOR_INVERTED_VALUE = false,
-            FOLLOWER_ELEVATOR_INVERTED_VALUE = true,
-            ELEVATOR_MAG_ENCODER_PHASE_VALUE = true;
+            MASTER_ANGLE_INVERTED = false,
+            FOLLOWER_ANGLE_INVERTED = false,
+            MASTER_ELEVATOR_INVERTED = false,
+            FOLLOWER_ELEVATOR_INVERTED = true,
+            ELEVATOR_MAG_ENCODER_PHASE = true;
     private static final SensorDirectionValue ANGLE_CANCODER_SENSOR_DIRECTION = SensorDirectionValue.Clockwise_Positive;
-
-    private static final double
-            P = 1.32,
-            I = 3.1,
-            D = 0;
-    private static final PIDController PID_CONTROLLER = new PIDController(P, I, D);
 
     private static final double
         MAX_ANGLE_VELOCITY = 600,
@@ -45,11 +39,10 @@ public class ArmConstants {
         MAX_ELEVATOR_ACCELERATION = 550;
     static final TrapezoidProfile.Constraints ANGLE_CONSTRAINS = new TrapezoidProfile.Constraints(MAX_ANGLE_VELOCITY, MAX_ANGLE_ACCELERATION);
     static final TrapezoidProfile.Constraints ELEVATOR_CONSTRAINS = new TrapezoidProfile.Constraints(MAX_ELEVATOR_VELOCITY, MAX_ELEVATOR_ACCELERATION);
-
-
+    
     private static final CANSparkMax.IdleMode
-            ANGLE_NEUTRAL_MODE_VALUE = CANSparkMax.IdleMode.kBrake,
-            ELEVATOR_NEUTRAL_MODE_VALUE = CANSparkMax.IdleMode.kBrake;
+            ANGLE_IDLE_MODE_VALUE = CANSparkMax.IdleMode.kBrake,
+            ELEVATOR_IDLE_MODE_VALUE = CANSparkMax.IdleMode.kBrake;
     private static final AbsoluteSensorRangeValue ANGLE_ENCODER_SENSOR_RANGE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
 
     static final CANSparkMax
@@ -57,60 +50,69 @@ public class ArmConstants {
             FOLLOWER_ANGLE_MOTOR = new CANSparkMax(FOLLOWER_ANGLE_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless),
             MASTER_ELEVATOR_MOTOR = new CANSparkMax(MASTER_ELEVATOR_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless),
             FOLLOWER_ELEVATOR_MOTOR = new CANSparkMax(FOLLOWER_ELEVATOR_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless);
-    static final TalonSRX ELEVATOR_MAG_ENCODER = new TalonSRX(ELEVATOR_MAG_ENCODER_ID);
-    static final CANcoder ANGLE_CANCODER = new CANcoder(ANGLE_CANCODER_ID);
+    static final TalonSRX ELEVATOR_ENCODER = new TalonSRX(ELEVATOR_MAG_ENCODER_ID);
+    static final CANcoder ANGLE_ENCODER = new CANcoder(ANGLE_CANCODER_ID);
+
+    private static final double
+            P = 1.32,
+            I = 3.1,
+            D = 0;
+    private static final PIDController PID_CONTROLLER = new PIDController(P, I, D);
 
     static {
-        motors_angle_config();
-        motors_elevator_config();
+        configureAngleMotors();
+        configureElevatorMotors();
         configureElevatorEncoder();
+        configureAngleEncoder();
     }
 
-    private static void motors_elevator_config() {
+    private static void configureElevatorMotors() {
         MASTER_ELEVATOR_MOTOR.restoreFactoryDefaults();
         FOLLOWER_ELEVATOR_MOTOR.restoreFactoryDefaults();
 
-        MASTER_ELEVATOR_MOTOR.setInverted(MASTER_ELEVATOR_INVERTED_VALUE);
-        FOLLOWER_ELEVATOR_MOTOR.setInverted(FOLLOWER_ELEVATOR_INVERTED_VALUE);
+        MASTER_ELEVATOR_MOTOR.setInverted(MASTER_ELEVATOR_INVERTED);
+        FOLLOWER_ELEVATOR_MOTOR.setInverted(FOLLOWER_ELEVATOR_INVERTED);
 
-        MASTER_ELEVATOR_MOTOR.setIdleMode(ANGLE_NEUTRAL_MODE_VALUE);
-        FOLLOWER_ELEVATOR_MOTOR.setIdleMode(ANGLE_NEUTRAL_MODE_VALUE);
-
-        ELEVATOR_MAG_ENCODER.setSelectedSensorPosition(ELEVATOR_MAG_ENCODER.getSelectedSensorPosition() - ELEVATOR_MAG_ENCODER_OFFSET);
-        ELEVATOR_MAG_ENCODER.setSensorPhase(ELEVATOR_MAG_ENCODER_PHASE_VALUE);
-
+        MASTER_ELEVATOR_MOTOR.setIdleMode(ELEVATOR_IDLE_MODE_VALUE);
+        FOLLOWER_ELEVATOR_MOTOR.setIdleMode(ELEVATOR_IDLE_MODE_VALUE);
     }
+
 
     private static void configureElevatorEncoder() {
-        ELEVATOR_MAG_ENCODER.setSelectedSensorPosition(ELEVATOR_MAG_ENCODER.getSelectedSensorPosition() - ELEVATOR_MAG_ENCODER_OFFSET);
-        ELEVATOR_MAG_ENCODER.setSensorPhase(ELEVATOR_MAG_ENCODER_PHASE_VALUE);
+        ELEVATOR_ENCODER.setSelectedSensorPosition(ELEVATOR_ENCODER.getSelectedSensorPosition() - ELEVATOR_MAG_ENCODER_OFFSET);
+        ELEVATOR_ENCODER.setSensorPhase(ELEVATOR_MAG_ENCODER_PHASE);
     }
 
 
-    private static void motors_angle_config() {
+    private static void configureAngleMotors() {
         MASTER_ANGLE_MOTOR.restoreFactoryDefaults();
         FOLLOWER_ANGLE_MOTOR.restoreFactoryDefaults();
 
-        MASTER_ANGLE_MOTOR.setInverted(MASTER_ANGLE_INVERTED_VALUE);
-        FOLLOWER_ANGLE_MOTOR.setInverted(FOLLOWER_ANGLE_INVERTED_VALUE);
+        MASTER_ANGLE_MOTOR.setInverted(MASTER_ANGLE_INVERTED);
+        FOLLOWER_ANGLE_MOTOR.setInverted(FOLLOWER_ANGLE_INVERTED);
 
-        MASTER_ANGLE_MOTOR.setIdleMode(ANGLE_NEUTRAL_MODE_VALUE);
-        FOLLOWER_ANGLE_MOTOR.setIdleMode(ANGLE_NEUTRAL_MODE_VALUE);
+        MASTER_ANGLE_MOTOR.setIdleMode(ANGLE_IDLE_MODE_VALUE);
+        FOLLOWER_ANGLE_MOTOR.setIdleMode(ANGLE_IDLE_MODE_VALUE);
+    }
 
+
+    private static void configureAngleEncoder() {
         CANcoderConfiguration configureAngleEncoder = new CANcoderConfiguration();
         configureAngleEncoder.MagnetSensor.MagnetOffset = ANGLE_CANCODER_OFFSET;
         configureAngleEncoder.MagnetSensor.AbsoluteSensorRange = ANGLE_ENCODER_SENSOR_RANGE;
         configureAngleEncoder.MagnetSensor.SensorDirection = ANGLE_CANCODER_SENSOR_DIRECTION;
-        ANGLE_CANCODER.getConfigurator().apply(configureAngleEncoder);
+        ANGLE_ENCODER.getConfigurator().apply(configureAngleEncoder);
     }
 
 
-    public enum ArmStates {
+
+
+        public enum ArmStates {
         FIRST_STATE(new Rotation2d(30), 1),
         SECOND_STATE(new Rotation2d(50), 2),
         THIRD_STATE(new Rotation2d(100), 3);
-        final Rotation2d angle;
 
+        final Rotation2d angle;
         final double elevatorPosition;
 
         ArmStates(Rotation2d angle, double elevatorPosition) {
