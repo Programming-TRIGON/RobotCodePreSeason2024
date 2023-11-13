@@ -19,8 +19,12 @@ public class Arm extends SubsystemBase {
             followerElevatorMotor = ArmConstants.FOLLOWER_ELEVATOR_MOTOR;
     private final CANcoder angleEncoder = ArmConstants.ANGLE_ENCODER;
     private final TalonSRX elevatorEncoder = ArmConstants.ELEVATOR_ENCODER;
-    private TrapezoidProfile angleMotorProfile = null;
-    private double lastAngleMotorProfileGenerationTime;
+    private TrapezoidProfile
+            angleMotorProfile = null,
+            elevatorMotorProfile = null;
+    private double
+            lastAngleMotorProfileGenerationTime,
+            lastElevatorMotorProfileGenerationTime;
 
     public static Arm getInstance() {
         return INSTANCE;
@@ -30,6 +34,9 @@ public class Arm extends SubsystemBase {
 
     }
 
+    /**
+     * @return a command that sets the angle motor to the target angle
+     */
     public Command getSetTargetArmAngleCommand(Rotation2d angle) {
         return new FunctionalCommand(
                 () -> generateAngleMotorProfile(angle),
@@ -41,6 +48,20 @@ public class Arm extends SubsystemBase {
         );
     }
 
+    public Command getSetTargetElevatorPositionCommand(double targetPosition) {
+        return new FunctionalCommand(
+                () -> generateElevatorMotorProfile(targetPosition),
+                this::setTargetPositionFromProfile,
+                (interrupted) -> {
+                },
+                () -> false,
+                this
+        );
+    }
+
+    /**
+     * @return a command that creates the profile for the angle motor
+     */
     private void generateAngleMotorProfile(Rotation2d targetAngle) {
         angleMotorProfile = new TrapezoidProfile(
                 ArmConstants.ANGLE_CONSTRAINTS,
@@ -50,6 +71,21 @@ public class Arm extends SubsystemBase {
         lastAngleMotorProfileGenerationTime = Timer.getFPGATimestamp();
     }
 
+    /**
+     * @return a command that creates the profile for the elevator motor
+     */
+    private void generateElevatorMotorProfile(double targetPosition) {
+        elevatorMotorProfile = new TrapezoidProfile(
+                ArmConstants.ELEVATOR_CONSTRAINTS,
+                new TrapezoidProfile.State(targetPosition * ArmConstants.ELEVATOR_MOTOR_RATIO, 0),
+                new TrapezoidProfile.State(getElevatorMotorPositionDegrees(), getElevatorMotorVelocity())
+        );
+        lastElevatorMotorProfileGenerationTime = Timer.getFPGATimestamp();
+    }
+
+    /**
+     * @return a command that moves the angle motor to the target angle
+     */
     private void setTargetAngleFromProfile() {
         if (angleMotorProfile == null) {
             masterAngleMotor.stopMotor();
@@ -59,16 +95,40 @@ public class Arm extends SubsystemBase {
         masterAngleMotor.getPIDController().setReference(targetState.position, CANSparkMax.ControlType.kPosition);
     }
 
+    /**
+     * @return a command that moves the elevator motor to the target position
+     */
+    private void setTargetPositionFromProfile() {
+        if (elevatorMotorProfile == null) {
+            masterElevatorMotor.stopMotor();
+            return;
+        }
+        final TrapezoidProfile.State targetState = elevatorMotorProfile.calculate(getElevatorMotorProfileTime());
+        masterElevatorMotor.getPIDController().setReference(targetState.position, CANSparkMax.ControlType.kPosition);
+    }
+
     private double getAngleMotorProfileTime() {
         return Timer.getFPGATimestamp() - lastAngleMotorProfileGenerationTime;
+    }
+
+    private double getElevatorMotorProfileTime() {
+        return Timer.getFPGATimestamp() - lastElevatorMotorProfileGenerationTime;
     }
 
     private double getAngleMotorPositionDegrees() {
         return angleEncoder.getAbsolutePosition().getValue();
     }
 
+    private double getElevatorMotorPositionDegrees() {
+        return elevatorEncoder.getSelectedSensorPosition();
+    }
+
     private double getAngleMotorVelocity() {
         return angleEncoder.getVelocity().getValue();
+    }
+
+    private double getElevatorMotorVelocity() {
+        return elevatorEncoder.getActiveTrajectoryVelocity();
     }
 }
 

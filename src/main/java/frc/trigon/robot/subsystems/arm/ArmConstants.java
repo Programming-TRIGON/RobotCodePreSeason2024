@@ -121,4 +121,5 @@ public class ArmConstants {
             this.elevatorPosition = elevatorPosition;
         }
     }
+    static final double ELEVATOR_MOTOR_RATIO = 10.5;
 }
