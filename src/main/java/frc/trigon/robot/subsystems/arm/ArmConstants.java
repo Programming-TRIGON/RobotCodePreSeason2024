@@ -9,6 +9,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 public class ArmConstants {
     private static final int
@@ -37,18 +38,27 @@ public class ArmConstants {
             D = 0;
     private static final PIDController PID_CONTROLLER = new PIDController(P, I, D);
 
+    private static final double
+        MAX_ANGLE_VELOCITY = 600,
+        MAX_ANGLE_ACCELERATION = 500,
+        MAX_ELEVATOR_VELOCITY = 900,
+        MAX_ELEVATOR_ACCELERATION = 550;
+    static final TrapezoidProfile.Constraints ANGLE_CONSTRAINS = new TrapezoidProfile.Constraints(MAX_ANGLE_VELOCITY, MAX_ANGLE_ACCELERATION);
+    static final TrapezoidProfile.Constraints ELEVATOR_CONSTRAINS = new TrapezoidProfile.Constraints(MAX_ELEVATOR_VELOCITY, MAX_ELEVATOR_ACCELERATION);
+
+
     private static final CANSparkMax.IdleMode
             ANGLE_NEUTRAL_MODE_VALUE = CANSparkMax.IdleMode.kBrake,
             ELEVATOR_NEUTRAL_MODE_VALUE = CANSparkMax.IdleMode.kBrake;
     private static final AbsoluteSensorRangeValue ANGLE_ENCODER_SENSOR_RANGE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
 
-    private static final CANSparkMax
+    static final CANSparkMax
             MASTER_ANGLE_MOTOR = new CANSparkMax(MASTER_ANGLE_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless),
             FOLLOWER_ANGLE_MOTOR = new CANSparkMax(FOLLOWER_ANGLE_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless),
             MASTER_ELEVATOR_MOTOR = new CANSparkMax(MASTER_ELEVATOR_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless),
             FOLLOWER_ELEVATOR_MOTOR = new CANSparkMax(FOLLOWER_ELEVATOR_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless);
-    private static final TalonSRX ELEVATOR_MAG_ENCODER = new TalonSRX(ELEVATOR_MAG_ENCODER_ID);
-    private static final CANcoder ANGLE_CANCODER = new CANcoder(ANGLE_CANCODER_ID);
+    static final TalonSRX ELEVATOR_MAG_ENCODER = new TalonSRX(ELEVATOR_MAG_ENCODER_ID);
+    static final CANcoder ANGLE_CANCODER = new CANcoder(ANGLE_CANCODER_ID);
 
     static {
         motors_angle_config();
