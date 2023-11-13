@@ -34,6 +34,26 @@ public class Arm extends SubsystemBase {
             lastAngleMotorProfileGenerationTime,
             lastElevatorMotorProfileGenerationTime;
 
+    private void setTargetAngleFromProfile(){
+        if (angleMotorProfile == null){
+            stopAngleMotors();
+            return;
+        }
+
+        final TrapezoidProfile.State targetState = angleMotorProfile.calculate(getAngleMotorProfileTime());
+        masterAngleMotor.getPIDController().setReference(targetState.position, CANSparkMax.ControlType.kPosition);
+    }
+
+    private void setTargetElevatorFromProfile(){
+        if (elevatorMotorProfile == null){
+            stopElevatorMotors();
+            return;
+        }
+
+        final TrapezoidProfile.State targetState = elevatorMotorProfile.calculate(getElevatorMotorProfileTime());
+        masterElevatorMotor.getPIDController().setReference(targetState.position, CANSparkMax.ControlType.kPosition);
+    }
+
     private void generateAngleMotorProfile(Rotation2d targetAngle){
         angleMotorProfile = new TrapezoidProfile(
                 ArmConstants.ANGLE_CONSTRAINTS,
@@ -54,6 +74,14 @@ public class Arm extends SubsystemBase {
         lastElevatorMotorProfileGenerationTime = Timer.getFPGATimestamp();
     }
 
+    private double getAngleMotorProfileTime(){
+        return Timer.getFPGATimestamp() - lastAngleMotorProfileGenerationTime;
+    }
+
+    private double getElevatorMotorProfileTime(){
+        return Timer.getFPGATimestamp() - lastElevatorMotorProfileGenerationTime;
+    }
+
     private double getAngleMotorPositionDegrees(){
         return Rotation2d.fromDegrees(angleEncoder.getPosition().getValue()).getDegrees();
     }
@@ -68,6 +96,16 @@ public class Arm extends SubsystemBase {
 
     private double getElevatorMotorVelocity(){
         return elevatorEncoder.getSelectedSensorVelocity();
+    }
+
+    private void stopAngleMotors(){
+        masterAngleMotor.stopMotor();
+        followerAngleMotor.stopMotor();
+    }
+
+    private void stopElevatorMotors(){
+        masterElevatorMotor.stopMotor();
+        followerElevatorMotor.stopMotor();
     }
 
 }
