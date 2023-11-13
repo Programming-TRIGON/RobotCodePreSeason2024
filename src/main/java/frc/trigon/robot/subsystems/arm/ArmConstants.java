@@ -25,7 +25,7 @@ public class ArmConstants {
             ELEVATOR_IDLE_MODE = CANSparkMax.IdleMode.kBrake,
             ANGLE_IDLE_MODE = CANSparkMax.IdleMode.kBrake;
     private static final int
-            VOLTAGE_COMPANSATION_SATURATION = 12;
+            VOLTAGE_COMPENSATION_SATURATION = 12;
     private static final boolean
             MASTER_ANGLE_INVERTED = false,
             MASTER_ELEVATOR_INVERTED = false,
@@ -36,17 +36,6 @@ public class ArmConstants {
     private static final int
             ELEVATOR_ENCODER_OFFSET = 5,
             ANGLE_ENCODER_OFFSET = 5;
-    private static final double
-            MAX_ANGLE_VELOCITY = 100,
-            MAX_ANGLE_ACCELERATION = 100,
-            MAX_ELEVATOR_VELOCITY = 100,
-            MAX_ELEVATOR_ACCELERATION = 100;
-    static final TrapezoidProfile.Constraints ANGLE_CONSTRAINTS = new TrapezoidProfile.Constraints(
-            MAX_ANGLE_VELOCITY, MAX_ANGLE_ACCELERATION
-    );
-    static final TrapezoidProfile.Constraints ELEVATOR_CONSTRAINTS = new TrapezoidProfile.Constraints(
-            MAX_ELEVATOR_VELOCITY, MAX_ELEVATOR_ACCELERATION
-    );
     private static final AbsoluteSensorRangeValue ANGLE_ENCODER_RANGE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
     private static final CANSparkMax
             MASTER_ANGLE_MOTOR = new CANSparkMax(MASTER_ANGLE_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless),
@@ -65,6 +54,17 @@ public class ArmConstants {
     static final PIDController
             ANGLE_PID_CONTROLLER = new PIDController(ANGLE_P, ANGLE_I, ANGLE_D),
             ELEVATOR_PID_CONTROLLER = new PIDController(ELEVATOR_P, ELEVATOR_I, ELEVATOR_D);
+    private static final double
+            MAX_ANGLE_VELOCITY = 100,
+            MAX_ANGLE_ACCELERATION = 100,
+            MAX_ELEVATOR_VELOCITY = 100,
+            MAX_ELEVATOR_ACCELERATION = 100;
+    static final TrapezoidProfile.Constraints ANGLE_CONSTRAINTS = new TrapezoidProfile.Constraints(
+            MAX_ANGLE_VELOCITY, MAX_ANGLE_ACCELERATION
+    );
+    static final TrapezoidProfile.Constraints ELEVATOR_CONSTRAINTS = new TrapezoidProfile.Constraints(
+            MAX_ELEVATOR_VELOCITY, MAX_ELEVATOR_ACCELERATION
+    );
 
     static {
         configureAngleEncoder();
