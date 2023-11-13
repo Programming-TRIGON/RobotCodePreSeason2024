@@ -36,7 +36,7 @@ public class ArmConstants {
             ELEVATOR_ENCODER_OFFSET = 0,
             ANGLE_ENCODER_OFFSET = 0;
     private static final AbsoluteSensorRangeValue ANGLE_ENCODER_RANGE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
-    static final int ENCODER_TICS_PER_REVOLUTION = 1024;
+    static final double ENCODER_TICS_PER_REVOLUTION = 1024;
     static final CANSparkMax
             MASTER_ANGLE_MOTOR = new CANSparkMax(MASTER_ANGLE_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless),
             MASTER_ELEVATOR_MOTOR = new CANSparkMax(MASTER_ELEVATOR_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless),
