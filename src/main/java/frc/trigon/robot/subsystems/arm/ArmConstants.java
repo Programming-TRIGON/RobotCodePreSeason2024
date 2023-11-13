@@ -10,6 +10,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.trigon.robot.utilities.Conversions;
 
 public class ArmConstants {
@@ -34,8 +35,6 @@ public class ArmConstants {
             FOLLOWER_ANGLE_MOTOR = new CANSparkMax(FOLLOWER_ANGLE_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless),
             MASTER_ELEVATOR_MOTOR = new CANSparkMax(MASTER_ELEVATOR_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless),
             FOLLOWER_ELEVATOR_MOTOR = new CANSparkMax(FOLLOWER_ELEVATOR_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless);
-    private static final CANcoder ANGLE_ENCODER = new CANcoder(ANGLE_ENCODER_ID);
-    private static final TalonSRX ELEVATOR_ENCODER = new TalonSRX(ELEVATOR_ENCODER_ID);
     private static final double
             ANGLE_MOTOR_OFFSET = 0,
             ELEVATOR_MOTOR_OFFSET = 0;
@@ -49,6 +48,8 @@ public class ArmConstants {
             ELEVATOR_P = 0,
             ELEVATOR_I = 0,
             ELEVATOR_D = 0;
+    private static final CANcoder ANGLE_ENCODER = new CANcoder(ANGLE_ENCODER_ID);
+    private static final TalonSRX ELEVATOR_ENCODER = new TalonSRX(ELEVATOR_ENCODER_ID);
     private static final PIDController
             ANGLE_PID_CONTROLLER = new PIDController(ANGLE_P, ANGLE_I, ANGLE_D),
             ELEVATOR_PID_CONTROLLER = new PIDController(ELEVATOR_P, ELEVATOR_I, ELEVATOR_D);
@@ -57,6 +58,8 @@ public class ArmConstants {
         MAX_ELEVATOR_VELOCITY = 100,
         MAX_ANGLE_ACCELERATION = 100,
         MAX_ELEVATOR_ACCELERATION = 100;
+    private static final TrapezoidProfile.Constraints ANGLE_CONSTRAINTS = new TrapezoidProfile.Constraints(MAX_ANGLE_VELOCITY, MAX_ANGLE_ACCELERATION);
+    private static final TrapezoidProfile.Constraints ELEVATOR_CONSTRAINTS = new TrapezoidProfile.Constraints(MAX_ELEVATOR_VELOCITY, MAX_ELEVATOR_ACCELERATION);
 
     static {
         configureAngleMotors();
@@ -96,8 +99,8 @@ public class ArmConstants {
     }
 
     private static void configureElevatorEncoder() {
-        ELEVATOR_ENCODER.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
         ELEVATOR_ENCODER.configFactoryDefault();
+        ELEVATOR_ENCODER.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
         ELEVATOR_ENCODER.setSensorPhase(ELEVATOR_MOTOR_PHASE);
         ELEVATOR_ENCODER.setSelectedSensorPosition(Conversions.offsetRead(ELEVATOR_ENCODER.getSelectedSensorPosition(), ELEVATOR_MOTOR_OFFSET));
     }
