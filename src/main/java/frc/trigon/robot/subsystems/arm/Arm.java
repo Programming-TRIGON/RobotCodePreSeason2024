@@ -49,7 +49,7 @@ public class Arm extends SubsystemBase {
     public Command getSetTargetElevatorPositionCommand(double targetElevatorPosition) {
         return new FunctionalCommand(
                 () -> generateElevatorMotorProfile(targetElevatorPosition),
-                this::setTargetPositionFromProfile,
+                this::setTargetElevatorPositionFromProfile,
                 (interrupted) -> {
                 },
                 () -> false,
@@ -80,17 +80,17 @@ public class Arm extends SubsystemBase {
             stopAngleMotors();
             return;
         }
-        final TrapezoidProfile.State targetState = angleMotorProfile.calculate(getAngleMotorProfileTime());
-        masterAngleMotor.set(ArmConstants.ANGLE_PID_CONTROLLER.calculate(targetState.velocity));
+        TrapezoidProfile.State targetState = angleMotorProfile.calculate(getAngleMotorProfileTime());
+        masterAngleMotor.setVoltage(ArmConstants.ANGLE_PID_CONTROLLER.calculate(getAngleMotorPositionDegrees().getDegrees(), targetState.position));
     }
 
-    private void setTargetPositionFromProfile() {
+    private void setTargetElevatorPositionFromProfile() {
         if (elevatorMotorProfile == null) {
             stopElevatorMotors();
             return;
         }
-        final TrapezoidProfile.State targetState = elevatorMotorProfile.calculate(getElevatorMotorProfileTime());
-        masterElevatorMotor.set(ArmConstants.ELEVATOR_PID_CONTROLLER.calculate(targetState.velocity));
+        TrapezoidProfile.State targetState = elevatorMotorProfile.calculate(getElevatorMotorProfileTime());
+        masterElevatorMotor.setVoltage(ArmConstants.ELEVATOR_PID_CONTROLLER.calculate(getElevatorMotorPositionDegrees().getDegrees(), targetState.position));
     }
 
     private double getAngleMotorProfileTime() {
@@ -103,6 +103,10 @@ public class Arm extends SubsystemBase {
 
     private Rotation2d getAngleMotorPositionDegrees() {
         return Rotation2d.fromRotations(angleEncoder.getPosition().getValue());
+    }
+
+    private Rotation2d getElevatorMotorPositionDegrees()    {
+        return Rotation2d.fromRotations(elevatorEncoder.getSelectedSensorPosition());
     }
 
     private double getElevatorMotorPositionRevolutions() {
