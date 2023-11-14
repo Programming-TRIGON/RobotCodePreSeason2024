@@ -64,7 +64,7 @@ public class Arm extends SubsystemBase {
             return;
         }
 
-        final TrapezoidProfile.State targetState = angleMotorProfile.calculate(getAngleMotorProfileTime());
+        TrapezoidProfile.State targetState = angleMotorProfile.calculate(getAngleMotorProfileTime());
         masterAngleMotor.getPIDController().setReference(targetState.position, CANSparkMax.ControlType.kPosition);
     }
 
