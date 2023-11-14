@@ -36,28 +36,30 @@ public class Arm extends SubsystemBase {
     private Arm() {
     }
 
-    public Command getSetTargetAngleCommand(Rotation2d angle){
+    public Command getSetTargetAngleCommand(Rotation2d angle) {
         return new FunctionalCommand(
                 () -> generateAngleMotorProfile(angle),
                 this::setTargetAngleFromProfile,
-                (interrupted) -> {},
+                (interrupted) -> {
+                },
                 () -> false,
                 this
         );
     }
 
-    public Command getSetElevatorTargetCommand(double rotations){
+    public Command getSetElevatorTargetCommand(double rotations) {
         return new FunctionalCommand(
                 () -> generateElevatorMotorProfile(rotations),
                 this::setTargetElevatorFromProfile,
-                (interrupted) -> {},
+                (interrupted) -> {
+                },
                 () -> false,
                 this
         );
     }
 
-    private void setTargetAngleFromProfile(){
-        if (angleMotorProfile == null){
+    private void setTargetAngleFromProfile() {
+        if (angleMotorProfile == null) {
             stopAngleMotors();
             return;
         }
@@ -66,8 +68,8 @@ public class Arm extends SubsystemBase {
         masterAngleMotor.getPIDController().setReference(targetState.position, CANSparkMax.ControlType.kPosition);
     }
 
-    private void setTargetElevatorFromProfile(){
-        if (elevatorMotorProfile == null){
+    private void setTargetElevatorFromProfile() {
+        if (elevatorMotorProfile == null) {
             stopElevatorMotors();
             return;
         }
@@ -76,56 +78,56 @@ public class Arm extends SubsystemBase {
         masterElevatorMotor.getPIDController().setReference(targetState.position, CANSparkMax.ControlType.kPosition);
     }
 
-    private void generateAngleMotorProfile(Rotation2d targetAngle){
+    private void generateAngleMotorProfile(Rotation2d targetAngle) {
         angleMotorProfile = new TrapezoidProfile(
                 ArmConstants.ANGLE_CONSTRAINTS,
-                new TrapezoidProfile.State(targetAngle.getDegrees(),0),
+                new TrapezoidProfile.State(targetAngle.getDegrees(), 0),
                 new TrapezoidProfile.State(getAngleMotorPosition().getDegrees(), getAngleMotorVelocityRevolutionsPerSecond())
         );
 
         lastAngleMotorProfileGenerationTime = Timer.getFPGATimestamp();
     }
 
-    private void generateElevatorMotorProfile(double targetPostition){
+    private void generateElevatorMotorProfile(double targetPosition) {
         angleMotorProfile = new TrapezoidProfile(
                 ArmConstants.ELEVATOR_CONSTRAINTS,
-                new TrapezoidProfile.State(targetPostition,0),
+                new TrapezoidProfile.State(targetPosition, 0),
                 new TrapezoidProfile.State(getElevatorMotorPositionRevolutions(), getElevatorVelocityRevolutionsPerSecond())
         );
 
         lastElevatorMotorProfileGenerationTime = Timer.getFPGATimestamp();
     }
 
-    private double getAngleMotorProfileTime(){
+    private double getAngleMotorProfileTime() {
         return Timer.getFPGATimestamp() - lastAngleMotorProfileGenerationTime;
     }
 
-    private double getElevatorMotorProfileTime(){
+    private double getElevatorMotorProfileTime() {
         return Timer.getFPGATimestamp() - lastElevatorMotorProfileGenerationTime;
     }
 
-    private Rotation2d getAngleMotorPosition (){
+    private Rotation2d getAngleMotorPosition() {
         return Rotation2d.fromRotations(angleEncoder.getPosition().getValue());
     }
 
-    private double getElevatorMotorPositionRevolutions(){
+    private double getElevatorMotorPositionRevolutions() {
         return Conversions.magTicksToRevolutions(elevatorEncoder.getSelectedSensorPosition());
     }
 
-    private double getAngleMotorVelocityRevolutionsPerSecond(){
+    private double getAngleMotorVelocityRevolutionsPerSecond() {
         return angleEncoder.getVelocity().getValue();
     }
 
-    private double getElevatorVelocityRevolutionsPerSecond(){
+    private double getElevatorVelocityRevolutionsPerSecond() {
         return Conversions.magTicksToRevolutions(elevatorEncoder.getSelectedSensorVelocity());
     }
 
-    private void stopAngleMotors(){
+    private void stopAngleMotors() {
         masterAngleMotor.stopMotor();
         followerAngleMotor.stopMotor();
     }
 
-    private void stopElevatorMotors(){
+    private void stopElevatorMotors() {
         masterElevatorMotor.stopMotor();
         followerElevatorMotor.stopMotor();
     }
