@@ -35,6 +35,7 @@ public class ArmConstants {
             FOLLOWER_ANGLE_MOTOR = new CANSparkMax(FOLLOWER_ANGLE_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless),
             MASTER_ELEVATOR_MOTOR = new CANSparkMax(MASTER_ELEVATOR_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless),
             FOLLOWER_ELEVATOR_MOTOR = new CANSparkMax(FOLLOWER_ELEVATOR_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless);
+
     private static final double
             ANGLE_MOTOR_OFFSET = 0,
             ELEVATOR_MOTOR_OFFSET = 0;
@@ -43,6 +44,7 @@ public class ArmConstants {
     private static final AbsoluteSensorRangeValue ANGLE_MOTOR_RANGE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
     static final CANcoder ANGLE_ENCODER = new CANcoder(ANGLE_ENCODER_ID);
     static final TalonSRX ELEVATOR_ENCODER = new TalonSRX(ELEVATOR_ENCODER_ID);
+
     private static final int
             ANGLE_P = 0,
             ANGLE_I = 0,
