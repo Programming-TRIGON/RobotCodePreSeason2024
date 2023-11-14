@@ -13,8 +13,9 @@ import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+
 public class SideShooterConstants {
-    private static final double VOLTAGE_COMPENSATION = 12;
+    private static final double VOLTAGE_COMPENSATION_SATURATION = 12;
     private static final int
             SHOOTING_MOTOR_ID = 0,
             ANGLE_MOTOR_ID = 1,
@@ -62,7 +63,7 @@ public class SideShooterConstants {
         ANGLE_MOTOR.restoreFactoryDefaults();
         ANGLE_MOTOR.setIdleMode(ANGLE_MOTOR_IDLE_MODE);
         ANGLE_MOTOR.setInverted(ANGLE_MOTOR_INVERTED);
-        ANGLE_MOTOR.enableVoltageCompensation(VOLTAGE_COMPENSATION);
+        ANGLE_MOTOR.enableVoltageCompensation(VOLTAGE_COMPENSATION_SATURATION);
     }
 
     private static void configureAngleEncoder() {
@@ -73,7 +74,7 @@ public class SideShooterConstants {
         ANGLE_ENCODER.getConfigurator().apply(config);
     }
 
-    public enum SideShooter {
+    public enum SideShooterStates {
         COLLECTION(Rotation2d.fromDegrees(-15), -5),
         MIDDLE(Rotation2d.fromDegrees(30), 5),
         HIGH(Rotation2d.fromDegrees(60), 10);
@@ -81,7 +82,7 @@ public class SideShooterConstants {
         final Rotation2d angle;
         final double power;
 
-        SideShooter(Rotation2d angle, double power) {
+        SideShooterStates(Rotation2d angle, double power) {
             this.angle = angle;
             this.power = power;
         }
