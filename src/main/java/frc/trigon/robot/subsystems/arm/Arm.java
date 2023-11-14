@@ -89,7 +89,7 @@ public class Arm extends SubsystemBase {
     }
 
     private void generateElevatorMotorProfile(double targetPosition) {
-        angleMotorProfile = new TrapezoidProfile(
+        elevatorMotorProfile = new TrapezoidProfile(
                 ArmConstants.ELEVATOR_CONSTRAINTS,
                 new TrapezoidProfile.State(targetPosition, 0),
                 new TrapezoidProfile.State(getElevatorMotorPositionRevolutions(), getElevatorVelocityRevolutionsPerSecond())
