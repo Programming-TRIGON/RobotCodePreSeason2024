@@ -8,6 +8,8 @@ import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -44,9 +46,21 @@ public class ArmConstants {
             ANGLE_CONSTRAINS = new TrapezoidProfile.Constraints(MAX_ANGLE_VELOCITY, MAX_ANGLE_ACCELERATION),
             ELEVATOR_CONSTRAINS = new TrapezoidProfile.Constraints(MAX_ELEVATOR_VELOCITY, MAX_ELEVATOR_ACCELERATION);
 
+    private static final double
+            ANGLE_MOTOR_KS = 0,
+            ANGLE_MOTOR_KV = 0,
+            ANGLE_MOTOR_KA = 0,
+            ANGLE_MOTOR_KG = 0,
+            ELEVATOR_MOTOR_KS = 0,
+            ELEVATOR_MOTOR_KV = 0,
+            ELEVATOR_MOTOR_KA = 0,
+            ELEVATOR_MOTOR_KG = 0;
+    static final ArmFeedforward ANGLE_MOTOR_FEEDFORWARD = new ArmFeedforward(ANGLE_MOTOR_KS,ANGLE_MOTOR_KG,ANGLE_MOTOR_KV,ANGLE_MOTOR_KA);
+    static final ElevatorFeedforward ELEVATOR_MOTOR_FEEDFORWARD = new ElevatorFeedforward(ELEVATOR_MOTOR_KS,ELEVATOR_MOTOR_KG,ELEVATOR_MOTOR_KV,ELEVATOR_MOTOR_KA);
+
     private static final CANSparkMax.IdleMode
-            ANGLE_IDLE_MODE_VALUE = CANSparkMax.IdleMode.kBrake,
-            ELEVATOR_IDLE_MODE_VALUE = CANSparkMax.IdleMode.kBrake;
+            ANGLE_IDLE_MODE = CANSparkMax.IdleMode.kBrake,
+            ELEVATOR_IDLE_MODE = CANSparkMax.IdleMode.kBrake;
     private static final AbsoluteSensorRangeValue ANGLE_ENCODER_SENSOR_RANGE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
 
     static final CANSparkMax
@@ -85,13 +99,13 @@ public class ArmConstants {
         MASTER_ELEVATOR_MOTOR.setInverted(MASTER_ELEVATOR_INVERTED);
         FOLLOWER_ELEVATOR_MOTOR.setInverted(FOLLOWER_ELEVATOR_INVERTED);
 
-        MASTER_ELEVATOR_MOTOR.setIdleMode(ELEVATOR_IDLE_MODE_VALUE);
-        FOLLOWER_ELEVATOR_MOTOR.setIdleMode(ELEVATOR_IDLE_MODE_VALUE);
+        MASTER_ELEVATOR_MOTOR.setIdleMode(ELEVATOR_IDLE_MODE);
+        FOLLOWER_ELEVATOR_MOTOR.setIdleMode(ELEVATOR_IDLE_MODE);
     }
 
     private static void configureElevatorEncoder() {
-        ELEVATOR_ENCODER.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0, 10);
         ELEVATOR_ENCODER.configFactoryDefault();
+        ELEVATOR_ENCODER.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0, 10);
         ELEVATOR_ENCODER.setSelectedSensorPosition(ELEVATOR_ENCODER.getSelectedSensorPosition() - ELEVATOR_ENCODER_OFFSET);
         ELEVATOR_ENCODER.setSensorPhase(ELEVATOR_ENCODER_PHASE);
     }
@@ -106,8 +120,8 @@ public class ArmConstants {
         MASTER_ANGLE_MOTOR.setInverted(MASTER_ANGLE_INVERTED);
         FOLLOWER_ANGLE_MOTOR.setInverted(FOLLOWER_ANGLE_INVERTED);
 
-        MASTER_ANGLE_MOTOR.setIdleMode(ANGLE_IDLE_MODE_VALUE);
-        FOLLOWER_ANGLE_MOTOR.setIdleMode(ANGLE_IDLE_MODE_VALUE);
+        MASTER_ANGLE_MOTOR.setIdleMode(ANGLE_IDLE_MODE);
+        FOLLOWER_ANGLE_MOTOR.setIdleMode(ANGLE_IDLE_MODE);
     }
 
     private static void configureAngleEncoder() {
