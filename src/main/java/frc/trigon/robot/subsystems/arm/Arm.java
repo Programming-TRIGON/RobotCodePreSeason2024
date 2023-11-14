@@ -119,7 +119,7 @@ public class Arm extends SubsystemBase {
     }
 
     private double getElevatorVelocityRevolutionsPerSecond() {
-        return Conversions.magTicksToRevolutions(elevatorEncoder.getSelectedSensorVelocity());
+        return Conversions.perHundredMsToPerSecond(elevatorEncoder.getSelectedSensorVelocity());
     }
 
     private void stopAngleMotors() {
