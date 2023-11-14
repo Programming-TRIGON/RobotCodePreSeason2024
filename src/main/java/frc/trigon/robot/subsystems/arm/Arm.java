@@ -47,9 +47,9 @@ public class Arm extends SubsystemBase {
         );
     }
 
-    public Command getSetElevatorTargetCommand(double elevatorPosition) {
+    public Command getSetElevatorTargetCommand(double targetElevatorPosition) {
         return new FunctionalCommand(
-                () -> generateElevatorMotorProfile(elevatorPosition),
+                () -> generateElevatorMotorProfile(targetElevatorPosition),
                 this::setTargetElevatorFromProfile,
                 (interrupted) -> {
                 },
