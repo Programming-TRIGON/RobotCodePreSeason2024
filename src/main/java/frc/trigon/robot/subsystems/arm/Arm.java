@@ -50,7 +50,7 @@ public class Arm extends SubsystemBase {
     public Command getSetTargetElevatorPositionCommand(double targetElevatorPosition) {
         return new FunctionalCommand(
                 () -> generateElevatorMotorProfile(targetElevatorPosition),
-                this::setTargetElevatorFromProfile,
+                this::setTargetElevatorPositionFromProfile,
                 (interrupted) -> {
                 },
                 () -> false,
@@ -68,7 +68,7 @@ public class Arm extends SubsystemBase {
         masterAngleMotor.getPIDController().setReference(targetState.position, CANSparkMax.ControlType.kPosition);
     }
 
-    private void setTargetElevatorFromProfile() {
+    private void setTargetElevatorPositionFromProfile() {
         if (elevatorMotorProfile == null) {
             stopElevatorMotors();
             return;
