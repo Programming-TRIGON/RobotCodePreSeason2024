@@ -2,12 +2,14 @@ package frc.trigon.robot.subsystems.arm;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -63,6 +65,28 @@ public class ArmConstants {
     static final TrapezoidProfile.Constraints
             ANGLE_CONSTRAINTS = new TrapezoidProfile.Constraints(MAX_ANGLE_VELOCITY, MAX_ANGLE_ACCELERATION),
             ELEVATOR_CONSTRAINTS = new TrapezoidProfile.Constraints(MAX_ELEVATOR_VELOCITY, MAX_ELEVATOR_ACCELERATION);
+    static final StatusSignal<Double> ANGLE_ENCODER_POSITION_SIGNAL = ANGLE_ENCODER.getPosition();
+    private static final double
+            ANGLE_MOTOR_KS = 1,
+            ANGLE_MOTOR_KG = 1,
+            ANGLE_MOTOR_KV = 1,
+            ANGLE_MOTOR_KA = 1,
+            ELEVATOR_MOTOR_KS = 1,
+            ELEVATOR_MOTOR_KG = 1,
+            ELEVATOR_MOTOR_KV = 1,
+            ELEVATOR_MOTOR_KA = 1;
+    static final ArmFeedforward ARM_FEEDFORWARD = new ArmFeedforward(
+            ANGLE_MOTOR_KS,
+            ANGLE_MOTOR_KG,
+            ANGLE_MOTOR_KV,
+            ANGLE_MOTOR_KA
+    );
+    static final ArmFeedforward ANGLE_FEEDFORWARD = new ArmFeedforward(
+            ELEVATOR_MOTOR_KS,
+            ELEVATOR_MOTOR_KG,
+            ELEVATOR_MOTOR_KV,
+            ELEVATOR_MOTOR_KA
+    );
 
     static {
         configureAngleMotors();
