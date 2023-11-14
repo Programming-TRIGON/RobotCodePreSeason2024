@@ -13,17 +13,12 @@ import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-
-
 public class SideShooterConstants {
-
     private static final double VOLTAGE_COMPENSATION = 12;
     private static final int
             SHOOTING_MOTOR_ID = 0,
             ANGLE_MOTOR_ID = 1,
             ANGLE_ENCODER_ID = 2;
-
-
     private static final double ANGLE_ENCODER_OFFSET = 0;
     private static final AbsoluteSensorRangeValue ANGLE_ENCODER_RANGE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
     private static final InvertedValue SHOOTING_MOTOR_INVERTED_VALUE = InvertedValue.CounterClockwise_Positive;
@@ -40,7 +35,6 @@ public class SideShooterConstants {
     private static final double
         MAX_ANGLE_VELOCITY = 600,
         MAX_ANGLE_ACCELERATION = 500;
-
     static final TrapezoidProfile.Constraints ANGLE_CONSTRAINTS = new TrapezoidProfile.Constraints(MAX_ANGLE_VELOCITY, MAX_ANGLE_ACCELERATION);
 
     private static final double
@@ -80,9 +74,9 @@ public class SideShooterConstants {
     }
 
     public enum SideShooter {
-        COLLECTION(new Rotation2d(-15), -5),
-        MIDDLE(new Rotation2d(30), 5),
-        HIGH(new Rotation2d(60), 10);
+        COLLECTION(Rotation2d.fromDegrees(-15), -5),
+        MIDDLE(Rotation2d.fromDegrees(30), 5),
+        HIGH(Rotation2d.fromDegrees(60), 10);
 
         final Rotation2d angle;
         final double power;
