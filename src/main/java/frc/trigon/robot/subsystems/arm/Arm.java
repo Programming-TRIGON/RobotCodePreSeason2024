@@ -66,8 +66,7 @@ public class Arm extends SubsystemBase {
         }
 
         TrapezoidProfile.State targetState = angleMotorProfile.calculate(getAngleMotorProfileTime());
-        masterAngleMotor.setVoltage(calculateAngleMotorOutput(targetState));
-        followerAngleMotor.setVoltage(calculateAngleMotorOutput(targetState));
+        setAngleMotorsVoltage(targetState);
     }
 
     private void setTargetElevatorPositionFromProfile() {
@@ -77,9 +76,17 @@ public class Arm extends SubsystemBase {
         }
 
         TrapezoidProfile.State targetState = elevatorMotorProfile.calculate(getElevatorMotorProfileTime());
+        setElevatorMotorsVoltage(targetState);
+    }
+
+    private void setAngleMotorsVoltage(TrapezoidProfile.State targetState){
+        masterAngleMotor.setVoltage(calculateAngleMotorOutput(targetState));
+        followerAngleMotor.setVoltage(calculateAngleMotorOutput(targetState));
+    }
+
+    private void setElevatorMotorsVoltage(TrapezoidProfile.State targetState){
         masterElevatorMotor.setVoltage(calculateElevatorMotorOutput(targetState));
         followerElevatorMotor.setVoltage(calculateElevatorMotorOutput(targetState));
-
     }
 
     private double calculateAngleMotorOutput(TrapezoidProfile.State targetState){
@@ -87,7 +94,7 @@ public class Arm extends SubsystemBase {
                 getAngleMotorPosition().getDegrees(),
                 targetState.position
         );
-        double feedForward = ArmConstants.ANGLE_FEED_FORWARD.calculate(
+        double feedForward = ArmConstants.ANGLE_FEEDFORWARD.calculate(
                 Units.degreesToRadians(targetState.position),
                 Units.degreesToRadians(targetState.velocity)
         );
@@ -100,7 +107,7 @@ public class Arm extends SubsystemBase {
                 getElevatorMotorPositionRevolutions(),
                 targetState.position
         );
-        double feedForward = ArmConstants.ELEVATOR_FEED_FORWARD.calculate(
+        double feedForward = ArmConstants.ELEVATOR_FEEDFORWARD.calculate(
                 Units.degreesToRadians(targetState.position),
                 Units.degreesToRadians(targetState.velocity)
         );
@@ -149,8 +156,8 @@ public class Arm extends SubsystemBase {
     }
 
     private double getElevatorVelocityRevolutionsPerSecond() {
-        double msPerSecond = Conversions.perHundredMsToPerSecond(elevatorEncoder.getSelectedSensorVelocity());
-        return Conversions.magTicksToRevolutions(msPerSecond);
+        double magTicksPerSecond = Conversions.perHundredMsToPerSecond(elevatorEncoder.getSelectedSensorVelocity());
+        return Conversions.magTicksToRevolutions(magTicksPerSecond);
     }
 
     private void stopAngleMotors() {
