@@ -1,5 +1,6 @@
 package frc.trigon.robot.subsystems.arm;
 
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -39,8 +40,9 @@ public class ArmConstants {
             MAX_ANGLE_ACCELERATION = 100,
             MAX_ELEVATOR_VELOCITY = 100,
             MAX_ELEVATOR_ACCELERATION = 100;
-    static final TrapezoidProfile.Constraints ANGLE_CONSTRAINS = new TrapezoidProfile.Constraints(MAX_ANGLE_VELOCITY, MAX_ANGLE_ACCELERATION);
-    static final TrapezoidProfile.Constraints ELEVATOR_CONSTRAINS = new TrapezoidProfile.Constraints(MAX_ELEVATOR_VELOCITY, MAX_ELEVATOR_ACCELERATION);
+    static final TrapezoidProfile.Constraints
+            ANGLE_CONSTRAINS = new TrapezoidProfile.Constraints(MAX_ANGLE_VELOCITY, MAX_ANGLE_ACCELERATION),
+            ELEVATOR_CONSTRAINS = new TrapezoidProfile.Constraints(MAX_ELEVATOR_VELOCITY, MAX_ELEVATOR_ACCELERATION);
 
     private static final CANSparkMax.IdleMode
             ANGLE_IDLE_MODE_VALUE = CANSparkMax.IdleMode.kBrake,
@@ -80,7 +82,6 @@ public class ArmConstants {
         MASTER_ELEVATOR_MOTOR.enableVoltageCompensation(VOLTAGE_COMPENSATION_SATURATION);
         FOLLOWER_ELEVATOR_MOTOR.enableVoltageCompensation(VOLTAGE_COMPENSATION_SATURATION);
 
-
         MASTER_ELEVATOR_MOTOR.setInverted(MASTER_ELEVATOR_INVERTED);
         FOLLOWER_ELEVATOR_MOTOR.setInverted(FOLLOWER_ELEVATOR_INVERTED);
 
@@ -88,13 +89,12 @@ public class ArmConstants {
         FOLLOWER_ELEVATOR_MOTOR.setIdleMode(ELEVATOR_IDLE_MODE_VALUE);
     }
 
-
     private static void configureElevatorEncoder() {
+        ELEVATOR_ENCODER.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0, 10);
         ELEVATOR_ENCODER.configFactoryDefault();
         ELEVATOR_ENCODER.setSelectedSensorPosition(ELEVATOR_ENCODER.getSelectedSensorPosition() - ELEVATOR_ENCODER_OFFSET);
         ELEVATOR_ENCODER.setSensorPhase(ELEVATOR_ENCODER_PHASE);
     }
-
 
     private static void configureAngleMotors() {
         MASTER_ANGLE_MOTOR.restoreFactoryDefaults();
