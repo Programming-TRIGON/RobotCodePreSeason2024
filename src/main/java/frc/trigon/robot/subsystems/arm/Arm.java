@@ -162,6 +162,11 @@ public class Arm extends SubsystemBase {
         return Conversions.magTicksToRevolutions(magTicksPerSecond);
     }
 
+    private Rotation2d getAngleEncoderPosition(){
+        double positionRevolutions = ArmConstants.ANGLE_ENCODER_POSITION_SIGNAL.refresh().getValue();
+        return Rotation2d.fromRotations(positionRevolutions);
+    }
+
     private void stopAngleMotors() {
         masterAngleMotor.stopMotor();
         followerAngleMotor.stopMotor();
