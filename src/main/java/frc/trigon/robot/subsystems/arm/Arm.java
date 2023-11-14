@@ -85,7 +85,9 @@ public class Arm extends SubsystemBase {
             return;
         }
         final TrapezoidProfile.State targetState = angleMotorProfile.calculate(getAngleMotorProfileTime());
-        masterAngleMotor.getPIDController().setReference(targetState.position, CANSparkMax.ControlType.kPosition);
+        ArmConstants.MASTER_ANGLE_MOTOR.getPIDController().setP(ArmConstants.ANGLE_PID_CONTROLLER.getP());
+        ArmConstants.MASTER_ANGLE_MOTOR.getPIDController().setI(ArmConstants.ANGLE_PID_CONTROLLER.getI());
+        ArmConstants.MASTER_ANGLE_MOTOR.getPIDController().setD(ArmConstants.ANGLE_PID_CONTROLLER.getD());
     }
 
     private void setTargetPositionFromProfile() {
@@ -94,7 +96,9 @@ public class Arm extends SubsystemBase {
             return;
         }
         final TrapezoidProfile.State targetState = elevatorMotorProfile.calculate(getElevatorMotorProfileTime());
-        masterElevatorMotor.getPIDController().setReference(targetState.position, CANSparkMax.ControlType.kPosition);
+        ArmConstants.MASTER_ELEVATOR_MOTOR.getPIDController().setP(ArmConstants.ELEVATOR_PID_CONTROLLER.getP());
+        ArmConstants.MASTER_ELEVATOR_MOTOR.getPIDController().setI(ArmConstants.ELEVATOR_PID_CONTROLLER.getI());
+        ArmConstants.MASTER_ELEVATOR_MOTOR.getPIDController().setD(ArmConstants.ELEVATOR_PID_CONTROLLER.getD());
     }
 
     private double getAngleMotorProfileTime() {

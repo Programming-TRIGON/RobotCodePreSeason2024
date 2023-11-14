@@ -50,7 +50,7 @@ public class ArmConstants {
             ELEVATOR_P = 0,
             ELEVATOR_I = 0,
             ELEVATOR_D = 0;
-    private static final PIDController
+    static final PIDController
             ANGLE_PID_CONTROLLER = new PIDController(ANGLE_P, ANGLE_I, ANGLE_D),
             ELEVATOR_PID_CONTROLLER = new PIDController(ELEVATOR_P, ELEVATOR_I, ELEVATOR_D);
     private static final double
