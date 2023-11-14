@@ -86,10 +86,10 @@ public class Arm extends SubsystemBase {
         lastAngleMotorProfileGenerationTime = Timer.getFPGATimestamp();
     }
 
-    private void generateElevatorMotorProfile(double targetAngle){
+    private void generateElevatorMotorProfile(double targetPostition){
         angleMotorProfile = new TrapezoidProfile(
                 ArmConstants.ELEVATOR_CONSTRAINTS,
-                new TrapezoidProfile.State(targetAngle,0),
+                new TrapezoidProfile.State(targetPostition,0),
                 new TrapezoidProfile.State(getElevatorMotorPositionRevolutions(), getElevatorVelocityRevolutionsPerSecond())
         );
 
