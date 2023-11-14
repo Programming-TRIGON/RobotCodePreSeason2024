@@ -12,34 +12,36 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 public class ArmConstants {
+    private static final double VOLTAGE_COMPENSATION_SATURATION = 12;
+
     private static final int
             MASTER_ANGLE_MOTOR_ID = 0,
             FOLLOWER_ANGLE_MOTOR_ID = 1,
             MASTER_ELEVATOR_MOTOR_ID = 2,
             FOLLOWER_ELEVATOR_MOTOR_ID = 3,
-            ELEVATOR_MAG_ENCODER_ID = 4,
-            ANGLE_CANCODER_ID = 5;
+            ELEVATOR_ENCODER_ID = 4,
+            ANGLE_ENCODER_ID = 5;
 
     private static final double
-            ELEVATOR_MAG_ENCODER_OFFSET = 0.0,
-            ANGLE_CANCODER_OFFSET = 0.0;
+            ELEVATOR_ENCODER_OFFSET = 0.0,
+            ANGLE_ENCODER_OFFSET = 0.0;
 
     private static final boolean
             MASTER_ANGLE_INVERTED = false,
             FOLLOWER_ANGLE_INVERTED = false,
             MASTER_ELEVATOR_INVERTED = false,
             FOLLOWER_ELEVATOR_INVERTED = true,
-            ELEVATOR_MAG_ENCODER_PHASE = true;
-    private static final SensorDirectionValue ANGLE_CANCODER_SENSOR_DIRECTION = SensorDirectionValue.Clockwise_Positive;
+            ELEVATOR_ENCODER_PHASE = true;
+    private static final SensorDirectionValue ANGLE_ENCODER_SENSOR_DIRECTION = SensorDirectionValue.Clockwise_Positive;
 
     private static final double
-        MAX_ANGLE_VELOCITY = 100,
-        MAX_ANGLE_ACCELERATION = 100,
-        MAX_ELEVATOR_VELOCITY = 100,
-        MAX_ELEVATOR_ACCELERATION = 100;
+            MAX_ANGLE_VELOCITY = 100,
+            MAX_ANGLE_ACCELERATION = 100,
+            MAX_ELEVATOR_VELOCITY = 100,
+            MAX_ELEVATOR_ACCELERATION = 100;
     static final TrapezoidProfile.Constraints ANGLE_CONSTRAINS = new TrapezoidProfile.Constraints(MAX_ANGLE_VELOCITY, MAX_ANGLE_ACCELERATION);
     static final TrapezoidProfile.Constraints ELEVATOR_CONSTRAINS = new TrapezoidProfile.Constraints(MAX_ELEVATOR_VELOCITY, MAX_ELEVATOR_ACCELERATION);
-    
+
     private static final CANSparkMax.IdleMode
             ANGLE_IDLE_MODE_VALUE = CANSparkMax.IdleMode.kBrake,
             ELEVATOR_IDLE_MODE_VALUE = CANSparkMax.IdleMode.kBrake;
@@ -50,16 +52,19 @@ public class ArmConstants {
             FOLLOWER_ANGLE_MOTOR = new CANSparkMax(FOLLOWER_ANGLE_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless),
             MASTER_ELEVATOR_MOTOR = new CANSparkMax(MASTER_ELEVATOR_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless),
             FOLLOWER_ELEVATOR_MOTOR = new CANSparkMax(FOLLOWER_ELEVATOR_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless);
-    static final TalonSRX ELEVATOR_ENCODER = new TalonSRX(ELEVATOR_MAG_ENCODER_ID);
-    static final CANcoder ANGLE_ENCODER = new CANcoder(ANGLE_CANCODER_ID);
+    static final TalonSRX ELEVATOR_ENCODER = new TalonSRX(ELEVATOR_ENCODER_ID);
+    static final CANcoder ANGLE_ENCODER = new CANcoder(ANGLE_ENCODER_ID);
 
     private static final double
-            P = 1.32,
-            I = 3.1,
-            D = 0;
-    private static final PIDController PID_CONTROLLER = new PIDController(P, I, D);
-
-    private static final double VOLTAGE_COMPENSATION_SATURATION = 12;
+            ELEVATOR_P = 1.32,
+            ELEVATOR_I = 3.1,
+            ELEVATOR_D = 0,
+            ANGLE_P = 1.32,
+            ANGLE_I = 3.1,
+            ANGLE_D = 0;
+    private static final PIDController
+            ELEVATOR_PID_CONTROLLER = new PIDController(ELEVATOR_P, ELEVATOR_I, ELEVATOR_D),
+            ANGLE_PID_CONTROLLER = new PIDController(ANGLE_P, ANGLE_I, ANGLE_D);
 
     static {
         configureAngleMotors();
@@ -86,8 +91,8 @@ public class ArmConstants {
 
     private static void configureElevatorEncoder() {
         ELEVATOR_ENCODER.configFactoryDefault();
-        ELEVATOR_ENCODER.setSelectedSensorPosition(ELEVATOR_ENCODER.getSelectedSensorPosition() - ELEVATOR_MAG_ENCODER_OFFSET);
-        ELEVATOR_ENCODER.setSensorPhase(ELEVATOR_MAG_ENCODER_PHASE);
+        ELEVATOR_ENCODER.setSelectedSensorPosition(ELEVATOR_ENCODER.getSelectedSensorPosition() - ELEVATOR_ENCODER_OFFSET);
+        ELEVATOR_ENCODER.setSensorPhase(ELEVATOR_ENCODER_PHASE);
     }
 
 
@@ -107,13 +112,13 @@ public class ArmConstants {
 
     private static void configureAngleEncoder() {
         CANcoderConfiguration configureAngleEncoder = new CANcoderConfiguration();
-        configureAngleEncoder.MagnetSensor.MagnetOffset = ANGLE_CANCODER_OFFSET;
+        configureAngleEncoder.MagnetSensor.MagnetOffset = ANGLE_ENCODER_OFFSET;
         configureAngleEncoder.MagnetSensor.AbsoluteSensorRange = ANGLE_ENCODER_SENSOR_RANGE;
-        configureAngleEncoder.MagnetSensor.SensorDirection = ANGLE_CANCODER_SENSOR_DIRECTION;
+        configureAngleEncoder.MagnetSensor.SensorDirection = ANGLE_ENCODER_SENSOR_DIRECTION;
         ANGLE_ENCODER.getConfigurator().apply(configureAngleEncoder);
     }
 
-        public enum ArmStates {
+    public enum ArmStates {
         FIRST_STATE(Rotation2d.fromDegrees(30), 1),
         SECOND_STATE(Rotation2d.fromDegrees(50), 2),
         THIRD_STATE(Rotation2d.fromDegrees(100), 3);
