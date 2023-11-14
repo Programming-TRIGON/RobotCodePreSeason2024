@@ -66,7 +66,8 @@ public class Arm extends SubsystemBase {
         }
 
         TrapezoidProfile.State targetState = angleMotorProfile.calculate(getAngleMotorProfileTime());
-        setAngleMotorsVoltage(targetState);
+        double voltage = calculateAngleMotorOutput(targetState);
+        setAngleMotorsVoltage(voltage);
     }
 
     private void setTargetElevatorPositionFromProfile() {
@@ -76,17 +77,18 @@ public class Arm extends SubsystemBase {
         }
 
         TrapezoidProfile.State targetState = elevatorMotorProfile.calculate(getElevatorMotorProfileTime());
-        setElevatorMotorsVoltage(targetState);
+        double voltage = calculateElevatorMotorOutput(targetState);
+        setElevatorMotorsVoltage(voltage);
     }
 
-    private void setAngleMotorsVoltage(TrapezoidProfile.State targetState){
-        masterAngleMotor.setVoltage(calculateAngleMotorOutput(targetState));
-        followerAngleMotor.setVoltage(calculateAngleMotorOutput(targetState));
+    private void setAngleMotorsVoltage(double voltage){
+        masterAngleMotor.setVoltage(voltage);
+        followerAngleMotor.setVoltage(voltage);
     }
 
-    private void setElevatorMotorsVoltage(TrapezoidProfile.State targetState){
-        masterElevatorMotor.setVoltage(calculateElevatorMotorOutput(targetState));
-        followerElevatorMotor.setVoltage(calculateElevatorMotorOutput(targetState));
+    private void setElevatorMotorsVoltage(double voltage){
+        masterElevatorMotor.setVoltage(voltage);
+        followerElevatorMotor.setVoltage(voltage);
     }
 
     private double calculateAngleMotorOutput(TrapezoidProfile.State targetState){
