@@ -86,7 +86,7 @@ public class ArmConstants {
             ELEVATOR_CONSTRAINTS = new TrapezoidProfile.Constraints(
                     MAX_ELEVATOR_VELOCITY, MAX_ELEVATOR_ACCELERATION
             );
-    
+
     static final StatusSignal<Double>
             ANGLE_MOTOR_POSITION_SIGNAL = ANGLE_ENCODER.getPosition(),
             ANGLE_MOTOR_VELOCITY_SIGNAL = ANGLE_ENCODER.getVelocity();
