@@ -57,6 +57,7 @@ public class ArmConstants {
     static final PIDController
             ANGLE_PID_CONTROLLER = new PIDController(ANGLE_P, ANGLE_I, ANGLE_D),
             ELEVATOR_PID_CONTROLLER = new PIDController(ELEVATOR_P, ELEVATOR_I, ELEVATOR_D);
+
     private static final double
             MAX_ANGLE_VELOCITY = 100,
             MAX_ELEVATOR_VELOCITY = 100,
@@ -65,7 +66,6 @@ public class ArmConstants {
     static final TrapezoidProfile.Constraints
             ANGLE_CONSTRAINTS = new TrapezoidProfile.Constraints(MAX_ANGLE_VELOCITY, MAX_ANGLE_ACCELERATION),
             ELEVATOR_CONSTRAINTS = new TrapezoidProfile.Constraints(MAX_ELEVATOR_VELOCITY, MAX_ELEVATOR_ACCELERATION);
-    static final StatusSignal<Double> ANGLE_ENCODER_POSITION_SIGNAL = ANGLE_ENCODER.getPosition();
     private static final double
             ANGLE_MOTOR_KS = 1,
             ANGLE_MOTOR_KG = 1,
@@ -147,5 +147,12 @@ public class ArmConstants {
             this.angle = angle;
             this.elevatorPosition = elevatorPosition;
         }
+    }
+
+    static final StatusSignal<Double> ANGLE_ENCODER_POSITION_SIGNAL = ANGLE_ENCODER.getPosition();
+    static final StatusSignal<Double> ANGLE_ENCODER_VELOCITY_SIGNAL = ANGLE_ENCODER.getVelocity();
+
+    static {
+        ANGLE_ENCODER_POSITION_SIGNAL.setUpdateFrequency(100);
     }
 }

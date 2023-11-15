@@ -81,18 +81,7 @@ public class Arm extends SubsystemBase {
             stopAngleMotors();
             return;
         }
-        ArmConstants.ANGLE_ENCODER_POSITION_SIGNAL.setUpdateFrequency(100);
-        TrapezoidProfile.State targetState = angleMotorProfile.calculate(getAngleMotorProfileTime());
-        double pidOutput = ArmConstants.ANGLE_PID_CONTROLLER.calculate(
-                getAngleEncoderPosition().getDegrees(),
-                targetState.position
-        );
-        double feedForward = ArmConstants.ANGLE_FEEDFORWARD.calculate(
-                Units.degreesToRadians(targetState.position),
-                Units.degreesToRadians(targetState.velocity)
-        );
-        masterAngleMotor.setVoltage(pidOutput + feedForward);
-        followerAngleMotor.setVoltage(pidOutput + feedForward);
+        setAngleMotorsVoltage(calculateAngleMotorProfile());
     }
 
     private void setTargetElevatorPositionFromProfile() {
@@ -100,11 +89,7 @@ public class Arm extends SubsystemBase {
             stopElevatorMotors();
             return;
         }
-        TrapezoidProfile.State targetState = elevatorMotorProfile.calculate(getElevatorMotorProfileTime());
-        double pidOutput = ArmConstants.ELEVATOR_PID_CONTROLLER.calculate(
-                Conversions.revolutionsToDegrees(getElevatorMotorPositionRevolutions()),
-                targetState.position
-        );
+        setElevatorMotorsVoltage(calculateElevatorMotorProfile());
     }
 
     private double getAngleMotorProfileTime() {
@@ -115,7 +100,7 @@ public class Arm extends SubsystemBase {
         return Timer.getFPGATimestamp() - lastElevatorMotorProfileGenerationTime;
     }
 
-    private Rotation2d getAngleEncoderPosition()    {
+    private Rotation2d getAngleEncoderPosition() {
         double positionRevolutions = ArmConstants.ANGLE_ENCODER_POSITION_SIGNAL.refresh().getValue();
         return Rotation2d.fromRotations(positionRevolutions);
     }
@@ -125,11 +110,11 @@ public class Arm extends SubsystemBase {
     }
 
     private double getAngleMotorVelocityDegreesPerSecond() {
-        return Conversions.revolutionsToDegrees(angleEncoder.getVelocity().getValue());
+        return ArmConstants.ANGLE_ENCODER_VELOCITY_SIGNAL.getValue() * 100;
     }
 
     private double getElevatorMotorVelocityRevolutionsPerSecond() {
-        return ArmConstants.ANGLE_ENCODER_POSITION_SIGNAL.getValue();
+        return Conversions.magTicksToRevolutions(elevatorEncoder.getSelectedSensorVelocity()) * 100;
     }
 
     private void stopElevatorMotors() {
@@ -140,6 +125,42 @@ public class Arm extends SubsystemBase {
     private void stopAngleMotors() {
         masterAngleMotor.stopMotor();
         followerAngleMotor.stopMotor();
+    }
+
+    private double calculateAngleMotorProfile() {
+        TrapezoidProfile.State targetState = angleMotorProfile.calculate(getAngleMotorProfileTime());
+        double pidOutput = ArmConstants.ANGLE_PID_CONTROLLER.calculate(
+                getAngleEncoderPosition().getDegrees(),
+                targetState.position
+        );
+        double feedForward = ArmConstants.ANGLE_FEEDFORWARD.calculate(
+                Units.degreesToRadians(targetState.position),
+                Units.degreesToRadians(targetState.velocity)
+        );
+        return pidOutput + feedForward;
+    }
+
+    private double calculateElevatorMotorProfile() {
+        TrapezoidProfile.State targetState = elevatorMotorProfile.calculate(getElevatorMotorProfileTime());
+        double pidOutput = ArmConstants.ELEVATOR_PID_CONTROLLER.calculate(
+                getElevatorMotorPositionRevolutions(),
+                targetState.position
+        );
+        double feedForward = ArmConstants.ANGLE_FEEDFORWARD.calculate(
+                Units.degreesToRadians(targetState.position),
+                Units.degreesToRadians(targetState.velocity)
+        );
+        return pidOutput + feedForward;
+    }
+
+    private void setAngleMotorsVoltage(double voltage) {
+        masterAngleMotor.setVoltage(voltage);
+        followerAngleMotor.setVoltage(voltage);
+    }
+
+    private void setElevatorMotorsVoltage(double voltage) {
+        masterElevatorMotor.setVoltage(voltage);
+        followerElevatorMotor.setVoltage(voltage);
     }
 }
 
