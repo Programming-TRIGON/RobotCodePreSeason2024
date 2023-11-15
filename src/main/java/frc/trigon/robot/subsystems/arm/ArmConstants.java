@@ -77,11 +77,11 @@ public class ArmConstants {
             ELEVATOR_MOTOR_KA = 1;
     static final ArmFeedforward
             ANGLE_FEEDFORWARD = new ArmFeedforward(
-                    ANGLE_MOTOR_KS,
-                    ANGLE_MOTOR_KG,
-                    ANGLE_MOTOR_KV,
-                    ANGLE_MOTOR_KA),
-            ELEVATOR_FEEDFORWARD = new ArmFeedforward(
+            ANGLE_MOTOR_KS,
+            ANGLE_MOTOR_KG,
+            ANGLE_MOTOR_KV,
+            ANGLE_MOTOR_KA),
+            ARM_FEEDFORWARD = new ArmFeedforward(
                     ELEVATOR_MOTOR_KS,
                     ELEVATOR_MOTOR_KG,
                     ELEVATOR_MOTOR_KV,
@@ -130,6 +130,7 @@ public class ArmConstants {
 
         ANGLE_ENCODER_POSITION_SIGNAL.setUpdateFrequency(100);
         ANGLE_ENCODER_VELOCITY_SIGNAL.setUpdateFrequency(100);
+        ANGLE_ENCODER.optimizeBusUtilization();
     }
 
     private static void configureElevatorEncoder() {
