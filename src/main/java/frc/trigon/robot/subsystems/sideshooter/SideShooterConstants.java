@@ -74,17 +74,17 @@ public class SideShooterConstants {
         ANGLE_ENCODER.getConfigurator().apply(config);
     }
 
-    public enum SideShooterStates {
+    public enum SideShooterState {
         COLLECTION(Rotation2d.fromDegrees(-15), -5),
         MIDDLE(Rotation2d.fromDegrees(30), 5),
         HIGH(Rotation2d.fromDegrees(60), 10);
 
         final Rotation2d angle;
-        final double power;
+        final double voltage;
 
-        SideShooterStates(Rotation2d angle, double power) {
+        SideShooterState(Rotation2d angle, double voltage) {
             this.angle = angle;
-            this.power = power;
+            this.voltage = voltage;
         }
     }
 }
