@@ -10,6 +10,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.trigon.robot.utilities.Conversions;
 
@@ -35,6 +36,13 @@ public class Arm extends SubsystemBase {
     }
 
     private Arm() {
+    }
+
+    public Command setArmTarget(ArmConstants.ArmState targetState){
+        return new StartEndCommand(
+                () -> getSetTargetAngleCommand(targetState.angle),
+                () -> getSetTargetElevatorPositionCommand(targetState.elevatorPosition)
+        );
     }
 
     public Command getSetTargetAngleCommand(Rotation2d targetAngle) {
