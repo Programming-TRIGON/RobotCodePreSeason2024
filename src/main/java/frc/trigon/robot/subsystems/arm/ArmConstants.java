@@ -10,6 +10,7 @@ import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -66,6 +67,7 @@ public class ArmConstants {
     static final TrapezoidProfile.Constraints
             ANGLE_CONSTRAINTS = new TrapezoidProfile.Constraints(MAX_ANGLE_VELOCITY, MAX_ANGLE_ACCELERATION),
             ELEVATOR_CONSTRAINTS = new TrapezoidProfile.Constraints(MAX_ELEVATOR_VELOCITY, MAX_ELEVATOR_ACCELERATION);
+
     private static final double
             ANGLE_MOTOR_KS = 1,
             ANGLE_MOTOR_KG = 1,
@@ -75,18 +77,18 @@ public class ArmConstants {
             ELEVATOR_MOTOR_KG = 1,
             ELEVATOR_MOTOR_KV = 1,
             ELEVATOR_MOTOR_KA = 1;
-    static final ArmFeedforward
-            ANGLE_FEEDFORWARD = new ArmFeedforward(
+    static final ArmFeedforward ANGLE_FEEDFORWARD = new ArmFeedforward(
             ANGLE_MOTOR_KS,
             ANGLE_MOTOR_KG,
             ANGLE_MOTOR_KV,
-            ANGLE_MOTOR_KA),
-            ARM_FEEDFORWARD = new ArmFeedforward(
-                    ELEVATOR_MOTOR_KS,
-                    ELEVATOR_MOTOR_KG,
-                    ELEVATOR_MOTOR_KV,
-                    ELEVATOR_MOTOR_KA
-            );
+            ANGLE_MOTOR_KA
+    );
+    static final ElevatorFeedforward ARM_FEEDFORWARD = new ElevatorFeedforward(
+            ELEVATOR_MOTOR_KS,
+            ELEVATOR_MOTOR_KG,
+            ELEVATOR_MOTOR_KV,
+            ELEVATOR_MOTOR_KA
+    );
 
     static final StatusSignal<Double>
             ANGLE_ENCODER_POSITION_SIGNAL = ANGLE_ENCODER.getPosition(),

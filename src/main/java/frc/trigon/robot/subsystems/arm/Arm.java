@@ -71,7 +71,7 @@ public class Arm extends SubsystemBase {
         elevatorMotorProfile = new TrapezoidProfile(
                 ArmConstants.ELEVATOR_CONSTRAINTS,
                 new TrapezoidProfile.State(targetElevatorPosition, 0),
-                new TrapezoidProfile.State(getElevatorMotorPositionRevolutions(), getElevatorMotorVelocityRevolutionsPerSecond())
+                new TrapezoidProfile.State(getElevatorMotorPositionRevolutions(), getElevatorMotorVelocityRevolutions())
         );
         lastElevatorMotorProfileGenerationTime = Timer.getFPGATimestamp();
     }
@@ -104,10 +104,6 @@ public class Arm extends SubsystemBase {
         return Timer.getFPGATimestamp() - lastElevatorMotorProfileGenerationTime;
     }
 
-    private Rotation2d getAngleMotorPositionRevolutions() {
-        return Rotation2d.fromRotations(angleEncoder.getPosition().getValue());
-    }
-
     private double getElevatorMotorPositionRevolutions() {
         return Conversions.magTicksToRevolutions(elevatorEncoder.getSelectedSensorPosition());
     }
@@ -116,7 +112,7 @@ public class Arm extends SubsystemBase {
         return Conversions.revolutionsToDegrees(ArmConstants.ANGLE_ENCODER_VELOCITY_SIGNAL.refresh().getValue());
     }
 
-    private double getElevatorMotorVelocityRevolutionsPerSecond() {
+    private double getElevatorMotorVelocityRevolutions() {
         double velocity = Conversions.magTicksToRevolutions(elevatorEncoder.getSelectedSensorVelocity());
         return Conversions.perHundredMsToPerSecond(velocity);
     }
