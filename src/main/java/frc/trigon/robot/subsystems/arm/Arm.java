@@ -156,7 +156,7 @@ public class Arm extends SubsystemBase {
 
     private double getAngleMotorVelocityDegreesPerSecond() {
         double positionRevolutions = ArmConstants.ANGLE_MOTOR_VELOCITY_SIGNAL.refresh().getValue();
-        return Conversions.revolutionsToDegrees(angleEncoder.getVelocity().getValue());
+        return Conversions.revolutionsToDegrees(positionRevolutions);
     }
 
     private double getElevatorVelocityRevolutionsPerSecond() {
