@@ -123,6 +123,8 @@ public class ArmConstants {
         config.MagnetSensor.SensorDirection = ANGLE_MOTOR_DIRECTION;
         config.MagnetSensor.AbsoluteSensorRange = ANGLE_MOTOR_RANGE;
         ANGLE_ENCODER.getConfigurator().apply(config);
+
+        ANGLE_ENCODER_POSITION_SIGNAL.setUpdateFrequency(100);
     }
 
     private static void configureElevatorEncoder() {
@@ -152,7 +154,4 @@ public class ArmConstants {
     static final StatusSignal<Double> ANGLE_ENCODER_POSITION_SIGNAL = ANGLE_ENCODER.getPosition();
     static final StatusSignal<Double> ANGLE_ENCODER_VELOCITY_SIGNAL = ANGLE_ENCODER.getVelocity();
 
-    static {
-        ANGLE_ENCODER_POSITION_SIGNAL.setUpdateFrequency(100);
-    }
 }
