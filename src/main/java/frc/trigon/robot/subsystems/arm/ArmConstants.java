@@ -82,7 +82,6 @@ public class ArmConstants {
             ANGLE_CONSTRAINS = new TrapezoidProfile.Constraints(MAX_ANGLE_VELOCITY, MAX_ANGLE_ACCELERATION),
             ELEVATOR_CONSTRAINS = new TrapezoidProfile.Constraints(MAX_ELEVATOR_VELOCITY, MAX_ELEVATOR_ACCELERATION);
 
-
     static {
         configureAngleMotors();
         configureElevatorMotors();
