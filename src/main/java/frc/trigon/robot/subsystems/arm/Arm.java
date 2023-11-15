@@ -146,7 +146,8 @@ public class Arm extends SubsystemBase {
     }
 
     private Rotation2d getAngleMotorPosition() {
-        return Rotation2d.fromRotations(angleEncoder.getPosition().getValue());
+        double positionRevolutions = ArmConstants.ANGLE_MOTOR_POSITION_SIGNAL.refresh().getValue();
+        return Rotation2d.fromRotations(positionRevolutions);
     }
 
     private double getElevatorMotorPositionRevolutions() {
@@ -154,17 +155,13 @@ public class Arm extends SubsystemBase {
     }
 
     private double getAngleMotorVelocityDegreesPerSecond() {
+        double positionRevolutions = ArmConstants.ANGLE_MOTOR_VELOCITY_SIGNAL.refresh().getValue();
         return Conversions.revolutionsToDegrees(angleEncoder.getVelocity().getValue());
     }
 
     private double getElevatorVelocityRevolutionsPerSecond() {
         double magTicksPerSecond = Conversions.perHundredMsToPerSecond(elevatorEncoder.getSelectedSensorVelocity());
         return Conversions.magTicksToRevolutions(magTicksPerSecond);
-    }
-
-    private Rotation2d getAngleEncoderPosition(){
-        double positionRevolutions = ArmConstants.ANGLE_ENCODER_POSITION_SIGNAL.refresh().getValue();
-        return Rotation2d.fromRotations(positionRevolutions);
     }
 
     private void stopAngleMotors() {

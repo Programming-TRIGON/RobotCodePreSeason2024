@@ -86,7 +86,9 @@ public class ArmConstants {
             ELEVATOR_CONSTRAINTS = new TrapezoidProfile.Constraints(
             MAX_ELEVATOR_VELOCITY, MAX_ELEVATOR_ACCELERATION
     );
-    static final StatusSignal<Double> ANGLE_ENCODER_POSITION_SIGNAL = ANGLE_ENCODER.getPosition();
+    static final StatusSignal<Double>
+            ANGLE_MOTOR_POSITION_SIGNAL = ANGLE_ENCODER.getPosition(),
+            ANGLE_MOTOR_VELOCITY_SIGNAL = ANGLE_ENCODER.getVelocity();
 
     static {
         configureAngleEncoder();
@@ -115,10 +117,11 @@ public class ArmConstants {
         FOLLOWER_ANGLE_MOTOR.setInverted(FOLLOWER_ANGLE_INVERTED);
         MASTER_ANGLE_MOTOR.enableVoltageCompensation(VOLTAGE_COMPENSATION_SATURATION);
         FOLLOWER_ANGLE_MOTOR.enableVoltageCompensation(VOLTAGE_COMPENSATION_SATURATION);
+        ANGLE_MOTOR_POSITION_SIGNAL.setUpdateFrequency(100);
+        ANGLE_MOTOR_VELOCITY_SIGNAL.setUpdateFrequency(100);
     }
 
     private static void configureAngleEncoder() {
-        ANGLE_ENCODER_POSITION_SIGNAL.setUpdateFrequency(100);
         CANcoderConfiguration angleEncoderConfig = new CANcoderConfiguration();
         angleEncoderConfig.MagnetSensor.MagnetOffset = ANGLE_ENCODER_OFFSET;
         angleEncoderConfig.MagnetSensor.AbsoluteSensorRange = ANGLE_ENCODER_RANGE;
