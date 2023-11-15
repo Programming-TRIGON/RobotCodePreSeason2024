@@ -110,7 +110,6 @@ public class Arm extends SubsystemBase {
                 targetState.position
         );
         double feedForward = ArmConstants.ELEVATOR_FEEDFORWARD.calculate(
-                Units.rotationsToRadians(targetState.position),
                 Units.rotationsToRadians(targetState.velocity)
         );
 
