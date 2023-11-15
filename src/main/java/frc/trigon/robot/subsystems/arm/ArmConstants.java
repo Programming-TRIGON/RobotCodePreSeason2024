@@ -75,18 +75,18 @@ public class ArmConstants {
             ELEVATOR_MOTOR_KG = 1,
             ELEVATOR_MOTOR_KV = 1,
             ELEVATOR_MOTOR_KA = 1;
-    static final ArmFeedforward ARM_FEEDFORWARD = new ArmFeedforward(
-            ANGLE_MOTOR_KS,
-            ANGLE_MOTOR_KG,
-            ANGLE_MOTOR_KV,
-            ANGLE_MOTOR_KA
-    );
-    static final ArmFeedforward ANGLE_FEEDFORWARD = new ArmFeedforward(
-            ELEVATOR_MOTOR_KS,
-            ELEVATOR_MOTOR_KG,
-            ELEVATOR_MOTOR_KV,
-            ELEVATOR_MOTOR_KA
-    );
+    static final ArmFeedforward
+            ANGLE_FEEDFORWARD = new ArmFeedforward(
+                    ANGLE_MOTOR_KS,
+                    ANGLE_MOTOR_KG,
+                    ANGLE_MOTOR_KV,
+                    ANGLE_MOTOR_KA),
+            ELEVATOR_FEEDFORWARD = new ArmFeedforward(
+                    ELEVATOR_MOTOR_KS,
+                    ELEVATOR_MOTOR_KG,
+                    ELEVATOR_MOTOR_KV,
+                    ELEVATOR_MOTOR_KA
+            );
 
     static final StatusSignal<Double>
             ANGLE_ENCODER_POSITION_SIGNAL = ANGLE_ENCODER.getPosition(),
