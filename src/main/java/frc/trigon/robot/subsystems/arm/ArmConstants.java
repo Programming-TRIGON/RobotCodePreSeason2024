@@ -37,27 +37,6 @@ public class ArmConstants {
             ELEVATOR_ENCODER_PHASE = true;
     private static final SensorDirectionValue ANGLE_ENCODER_SENSOR_DIRECTION = SensorDirectionValue.Clockwise_Positive;
 
-    private static final double
-            MAX_ANGLE_VELOCITY = 100,
-            MAX_ANGLE_ACCELERATION = 100,
-            MAX_ELEVATOR_VELOCITY = 100,
-            MAX_ELEVATOR_ACCELERATION = 100;
-    static final TrapezoidProfile.Constraints
-            ANGLE_CONSTRAINS = new TrapezoidProfile.Constraints(MAX_ANGLE_VELOCITY, MAX_ANGLE_ACCELERATION),
-            ELEVATOR_CONSTRAINS = new TrapezoidProfile.Constraints(MAX_ELEVATOR_VELOCITY, MAX_ELEVATOR_ACCELERATION);
-
-    private static final double
-            ANGLE_MOTOR_KS = 0,
-            ANGLE_MOTOR_KV = 0,
-            ANGLE_MOTOR_KA = 0,
-            ANGLE_MOTOR_KG = 0,
-            ELEVATOR_MOTOR_KS = 0,
-            ELEVATOR_MOTOR_KV = 0,
-            ELEVATOR_MOTOR_KA = 0,
-            ELEVATOR_MOTOR_KG = 0;
-    static final ArmFeedforward ANGLE_MOTOR_FEEDFORWARD = new ArmFeedforward(ANGLE_MOTOR_KS,ANGLE_MOTOR_KG,ANGLE_MOTOR_KV,ANGLE_MOTOR_KA);
-    static final ElevatorFeedforward ELEVATOR_MOTOR_FEEDFORWARD = new ElevatorFeedforward(ELEVATOR_MOTOR_KS,ELEVATOR_MOTOR_KG,ELEVATOR_MOTOR_KV,ELEVATOR_MOTOR_KA);
-
     private static final CANSparkMax.IdleMode
             ANGLE_IDLE_MODE = CANSparkMax.IdleMode.kBrake,
             ELEVATOR_IDLE_MODE = CANSparkMax.IdleMode.kBrake;
@@ -81,6 +60,28 @@ public class ArmConstants {
     private static final PIDController
             ELEVATOR_PID_CONTROLLER = new PIDController(ELEVATOR_P, ELEVATOR_I, ELEVATOR_D),
             ANGLE_PID_CONTROLLER = new PIDController(ANGLE_P, ANGLE_I, ANGLE_D);
+
+    private static final double
+            ANGLE_MOTOR_KS = 0,
+            ANGLE_MOTOR_KV = 0,
+            ANGLE_MOTOR_KA = 0,
+            ANGLE_MOTOR_KG = 0,
+            ELEVATOR_MOTOR_KS = 0,
+            ELEVATOR_MOTOR_KV = 0,
+            ELEVATOR_MOTOR_KA = 0,
+            ELEVATOR_MOTOR_KG = 0;
+    static final ArmFeedforward ANGLE_MOTOR_FEEDFORWARD = new ArmFeedforward(ANGLE_MOTOR_KS, ANGLE_MOTOR_KG, ANGLE_MOTOR_KV, ANGLE_MOTOR_KA);
+    static final ElevatorFeedforward ELEVATOR_MOTOR_FEEDFORWARD = new ElevatorFeedforward(ELEVATOR_MOTOR_KS, ELEVATOR_MOTOR_KG, ELEVATOR_MOTOR_KV, ELEVATOR_MOTOR_KA);
+
+    private static final double
+            MAX_ANGLE_VELOCITY = 100,
+            MAX_ANGLE_ACCELERATION = 100,
+            MAX_ELEVATOR_VELOCITY = 100,
+            MAX_ELEVATOR_ACCELERATION = 100;
+    static final TrapezoidProfile.Constraints
+            ANGLE_CONSTRAINS = new TrapezoidProfile.Constraints(MAX_ANGLE_VELOCITY, MAX_ANGLE_ACCELERATION),
+            ELEVATOR_CONSTRAINS = new TrapezoidProfile.Constraints(MAX_ELEVATOR_VELOCITY, MAX_ELEVATOR_ACCELERATION);
+
 
     static {
         configureAngleMotors();
