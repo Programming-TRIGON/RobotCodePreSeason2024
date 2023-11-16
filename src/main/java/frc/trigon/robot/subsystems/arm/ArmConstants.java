@@ -83,7 +83,7 @@ public class ArmConstants {
             ANGLE_MOTOR_KV,
             ANGLE_MOTOR_KA
     );
-    static final ElevatorFeedforward ARM_FEEDFORWARD = new ElevatorFeedforward(
+    static final ElevatorFeedforward ELEVATOR_FEEDFORWARD = new ElevatorFeedforward(
             ELEVATOR_MOTOR_KS,
             ELEVATOR_MOTOR_KG,
             ELEVATOR_MOTOR_KV,
