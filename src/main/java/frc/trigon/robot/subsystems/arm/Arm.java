@@ -43,7 +43,7 @@ public class Arm extends SubsystemBase {
         );
     }
 
-    public Command setTargetState(ArmConstants.ArmState targetState)    {
+    public Command setTargetState(ArmConstants.ArmState targetState) {
         if (targetState.elevatorPosition >= getElevatorPositionRevolutions()) {
             return new SequentialCommandGroup(
                     getSetTargetAngleCommand(targetState.angle),
