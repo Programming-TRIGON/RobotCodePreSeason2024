@@ -35,18 +35,17 @@ public class Arm extends SubsystemBase {
     }
 
 
-    public Command setTargetState(ArmConstants.ArmState targetState) {
+    public Command getSetTargetState(ArmConstants.ArmState targetState) {
         if (targetState.elevatorPosition >= getElevatorPositionRevolutions()) {
             return new SequentialCommandGroup(
                     getSetTargetAngleCommand(targetState.angle),
                     getSetTargetElevatorPositionCommand(targetState.elevatorPosition)
             );
-        } if (targetState.elevatorPosition < getElevatorPositionRevolutions()) {
-            return new SequentialCommandGroup(
-                    getSetTargetElevatorPositionCommand(targetState.elevatorPosition),
-                    getSetTargetAngleCommand(targetState.angle)
-            );
         }
+        return new SequentialCommandGroup(
+                getSetTargetElevatorPositionCommand(targetState.elevatorPosition),
+                getSetTargetAngleCommand(targetState.angle)
+        );
     }
 
     public Command getSetTargetAngleCommand(Rotation2d angle) {
@@ -149,11 +148,11 @@ public class Arm extends SubsystemBase {
                 ArmConstants.ANGLE_ENCODER_POSITION_SIGNAL.refresh().getValue(),
                 targetState.position
         );
-        double feedForward = ArmConstants.ANGLE_FEEDFORWARD.calculate(
+        double feedforward = ArmConstants.ANGLE_FEEDFORWARD.calculate(
                 Units.degreesToRadians(targetState.position),
                 Units.degreesToRadians(targetState.velocity)
         );
-        return pidOutput + feedForward;
+        return pidOutput + feedforward;
     }
 
     private double calculateElevatorMotorVoltage(TrapezoidProfile.State targetState) {
@@ -161,8 +160,8 @@ public class Arm extends SubsystemBase {
                 getElevatorPositionRevolutions(),
                 targetState.position
         );
-        double feedForward = ArmConstants.ELEVATOR_FEEDFORWARD.calculate(targetState.velocity);
-        return pidOutput + feedForward;
+        double feedforward = ArmConstants.ELEVATOR_FEEDFORWARD.calculate(targetState.velocity);
+        return pidOutput + feedforward;
     }
 
     private void setAngleMotorsVoltage(double voltage) {
