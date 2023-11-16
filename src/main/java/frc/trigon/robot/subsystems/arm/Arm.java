@@ -36,14 +36,14 @@ public class Arm extends SubsystemBase {
 
     }
 
-    public Command getSetTargetState(ArmConstants.ArmState targetState) {
+    public Command getCurrentSetTargetArmStateDeferredCommand(ArmConstants.ArmState targetState) {
         return new DeferredCommand(
-                () -> setTargetState(targetState),
-                Set.of()
+                () -> getCurrentSetTargetArmStateCommand(targetState),
+                Set.of(this)
         );
     }
 
-    public Command setTargetState(ArmConstants.ArmState targetState) {
+    private Command getCurrentSetTargetArmStateCommand(ArmConstants.ArmState targetState) {
         if (targetState.elevatorPosition >= getElevatorPositionRevolutions()) {
             return new SequentialCommandGroup(
                     getSetTargetAngleCommand(targetState.angle),
