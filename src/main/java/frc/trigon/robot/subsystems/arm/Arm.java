@@ -1,6 +1,5 @@
 package frc.trigon.robot.subsystems.arm;
 
-
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkMax;
