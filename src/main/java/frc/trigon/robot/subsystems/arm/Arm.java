@@ -39,7 +39,7 @@ public class Arm extends SubsystemBase {
     public Command getSetTargetState(ArmConstants.ArmState targetState) {
         return new DeferredCommand(
                 () -> setTargetState(targetState),
-                //?
+                Set.of()
         );
     }
 
