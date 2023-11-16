@@ -9,6 +9,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.trigon.robot.utilities.Conversions;
 
@@ -34,6 +35,26 @@ public class Arm extends SubsystemBase {
 
     private Arm() {
 
+    }
+
+    /**
+     * @return a command that sets the elevator and angle to the target position for moving the angle before moving the elevator out
+     */
+    public Command setTargetStateElevatorOut(ArmConstants.ArmState targetState) {
+        return new StartEndCommand(
+                () -> getSetTargetAngleCommand(targetState.angle),
+                () -> getSetTargetElevatorPositionCommand(targetState.elevatorPosition)
+        );
+    }
+
+    /**
+     * @return a command that sets the elevator and angle to the target position for moving the elevator in before moving the angle
+     */
+    public Command setTargetStateElevatorIn(ArmConstants.ArmState targetState) {
+        return new StartEndCommand(
+                () -> getSetTargetElevatorPositionCommand(targetState.elevatorPosition),
+                () -> getSetTargetAngleCommand(targetState.angle)
+        );
     }
 
     public Command getSetTargetAngleCommand(Rotation2d angle) {
@@ -108,7 +129,7 @@ public class Arm extends SubsystemBase {
         return Conversions.magTicksToRevolutions(elevatorEncoder.getSelectedSensorPosition());
     }
 
-    private double getAngleMotorPositionDegrees()   {
+    private double getAngleMotorPositionDegrees() {
         return Conversions.revolutionsToDegrees(ArmConstants.ANGLE_ENCODER_VELOCITY_SIGNAL.refresh().getValue());
     }
 
