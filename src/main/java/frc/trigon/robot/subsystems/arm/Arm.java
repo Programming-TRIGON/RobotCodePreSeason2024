@@ -38,24 +38,22 @@ public class Arm extends SubsystemBase {
     private Arm() {
     }
 
-    public Command setArmTarget(ArmConstants.ArmState targetState){
-        if (masterAngleMotor.getOutputCurrent() > targetState.elevatorPosition){
+    public Command getSetArmTarget(ArmConstants.ArmState targetState){
+        if (masterAngleMotor.getOutputCurrent() > targetState.elevatorPosition) {
             return new StartEndCommand(
                     () -> getSetTargetAngleCommand(targetState.angle),
                     () -> getSetTargetElevatorPositionCommand(targetState.elevatorPosition),
-                    this
-            );
-        } else {
-            return new StartEndCommand(
-                    () -> getSetTargetElevatorPositionCommand(targetState.elevatorPosition),
-                    () -> getSetTargetAngleCommand(targetState.angle),
                     this
             );
         }
-
+            return new StartEndCommand(
+                    () -> getSetTargetElevatorPositionCommand(targetState.elevatorPosition),
+                    () -> getSetTargetAngleCommand(targetState.angle),
+                    this
+            );
     }
 
-    public Command getSetTargetAngleCommand(Rotation2d targetAngle) {
+    private Command getSetTargetAngleCommand(Rotation2d targetAngle) {
         return new FunctionalCommand(
                 () -> generateAngleMotorProfile(targetAngle),
                 this::setTargetAngleFromProfile,
@@ -66,7 +64,7 @@ public class Arm extends SubsystemBase {
         );
     }
 
-    public Command getSetTargetElevatorPositionCommand(double targetElevatorPosition) {
+    private Command getSetTargetElevatorPositionCommand(double targetElevatorPosition) {
         return new FunctionalCommand(
                 () -> generateElevatorMotorProfile(targetElevatorPosition),
                 this::setTargetElevatorPositionFromProfile,
@@ -114,12 +112,12 @@ public class Arm extends SubsystemBase {
                 getAngleMotorPosition().getDegrees(),
                 targetState.position
         );
-        double feedForward = ArmConstants.ANGLE_FEEDFORWARD.calculate(
+        double feedforward = ArmConstants.ANGLE_FEEDFORWARD.calculate(
                 Units.degreesToRadians(targetState.position),
                 Units.degreesToRadians(targetState.velocity)
         );
 
-        return pidOutput + feedForward;
+        return pidOutput + feedforward;
     }
 
     private double calculateElevatorMotorOutput(TrapezoidProfile.State targetState){
@@ -127,11 +125,11 @@ public class Arm extends SubsystemBase {
                 getElevatorMotorPositionRevolutions(),
                 targetState.position
         );
-        double feedForward = ArmConstants.ELEVATOR_FEEDFORWARD.calculate(
+        double feedforward = ArmConstants.ELEVATOR_FEEDFORWARD.calculate(
                 Units.rotationsToDegrees(targetState.velocity)
         );
 
-        return pidOutput + feedForward;
+        return pidOutput + feedforward;
     }
 
     private void generateAngleMotorProfile(Rotation2d targetAngle) {
