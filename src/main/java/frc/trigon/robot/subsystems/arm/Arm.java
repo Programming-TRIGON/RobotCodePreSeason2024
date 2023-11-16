@@ -126,7 +126,7 @@ public class Arm extends SubsystemBase {
                 targetState.position
         );
         double feedforward = ArmConstants.ELEVATOR_FEEDFORWARD.calculate(
-                Units.rotationsToDegrees(targetState.velocity)
+                (targetState.velocity)
         );
 
         return pidOutput + feedforward;
