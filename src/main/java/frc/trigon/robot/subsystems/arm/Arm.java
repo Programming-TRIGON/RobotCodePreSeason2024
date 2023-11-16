@@ -38,7 +38,7 @@ public class Arm extends SubsystemBase {
     }
 
     public Command getSetArmTarget(ArmConstants.ArmState targetState){
-        if (getElevatorPositionRevolutions() > targetState.elevatorPosition) {
+        if (getElevatorPositionRevolutions() < targetState.elevatorPosition) {
             return new StartEndCommand(
                     () -> getSetTargetAngleCommand(targetState.angle),
                     () -> getSetTargetElevatorPositionCommand(targetState.elevatorPosition),
@@ -108,7 +108,7 @@ public class Arm extends SubsystemBase {
 
     private double calculateAngleMotorOutput(TrapezoidProfile.State targetState){
         double pidOutput = ArmConstants.ANGLE_PID_CONTROLLER.calculate(
-                getMotorPosition().getDegrees(),
+                getAnglePosition().getDegrees(),
                 targetState.position
         );
         double feedforward = ArmConstants.ANGLE_FEEDFORWARD.calculate(
@@ -124,10 +124,7 @@ public class Arm extends SubsystemBase {
                 getElevatorPositionRevolutions(),
                 targetState.position
         );
-        double feedforward = ArmConstants.ELEVATOR_FEEDFORWARD.calculate(
-                (targetState.velocity)
-        );
-
+        double feedforward = ArmConstants.ELEVATOR_FEEDFORWARD.calculate(targetState.velocity);
         return pidOutput + feedforward;
     }
 
@@ -135,7 +132,7 @@ public class Arm extends SubsystemBase {
         angleMotorProfile = new TrapezoidProfile(
                 ArmConstants.ANGLE_CONSTRAINTS,
                 new TrapezoidProfile.State(targetAngle.getDegrees(), 0),
-                new TrapezoidProfile.State(getMotorPosition().getDegrees(), getAngleVelocityDegreesPerSecond())
+                new TrapezoidProfile.State(getAnglePosition().getDegrees(), getAngleVelocityDegreesPerSecond())
         );
 
         lastAngleMotorProfileGenerationTime = Timer.getFPGATimestamp();
@@ -159,7 +156,7 @@ public class Arm extends SubsystemBase {
         return Timer.getFPGATimestamp() - lastElevatorMotorProfileGenerationTime;
     }
 
-    private Rotation2d getMotorPosition() {
+    private Rotation2d getAnglePosition() {
         double positionRevolutions = ArmConstants.ANGLE_MOTOR_POSITION_SIGNAL.refresh().getValue();
         return Rotation2d.fromRotations(positionRevolutions);
     }
