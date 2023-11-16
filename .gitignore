@@ -331,3 +331,5 @@ bin/
 
 # End entries from WPI Lib team
 
+src/main/java/frc/trigon/robot/subsystems/arm/ArmSubsystem.java
+src/main/java/frc/trigon/robot/subsystems/arm/ArmSubsystem.java
