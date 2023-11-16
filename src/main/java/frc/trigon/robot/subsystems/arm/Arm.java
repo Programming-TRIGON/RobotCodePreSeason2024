@@ -39,10 +39,20 @@ public class Arm extends SubsystemBase {
     }
 
     public Command setArmTarget(ArmConstants.ArmState targetState){
-        return new StartEndCommand(
-                () -> getSetTargetAngleCommand(targetState.angle),
-                () -> getSetTargetElevatorPositionCommand(targetState.elevatorPosition)
-        );
+        if (masterAngleMotor.getOutputCurrent() > targetState.elevatorPosition){
+            return new StartEndCommand(
+                    () -> getSetTargetAngleCommand(targetState.angle),
+                    () -> getSetTargetElevatorPositionCommand(targetState.elevatorPosition),
+                    this
+            );
+        } else {
+            return new StartEndCommand(
+                    () -> getSetTargetElevatorPositionCommand(targetState.elevatorPosition),
+                    () -> getSetTargetAngleCommand(targetState.angle),
+                    this
+            );
+        }
+
     }
 
     public Command getSetTargetAngleCommand(Rotation2d targetAngle) {
