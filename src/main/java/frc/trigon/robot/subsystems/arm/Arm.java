@@ -36,7 +36,7 @@ public class Arm extends SubsystemBase {
 
     }
 
-    public Command getCurrentSetTargetArmStateDeferredCommand(ArmConstants.ArmState targetState) {
+    public Command getSetTargetArmStateCommand(ArmConstants.ArmState targetState) {
         return new DeferredCommand(
                 () -> getCurrentSetTargetArmStateCommand(targetState),
                 Set.of(this)
@@ -56,7 +56,7 @@ public class Arm extends SubsystemBase {
         );
     }
 
-    public Command getSetTargetAngleCommand(Rotation2d angle) {
+    private Command getSetTargetAngleCommand(Rotation2d angle) {
         return new FunctionalCommand(
                 () -> generateAngleMotorProfile(angle),
                 this::setTargetAngleFromProfile,
@@ -67,7 +67,7 @@ public class Arm extends SubsystemBase {
         );
     }
 
-    public Command getSetTargetElevatorPositionCommand(double targetElevatorPosition) {
+    private Command getSetTargetElevatorPositionCommand(double targetElevatorPosition) {
         return new FunctionalCommand(
                 () -> generateElevatorMotorProfile(targetElevatorPosition),
                 this::setTargetElevatorPositionFromProfile,
