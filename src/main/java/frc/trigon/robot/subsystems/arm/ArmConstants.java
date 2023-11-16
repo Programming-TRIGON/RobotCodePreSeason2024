@@ -132,7 +132,7 @@ public class ArmConstants {
         ANGLE_ENCODER.getConfigurator().apply(configureAngleEncoder);
     }
 
-    public enum ArmStates {
+    public enum ArmState {
         FIRST_STATE(Rotation2d.fromDegrees(30), 1),
         SECOND_STATE(Rotation2d.fromDegrees(50), 2),
         THIRD_STATE(Rotation2d.fromDegrees(100), 3);
@@ -140,7 +140,7 @@ public class ArmConstants {
         final Rotation2d angle;
         final double elevatorPosition;
 
-        ArmStates(Rotation2d angle, double elevatorPosition) {
+        ArmState(Rotation2d angle, double elevatorPosition) {
             this.elevatorPosition = elevatorPosition;
             this.angle = angle;
         }
