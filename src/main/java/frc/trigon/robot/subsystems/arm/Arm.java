@@ -39,7 +39,7 @@ public class Arm extends SubsystemBase {
     }
 
     public Command getSetArmTarget(ArmConstants.ArmState targetState){
-        if (masterAngleMotor.getOutputCurrent() > targetState.elevatorPosition) {
+        if (elevatorEncoder.getSelectedSensorPosition() > targetState.elevatorPosition) {
             return new StartEndCommand(
                     () -> getSetTargetAngleCommand(targetState.angle),
                     () -> getSetTargetElevatorPositionCommand(targetState.elevatorPosition),
