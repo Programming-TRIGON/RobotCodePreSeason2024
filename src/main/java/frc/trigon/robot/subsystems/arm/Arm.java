@@ -7,7 +7,10 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.*;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.trigon.robot.utilities.Conversions;
 
 public class Arm extends SubsystemBase {
@@ -34,17 +37,17 @@ public class Arm extends SubsystemBase {
     private Arm() {
     }
 
-    public Command getSetArmTarget(ArmConstants.ArmState targetState){
+    public Command getSetArmState(ArmConstants.ArmState targetState) {
         if (getElevatorPositionRevolutions() < targetState.elevatorPosition) {
             return new SequentialCommandGroup(
                     getSetTargetAngleCommand(targetState.angle),
                     getSetTargetElevatorPositionCommand(targetState.elevatorPosition)
             );
         }
-            return new SequentialCommandGroup(
-                    getSetTargetElevatorPositionCommand(targetState.elevatorPosition),
-                    getSetTargetAngleCommand(targetState.angle)
-            );
+        return new SequentialCommandGroup(
+                getSetTargetElevatorPositionCommand(targetState.elevatorPosition),
+                getSetTargetAngleCommand(targetState.angle)
+        );
     }
 
     private Command getSetTargetAngleCommand(Rotation2d targetAngle) {
@@ -91,17 +94,17 @@ public class Arm extends SubsystemBase {
         setElevatorMotorsVoltage(voltage);
     }
 
-    private void setAngleMotorsVoltage(double voltage){
+    private void setAngleMotorsVoltage(double voltage) {
         masterAngleMotor.setVoltage(voltage);
         followerAngleMotor.setVoltage(voltage);
     }
 
-    private void setElevatorMotorsVoltage(double voltage){
+    private void setElevatorMotorsVoltage(double voltage) {
         masterElevatorMotor.setVoltage(voltage);
         followerElevatorMotor.setVoltage(voltage);
     }
 
-    private double calculateAngleMotorOutput(TrapezoidProfile.State targetState){
+    private double calculateAngleMotorOutput(TrapezoidProfile.State targetState) {
         double pidOutput = ArmConstants.ANGLE_PID_CONTROLLER.calculate(
                 getAnglePosition().getDegrees(),
                 targetState.position
@@ -114,7 +117,7 @@ public class Arm extends SubsystemBase {
         return pidOutput + feedforward;
     }
 
-    private double calculateElevatorMotorOutput(TrapezoidProfile.State targetState){
+    private double calculateElevatorMotorOutput(TrapezoidProfile.State targetState) {
         double pidOutput = ArmConstants.ELEVATOR_PID_CONTROLLER.calculate(
                 getElevatorPositionRevolutions(),
                 targetState.position
