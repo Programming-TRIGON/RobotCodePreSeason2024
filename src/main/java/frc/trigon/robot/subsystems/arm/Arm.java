@@ -7,11 +7,10 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.FunctionalCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.*;
 import frc.trigon.robot.utilities.Conversions;
+
+import java.util.Set;
 
 public class Arm extends SubsystemBase {
     private final static Arm INSTANCE = new Arm();
@@ -38,7 +37,13 @@ public class Arm extends SubsystemBase {
     }
 
     public Command getSetTargetState(ArmConstants.ArmState targetState) {
+        return new DeferredCommand(
+                () -> setTargetState(targetState),
+                //?
+        );
+    }
 
+    public Command setTargetState(ArmConstants.ArmState targetState)    {
         if (targetState.elevatorPosition >= getElevatorPositionRevolutions()) {
             return new SequentialCommandGroup(
                     getSetTargetAngleCommand(targetState.angle),
