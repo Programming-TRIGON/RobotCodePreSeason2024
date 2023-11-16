@@ -7,10 +7,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.FunctionalCommand;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.*;
 import frc.trigon.robot.utilities.Conversions;
 
 public class Arm extends SubsystemBase {
@@ -37,24 +34,23 @@ public class Arm extends SubsystemBase {
 
     }
 
-    /**
-     * @return a command that sets the elevator and angle to the target position for moving the angle before moving the elevator out
-     */
-    public Command setTargetStateElevatorOut(ArmConstants.ArmState targetState) {
-        return new StartEndCommand(
-                () -> getSetTargetAngleCommand(targetState.angle),
-                () -> getSetTargetElevatorPositionCommand(targetState.elevatorPosition)
-        );
-    }
 
-    /**
-     * @return a command that sets the elevator and angle to the target position for moving the elevator in before moving the angle
-     */
-    public Command setTargetStateElevatorIn(ArmConstants.ArmState targetState) {
-        return new StartEndCommand(
-                () -> getSetTargetElevatorPositionCommand(targetState.elevatorPosition),
-                () -> getSetTargetAngleCommand(targetState.angle)
-        );
+    public Command setTargetState(ArmConstants.ArmState targetState) {
+        if (targetState.elevatorPosition >= getElevatorMotorPositionRevolutions()) {
+            return new StartEndCommand(
+                    () -> getSetTargetAngleCommand(targetState.angle),
+                    () -> getSetTargetElevatorPositionCommand(targetState.elevatorPosition)
+            );
+        } else if (targetState.elevatorPosition < getElevatorMotorPositionRevolutions()) {
+            return new StartEndCommand(
+                    () -> getSetTargetElevatorPositionCommand(targetState.elevatorPosition),
+                    () -> getSetTargetAngleCommand(targetState.angle)
+            );
+        } else {
+            return new InstantCommand(
+                    () -> getSetTargetAngleCommand(targetState.angle)
+            );
+        }
     }
 
     public Command getSetTargetAngleCommand(Rotation2d angle) {
