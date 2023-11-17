@@ -15,18 +15,16 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Arm extends SubsystemBase {
     private final static Arm INSTANCE = new Arm();
 
-    public static Arm getInstance() {return INSTANCE;}
-
     private final CANSparkMax
-            masterAngleMotor = frc.trigon.robot.subsystems.arm.ArmConstants.MASTER_ANGLE_MOTOR,
-            followerAngleMotor = frc.trigon.robot.subsystems.arm.ArmConstants.FOLLOWER_ANGLE_MOTOR,
-            masterElevatorMotor = frc.trigon.robot.subsystems.arm.ArmConstants.MASTER_ELEVATOR_MOTOR,
-            followerElevatorMotor = frc.trigon.robot.subsystems.arm.ArmConstants.FOLLOWER_ELEVATOR_MOTOR;
-    private final TalonSRX elevatorEncoder = frc.trigon.robot.subsystems.arm.ArmConstants.ELEVATOR_ENCODER;
-    private final CANcoder angleEncoder = frc.trigon.robot.subsystems.arm.ArmConstants.ANGLE_ENCODER;
+            masterAngleMotor = ArmConstants.MASTER_ANGLE_MOTOR,
+            followerAngleMotor = ArmConstants.FOLLOWER_ANGLE_MOTOR,
+            masterElevatorMotor = ArmConstants.MASTER_ELEVATOR_MOTOR,
+            followerElevatorMotor = ArmConstants.FOLLOWER_ELEVATOR_MOTOR;
+    private final TalonSRX elevatorEncoder = ArmConstants.ELEVATOR_ENCODER;
+    private final CANcoder angleEncoder = ArmConstants.ANGLE_ENCODER;
 
-    private final ArmFeedforward angleMotorFeedforward = frc.trigon.robot.subsystems.arm.ArmConstants.ANGLE_MOTOR_FEEDFORWARD;
-    private final ElevatorFeedforward elevatorMotorFeedforward = frc.trigon.robot.subsystems.arm.ArmConstants.ELEVATOR_MOTOR_FEEDFORWARD;
+    private final ArmFeedforward angleMotorFeedforward = ArmConstants.ANGLE_MOTOR_FEEDFORWARD;
+    private final ElevatorFeedforward elevatorMotorFeedforward = ArmConstants.ELEVATOR_MOTOR_FEEDFORWARD;
 
     private TrapezoidProfile
             angleMotorProfile = null,
@@ -34,34 +32,61 @@ public class Arm extends SubsystemBase {
     private double
             lastAngleProfileGeneration,
             lastElevatorProfileGeneration;
-    private double getAngleMotorPositionDegrees(){
-        return angleEncoder.getPosition().getValue();
-    }
-    private double getAngleMotorVelocity(){
-        return masterAngleMotor.getVoltageCompensationNominalVoltage();
+
+    public static Arm getInstance() {
+        return INSTANCE;
     }
 
-        private void generateAngleMotorProfile(Rotation2d targetAngle){
+    private double getAngleMotorPositionDegrees() {
+        return angleEncoder.getPosition().getValue();
+    }
+
+    private double getElevatorMotorPositionDegrees() {
+        return elevatorEncoder.getSelectedSensorPosition();
+    }
+
+    private double getAngleMotorVelocity() {
+        return angleEncoder.getVelocity().getValue();
+    }
+
+    private double getElevatorMotorVelocity() {
+        return elevatorEncoder.getSelectedSensorVelocity();
+    }
+
+    private double getAngleMotorProfileTime() {
+        return Timer.getFPGATimestamp() - lastAngleProfileGeneration;
+    }
+
+    private double getElevatorMotorProfileTime() {
+        return Timer.getFPGATimestamp() - lastElevatorProfileGeneration;
+    }
+
+    private void generateAngleMotorProfile(Rotation2d targetAngle) {
         angleMotorProfile = new TrapezoidProfile(
                 ArmConstants.ANGLE_CONSTRAINS,
-                new TrapezoidProfile.State(targetAngle.getDegrees(),0),
-                new TrapezoidProfile.State(getAngleMotorPositionDegrees(), getAngleMotorVelocity())
+                new TrapezoidProfile.State(targetAngle.getDegrees(), 0),
+                new TrapezoidProfile.State(getAngleMotorPositionDegrees(), getElevatorMotorVelocity())
+        );
+        lastElevatorProfileGeneration = Timer.getFPGATimestamp();
+    }
+
+    private void generateElevatorMotorProfile(Rotation2d targetAngle) {
+        elevatorMotorProfile = new TrapezoidProfile(
+                ArmConstants.ELEVATOR_CONSTRAINS,
+                new TrapezoidProfile.State(targetAngle.getDegrees(), 0),
+                new TrapezoidProfile.State(getElevatorMotorPositionDegrees(), getAngleMotorVelocity())
         );
         lastAngleProfileGeneration = Timer.getFPGATimestamp();
     }
 
-    private double getAngleMotorProfileTime(){
-        return Timer.getFPGATimestamp() - lastAngleProfileGeneration;
-    }
-
-    private void setTargetAngleFromProfile(){
-        if (angleMotorProfile == null){
+    private void setTargetAngleFromProfile() {
+        if (angleMotorProfile == null) {
             masterAngleMotor.stopMotor();
             followerAngleMotor.stopMotor();
             return;
         }
         TrapezoidProfile.State targetState = angleMotorProfile.calculate(getAngleMotorProfileTime());
-        double pidOutPut = ArmConstants.ANGLE_PID_CONTROLLER.calculate(
+        double pidOutput = ArmConstants.ANGLE_PID_CONTROLLER.calculate(
                 getAngleMotorPositionDegrees(),
                 targetState.position
         );
@@ -69,7 +94,27 @@ public class Arm extends SubsystemBase {
                 Units.degreesToRadians(targetState.position),
                 Units.degreesToRadians(targetState.velocity)
         );
-        masterAngleMotor.setVoltage(pidOutPut + feedForward);
+        masterAngleMotor.setVoltage(pidOutput + feedForward);
+        followerAngleMotor.setVoltage(pidOutput + feedForward);
+    }
+
+    private void setTargetElevatorFromProfile() {
+        if (elevatorMotorProfile == null) {
+            masterElevatorMotor.stopMotor();
+            followerElevatorMotor.stopMotor();
+            return;
+        }
+        TrapezoidProfile.State targetState = elevatorMotorProfile.calculate(getElevatorMotorProfileTime());
+        double pidOutput = ArmConstants.ELEVATOR_PID_CONTROLLER.calculate(
+                getElevatorMotorPositionDegrees(),
+                targetState.position
+        );
+        double feedForward = ArmConstants.ELEVATOR_MOTOR_FEEDFORWARD.calculate(
+                Units.degreesToRadians(targetState.position),
+                Units.degreesToRadians(targetState.velocity)
+        );
+        masterElevatorMotor.setVoltage(pidOutput + feedForward);
+        followerElevatorMotor.setVoltage(pidOutput + feedForward);
     }
 
     private Arm() {
