@@ -67,7 +67,7 @@ public class Arm extends SubsystemBase {
                 new TrapezoidProfile.State(targetAngle.getDegrees(), 0),
                 new TrapezoidProfile.State(getAngleMotorPositionDegrees(), getElevatorMotorVelocity())
         );
-        lastElevatorProfileGeneration = Timer.getFPGATimestamp();
+        lastAngleProfileGeneration = Timer.getFPGATimestamp();
     }
 
     private void generateElevatorMotorProfile(Rotation2d targetAngle) {
@@ -76,7 +76,7 @@ public class Arm extends SubsystemBase {
                 new TrapezoidProfile.State(targetAngle.getDegrees(), 0),
                 new TrapezoidProfile.State(getElevatorMotorPositionDegrees(), getAngleMotorVelocity())
         );
-        lastAngleProfileGeneration = Timer.getFPGATimestamp();
+        lastElevatorProfileGeneration = Timer.getFPGATimestamp();
     }
 
     private void setTargetAngleFromProfile() {
