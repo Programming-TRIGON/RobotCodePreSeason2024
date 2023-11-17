@@ -39,22 +39,31 @@ public class Arm extends SubsystemBase {
     }
 
     public Command getSetArmState(ArmConstants.ArmState targetState) {
-        Supplier<Command> getSetTargetAngleCommandSupplier = () -> getSetTargetAngleCommand(targetState.angle);
-        Supplier<Command> getSetTargetElevatorPositionCommandSupplier = () -> getSetTargetElevatorPositionCommand(targetState.elevatorPosition);
-        Set<Subsystem> set = new HashSet<>();
-        new DeferredCommand(
-                getSetTargetAngleCommandSupplier,
-                set
-        );
         if (getElevatorPositionRevolutions() < targetState.elevatorPosition) {
             return new SequentialCommandGroup(
-                    getSetTargetAngleCommand(targetState.angle),
-                    getSetTargetElevatorPositionCommand(targetState.elevatorPosition)
+                    setAngleStateDeferedCommand(targetState.angle),
+                    setElevatorPositionDeferedCommand(targetState.elevatorPosition)
             );
         }
         return new SequentialCommandGroup(
-                getSetTargetElevatorPositionCommand(targetState.elevatorPosition),
-                getSetTargetAngleCommand(targetState.angle)
+                setElevatorPositionDeferedCommand(targetState.elevatorPosition),
+                setAngleStateDeferedCommand(targetState.angle)
+        );
+    }
+
+    private Command setAngleStateDeferedCommand(Rotation2d targetAngle){
+        Supplier<Command> getSetTargetAngleCommandSupplier = () -> getSetTargetAngleCommand(targetAngle);
+        return new DeferredCommand(
+                getSetTargetAngleCommandSupplier,
+                Set.of(this)
+        );
+    }
+
+    private Command setElevatorPositionDeferedCommand(double targetPosition){
+        Supplier<Command> getSetTargetElevatorPositionCommandSupplier = () -> getSetTargetElevatorPositionCommand(targetPosition);
+        return new DeferredCommand(
+                getSetTargetElevatorPositionCommandSupplier,
+                Set.of(this)
         );
     }
 
