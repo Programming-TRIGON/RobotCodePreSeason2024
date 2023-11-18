@@ -111,6 +111,26 @@ public class Arm extends SubsystemBase {
         setElevatorMotorsVoltage(voltage);
     }
 
+    private void generateAngleMotorProfile(Rotation2d targetAngle) {
+        angleMotorProfile = new TrapezoidProfile(
+                ArmConstants.ANGLE_CONSTRAINTS,
+                new TrapezoidProfile.State(targetAngle.getDegrees(), 0),
+                new TrapezoidProfile.State(getAnglePosition().getDegrees(), getAngleVelocityDegreesPerSecond())
+        );
+
+        lastAngleMotorProfileGenerationTime = Timer.getFPGATimestamp();
+    }
+
+    private void generateElevatorMotorProfile(double targetElevatorPosition) {
+        elevatorMotorProfile = new TrapezoidProfile(
+                ArmConstants.ELEVATOR_CONSTRAINTS,
+                new TrapezoidProfile.State(targetElevatorPosition, 0),
+                new TrapezoidProfile.State(getElevatorPositionRevolutions(), getElevatorVelocityRevolutionsPerSecond())
+        );
+
+        lastElevatorMotorProfileGenerationTime = Timer.getFPGATimestamp();
+    }
+
     private void setAngleMotorsVoltage(double voltage) {
         masterAngleMotor.setVoltage(voltage);
         followerAngleMotor.setVoltage(voltage);
@@ -141,26 +161,6 @@ public class Arm extends SubsystemBase {
         );
         double feedforward = ArmConstants.ELEVATOR_FEEDFORWARD.calculate(targetState.velocity);
         return pidOutput + feedforward;
-    }
-
-    private void generateAngleMotorProfile(Rotation2d targetAngle) {
-        angleMotorProfile = new TrapezoidProfile(
-                ArmConstants.ANGLE_CONSTRAINTS,
-                new TrapezoidProfile.State(targetAngle.getDegrees(), 0),
-                new TrapezoidProfile.State(getAnglePosition().getDegrees(), getAngleVelocityDegreesPerSecond())
-        );
-
-        lastAngleMotorProfileGenerationTime = Timer.getFPGATimestamp();
-    }
-
-    private void generateElevatorMotorProfile(double targetElevatorPosition) {
-        elevatorMotorProfile = new TrapezoidProfile(
-                ArmConstants.ELEVATOR_CONSTRAINTS,
-                new TrapezoidProfile.State(targetElevatorPosition, 0),
-                new TrapezoidProfile.State(getElevatorPositionRevolutions(), getElevatorVelocityRevolutionsPerSecond())
-        );
-
-        lastElevatorMotorProfileGenerationTime = Timer.getFPGATimestamp();
     }
 
     private double getAngleMotorProfileTime() {
