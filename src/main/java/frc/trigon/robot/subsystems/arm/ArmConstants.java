@@ -126,6 +126,7 @@ public class ArmConstants {
         angleEncoderConfig.MagnetSensor.AbsoluteSensorRange = ANGLE_ENCODER_RANGE;
         angleEncoderConfig.MagnetSensor.SensorDirection = ANGLE_ENCODER_DIRECTION;
         ANGLE_ENCODER.getConfigurator().apply(angleEncoderConfig);
+        
         ANGLE_MOTOR_POSITION_SIGNAL.setUpdateFrequency(100);
         ANGLE_MOTOR_VELOCITY_SIGNAL.setUpdateFrequency(100);
         ANGLE_ENCODER.optimizeBusUtilization();
