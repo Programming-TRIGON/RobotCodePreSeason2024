@@ -38,33 +38,29 @@ public class Arm extends SubsystemBase {
     private Arm() {
     }
 
-    public Command getSetArmState(ArmConstants.ArmState targetState) {
-        if (getElevatorPositionRevolutions() < targetState.elevatorPosition) {
+    public Command getSetArmStateCommand(ArmConstants.ArmState targetState){
+        Supplier<Command> setArmStateSupplier = () -> setArmStateCommand(targetState);
+        return new DeferredCommand(
+                setArmStateSupplier,
+                Set.of(this)
+        );
+    }
+
+    private Command setArmStateCommand(ArmConstants.ArmState targetState){
+        if (isElevatorOpening(targetState.elevatorPosition)) {
             return new SequentialCommandGroup(
-                    setAngleStateDeferedCommand(targetState.angle),
-                    setElevatorPositionDeferedCommand(targetState.elevatorPosition)
+                    getSetTargetAngleCommand(targetState.angle),
+                    getSetTargetElevatorPositionCommand(targetState.elevatorPosition)
             );
         }
-        return new SequentialCommandGroup(
-                setElevatorPositionDeferedCommand(targetState.elevatorPosition),
-                setAngleStateDeferedCommand(targetState.angle)
-        );
+            return new SequentialCommandGroup(
+                    getSetTargetElevatorPositionCommand(targetState.elevatorPosition),
+                    getSetTargetAngleCommand(targetState.angle)
+            );
     }
 
-    private Command setAngleStateDeferedCommand(Rotation2d targetAngle){
-        Supplier<Command> getSetTargetAngleCommandSupplier = () -> getSetTargetAngleCommand(targetAngle);
-        return new DeferredCommand(
-                getSetTargetAngleCommandSupplier,
-                Set.of(this)
-        );
-    }
-
-    private Command setElevatorPositionDeferedCommand(double targetPosition){
-        Supplier<Command> getSetTargetElevatorPositionCommandSupplier = () -> getSetTargetElevatorPositionCommand(targetPosition);
-        return new DeferredCommand(
-                getSetTargetElevatorPositionCommandSupplier,
-                Set.of(this)
-        );
+    private boolean isElevatorOpening(double elevatorPosition){
+        return getElevatorPositionRevolutions() < elevatorPosition;
     }
 
     private Command getSetTargetAngleCommand(Rotation2d targetAngle) {
