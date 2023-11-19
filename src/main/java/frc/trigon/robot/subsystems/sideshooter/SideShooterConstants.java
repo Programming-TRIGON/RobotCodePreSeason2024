@@ -70,8 +70,8 @@ public class SideShooterConstants {
         config.Audio.BeepOnConfig = false;
         config.MotorOutput.Inverted = SHOOTER_INVERTED_VALUE;
         config.MotorOutput.NeutralMode = SHOOTING_NEUTRAL_MODE_VALUE;
-        SHOOTING_MOTOR.optimizeBusUtilization();
         SHOOTING_MOTOR.getConfigurator().apply(config);
+        SHOOTING_MOTOR.optimizeBusUtilization();
     }
 
     private static void configureAngleMotor() {
@@ -86,8 +86,8 @@ public class SideShooterConstants {
         configureAngleMotor.MagnetSensor.AbsoluteSensorRange = ANGEL_ENCODER_VALUE;
         configureAngleMotor.MagnetSensor.MagnetOffset = ANGLE_ENCODER_OFFSET;
         configureAngleMotor.MagnetSensor.SensorDirection = ANGLE_ENCODER_SENSOR_DIRECTION;
-        ANGEL_ENCODER_POSITION_SIGNAL.setUpdateFrequency(100);
         ANGLE_ENCODER.optimizeBusUtilization();
+        ANGEL_ENCODER_POSITION_SIGNAL.setUpdateFrequency(100);
         ANGLE_ENCODER.getConfigurator().apply(configureAngleMotor);
     }
 
@@ -96,8 +96,8 @@ public class SideShooterConstants {
         MID_LEVEL_POSITION(Rotation2d.fromDegrees(222), 9),
         HIGH_LEVEL_POSITION(Rotation2d.fromDegrees(666.3), 78);
 
-        Rotation2d angle;
-        double shootingVoltage;
+        final Rotation2d angle;
+        final double shootingVoltage;
 
         SideShooterState(Rotation2d angel, double shootingVoltage) {
             this.angle = angel;
