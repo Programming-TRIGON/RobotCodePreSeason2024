@@ -37,7 +37,7 @@ public class Arm extends SubsystemBase {
 
     private double calculateAngleMotorOutput(TrapezoidProfile.State targetState){
         double pidOutput = ArmConstants.ANGLE_PID_CONTROLLER.calculate(
-                getAngleMotorPositionDegrees().getDegrees(),
+                getAnglePositionDegrees().getDegrees(),
                 targetState.position
         );
         double feedforward = ArmConstants.ANGLE_MOTOR_FEEDFORWARD.calculate(
@@ -48,7 +48,7 @@ public class Arm extends SubsystemBase {
     }
     private double calculateElevatorMotorOutput(TrapezoidProfile.State targetState){
         double pidOutput = ArmConstants.ELEVATOR_PID_CONTROLLER.calculate(
-                getElevatorMotorPositionDegrees().getDegrees(),
+                getElevatorPositionDegrees().getDegrees(),
                 targetState.position
         );
         double feedforward = ArmConstants.ELEVATOR_MOTOR_FEEDFORWARD.calculate(targetState.velocity);
@@ -59,7 +59,7 @@ public class Arm extends SubsystemBase {
         angleMotorProfile = new TrapezoidProfile(
                 ArmConstants.ANGLE_CONSTRAINS,
                 new TrapezoidProfile.State(targetAngle.getDegrees(), 0),
-                new TrapezoidProfile.State(getAngleMotorPositionDegrees().getDegrees(), getAngleMotorVelocityPerSecond())
+                new TrapezoidProfile.State(getAnglePositionDegrees().getDegrees(), getAngleVelocityPerSecond())
         );
         lastAngleProfileGenerationTime = Timer.getFPGATimestamp();
     }
@@ -68,7 +68,7 @@ public class Arm extends SubsystemBase {
         elevatorMotorProfile = new TrapezoidProfile(
                 ArmConstants.ELEVATOR_CONSTRAINS,
                 new TrapezoidProfile.State(targetPosition, 0),
-                new TrapezoidProfile.State(getElevatorMotorPositionDegrees().getDegrees(), getElevatorMotorVelocityRevolutionsPerSeconds())
+                new TrapezoidProfile.State(getElevatorPositionDegrees().getDegrees(), getElevatorVelocityRevolutionsPerSeconds())
         );
         lastElevatorProfileGenerationTime = Timer.getFPGATimestamp();
     }
@@ -99,21 +99,21 @@ public class Arm extends SubsystemBase {
         return Timer.getFPGATimestamp() - lastElevatorProfileGenerationTime;
     }
 
-    private Rotation2d getAngleMotorPositionDegrees() {
+    private Rotation2d getAnglePositionDegrees() {
         double position = ArmConstants.ANGLE_MOTOR_POSITION_SIGNAL.refresh().getValue();
         return new Rotation2d(position);
     }
 
-    private Rotation2d getElevatorMotorPositionDegrees() {
+    private Rotation2d getElevatorPositionDegrees() {
         return new Rotation2d(elevatorEncoder.getSelectedSensorPosition());
     }
 
-    private double getAngleMotorVelocityPerSecond() {
+    private double getAngleVelocityPerSecond() {
         double position = ArmConstants.ANGLE_MOTOR_VELOCITY_SIGNAL.refresh().getValue();
         return Conversions.revolutionsToDegrees(position);
     }
 
-    private double getElevatorMotorVelocityRevolutionsPerSeconds() {
+    private double getElevatorVelocityRevolutionsPerSeconds() {
         double velocity = elevatorEncoder.getSelectedSensorVelocity();
         return Conversions.degreesToRevolutions(velocity);
     }
