@@ -41,10 +41,11 @@ public class Arm extends SubsystemBase {
     }
 
     /**
-     * @param targetState             target state for both motors
-     * @param angleSpeedPercentage    speed multiplier for angle motor
-     * @param elevatorSpeedPercentage speed multiplier for elevator motor
-     * @return a command that sets the arm to the target state at the target speeds
+     * sets arm to target state
+     * @param targetState             target state of the arm
+     * @param angleSpeedPercentage    target speed for the angle motor
+     * @param elevatorSpeedPercentage target speed for the elevator motor
+     * @return a command that sets the arm to targetState at the speed set by angleSpeedPercentage and elevatorSpeedPercentage
      */
     public Command getSetTargetArmStateCommand(ArmConstants.ArmState targetState, double angleSpeedPercentage, double elevatorSpeedPercentage) {
         return getSetTargetArmPositionCommand(targetState.angle, targetState.elevatorPosition, angleSpeedPercentage, elevatorSpeedPercentage);
@@ -55,11 +56,12 @@ public class Arm extends SubsystemBase {
     }
 
     /**
+     * sets arm to target state
      * @param targetAngle             target angle position
      * @param targetElevatorPosition  target elevator position
-     * @param angleSpeedPercentage    speed multiplier for angle motor
-     * @param elevatorSpeedPercentage speed multiplier for elevator motor
-     * @return a command that sets the arm to the target positions at the target speeds
+     * @param angleSpeedPercentage    target speed for angle motor
+     * @param elevatorSpeedPercentage target speed for elevator motor
+     * @return a command that sets the arm to the targetAngle and targetElevatorPosition at the speed set by angleSpeedPercentage and elevatorSpeedPercentage
      */
     public Command getSetTargetArmPositionCommand(Rotation2d targetAngle, double targetElevatorPosition, double angleSpeedPercentage, double elevatorSpeedPercentage) {
         return new DeferredCommand(
