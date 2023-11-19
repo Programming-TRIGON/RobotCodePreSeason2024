@@ -9,6 +9,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.trigon.robot.utilities.Conversions;
+
 import java.util.Set;
 
 public class Arm extends SubsystemBase {
@@ -44,26 +45,25 @@ public class Arm extends SubsystemBase {
     }
 
     /**
-     * Retrieves a command to set the target state of the arm with specified parameters.
+     * Creates a command that set's the arm's state.
      *
-     * @param targetState           The target state for the arm.
-     * @param angleSpeedPercentage  The percentage of the maximum speed for arm angle movement.
-     * @param elevatorSpeedPercentage The percentage of the maximum speed for elevator movement.
-     * @return                      A command to set the target arm position based on the specified parameters.
+     * @param targetState             The target state for the arm.
+     * @param angleSpeedPercentage    the percentage of speed that the angle will move
+     * @param elevatorSpeedPercentage the percentage of speed that the elevator will move
+     * @return A command to set the target arm position based on the parameters.
      */
     public Command getSetTargetArmStateCommand(ArmConstants.ArmState targetState, double angleSpeedPercentage, double elevatorSpeedPercentage) {
         return getSetTargetArmPositionCommand(targetState.angle, targetState.elevatorPosition);
     }
 
     /**
-     * Generates a command to set the target arm position with specified parameters.
+     * Creates a command that set's the arm's state.
      *
-     * @param targetAngle            The target angle for the arm rotation.
-     * @param targetElevatorPosition The target position for the arm's elevator.
-     * @param angleSpeedPercentage   The percentage of the maximum speed for arm angle movement.
-     * @param elevatorSpeedPercentage The percentage of the maximum speed for elevator movement.
-     * @return                       A command to set the target arm position based on the specified parameters,
-     *                               wrapped in a DeferredCommand for deferred execution.
+     * @param targetAngle             The target angle for the arm rotation.
+     * @param targetElevatorPosition  The target position for the arm's elevator.
+     * @param angleSpeedPercentage    the percentage of speed that the angle will move
+     * @param elevatorSpeedPercentage the percentage of speed that the elevator will move
+     * @return A command to set the target arm position based on the parameters.
      */
     public Command setTargetArmPositionCommand(Rotation2d targetAngle, double targetElevatorPosition, double angleSpeedPercentage, double elevatorSpeedPercentage) {
         return new DeferredCommand(
