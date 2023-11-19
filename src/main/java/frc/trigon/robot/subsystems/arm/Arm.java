@@ -39,15 +39,15 @@ public class Arm extends SubsystemBase {
         return setTargetArmPosition(targetState.angle, targetState.elevatorPosition, 100, 100);
     }
 
-    public Command getSetTargetArmStateCommand(Rotation2d angle, double elevatorPosition) {
+    public Command getSetTargetArmPositionCommand(Rotation2d angle, double elevatorPosition) {
         return setTargetArmPosition(angle, elevatorPosition, 100, 100);
     }
 
-    public Command setTargetArmPosition(ArmConstants.ArmState targetState, double angleSpeedPercentage, double elevatorSpeedPercentage){
+    public Command getSetTargetArmPositionCommandAndSetPercentage(ArmConstants.ArmState targetState, double angleSpeedPercentage, double elevatorSpeedPercentage) {
         return setTargetArmPosition(targetState.angle, targetState.elevatorPosition, angleSpeedPercentage, elevatorSpeedPercentage);
     }
 
-    private Command setTargetArmPosition(Rotation2d targetAngle, double targetElevatorPosition, double angleSpeedPercentage, double elevatorSpeedPercentage){
+    private Command setTargetArmPosition(Rotation2d targetAngle, double targetElevatorPosition, double angleSpeedPercentage, double elevatorSpeedPercentage) {
         Conversions.scaleConstraints(ArmConstants.ANGLE_CONSTRAINTS, angleSpeedPercentage);
         Conversions.scaleConstraints(ArmConstants.ELEVATOR_CONSTRAINTS, elevatorSpeedPercentage);
         return new DeferredCommand(
@@ -67,10 +67,6 @@ public class Arm extends SubsystemBase {
                 getSetTargetElevatorPositionCommand(elevatorPosition),
                 getSetTargetAngleCommand(angle)
         );
-    }
-
-    private boolean isElevatorOpening(double elevatorPosition) {
-        return getElevatorPositionRevolutions() < elevatorPosition;
     }
 
     private Command getSetTargetAngleCommand(Rotation2d targetAngle) {
@@ -93,6 +89,11 @@ public class Arm extends SubsystemBase {
                 () -> false,
                 this
         );
+    }
+
+
+    private boolean isElevatorOpening(double elevatorPosition) {
+        return getElevatorPositionRevolutions() < elevatorPosition;
     }
 
     private void setTargetAngleFromProfile() {
