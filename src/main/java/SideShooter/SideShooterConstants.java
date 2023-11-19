@@ -52,7 +52,7 @@ public class SideShooterConstants {
 
     private static void configureShootingMotor() {
         TalonFXConfiguration config = new TalonFXConfiguration();
-        config.Audio.BeepOnBoot = true;
+        config.Audio.BeepOnBoot = false;
         config.MotorOutput.Inverted = SHOOTER_INVERTED_VALUE;
         config.MotorOutput.NeutralMode = SHOOTING_NEUTRAL_MODE_VALUE;
         config.Audio.BeepOnConfig = false;
