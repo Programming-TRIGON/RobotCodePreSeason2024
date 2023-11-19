@@ -1,7 +1,6 @@
 package frc.trigon.robot.subsystems.arm;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -36,11 +35,11 @@ public class Arm extends SubsystemBase {
     }
 
     public Command getSetTargetArmStateCommand(ArmConstants.ArmState targetState) {
-        return setTargetArmPositionCommand(targetState.angle, targetState.elevatorPosition, 100, 100);
+        return getSetTargetArmPositionCommand(targetState.angle, targetState.elevatorPosition, 100, 100);
     }
 
     public Command getSetTargetArmPositionCommand(Rotation2d angle, double elevatorPosition) {
-        return setTargetArmPositionCommand(angle, elevatorPosition, 100, 100);
+        return getSetTargetArmPositionCommand(angle, elevatorPosition, 100, 100);
     }
 
     /**
@@ -64,7 +63,7 @@ public class Arm extends SubsystemBase {
      * @param elevatorSpeedPercentage the percentage of speed that the elevator will move in
      * @return the command
      */
-    public Command setTargetArmPositionCommand(Rotation2d targetAngle, double targetElevatorPosition, double angleSpeedPercentage, double elevatorSpeedPercentage) {
+    public Command getSetTargetArmPositionCommand(Rotation2d targetAngle, double targetElevatorPosition, double angleSpeedPercentage, double elevatorSpeedPercentage) {
         return new DeferredCommand(
                 () -> getCurrentSetTargetArmStateCommand(targetAngle, targetElevatorPosition, angleSpeedPercentage, elevatorSpeedPercentage),
                 Set.of(this)
