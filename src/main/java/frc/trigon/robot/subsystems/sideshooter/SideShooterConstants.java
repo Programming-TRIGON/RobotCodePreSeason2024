@@ -1,4 +1,4 @@
-package SideShooter;
+package frc.trigon.robot.subsystems.sideshooter;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -37,9 +37,6 @@ public class SideShooterConstants {
     static final TrapezoidProfile.Constraints ANGLE_Constraints = new TrapezoidProfile.Constraints(
             MAX_ANGEL_VELOCITY, MAX_ANGEL_ACCELERATION
     );
-    static final ArmFeedforward SIDE_SHOOTER_FEEDFORWARD = new ArmFeedforward(
-            ANGLE_MOTOR_ks, ANGLE_MOTOR_kg, ANGLE_MOTOR_kv, ANGLE_MOTOR_ka
-    );
 
     private static final double
             ANGLE_MOTOR_P = 0,
@@ -51,6 +48,10 @@ public class SideShooterConstants {
             ANGLE_MOTOR_kv = 0.74627,
             ANGLE_MOTOR_ka = 0.37502,
             ANGLE_MOTOR_kg = 0.92056;
+
+    static final ArmFeedforward SIDE_SHOOTER_FEEDFORWARD = new ArmFeedforward(
+            ANGLE_MOTOR_ks, ANGLE_MOTOR_kg, ANGLE_MOTOR_kv, ANGLE_MOTOR_ka
+    );
 
     static final PIDController ANGLE_PID_CONTROLLER = new PIDController(
             ANGLE_MOTOR_P, ANGLE_MOTOR_I, ANGLE_MOTOR_D
@@ -87,13 +88,15 @@ public class SideShooterConstants {
     }
 
     public enum SideShooterState {
-        COLLECT_POSITION(Rotation2d.fromDegrees(0)),
-        MID_LEVEL_POSITION(Rotation2d.fromDegrees(222)),
-        HIGH_LEVEL_POSITION(Rotation2d.fromDegrees(666.3));
+        COLLECT_POSITION(Rotation2d.fromDegrees(0),0),
+        MID_LEVEL_POSITION(Rotation2d.fromDegrees(222), 9),
+        HIGH_LEVEL_POSITION(Rotation2d.fromDegrees(666.3), 78);
         private Rotation2d angle;
+        private double voltage;
 
-        SideShooterState(Rotation2d angel) {
+        SideShooterState(Rotation2d angel, double voltage) {
             this.angle = angel;
+            this.voltage = voltage;
 
 
         }
