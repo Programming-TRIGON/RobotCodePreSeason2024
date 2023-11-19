@@ -52,7 +52,7 @@ public class Arm extends SubsystemBase {
      * @return the command
      */
     public Command getSetTargetArmStateCommand(ArmConstants.ArmState targetState, double angleSpeedPercentage, double elevatorSpeedPercentage) {
-        return setTargetArmPositionCommand(targetState.angle, targetState.elevatorPosition, angleSpeedPercentage, elevatorSpeedPercentage);
+        return getSetTargetArmStateCommand(targetState, angleSpeedPercentage, elevatorSpeedPercentage);
     }
 
     /**
