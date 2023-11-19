@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.trigon.robot.utilities.Conversions;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Supplier;
 
@@ -38,7 +37,7 @@ public class Arm extends SubsystemBase {
     private Arm() {
     }
 
-    public Command getSetArmStateCommand(ArmConstants.ArmState targetState){
+    public Command getSetTargetArmStateCommand(ArmConstants.ArmState targetState) {
         Supplier<Command> setArmStateSupplier = () -> setArmStateCommand(targetState);
         return new DeferredCommand(
                 setArmStateSupplier,
@@ -46,20 +45,20 @@ public class Arm extends SubsystemBase {
         );
     }
 
-    private Command setArmStateCommand(ArmConstants.ArmState targetState){
+    private Command setArmStateCommand(ArmConstants.ArmState targetState) {
         if (isElevatorOpening(targetState.elevatorPosition)) {
             return new SequentialCommandGroup(
                     getSetTargetAngleCommand(targetState.angle),
                     getSetTargetElevatorPositionCommand(targetState.elevatorPosition)
             );
         }
-            return new SequentialCommandGroup(
-                    getSetTargetElevatorPositionCommand(targetState.elevatorPosition),
-                    getSetTargetAngleCommand(targetState.angle)
-            );
+        return new SequentialCommandGroup(
+                getSetTargetElevatorPositionCommand(targetState.elevatorPosition),
+                getSetTargetAngleCommand(targetState.angle)
+        );
     }
 
-    private boolean isElevatorOpening(double elevatorPosition){
+    private boolean isElevatorOpening(double elevatorPosition) {
         return getElevatorPositionRevolutions() < elevatorPosition;
     }
 
