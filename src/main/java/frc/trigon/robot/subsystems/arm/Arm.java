@@ -20,7 +20,6 @@ public class Arm extends SubsystemBase {
             followerAngleMotor = ArmConstants.FOLLOWER_ANGLE_MOTOR,
             masterElevatorMotor = ArmConstants.MASTER_ELEVATOR_MOTOR,
             followerElevatorMotor = ArmConstants.FOLLOWER_ELEVATOR_MOTOR;
-    private final CANcoder angleEncoder = ArmConstants.ANGLE_ENCODER;
     private final TalonSRX elevatorEncoder = ArmConstants.ELEVATOR_ENCODER;
     private TrapezoidProfile
             angleMotorProfile = null,
@@ -53,7 +52,7 @@ public class Arm extends SubsystemBase {
      * @return the command
      */
     public Command getSetTargetArmStateCommand(ArmConstants.ArmState targetState, double angleSpeedPercentage, double elevatorSpeedPercentage) {
-        return getSetTargetArmPositionCommand(targetState.angle, targetState.elevatorPosition);
+        return setTargetArmPositionCommand(targetState.angle, targetState.elevatorPosition, angleSpeedPercentage, elevatorSpeedPercentage);
     }
 
     /**
