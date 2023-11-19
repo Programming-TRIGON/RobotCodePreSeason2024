@@ -1,7 +1,6 @@
 package frc.trigon.robot.subsystems.arm;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -33,7 +32,7 @@ public class Arm extends SubsystemBase {
 
     private Arm() {
     }
-    
+
         public Command getSetToStateCommand(ArmConstants.ArmState targetState){
         if (isElevatorOpening(targetState.elevatorPosition)){
             return new SequentialCommandGroup(
@@ -78,15 +77,15 @@ public class Arm extends SubsystemBase {
         angleMotorProfile = new TrapezoidProfile(
                 ArmConstants.ANGLE_CONSTRAINS,
                 new TrapezoidProfile.State(targetAngle.getDegrees(), 0),
-                new TrapezoidProfile.State(getAnglePosition().getDegrees(), getAngleVelocityPerSecond())
+                new TrapezoidProfile.State(getAnglePosition().getDegrees(), getAngleVelocityDegreesPerSecond())
         );
         lastAngleProfileGenerationTime = Timer.getFPGATimestamp();
     }
 
-    private void generateElevatorMotorProfile(double targetPosition) {
+    private void generateElevatorMotorProfile(double targetElevatorPosition) {
         elevatorMotorProfile = new TrapezoidProfile(
                 ArmConstants.ELEVATOR_CONSTRAINS,
-                new TrapezoidProfile.State(targetPosition, 0),
+                new TrapezoidProfile.State(targetElevatorPosition, 0),
                 new TrapezoidProfile.State(getElevatorPositionRevolutions(), getElevatorVelocityRevolutionsPerSecond())
         );
         lastElevatorProfileGenerationTime = Timer.getFPGATimestamp();
@@ -148,7 +147,7 @@ public class Arm extends SubsystemBase {
         return feedforward + pidOutput;
     }
 
-    private double getAngleVelocityPerSecond() {
+    private double getAngleVelocityDegreesPerSecond() {
         double position = ArmConstants.ANGLE_MOTOR_VELOCITY_SIGNAL.refresh().getValue();
         return Conversions.revolutionsToDegrees(position);
     }
