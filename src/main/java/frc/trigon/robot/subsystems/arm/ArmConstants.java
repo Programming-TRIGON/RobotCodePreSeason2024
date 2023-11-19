@@ -48,7 +48,7 @@ public class ArmConstants {
     static final CANcoder ANGLE_ENCODER = new CANcoder(ANGLE_ENCODER_ID);
     static final TalonSRX ELEVATOR_ENCODER = new TalonSRX(ELEVATOR_ENCODER_ID);
 
-    private static final int
+    private static final double
             ANGLE_P = 0,
             ANGLE_I = 0,
             ANGLE_D = 0,
