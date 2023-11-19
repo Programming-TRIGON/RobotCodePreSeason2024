@@ -44,8 +44,6 @@ public class Arm extends SubsystemBase {
     }
 
     private Command getCurrentSetTargetArmStateCommand(Rotation2d targetAngle, double targetElevatorPosition, double angleSpeedPercentage, double elevatorSpeedPercentage) {
-
-
         if (targetElevatorPosition >= getElevatorPositionRevolutions()) {
             return new SequentialCommandGroup(
                     getSetTargetAngleCommand(targetAngle, angleSpeedPercentage),
