@@ -153,7 +153,5 @@ public class ArmConstants {
             this.elevatorPosition = elevatorPosition;
             this.angle = angle;
         }
-
     }
-
 }
