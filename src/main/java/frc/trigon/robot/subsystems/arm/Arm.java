@@ -45,9 +45,9 @@ public class Arm extends SubsystemBase {
     }
 
     /**
-     * Creates a command that sets the arm's state.
+     * Creates a command that sets the arm's target state.
      *
-     * @param targetState             The target state of the arm.
+     * @param targetState             the target state of the arm
      * @param angleSpeedPercentage    the percentage of speed that the angle will move in
      * @param elevatorSpeedPercentage the percentage of speed that the elevator will move in
      * @return the command
@@ -59,8 +59,8 @@ public class Arm extends SubsystemBase {
     /**
      * Creates a command that sets the target position of the arm.
      *
-     * @param targetAngle             The target angle of the arm rotation.
-     * @param targetElevatorPosition  The target position of the arm's elevator.
+     * @param targetAngle             the target angle of the arm
+     * @param targetElevatorPosition  the target position of the arm's elevator
      * @param angleSpeedPercentage    the percentage of speed that the angle will move in
      * @param elevatorSpeedPercentage the percentage of speed that the elevator will move in
      * @return the command
