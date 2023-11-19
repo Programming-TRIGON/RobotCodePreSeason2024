@@ -59,8 +59,8 @@ public class Arm extends SubsystemBase {
             );
         }
         return new SequentialCommandGroup(
-                getSetTargetElevatorPositionCommand(targetState.elevatorPosition),
-                getSetTargetAngleCommand(targetState.angle)
+                getSetTargetElevatorPositionCommand(elevatorPosition),
+                getSetTargetAngleCommand(angle)
         );
     }
 
