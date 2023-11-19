@@ -37,7 +37,7 @@ public class SideShooterConstants {
             MAX_ANGEL_VELOCITY, MAX_ANGEL_ACCELERATION
     );
 
-    private static final int
+    private static final double
             ANGLE_MOTOR_P = 0,
             ANGLE_MOTOR_I = 0,
             ANGLE_MOTOR_D = 0;
