@@ -9,7 +9,6 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.trigon.robot.utilities.Conversions;
-
 import java.util.Set;
 
 public class Arm extends SubsystemBase {
