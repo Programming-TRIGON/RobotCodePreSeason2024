@@ -9,7 +9,6 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.trigon.robot.utilities.Conversions;
-
 import java.util.Set;
 
 public class Arm extends SubsystemBase {
@@ -41,10 +40,11 @@ public class Arm extends SubsystemBase {
     }
 
     /**
-     * sets arm to target state
-     * @param targetState             target state of the arm
-     * @param angleSpeedPercentage    target speed for the angle motor
-     * @param elevatorSpeedPercentage target speed for the elevator motor
+     * Creates a command that sets the arm to target state.
+     *
+     * @param targetState             the target state of the arm
+     * @param angleSpeedPercentage    the target speed for the angle motor as a percentage of the normal speed
+     * @param elevatorSpeedPercentage the target speed for the elevator motor as a percentage of the normal speed
      * @return a command that sets the arm to targetState at the speed set by angleSpeedPercentage and elevatorSpeedPercentage
      */
     public Command getSetTargetArmStateCommand(ArmConstants.ArmState targetState, double angleSpeedPercentage, double elevatorSpeedPercentage) {
@@ -56,11 +56,12 @@ public class Arm extends SubsystemBase {
     }
 
     /**
-     * sets arm to target state
-     * @param targetAngle             target angle position
-     * @param targetElevatorPosition  target elevator position
-     * @param angleSpeedPercentage    target speed for angle motor
-     * @param elevatorSpeedPercentage target speed for elevator motor
+     * Creates a command that sets the arm to the target state.
+     *
+     * @param targetAngle             the target angle of the arm
+     * @param targetElevatorPosition  the target elevator position
+     * @param angleSpeedPercentage    the target speed for angle motor as a percentage of normal speed
+     * @param elevatorSpeedPercentage the target speed for elevator motor as a percentage of normal speed
      * @return a command that sets the arm to the targetAngle and targetElevatorPosition at the speed set by angleSpeedPercentage and elevatorSpeedPercentage
      */
     public Command getSetTargetArmPositionCommand(Rotation2d targetAngle, double targetElevatorPosition, double angleSpeedPercentage, double elevatorSpeedPercentage) {
