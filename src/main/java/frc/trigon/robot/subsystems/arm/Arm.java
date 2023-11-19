@@ -43,10 +43,28 @@ public class Arm extends SubsystemBase {
         return setTargetArmPositionCommand(angle, elevatorPosition, 100, 100);
     }
 
+    /**
+     * Retrieves a command to set the target state of the arm with specified parameters.
+     *
+     * @param targetState           The target state for the arm.
+     * @param angleSpeedPercentage  The percentage of the maximum speed for arm angle movement.
+     * @param elevatorSpeedPercentage The percentage of the maximum speed for elevator movement.
+     * @return                      A command to set the target arm position based on the specified parameters.
+     */
     public Command getSetTargetArmStateCommand(ArmConstants.ArmState targetState, double angleSpeedPercentage, double elevatorSpeedPercentage) {
         return getSetTargetArmPositionCommand(targetState.angle, targetState.elevatorPosition);
     }
 
+    /**
+     * Generates a command to set the target arm position with specified parameters.
+     *
+     * @param targetAngle            The target angle for the arm rotation.
+     * @param targetElevatorPosition The target position for the arm's elevator.
+     * @param angleSpeedPercentage   The percentage of the maximum speed for arm angle movement.
+     * @param elevatorSpeedPercentage The percentage of the maximum speed for elevator movement.
+     * @return                       A command to set the target arm position based on the specified parameters,
+     *                               wrapped in a DeferredCommand for deferred execution.
+     */
     public Command setTargetArmPositionCommand(Rotation2d targetAngle, double targetElevatorPosition, double angleSpeedPercentage, double elevatorSpeedPercentage) {
         return new DeferredCommand(
                 () -> getCurrentSetTargetArmStateCommand(targetAngle, targetElevatorPosition, angleSpeedPercentage, elevatorSpeedPercentage),
