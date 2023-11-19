@@ -18,13 +18,13 @@ public class SideShooterConstants {
     private static final int SHOOTING_MOTOR_ID = 0;
     private static final int ANGLE_MOTOR_ID = 0;
     private static final int ENCODER_ID = 0;
-    private static final double ANGLE_MAGNET_OFFSET = 0;
+    private static final double ANGLE_ENCODER_OFFSET = 0;
     private static final CANSparkMax.IdleMode ANGLE_MOTOR_IDLE_MODE = CANSparkMax.IdleMode.kBrake;
     private static final AbsoluteSensorRangeValue ANGEL_ENCODER_VALUE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
     private static final SensorDirectionValue ANGLE_ENCODER_SENSOR_DIRECTION = SensorDirectionValue.CounterClockwise_Positive;
     private static final InvertedValue SHOOTER_INVERTED_VALUE = InvertedValue.CounterClockwise_Positive;
     private static final NeutralModeValue SHOOTING_NEUTRAL_MODE_VALUE = NeutralModeValue.Brake;
-    private static final double VOLTAGE_COMPENSATION_SATURATION = 16.45;
+    private static final double VOLTAGE_COMPENSATION_SATURATION = 12;
     private static final boolean ANGLE_MOTOR_INVERTED = false;
     static final TalonFX SHOOTING_MOTOR = new TalonFX(SHOOTING_MOTOR_ID);
     static final CANSparkMax ANGLE_MOTOR = new CANSparkMax(ANGLE_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -69,7 +69,7 @@ public class SideShooterConstants {
     private static void configureAngleEncoder() {
         CANcoderConfiguration configureAngleMotor = new CANcoderConfiguration();
         configureAngleMotor.MagnetSensor.AbsoluteSensorRange = ANGEL_ENCODER_VALUE;
-        configureAngleMotor.MagnetSensor.MagnetOffset = ANGLE_MAGNET_OFFSET;
+        configureAngleMotor.MagnetSensor.MagnetOffset = ANGLE_ENCODER_OFFSET;
         configureAngleMotor.MagnetSensor.SensorDirection = ANGLE_ENCODER_SENSOR_DIRECTION;
         ANGLE_ENCODER.getConfigurator().apply(configureAngleMotor);
     }
@@ -78,10 +78,10 @@ public class SideShooterConstants {
         COLLECT_POSITION(Rotation2d.fromDegrees(0)),
         MID_LEVEL_POSITION(Rotation2d.fromDegrees(222)),
         HIGH_LEVEL_POSITION(Rotation2d.fromDegrees(666.3));
-        private Rotation2d angel;
+        private Rotation2d angle;
 
         SideShooterState(Rotation2d angel) {
-            this.angel = angel;
+            this.angle = angel;
 
 
         }
