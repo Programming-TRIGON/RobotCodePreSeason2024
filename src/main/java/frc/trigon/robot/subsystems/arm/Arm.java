@@ -36,38 +36,34 @@ public class Arm extends SubsystemBase {
 
     }
 
-    /**
-     * @return a command that sets the arm to the target position at normal speed
-     */
     public Command getSetTargetArmPositionCommand(Rotation2d targetAngle, double targetElevatorPosition) {
         return getSetTargetArmPositionCommand(targetAngle, targetElevatorPosition, 100, 100);
     }
 
     /**
-     * @return a command that calls a command to set the arm to the target positions at the target speeds
+     * @param angleSpeedPercentage speed multiplier for angle motor
+     * @param elevatorSpeedPercentage speed multiplier for elevator motor
      */
-    public Command getSetTargetArmPositionCommand(Rotation2d targetAngle, double targetElevatorPosition, double angleSpeedPercentage, double elevatorSpeedPercentage) {
-        return getSetTargetArmStateCommand(targetAngle, targetElevatorPosition, angleSpeedPercentage, elevatorSpeedPercentage);
-    }
-
-    /**
-     * @return a command that sets the arm to the target positions using an ArmState at the target speeds
-     */
-    public Command getSetTargetArmPositionCommand(ArmConstants.ArmState targetState, double angleSpeedPercentage, double elevatorSpeedPercentage) {
+    public Command getSetTargetArmStateCommand(ArmConstants.ArmState targetState, double angleSpeedPercentage, double elevatorSpeedPercentage) {
         return getSetTargetArmPositionCommand(targetState.angle, targetState.elevatorPosition, angleSpeedPercentage, elevatorSpeedPercentage);
     }
 
+    public Command getSetTargetArmStateCommand(ArmConstants.ArmState targetState) {
+        return getSetTargetArmPositionCommand(targetState.angle, targetState.elevatorPosition, 100, 100);
+    }
+
     /**
-     * @return a command that sets the arm to the target positions at the target speeds
+     * @param angleSpeedPercentage speed multiplier for angle motor
+     * @param elevatorSpeedPercentage speed multiplier for elevator motor
      */
-    public Command getSetTargetArmStateCommand(Rotation2d targetAngle, double targetElevatorPosition, double angleSpeedPercentage, double elevatorSpeedPercentage) {
+    public Command getSetTargetArmPositionCommand(Rotation2d targetAngle, double targetElevatorPosition, double angleSpeedPercentage, double elevatorSpeedPercentage) {
         return new DeferredCommand(
-                () -> getCurrentSetTargetArmStateCommand(targetAngle, targetElevatorPosition, angleSpeedPercentage, elevatorSpeedPercentage),
+                () -> getCurrentSetTargetArmPositionCommand(targetAngle, targetElevatorPosition, angleSpeedPercentage, elevatorSpeedPercentage),
                 Set.of(this)
         );
     }
 
-    private Command getCurrentSetTargetArmStateCommand(Rotation2d targetAngle, double targetElevatorPosition, double angleSpeedPercentage, double elevatorSpeedPercentage) {
+    private Command getCurrentSetTargetArmPositionCommand(Rotation2d targetAngle, double targetElevatorPosition, double angleSpeedPercentage, double elevatorSpeedPercentage) {
         if (targetElevatorPosition >= getElevatorPositionRevolutions()) {
             return new SequentialCommandGroup(
                     getSetTargetAngleCommand(targetAngle, angleSpeedPercentage),
