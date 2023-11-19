@@ -83,9 +83,9 @@ public class Arm extends SubsystemBase {
         );
     }
 
-    private Command getSetTargetAngleCommand(Rotation2d angle, double speedPercentage) {
+    private Command getSetTargetAngleCommand(Rotation2d targetAngle, double speedPercentage) {
         return new FunctionalCommand(
-                () -> generateAngleMotorProfile(angle, speedPercentage),
+                () -> generateAngleMotorProfile(targetAngle, speedPercentage),
                 this::setTargetAngleFromProfile,
                 (interrupted) -> {
                 },
