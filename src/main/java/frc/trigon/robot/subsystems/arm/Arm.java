@@ -45,25 +45,25 @@ public class Arm extends SubsystemBase {
     }
 
     /**
-     * Creates a command that set's the arm's state.
+     * Creates a command that sets the arm's state.
      *
-     * @param targetState             The target state for the arm.
-     * @param angleSpeedPercentage    the percentage of speed that the angle will move
-     * @param elevatorSpeedPercentage the percentage of speed that the elevator will move
-     * @return A command to set the target arm position based on the parameters.
+     * @param targetState             The target state of the arm.
+     * @param angleSpeedPercentage    the percentage of speed that the angle will move in
+     * @param elevatorSpeedPercentage the percentage of speed that the elevator will move in
+     * @return the command
      */
     public Command getSetTargetArmStateCommand(ArmConstants.ArmState targetState, double angleSpeedPercentage, double elevatorSpeedPercentage) {
         return getSetTargetArmPositionCommand(targetState.angle, targetState.elevatorPosition);
     }
 
     /**
-     * Creates a command that set's the arm's state.
+     * Creates a command that sets the target position of the arm.
      *
-     * @param targetAngle             The target angle for the arm rotation.
-     * @param targetElevatorPosition  The target position for the arm's elevator.
-     * @param angleSpeedPercentage    the percentage of speed that the angle will move
-     * @param elevatorSpeedPercentage the percentage of speed that the elevator will move
-     * @return A command to set the target arm position based on the parameters.
+     * @param targetAngle             The target angle of the arm rotation.
+     * @param targetElevatorPosition  The target position of the arm's elevator.
+     * @param angleSpeedPercentage    the percentage of speed that the angle will move in
+     * @param elevatorSpeedPercentage the percentage of speed that the elevator will move in
+     * @return the command
      */
     public Command setTargetArmPositionCommand(Rotation2d targetAngle, double targetElevatorPosition, double angleSpeedPercentage, double elevatorSpeedPercentage) {
         return new DeferredCommand(
