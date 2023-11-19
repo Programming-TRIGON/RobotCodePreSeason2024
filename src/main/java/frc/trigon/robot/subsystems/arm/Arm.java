@@ -35,7 +35,7 @@ public class Arm extends SubsystemBase {
     }
 
     public Command getSetTargetArmStateCommand(ArmConstants.ArmState targetState) {
-        return getSetTargetArmPositionCommand(targetState.angle, targetState.elevatorPosition, 100, 100);
+        return getSetTargetArmStateCommand(targetState, 100, 100);
     }
 
     public Command getSetTargetArmPositionCommand(Rotation2d targetAngle, double targetElevatorPosition) {
@@ -51,7 +51,7 @@ public class Arm extends SubsystemBase {
      * @return the command
      */
     public Command getSetTargetArmStateCommand(ArmConstants.ArmState targetState, double angleSpeedPercentage, double elevatorSpeedPercentage) {
-        return getSetTargetArmStateCommand(targetState, angleSpeedPercentage, elevatorSpeedPercentage);
+        return getSetTargetArmPositionCommand(targetState.angle, targetState.elevatorPosition, angleSpeedPercentage, elevatorSpeedPercentage);
     }
 
     /**
@@ -156,7 +156,7 @@ public class Arm extends SubsystemBase {
     }
 
     private Rotation2d getAnglePositionDegrees() {
-        return Rotation2d.fromDegrees(Conversions.revolutionsToDegrees(ArmConstants.ANGLE_ENCODER_VELOCITY_SIGNAL.refresh().getValue()));
+        return Rotation2d.fromRotations(ArmConstants.ANGLE_ENCODER_VELOCITY_SIGNAL.refresh().getValue());
     }
 
     private double getAngleVelocityDegreesPerSecond() {
