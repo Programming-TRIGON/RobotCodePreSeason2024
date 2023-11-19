@@ -35,7 +35,7 @@ public class Arm extends SubsystemBase {
     }
 
     public Command getSetTargetArmStateCommand(ArmConstants.ArmState targetState) {
-        return getSetTargetArmPositionCommand(targetState.angle, targetState.elevatorPosition, 100, 100);
+        return getSetTargetArmStateCommand(targetState, 100, 100);
     }
 
     public Command getSetTargetArmPositionCommand(Rotation2d angle, double elevatorPosition) {
@@ -51,7 +51,7 @@ public class Arm extends SubsystemBase {
      * @return the command
      */
     public Command getSetTargetArmStateCommand(ArmConstants.ArmState targetState, double angleSpeedPercentage, double elevatorSpeedPercentage) {
-        return getSetTargetArmStateCommand(targetState, angleSpeedPercentage, elevatorSpeedPercentage);
+        return getSetTargetArmPositionCommand(targetState.angle, targetState.elevatorPosition, angleSpeedPercentage, elevatorSpeedPercentage);
     }
 
     /**
