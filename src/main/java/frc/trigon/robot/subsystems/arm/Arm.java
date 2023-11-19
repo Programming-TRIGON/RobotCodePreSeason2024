@@ -105,8 +105,8 @@ public class Arm extends SubsystemBase {
         );
     }
 
-    private boolean isElevatorOpening(double elevatorPosition) {
-        return getElevatorPositionRevolutions() < elevatorPosition;
+    private boolean isElevatorOpening(double targetElevatorPosition) {
+        return getElevatorPositionRevolutions() < targetElevatorPosition;
     }
 
     private void setTargetAngleFromProfile() {
