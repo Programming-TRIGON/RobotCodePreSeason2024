@@ -7,9 +7,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.FunctionalCommand;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.*;
 import frc.trigon.robot.utilities.Conversions;
 
 public class Arm extends SubsystemBase {
@@ -35,6 +33,19 @@ public class Arm extends SubsystemBase {
 
     private Arm() {
     }
+    
+        public Command getSetToStateCommand(ArmConstants.ArmState targetState){
+        if (isElevatorOpening(targetState.elevatorPosition)){
+            return new SequentialCommandGroup(
+                    getSetTargetArmAngleCommand(targetState.angle),
+                    getSetTargetArmElevatorCommand(targetState.elevatorPosition)
+            );
+        }
+        return new SequentialCommandGroup(
+                getSetTargetArmElevatorCommand(targetState.elevatorPosition),
+                getSetTargetArmAngleCommand(targetState.angle)
+        );
+    }
 
     public Command getSetTargetArmAngleCommand(Rotation2d angle){
         return new FunctionalCommand(
@@ -47,15 +58,20 @@ public class Arm extends SubsystemBase {
         );
     }
 
-    public Command getSetTargetArmElevatorCommand(Rotation2d angle){
+    public Command getSetTargetArmElevatorCommand(double position){
         return new FunctionalCommand(
-                () -> generateElevatorMotorProfile(angle.getDegrees()),
+                () -> generateElevatorMotorProfile(position),
                 this::setTargetElevatorFromProfile,
                 (interrupted) -> {
                 },
                 () -> false,
                 this
         );
+    }
+
+
+    private boolean isElevatorOpening(double targetElevatorPosition){
+        return targetElevatorPosition > getElevatorPositionRevolutions();
     }
 
     private void generateAngleMotorProfile(Rotation2d targetAngle) {
