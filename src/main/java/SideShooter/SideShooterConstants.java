@@ -10,57 +10,80 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
-import com.revrobotics.SparkMaxPIDController;
 import edu.wpi.first.math.controller.PIDController;
-
-import java.time.OffsetDateTime;
-import java.time.OffsetTime;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 public class SideShooterConstants {
-
-
-    private static final int MOTOR_SHOOT_ID = 0;
-    private static final InvertedValue INVERTED_VALUE = InvertedValue.CounterClockwise_Positive;
+    private static final int SHOOTING_MOTOR_ID = 0;
+    private static final InvertedValue SHOOTER_INVERTED_VALUE = InvertedValue.CounterClockwise_Positive;
     private static final NeutralModeValue NEUTRAL_MODE_VALUE = NeutralModeValue.Brake;
-    private static final int MOTOR_angel_ID = 0;
-    private static SparkMaxPIDController MOTOR_angel_PIDController;
-    static final CANSparkMax MOTOR_angel = new CANSparkMax(MOTOR_angel_ID, CANSparkMaxLowLevel.MotorType.kBrushless);
+    private static final boolean ANGLE_MOTOR_INVERTED = false;
+    private static final int ANGLE_MOTOR_ID = 0;
+    static final CANSparkMax ANGLE_MOTOR = new CANSparkMax(ANGLE_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless);
     private final static int Encoder_ID = 0;
-    private static final CANcoder encoder = new CANcoder(Encoder_ID);
+    private static final CANcoder ANGLE_ENCODER = new CANcoder(Encoder_ID);
+
+    private static final double
+            MAX_ANGEL_VELOCITY = 600,
+
+            MAX_ANGEL_ACCELERATION = 500;
+
 
     private static final int
-    P= 0,
-    I = 0,
-    D = 0;
+            ANGLE_MOTOR_P = 0,
+            ANGLE_MOTOR_I = 0,
+            ANGLE_MOTOR_D = 0;
 
-    static final PIDController PID_CONTROLLER = new PIDController(P, I, D);
+    static final PIDController ANGLE_PID_CONTROLLER = new PIDController(ANGLE_MOTOR_P, ANGLE_MOTOR_I, ANGLE_MOTOR_D);
 
-    static final TalonFX MOTOR_SHOOT = new TalonFX(MOTOR_SHOOT_ID);
+    static final TalonFX SHOOTING_MOTOR = new TalonFX(SHOOTING_MOTOR_ID);
 
-
-    static {
+    private static void configureShootingMotor() {
         TalonFXConfiguration config = new TalonFXConfiguration();
-        config.Audio.BeepOnBoot = false;
-        config.MotorOutput.Inverted = INVERTED_VALUE;
+        config.Audio.BeepOnBoot = true;
+        config.MotorOutput.Inverted = SHOOTER_INVERTED_VALUE;
         config.MotorOutput.NeutralMode = NEUTRAL_MODE_VALUE;
         config.Audio.BeepOnConfig = false;
-
-        MOTOR_angel.restoreFactoryDefaults();
-        MOTOR_angel_PIDController = MOTOR_angel.getPIDController();
-        MOTOR_angel.setInverted(false);
-        MOTOR_angel.setIdleMode(CANSparkMax.IdleMode.kBrake);
-        MOTOR_angel.setVoltage(12);
-
-        MOTOR_SHOOT.getConfigurator().apply(config);
-        CANcoderConfiguration configuration = new CANcoderConfiguration();
-        configuration.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
-        configuration.MagnetSensor.MagnetOffset = 0;
-        configuration.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
-
+        SHOOTING_MOTOR.getConfigurator().apply(config);
     }
 
+    private static void configureAngleMotor() {
+        ANGLE_MOTOR.restoreFactoryDefaults();
+        ANGLE_PID_CONTROLLER.setSetpoint(0);
+        ANGLE_MOTOR.setInverted(ANGLE_MOTOR_INVERTED);
+        ANGLE_MOTOR.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        ANGLE_MOTOR.enableVoltageCompensation(12);
+    }
+
+    private static void configureAngleEncoder() {
+        CANcoderConfiguration configureAngleMotor = new CANcoderConfiguration();
+        configureAngleMotor.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
+        configureAngleMotor.MagnetSensor.MagnetOffset = 0;
+        configureAngleMotor.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
+        ANGLE_ENCODER.getConfigurator().apply(configureAngleMotor);
+    }
+
+    static final TrapezoidProfile.Constraints ANGLE_Constraints = new TrapezoidProfile.Constraints(
+            MAX_ANGEL_VELOCITY, MAX_ANGEL_ACCELERATION
+    );
+
+    static {
+        configureAngleEncoder();
+        configureAngleMotor();
+        configureShootingMotor();
+    }
+
+    public enum SideShooterState {
+        COLLECT_POSITION(Rotation2d.fromDegrees(0)),
+        MID_LEVEL_POSITION(Rotation2d.fromDegrees(222)),
+        HIGH_LEVEL_POSITION(Rotation2d.fromDegrees(666.3));
+        private Rotation2d angel;
+
+        SideShooterState(Rotation2d angel){
+            this.angel = angel;
 
 
-
-
+        }
+    }
 }
