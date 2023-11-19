@@ -10,6 +10,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -36,13 +37,24 @@ public class SideShooterConstants {
     static final TrapezoidProfile.Constraints ANGLE_Constraints = new TrapezoidProfile.Constraints(
             MAX_ANGEL_VELOCITY, MAX_ANGEL_ACCELERATION
     );
+    static final ArmFeedforward SIDE_SHOOTER_FEEDFORWARD = new ArmFeedforward(
+            ANGLE_MOTOR_ks, ANGLE_MOTOR_kg, ANGLE_MOTOR_kv, ANGLE_MOTOR_ka
+    );
 
     private static final double
             ANGLE_MOTOR_P = 0,
             ANGLE_MOTOR_I = 0,
             ANGLE_MOTOR_D = 0;
 
-    static final PIDController ANGLE_PID_CONTROLLER = new PIDController(ANGLE_MOTOR_P, ANGLE_MOTOR_I, ANGLE_MOTOR_D);
+    private static final double
+            ANGLE_MOTOR_ks = 0.58835,
+            ANGLE_MOTOR_kv = 0.74627,
+            ANGLE_MOTOR_ka = 0.37502,
+            ANGLE_MOTOR_kg = 0.92056;
+
+    static final PIDController ANGLE_PID_CONTROLLER = new PIDController(
+            ANGLE_MOTOR_P, ANGLE_MOTOR_I, ANGLE_MOTOR_D
+    );
 
     static {
         configureAngleEncoder();
