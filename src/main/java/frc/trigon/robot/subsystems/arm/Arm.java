@@ -47,7 +47,7 @@ public class Arm extends SubsystemBase {
         elevatorMotorProfile = new TrapezoidProfile(
                 ArmConstants.ELEVATOR_CONSTRAINS,
                 new TrapezoidProfile.State(targetPosition, 0),
-                new TrapezoidProfile.State(getElevatorPositionRevolutions().getDegrees(), getElevatorVelocityRevolutionsPerSecond())
+                new TrapezoidProfile.State(getElevatorPositionRevolutions(), getElevatorVelocityRevolutionsPerSecond())
         );
         lastElevatorProfileGenerationTime = Timer.getFPGATimestamp();
     }
