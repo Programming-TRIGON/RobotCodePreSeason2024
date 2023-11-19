@@ -45,7 +45,7 @@ public class Arm extends SubsystemBase {
     }
 
     /**
-     * Creates a command that sets the arm's target state.
+     * Creates a command that sets the target state of the arm.
      *
      * @param targetState             the target state of the arm
      * @param angleSpeedPercentage    the percentage of speed that the angle will move in
