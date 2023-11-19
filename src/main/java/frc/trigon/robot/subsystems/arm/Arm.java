@@ -9,9 +9,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.trigon.robot.utilities.Conversions;
-
 import java.util.Set;
-import java.util.function.Supplier;
 
 public class Arm extends SubsystemBase {
     private final static Arm INSTANCE = new Arm();
@@ -44,7 +42,7 @@ public class Arm extends SubsystemBase {
         );
     }
 
-    public Command getSetTargetArmStateCommand(Rotation2d angle, double elevatorPosition){
+    public Command getSetTargetArmStateCommand(Rotation2d angle, double elevatorPosition) {
         return new DeferredCommand(
                 () -> getCurrentSetTargetArmStateCommand(angle, elevatorPosition),
                 Set.of(this)
