@@ -1,6 +1,5 @@
 package SideShooter;
 
-import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -19,13 +18,13 @@ public class SideShooterConstants {
     private static final int SHOOTING_MOTOR_ID = 0;
     private static final int ANGLE_MOTOR_ID = 0;
     private static final int ENCODER_ID = 0;
-    private static final double MAGNET_OFFSET = 0;
+    private static final double ANGLE_MAGNET_OFFSET = 0;
     private static final CANSparkMax.IdleMode ANGLE_MOTOR_IDLE_MODE = CANSparkMax.IdleMode.kBrake;
     private static final AbsoluteSensorRangeValue ANGEL_ENCODER_VALUE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
-    private static final SensorDirectionValue ENCODER_SENSOR_DIRECTION = SensorDirectionValue.CounterClockwise_Positive;
+    private static final SensorDirectionValue ANGLE_ENCODER_SENSOR_DIRECTION = SensorDirectionValue.CounterClockwise_Positive;
     private static final InvertedValue SHOOTER_INVERTED_VALUE = InvertedValue.CounterClockwise_Positive;
-    private static final NeutralModeValue NEUTRAL_MODE_VALUE = NeutralModeValue.Brake;
-    private static final double ANGLE_MOTOR_ENABLE_VOLTAGE_COMPENEATION = 16.45;
+    private static final NeutralModeValue SHOOTING_NEUTRAL_MODE_VALUE = NeutralModeValue.Brake;
+    private static final double VOLTAGE_COMPENSATION_SATURATION = 16.45;
     private static final boolean ANGLE_MOTOR_INVERTED = false;
     static final TalonFX SHOOTING_MOTOR = new TalonFX(SHOOTING_MOTOR_ID);
     static final CANSparkMax ANGLE_MOTOR = new CANSparkMax(ANGLE_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -55,7 +54,7 @@ public class SideShooterConstants {
         TalonFXConfiguration config = new TalonFXConfiguration();
         config.Audio.BeepOnBoot = true;
         config.MotorOutput.Inverted = SHOOTER_INVERTED_VALUE;
-        config.MotorOutput.NeutralMode = NEUTRAL_MODE_VALUE;
+        config.MotorOutput.NeutralMode = SHOOTING_NEUTRAL_MODE_VALUE;
         config.Audio.BeepOnConfig = false;
         SHOOTING_MOTOR.getConfigurator().apply(config);
     }
@@ -64,14 +63,14 @@ public class SideShooterConstants {
         ANGLE_MOTOR.restoreFactoryDefaults();
         ANGLE_MOTOR.setInverted(ANGLE_MOTOR_INVERTED);
         ANGLE_MOTOR.setIdleMode(ANGLE_MOTOR_IDLE_MODE);
-        ANGLE_MOTOR.enableVoltageCompensation(ANGLE_MOTOR_ENABLE_VOLTAGE_COMPENEATION);
+        ANGLE_MOTOR.enableVoltageCompensation(VOLTAGE_COMPENSATION_SATURATION);
     }
 
     private static void configureAngleEncoder() {
         CANcoderConfiguration configureAngleMotor = new CANcoderConfiguration();
         configureAngleMotor.MagnetSensor.AbsoluteSensorRange = ANGEL_ENCODER_VALUE;
-        configureAngleMotor.MagnetSensor.MagnetOffset = MAGNET_OFFSET;
-        configureAngleMotor.MagnetSensor.SensorDirection = ENCODER_SENSOR_DIRECTION;
+        configureAngleMotor.MagnetSensor.MagnetOffset = ANGLE_MAGNET_OFFSET;
+        configureAngleMotor.MagnetSensor.SensorDirection = ANGLE_ENCODER_SENSOR_DIRECTION;
         ANGLE_ENCODER.getConfigurator().apply(configureAngleMotor);
     }
 
