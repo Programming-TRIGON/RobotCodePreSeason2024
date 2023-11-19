@@ -1,7 +1,6 @@
 package frc.trigon.robot.subsystems.arm;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -19,7 +18,6 @@ public class Arm extends SubsystemBase {
             followerAngleMotor = ArmConstants.FOLLOWER_ANGLE_MOTOR,
             masterElevatorMotor = ArmConstants.MASTER_ELEVATOR_MOTOR,
             followerElevatorMotor = ArmConstants.FOLLOWER_ELEVATOR_MOTOR;
-    private final CANcoder angleEncoder = ArmConstants.ANGLE_ENCODER;
     private final TalonSRX elevatorEncoder = ArmConstants.ELEVATOR_ENCODER;
     private TrapezoidProfile
             angleMotorProfile = null,
@@ -36,6 +34,10 @@ public class Arm extends SubsystemBase {
 
     }
 
+    public Command getSetTargetArmStateCommand(ArmConstants.ArmState targetState) {
+        return getSetTargetArmPositionCommand(targetState.angle, targetState.elevatorPosition, 100, 100);
+    }
+
     public Command getSetTargetArmPositionCommand(Rotation2d targetAngle, double targetElevatorPosition) {
         return getSetTargetArmPositionCommand(targetAngle, targetElevatorPosition, 100, 100);
     }
@@ -49,11 +51,7 @@ public class Arm extends SubsystemBase {
      * @return the command
      */
     public Command getSetTargetArmStateCommand(ArmConstants.ArmState targetState, double angleSpeedPercentage, double elevatorSpeedPercentage) {
-        return getSetTargetArmPositionCommand(targetState.angle, targetState.elevatorPosition, angleSpeedPercentage, elevatorSpeedPercentage);
-    }
-
-    public Command getSetTargetArmStateCommand(ArmConstants.ArmState targetState) {
-        return getSetTargetArmPositionCommand(targetState.angle, targetState.elevatorPosition, 100, 100);
+        return getSetTargetArmStateCommand(targetState, angleSpeedPercentage, elevatorSpeedPercentage);
     }
 
     /**
