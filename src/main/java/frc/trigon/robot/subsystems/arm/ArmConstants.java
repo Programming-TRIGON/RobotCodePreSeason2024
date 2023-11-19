@@ -2,6 +2,7 @@ package frc.trigon.robot.subsystems.arm;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
@@ -82,6 +83,11 @@ public class ArmConstants {
             ANGLE_CONSTRAINS = new TrapezoidProfile.Constraints(MAX_ANGLE_VELOCITY, MAX_ANGLE_ACCELERATION),
             ELEVATOR_CONSTRAINS = new TrapezoidProfile.Constraints(MAX_ELEVATOR_VELOCITY, MAX_ELEVATOR_ACCELERATION);
 
+
+    static final StatusSignal<Double>
+            ANGLE_MOTOR_POSITION_SIGNAL = ANGLE_ENCODER.getPosition(),
+            ANGLE_MOTOR_VELOCITY_SIGNAL = ANGLE_ENCODER.getVelocity();
+
     static {
         configureAngleMotors();
         configureElevatorMotors();
@@ -130,6 +136,9 @@ public class ArmConstants {
         configureAngleEncoder.MagnetSensor.AbsoluteSensorRange = ANGLE_ENCODER_SENSOR_RANGE;
         configureAngleEncoder.MagnetSensor.SensorDirection = ANGLE_ENCODER_SENSOR_DIRECTION;
         ANGLE_ENCODER.getConfigurator().apply(configureAngleEncoder);
+        ANGLE_MOTOR_POSITION_SIGNAL.setUpdateFrequency(111);
+        ANGLE_MOTOR_VELOCITY_SIGNAL.setUpdateFrequency(111);
+        ANGLE_ENCODER.optimizeBusUtilization();
     }
 
     public enum ArmState {
