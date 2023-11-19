@@ -1,5 +1,6 @@
 package frc.trigon.robot.subsystems.sideshooter;
 
+import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -57,6 +58,8 @@ public class SideShooterConstants {
             ANGLE_MOTOR_P, ANGLE_MOTOR_I, ANGLE_MOTOR_D
     );
 
+    static final StatusSignal<Double> ANGEL_ENCODER_POSITION_SIGNAL = ANGLE_ENCODER.getPosition();
+
     static {
         configureAngleEncoder();
         configureAngleMotor();
@@ -69,6 +72,7 @@ public class SideShooterConstants {
         config.MotorOutput.Inverted = SHOOTER_INVERTED_VALUE;
         config.MotorOutput.NeutralMode = SHOOTING_NEUTRAL_MODE_VALUE;
         config.Audio.BeepOnConfig = false;
+        SHOOTING_MOTOR.optimizeBusUtilization();
         SHOOTING_MOTOR.getConfigurator().apply(config);
     }
 
@@ -84,6 +88,8 @@ public class SideShooterConstants {
         configureAngleMotor.MagnetSensor.AbsoluteSensorRange = ANGEL_ENCODER_VALUE;
         configureAngleMotor.MagnetSensor.MagnetOffset = ANGLE_ENCODER_OFFSET;
         configureAngleMotor.MagnetSensor.SensorDirection = ANGLE_ENCODER_SENSOR_DIRECTION;
+        ANGEL_ENCODER_POSITION_SIGNAL.setUpdateFrequency(100);
+        ANGLE_ENCODER.optimizeBusUtilization();
         ANGLE_ENCODER.getConfigurator().apply(configureAngleMotor);
     }
 
