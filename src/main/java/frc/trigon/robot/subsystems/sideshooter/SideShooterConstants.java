@@ -43,19 +43,17 @@ public class SideShooterConstants {
             ANGLE_MOTOR_P = 0,
             ANGLE_MOTOR_I = 0,
             ANGLE_MOTOR_D = 0;
-
-    private static final double
-            ANGLE_MOTOR_ks = 0.58835,
-            ANGLE_MOTOR_kv = 0.74627,
-            ANGLE_MOTOR_ka = 0.37502,
-            ANGLE_MOTOR_kg = 0.92056;
-
-    static final ArmFeedforward SIDE_SHOOTER_FEEDFORWARD = new ArmFeedforward(
-            ANGLE_MOTOR_ks, ANGLE_MOTOR_kg, ANGLE_MOTOR_kv, ANGLE_MOTOR_ka
-    );
-
     static final PIDController ANGLE_PID_CONTROLLER = new PIDController(
             ANGLE_MOTOR_P, ANGLE_MOTOR_I, ANGLE_MOTOR_D
+    );
+
+    private static final double
+            ANGLE_MOTOR_KS = 0.58835,
+            ANGLE_MOTOR_KV = 0.74627,
+            ANGLE_MOTOR_KA = 0.37502,
+            ANGLE_MOTOR_KG = 0.92056;
+    static final ArmFeedforward SIDE_SHOOTER_FEEDFORWARD = new ArmFeedforward(
+            ANGLE_MOTOR_KS, ANGLE_MOTOR_KG, ANGLE_MOTOR_KV, ANGLE_MOTOR_KA
     );
 
     static final StatusSignal<Double> ANGEL_ENCODER_POSITION_SIGNAL = ANGLE_ENCODER.getPosition();
@@ -69,9 +67,9 @@ public class SideShooterConstants {
     private static void configureShootingMotor() {
         TalonFXConfiguration config = new TalonFXConfiguration();
         config.Audio.BeepOnBoot = false;
+        config.Audio.BeepOnConfig = false;
         config.MotorOutput.Inverted = SHOOTER_INVERTED_VALUE;
         config.MotorOutput.NeutralMode = SHOOTING_NEUTRAL_MODE_VALUE;
-        config.Audio.BeepOnConfig = false;
         SHOOTING_MOTOR.optimizeBusUtilization();
         SHOOTING_MOTOR.getConfigurator().apply(config);
     }
@@ -94,17 +92,16 @@ public class SideShooterConstants {
     }
 
     public enum SideShooterState {
-        COLLECT_POSITION(Rotation2d.fromDegrees(0),0),
+        COLLECT_POSITION(Rotation2d.fromDegrees(0), 0),
         MID_LEVEL_POSITION(Rotation2d.fromDegrees(222), 9),
         HIGH_LEVEL_POSITION(Rotation2d.fromDegrees(666.3), 78);
-        private Rotation2d angle;
-        private double voltage;
 
-        SideShooterState(Rotation2d angel, double voltage) {
+        Rotation2d angle;
+        double shootingVoltage;
+
+        SideShooterState(Rotation2d angel, double shootingVoltage) {
             this.angle = angel;
-            this.voltage = voltage;
-
-
+            this.shootingVoltage = shootingVoltage;
         }
     }
 }
