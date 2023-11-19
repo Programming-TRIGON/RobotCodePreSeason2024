@@ -47,6 +47,17 @@ public class Arm extends SubsystemBase {
         );
     }
 
+    public Command getSetTargetArmElevatorCommand(Rotation2d angle){
+        return new FunctionalCommand(
+                () -> generateElevatorMotorProfile(angle.getDegrees()),
+                this::setTargetElevatorFromProfile,
+                (interrupted) -> {
+                },
+                () -> false,
+                this
+        );
+    }
+
     private void generateAngleMotorProfile(Rotation2d targetAngle) {
         angleMotorProfile = new TrapezoidProfile(
                 ArmConstants.ANGLE_CONSTRAINS,
