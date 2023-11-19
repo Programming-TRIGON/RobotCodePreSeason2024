@@ -39,16 +39,23 @@ public class Arm extends SubsystemBase {
 
     public Command getSetTargetArmStateCommand(ArmConstants.ArmState targetState) {
         return new DeferredCommand(
-                () -> getCurrentSetTargetArmStateCommand(targetState),
+                () -> getCurrentSetTargetArmStateCommand(targetState.angle, targetState.elevatorPosition),
                 Set.of(this)
         );
     }
 
-    private Command getCurrentSetTargetArmStateCommand(ArmConstants.ArmState targetState) {
-        if (isElevatorOpening(targetState.elevatorPosition)) {
+    public Command getSetTargetArmStateCommand(Rotation2d angle, double elevatorPosition){
+        return new DeferredCommand(
+                () -> getCurrentSetTargetArmStateCommand(angle, elevatorPosition),
+                Set.of(this)
+        );
+    }
+
+    private Command getCurrentSetTargetArmStateCommand(Rotation2d angle, double elevatorPosition) {
+        if (isElevatorOpening(elevatorPosition)) {
             return new SequentialCommandGroup(
-                    getSetTargetAngleCommand(targetState.angle),
-                    getSetTargetElevatorPositionCommand(targetState.elevatorPosition)
+                    getSetTargetAngleCommand(angle),
+                    getSetTargetElevatorPositionCommand(elevatorPosition)
             );
         }
         return new SequentialCommandGroup(
