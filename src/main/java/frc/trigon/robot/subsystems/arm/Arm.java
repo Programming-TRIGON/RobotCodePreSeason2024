@@ -21,9 +21,6 @@ public class Arm extends SubsystemBase {
             followerElevatorMotor = ArmConstants.FOLLOWER_ELEVATOR_MOTOR;
     private final CANcoder angleEncoder = ArmConstants.ANGLE_ENCODER;
     private final TalonSRX elevatorEncoder = ArmConstants.ELEVATOR_ENCODER;
-    private double
-            angleSpeedPercentage = 100,
-            elevatorSpeedPercentage = 100;
     private TrapezoidProfile
             angleMotorProfile = null,
             elevatorMotorProfile = null;
@@ -51,30 +48,28 @@ public class Arm extends SubsystemBase {
     }
 
     private Command setTargetArmPosition(Rotation2d targetAngle, double targetElevatorPosition, double angleSpeedPercentage, double elevatorSpeedPercentage) {
-        this.angleSpeedPercentage = angleSpeedPercentage;
-        this.elevatorSpeedPercentage = elevatorSpeedPercentage;
         return new DeferredCommand(
-                () -> getCurrentSetTargetArmStateCommand(targetAngle, targetElevatorPosition),
+                () -> getCurrentSetTargetArmStateCommand(targetAngle, targetElevatorPosition, angleSpeedPercentage, elevatorSpeedPercentage),
                 Set.of(this)
         );
     }
 
-    private Command getCurrentSetTargetArmStateCommand(Rotation2d angle, double elevatorPosition) {
+    private Command getCurrentSetTargetArmStateCommand(Rotation2d angle, double elevatorPosition, double angleSpeedPercentage, double elevatorSpeedPercentage) {
         if (isElevatorOpening(elevatorPosition)) {
             return new SequentialCommandGroup(
-                    getSetTargetAngleCommand(angle),
-                    getSetTargetElevatorPositionCommand(elevatorPosition)
+                    getSetTargetAngleCommand(angle, angleSpeedPercentage),
+                    getSetTargetElevatorPositionCommand(elevatorPosition, elevatorSpeedPercentage)
             );
         }
         return new SequentialCommandGroup(
-                getSetTargetElevatorPositionCommand(elevatorPosition),
-                getSetTargetAngleCommand(angle)
+                getSetTargetElevatorPositionCommand(elevatorPosition, elevatorSpeedPercentage),
+                getSetTargetAngleCommand(angle, angleSpeedPercentage)
         );
     }
 
-    private Command getSetTargetAngleCommand(Rotation2d targetAngle) {
+    private Command getSetTargetAngleCommand(Rotation2d targetAngle, double angleSpeedPercentage) {
         return new FunctionalCommand(
-                () -> generateAngleMotorProfile(targetAngle),
+                () -> generateAngleMotorProfile(targetAngle, angleSpeedPercentage),
                 this::setTargetAngleFromProfile,
                 (interrupted) -> {
                 },
@@ -83,9 +78,9 @@ public class Arm extends SubsystemBase {
         );
     }
 
-    private Command getSetTargetElevatorPositionCommand(double targetElevatorPosition) {
+    private Command getSetTargetElevatorPositionCommand(double targetElevatorPosition, double elevatorSpeedPercentage) {
         return new FunctionalCommand(
-                () -> generateElevatorMotorProfile(targetElevatorPosition),
+                () -> generateElevatorMotorProfile(targetElevatorPosition, elevatorSpeedPercentage),
                 this::setTargetElevatorPositionFromProfile,
                 (interrupted) -> {
                 },
@@ -121,7 +116,7 @@ public class Arm extends SubsystemBase {
         setElevatorMotorsVoltage(voltage);
     }
 
-    private void generateAngleMotorProfile(Rotation2d targetAngle) {
+    private void generateAngleMotorProfile(Rotation2d targetAngle, double angleSpeedPercentage) {
         angleMotorProfile = new TrapezoidProfile(
                 Conversions.scaleConstraints(ArmConstants.ANGLE_CONSTRAINTS, angleSpeedPercentage),
                 new TrapezoidProfile.State(targetAngle.getDegrees(), 0),
@@ -131,7 +126,7 @@ public class Arm extends SubsystemBase {
         lastAngleMotorProfileGenerationTime = Timer.getFPGATimestamp();
     }
 
-    private void generateElevatorMotorProfile(double targetElevatorPosition) {
+    private void generateElevatorMotorProfile(double targetElevatorPosition, double elevatorSpeedPercentage) {
         elevatorMotorProfile = new TrapezoidProfile(
                 Conversions.scaleConstraints(ArmConstants.ELEVATOR_CONSTRAINTS, elevatorSpeedPercentage),
                 new TrapezoidProfile.State(targetElevatorPosition, 0),
