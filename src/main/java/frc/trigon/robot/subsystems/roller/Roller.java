@@ -1,8 +1,7 @@
 package frc.trigon.robot.subsystems.roller;
 
-
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj2.command.*;
+import frc.trigon.robot.subsystems.roller.toohardroller.ToohardRollerConstants;
 import frc.trigon.robot.utilities.Commands;
 import org.littletonrobotics.junction.Logger;
 
@@ -10,8 +9,6 @@ public class Roller extends SubsystemBase {
     private final static Roller INSTANCE = new Roller();
     private final RollerIO rollerIO = RollerIO.generateIO();
     private final RollerInputsAutoLogged rollerInputs = new RollerInputsAutoLogged();
-//    private final TalonSRX angleMotor = RollerConstants.ANGLE_MOTOR;
-//    private final CANSparkMax collectionMotor = RollerConstants.COLLECTION_MOTOR;
 
     public static Roller getInstance() {
         return INSTANCE;
@@ -95,31 +92,31 @@ public class Roller extends SubsystemBase {
     }
 
     private void openRoller() {
-        angleMotor.set(ControlMode.PercentOutput, RollerConstants.OPEN_POWER);
+        rollerIO.setAngleMotorPower(RollerConstants.OPEN_POWER);
     }
 
     private void closeRoller() {
-        angleMotor.set(ControlMode.PercentOutput, RollerConstants.CLOSE_POWER);
+        rollerIO.setAngleMotorPower(RollerConstants.CLOSE_POWER);
     }
 
     private void collect() {
-        collectionMotor.set(RollerConstants.COLLECTION_MOTOR_SPEED);
+        rollerIO.setCollectionMotorPower(RollerConstants.COLLECTION_MOTOR_SPEED);
     }
 
     private void stopCollection() {
-        collectionMotor.stopMotor();
+        rollerIO.stopCollectionMotor();
     }
 
     private void stopAngleMotor() {
-        angleMotor.set(ControlMode.Disabled, 0);
+        rollerIO.stopAngleMotor();
     }
 
     private boolean isOpen() {
-        return !RollerConstants.FORWARD_LIMIT_SWITCH.get();
+        return !ToohardRollerConstants.FORWARD_LIMIT_SWITCH.get();
     }
 
     private boolean isClosed() {
-        return !RollerConstants.BACKWARD_LIMIT_SWITCH.get();
+        return !ToohardRollerConstants.BACKWARD_LIMIT_SWITCH.get();
     }
 }
 
