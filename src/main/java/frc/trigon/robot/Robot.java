@@ -5,18 +5,25 @@
 
 package frc.trigon.robot;
 
-import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.trigon.robot.constants.RobotConstants;
+import org.littletonrobotics.junction.LogFileUtil;
+import org.littletonrobotics.junction.LoggedRobot;
+import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.networktables.NT4Publisher;
+import org.littletonrobotics.junction.wpilog.WPILOGReader;
+import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 
-public class Robot extends TimedRobot {
+public class Robot extends LoggedRobot {
+    public static final boolean IS_REAL = Robot.isReal();
     private Command autonomousCommand;
-
     private RobotContainer robotContainer;
 
     @Override
     public void robotInit() {
+        configLogger();
         robotContainer = new RobotContainer();
     }
 
@@ -26,7 +33,7 @@ public class Robot extends TimedRobot {
     }
 
     @Override
-    public void disabledPeriodic() {
+    public void disabledInit() {
     }
 
     @Override
@@ -38,17 +45,9 @@ public class Robot extends TimedRobot {
     }
 
     @Override
-    public void autonomousPeriodic() {
-    }
-
-    @Override
     public void teleopInit() {
         if (autonomousCommand != null)
             autonomousCommand.cancel();
-    }
-
-    @Override
-    public void teleopPeriodic() {
     }
 
     @Override
@@ -56,11 +55,21 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().cancelAll();
     }
 
-    @Override
-    public void testPeriodic() {
-    }
+    private void configLogger() {
+        if (RobotConstants.IS_REPLAY) {
+            setUseTiming(false);
+            final String logPath = LogFileUtil.findReplayLog();
+            final String logWriterPath = LogFileUtil.addPathSuffix(logPath, "_replay");
 
-    @Override
-    public void simulationPeriodic() {
+            Logger.setReplaySource(new WPILOGReader(logPath));
+            Logger.addDataReceiver(new WPILOGWriter(logWriterPath));
+            Logger.start();
+
+            return;
+        }
+
+        Logger.addDataReceiver(new WPILOGWriter(RobotConstants.ROBOT_TYPE.loggingPath));
+        Logger.addDataReceiver(new NT4Publisher());
+        Logger.start();
     }
 }
