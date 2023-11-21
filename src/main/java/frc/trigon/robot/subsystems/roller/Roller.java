@@ -2,21 +2,28 @@ package frc.trigon.robot.subsystems.roller;
 
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.trigon.robot.utilities.Commands;
+import org.littletonrobotics.junction.Logger;
 
 public class Roller extends SubsystemBase {
     private final static Roller INSTANCE = new Roller();
-    private final TalonSRX angleMotor = RollerConstants.ANGLE_MOTOR;
-    private final CANSparkMax collectionMotor = RollerConstants.COLLECTION_MOTOR;
+    private final RollerIO rollerIO = RollerIO.generateIO();
+    private final RollerInputsAutoLogged rollerInputs = new RollerInputsAutoLogged();
+//    private final TalonSRX angleMotor = RollerConstants.ANGLE_MOTOR;
+//    private final CANSparkMax collectionMotor = RollerConstants.COLLECTION_MOTOR;
 
     public static Roller getInstance() {
         return INSTANCE;
     }
 
     private Roller() {
+    }
+
+    @Override
+    public void periodic() {
+        rollerIO.updateInputs(rollerInputs);
+        Logger.processInputs("Roller", rollerInputs);
     }
 
     /**
