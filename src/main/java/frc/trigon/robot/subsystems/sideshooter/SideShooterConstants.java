@@ -1,5 +1,6 @@
 package frc.trigon.robot.subsystems.sideshooter;
 
+import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -10,6 +11,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -44,6 +46,18 @@ public class SideShooterConstants {
             ANGLE_MOTOR_D = 0;
     static final PIDController ANGLE_PID_CONTROLLER = new PIDController(ANGLE_MOTOR_P, ANGLE_MOTOR_I, ANGLE_MOTOR_D);
 
+    private static final double
+        ANGLE_MOTOR_KS = 0.5990,
+        ANGLE_MOTOR_KV = 0.5990,
+        ANGLE_MOTOR_KA = 0.5990,
+        ANGLE_MOTOR_KG = 0.5990;
+    static final ArmFeedforward ANGLE_MOTOR_FEEDFORWARD = new ArmFeedforward(
+      ANGLE_MOTOR_KS,ANGLE_MOTOR_KG,ANGLE_MOTOR_KV,ANGLE_MOTOR_KA
+    );
+
+    static final StatusSignal<Double> ANGLE_ENCODER_POSITION_SIGNAL = ANGLE_ENCODER.getPosition();
+    static final StatusSignal<Double> ANGLE_ENCODER_VELOCITY_SIGNAL = ANGLE_ENCODER.getVelocity();
+
     static {
         configureAngleEncoder();
         configureShootingMotor();
@@ -57,6 +71,8 @@ public class SideShooterConstants {
         config.MotorOutput.Inverted = SHOOTING_MOTOR_INVERTED_VALUE;
         config.MotorOutput.NeutralMode = SHOOTING_NEUTRAL_MODE_VALUE;
         SHOOTING_MOTOR.getConfigurator().apply(config);
+
+        SHOOTING_MOTOR.optimizeBusUtilization();
     }
 
     private static void configureAngleMotor() {
@@ -72,6 +88,9 @@ public class SideShooterConstants {
         config.MagnetSensor.MagnetOffset = ANGLE_ENCODER_OFFSET;
         config.MagnetSensor.SensorDirection = ANGLE_ENCODER_DIRECTION;
         ANGLE_ENCODER.getConfigurator().apply(config);
+
+        ANGLE_ENCODER_POSITION_SIGNAL.setUpdateFrequency(100);
+        ANGLE_ENCODER.optimizeBusUtilization();
     }
 
     public enum SideShooterState {
