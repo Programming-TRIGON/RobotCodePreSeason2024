@@ -33,13 +33,9 @@ public class Collector extends SubsystemBase {
         );
     }
 
-    private void stop() {
-        collectorIO.stop();
-    }
-
     private void startCurrentWatcher(){
         new CurrentWatcher(
-                this::stop,
+                collectorIO::stop,
                 () -> collectorInputs.motorCurrent,
                 CollectorConstants.MAX_CURRENT,
                 CollectorConstants.MAX_CURRENT_TIME

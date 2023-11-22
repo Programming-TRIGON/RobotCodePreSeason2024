@@ -5,7 +5,6 @@ import frc.trigon.robot.subsystems.arm.kablamaArm.KablamaArmIO;
 import org.littletonrobotics.junction.AutoLog;
 
 public class ArmIO {
-
     static ArmIO generateIO() {
         if (RobotConstants.IS_REPLAY)
             return new ArmIO();
@@ -37,5 +36,10 @@ public class ArmIO {
 
         public double elevatorMotorCurrent = 0;
         public double elevatorMotorVoltage = 0;
+
+        public double anglePositionDegrees = 0;
+        public double elevatorPositionRevolution = 0;
+        public double angleVelocityDegreesPerSecond = 0;
+        public double elevatorVelocityRevolutionsPerSecond = 0;
     }
 }

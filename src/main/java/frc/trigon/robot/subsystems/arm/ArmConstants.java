@@ -17,18 +17,6 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.trigon.robot.utilities.Conversions;
 
 public class ArmConstants {
-    private static final int
-            ANGLE_ENCODER_ID = 5,
-            ELEVATOR_ENCODER_ID = 6;
-    private static final SensorDirectionValue ANGLE_ENCODER_DIRECTION = SensorDirectionValue.CounterClockwise_Positive;
-    private static final boolean ELEVATOR_ENCODER_PHASE = false;
-    private static final int
-            ELEVATOR_ENCODER_OFFSET = 0,
-            ANGLE_ENCODER_OFFSET = 0;
-    private static final AbsoluteSensorRangeValue ANGLE_ENCODER_RANGE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
-    static final CANcoder ANGLE_ENCODER = new CANcoder(ANGLE_ENCODER_ID);
-    static final TalonSRX ELEVATOR_ENCODER = new TalonSRX(ELEVATOR_ENCODER_ID);
-
     static final double
             ANGLE_P = 1,
             ANGLE_I = 0,
@@ -68,34 +56,6 @@ public class ArmConstants {
             ELEVATOR_CONSTRAINTS = new TrapezoidProfile.Constraints(
                     MAX_ELEVATOR_VELOCITY, MAX_ELEVATOR_ACCELERATION
             );
-
-    static final StatusSignal<Double>
-            ANGLE_MOTOR_POSITION_SIGNAL = ANGLE_ENCODER.getPosition(),
-            ANGLE_MOTOR_VELOCITY_SIGNAL = ANGLE_ENCODER.getVelocity();
-
-    static {
-        configureAngleEncoder();
-        configureElevatorEncoder();
-    }
-
-    private static void configureAngleEncoder() {
-        CANcoderConfiguration angleEncoderConfig = new CANcoderConfiguration();
-        angleEncoderConfig.MagnetSensor.MagnetOffset = ANGLE_ENCODER_OFFSET;
-        angleEncoderConfig.MagnetSensor.AbsoluteSensorRange = ANGLE_ENCODER_RANGE;
-        angleEncoderConfig.MagnetSensor.SensorDirection = ANGLE_ENCODER_DIRECTION;
-        ANGLE_ENCODER.getConfigurator().apply(angleEncoderConfig);
-
-        ANGLE_MOTOR_POSITION_SIGNAL.setUpdateFrequency(100);
-        ANGLE_MOTOR_VELOCITY_SIGNAL.setUpdateFrequency(100);
-        ANGLE_ENCODER.optimizeBusUtilization();
-    }
-
-    private static void configureElevatorEncoder() {
-        ELEVATOR_ENCODER.configFactoryDefault();
-        ELEVATOR_ENCODER.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0, 0);
-        ELEVATOR_ENCODER.setSensorPhase(ELEVATOR_ENCODER_PHASE);
-        ELEVATOR_ENCODER.setSelectedSensorPosition(Conversions.offsetRead(ELEVATOR_ENCODER.getSelectedSensorPosition(), ELEVATOR_ENCODER_OFFSET));
-    }
 
     public enum ArmState {
         FIRST_STATE(Rotation2d.fromDegrees(100), 7),
