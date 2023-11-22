@@ -25,8 +25,9 @@ public class RollerIO {
     protected static class RollerInputs {
         public double
                 angleMotorCurrent = 0,
+                collectionMotorCurrent = 0;
+        public double
                 angleMotorVoltage = 0,
-                collectionMotorCurrent = 0,
                 collectionMotorVoltage = 0;
     }
     static RollerIO generateIO()    {
