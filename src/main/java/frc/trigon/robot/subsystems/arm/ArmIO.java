@@ -1,5 +1,6 @@
 package frc.trigon.robot.subsystems.arm;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.subsystems.arm.kablamaArm.KablamaArmIO;
 import org.littletonrobotics.junction.AutoLog;
