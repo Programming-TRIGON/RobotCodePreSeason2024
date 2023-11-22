@@ -8,17 +8,15 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.trigon.robot.utilities.Conversions;
+import org.littletonrobotics.junction.Logger;
 
 import java.util.Set;
 
 public class Arm extends SubsystemBase {
     private final static Arm INSTANCE = new Arm();
 
-    private final CANSparkMax
-            masterAngleMotor = ArmConstants.MASTER_ANGLE_MOTOR,
-            followerAngleMotor = ArmConstants.FOLLOWER_ANGLE_MOTOR,
-            masterElevatorMotor = ArmConstants.MASTER_ELEVATOR_MOTOR,
-            followerElevatorMotor = ArmConstants.FOLLOWER_ELEVATOR_MOTOR;
+    private final ArmIO armIO = ArmIO.generateIO();
+    private final ArmInputsAutoLogged armInputs = new ArmInputsAutoLogged();
     private final TalonSRX elevatorEncoder = ArmConstants.ELEVATOR_ENCODER;
     private TrapezoidProfile
             angleMotorProfile = null,
@@ -32,6 +30,12 @@ public class Arm extends SubsystemBase {
     }
 
     private Arm() {
+    }
+
+    @Override
+    public void periodic() {
+        armIO.updateInputs(armInputs);
+        Logger.processInputs("Arm", armInputs);
     }
 
     public Command getSetTargetArmStateCommand(ArmConstants.ArmState targetState) {
@@ -111,24 +115,24 @@ public class Arm extends SubsystemBase {
 
     private void setTargetAngleFromProfile() {
         if (angleMotorProfile == null) {
-            stopAngleMotors();
+            armIO.stopAngleMotors();
             return;
         }
 
         TrapezoidProfile.State targetState = angleMotorProfile.calculate(getAngleMotorProfileTime());
         double voltage = calculateAngleMotorOutput(targetState);
-        setAngleMotorsVoltage(voltage);
+        armIO.setAnglePower(voltage);
     }
 
     private void setTargetElevatorPositionFromProfile() {
         if (elevatorMotorProfile == null) {
-            stopElevatorMotors();
+            armIO.stopElevatorMotors();
             return;
         }
 
         TrapezoidProfile.State targetState = elevatorMotorProfile.calculate(getElevatorMotorProfileTime());
         double voltage = calculateElevatorMotorOutput(targetState);
-        setElevatorMotorsVoltage(voltage);
+        armIO.setElevatorPower(voltage);
     }
 
     private void generateAngleMotorProfile(Rotation2d targetAngle, double speedPercentage) {
@@ -149,16 +153,6 @@ public class Arm extends SubsystemBase {
         );
 
         lastElevatorMotorProfileGenerationTime = Timer.getFPGATimestamp();
-    }
-
-    private void setAngleMotorsVoltage(double voltage) {
-        masterAngleMotor.setVoltage(voltage);
-        followerAngleMotor.setVoltage(voltage);
-    }
-
-    private void setElevatorMotorsVoltage(double voltage) {
-        masterElevatorMotor.setVoltage(voltage);
-        followerElevatorMotor.setVoltage(voltage);
     }
 
     private double calculateAngleMotorOutput(TrapezoidProfile.State targetState) {
@@ -208,16 +202,6 @@ public class Arm extends SubsystemBase {
     private double getElevatorVelocityRevolutionsPerSecond() {
         double magTicksPerSecond = Conversions.perHundredMsToPerSecond(elevatorEncoder.getSelectedSensorVelocity());
         return Conversions.magTicksToRevolutions(magTicksPerSecond);
-    }
-
-    private void stopAngleMotors() {
-        masterAngleMotor.stopMotor();
-        followerAngleMotor.stopMotor();
-    }
-
-    private void stopElevatorMotors() {
-        masterElevatorMotor.stopMotor();
-        followerElevatorMotor.stopMotor();
     }
 }
 

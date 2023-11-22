@@ -10,7 +10,8 @@ public class CollectorIO {
             return new CollectorIO();
         if (RobotConstants.ROBOT_TYPE == RobotConstants.RobotType.KABLAMA)
             return new KablamaCollectorIO();
-        return new SimulationCollectorIO();
+        //return new SimulationCollectorIO();
+        return new CollectorIO();
     }
 
     protected void updateInputs(CollectorInputsAutoLogged inputs) {
