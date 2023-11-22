@@ -26,11 +26,9 @@ public class SideShooterConstants {
     private static final AbsoluteSensorRangeValue ANGLE_ENCODER_RANGE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
     private static final InvertedValue SHOOTING_MOTOR_INVERTED_VALUE = InvertedValue.CounterClockwise_Positive;
     private static final boolean ANGLE_MOTOR_INVERTED = false;
-
     private static final SensorDirectionValue ANGLE_ENCODER_DIRECTION = SensorDirectionValue.Clockwise_Positive;
     private static final NeutralModeValue SHOOTING_NEUTRAL_MODE_VALUE = NeutralModeValue.Coast;
     private static final CANSparkMax.IdleMode ANGLE_MOTOR_IDLE_MODE = CANSparkMax.IdleMode.kBrake;
-
     static final CANSparkMax ANGLE_MOTOR = new CANSparkMax(ANGLE_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless);
     static final CANcoder ANGLE_ENCODER = new CANcoder(ANGLE_ENCODER_ID);
     static final TalonFX SHOOTING_MOTOR = new TalonFX(SHOOTING_MOTOR_ID);
