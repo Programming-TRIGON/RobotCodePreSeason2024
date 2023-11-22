@@ -18,32 +18,14 @@ import frc.trigon.robot.utilities.Conversions;
 
 public class ArmConstants {
     private static final int
-            MASTER_ANGLE_MOTOR_ID = 1,
-            MASTER_ELEVATOR_MOTOR_ID = 2,
-            FOLLOWER_ANGLE_MOTOR_ID = 3,
-            FOLLOWER_ELEVATOR_MOTOR_ID = 4,
             ANGLE_ENCODER_ID = 5,
             ELEVATOR_ENCODER_ID = 6;
-    private static final CANSparkMax.IdleMode
-            ELEVATOR_IDLE_MODE = CANSparkMax.IdleMode.kBrake,
-            ANGLE_IDLE_MODE = CANSparkMax.IdleMode.kBrake;
-    private static final int VOLTAGE_COMPENSATION_SATURATION = 12;
-    private static final boolean
-            MASTER_ANGLE_INVERTED = false,
-            MASTER_ELEVATOR_INVERTED = false,
-            FOLLOWER_ANGLE_INVERTED = false,
-            FOLLOWER_ELEVATOR_INVERTED = false;
     private static final SensorDirectionValue ANGLE_ENCODER_DIRECTION = SensorDirectionValue.CounterClockwise_Positive;
     private static final boolean ELEVATOR_ENCODER_PHASE = false;
     private static final int
             ELEVATOR_ENCODER_OFFSET = 0,
             ANGLE_ENCODER_OFFSET = 0;
     private static final AbsoluteSensorRangeValue ANGLE_ENCODER_RANGE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
-    static final CANSparkMax
-            MASTER_ANGLE_MOTOR = new CANSparkMax(MASTER_ANGLE_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless),
-            MASTER_ELEVATOR_MOTOR = new CANSparkMax(MASTER_ELEVATOR_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless),
-            FOLLOWER_ANGLE_MOTOR = new CANSparkMax(FOLLOWER_ANGLE_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless),
-            FOLLOWER_ELEVATOR_MOTOR = new CANSparkMax(FOLLOWER_ELEVATOR_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless);
     static final CANcoder ANGLE_ENCODER = new CANcoder(ANGLE_ENCODER_ID);
     static final TalonSRX ELEVATOR_ENCODER = new TalonSRX(ELEVATOR_ENCODER_ID);
 
@@ -94,30 +76,6 @@ public class ArmConstants {
     static {
         configureAngleEncoder();
         configureElevatorEncoder();
-        configureElevatorMotors();
-        configureAngleMotors();
-    }
-
-    private static void configureElevatorMotors() {
-        MASTER_ELEVATOR_MOTOR.restoreFactoryDefaults();
-        FOLLOWER_ELEVATOR_MOTOR.restoreFactoryDefaults();
-        MASTER_ELEVATOR_MOTOR.setIdleMode(ELEVATOR_IDLE_MODE);
-        FOLLOWER_ELEVATOR_MOTOR.setIdleMode(ELEVATOR_IDLE_MODE);
-        MASTER_ELEVATOR_MOTOR.setInverted(MASTER_ELEVATOR_INVERTED);
-        FOLLOWER_ELEVATOR_MOTOR.setInverted(FOLLOWER_ELEVATOR_INVERTED);
-        MASTER_ELEVATOR_MOTOR.enableVoltageCompensation(VOLTAGE_COMPENSATION_SATURATION);
-        FOLLOWER_ELEVATOR_MOTOR.enableVoltageCompensation(VOLTAGE_COMPENSATION_SATURATION);
-    }
-
-    private static void configureAngleMotors() {
-        MASTER_ANGLE_MOTOR.restoreFactoryDefaults();
-        FOLLOWER_ANGLE_MOTOR.restoreFactoryDefaults();
-        MASTER_ANGLE_MOTOR.setIdleMode(ANGLE_IDLE_MODE);
-        FOLLOWER_ANGLE_MOTOR.setIdleMode(ANGLE_IDLE_MODE);
-        MASTER_ANGLE_MOTOR.setInverted(MASTER_ANGLE_INVERTED);
-        FOLLOWER_ANGLE_MOTOR.setInverted(FOLLOWER_ANGLE_INVERTED);
-        MASTER_ANGLE_MOTOR.enableVoltageCompensation(VOLTAGE_COMPENSATION_SATURATION);
-        FOLLOWER_ANGLE_MOTOR.enableVoltageCompensation(VOLTAGE_COMPENSATION_SATURATION);
     }
 
     private static void configureAngleEncoder() {
