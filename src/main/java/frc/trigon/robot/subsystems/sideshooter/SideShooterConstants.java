@@ -39,6 +39,7 @@ public class SideShooterConstants {
         config.MotorOutput.NeutralMode = SHOOTING_NEUTRAL_MODE_VALUE;
         config.MotorOutput.Inverted = SHOOTING_INVERTED_VALUE;
         SHOOTING_MOTOR.getConfigurator().apply(config);
+        SHOOTING_MOTOR.optimizeBusUtilization();
     }
 
     private static void configureAngleMotor(){
@@ -53,6 +54,7 @@ public class SideShooterConstants {
         config.MagnetSensor.MagnetOffset = ENCODER_OFFSET;
         config.MagnetSensor.AbsoluteSensorRange = ENCODER_RANGE_VALUE;
         ANGLE_ENCODER.getConfigurator().apply(config);
+        ANGLE_ENCODER.optimizeBusUtilization();
     }
 
 }
