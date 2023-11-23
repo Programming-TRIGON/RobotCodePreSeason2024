@@ -16,9 +16,9 @@ import frc.trigon.robot.utilities.Conversions;
 public class SideShooter extends SubsystemBase {
     private final static SideShooter INSTANCE = new SideShooter();
 
-    private final TalonFX SHOOTING_MOTOR = SideShooterConstants.SHOOTING_MOTOR;
-    private final CANSparkMax ANGLE_MOTOR = SideShooterConstants.ANGLE_MOTOR;
-    private final CANcoder ANGLE_ENCODER = SideShooterConstants.ANGLE_ENCODER;
+    private final TalonFX shootingMotor = SideShooterConstants.SHOOTING_MOTOR;
+    private final CANSparkMax angleMotor = SideShooterConstants.ANGLE_MOTOR;
+    private final CANcoder angleEncoder = SideShooterConstants.ANGLE_ENCODER;
 
     private TrapezoidProfile angleMotorProfile = null;
     private double lastAngleMotorProfileGenerationTime;
@@ -50,6 +50,15 @@ public class SideShooter extends SubsystemBase {
         lastAngleMotorProfileGenerationTime = Timer.getFPGATimestamp();
     }
 
+    private void setTargetAngleFromProfile() {
+        if (angleMotorProfile == null) {
+            stopAngleMotor();
+        }
+
+        TrapezoidProfile.State targetState = angleMotorProfile.calculate(getAngleMotorProfileTime());
+        angleMotor.setVoltage(calculateAngleMotorOutput());
+    }
+
     private Rotation2d getAnglePosition() {
         return Rotation2d.fromRotations(SideShooterConstants.ANGLE_ENCODER_POSITION_SIGNAL.refresh().getValue());
     }
@@ -60,15 +69,6 @@ public class SideShooter extends SubsystemBase {
 
     private double getAngleMotorProfileTime() {
         return Timer.getFPGATimestamp() - lastAngleMotorProfileGenerationTime;
-    }
-
-    private void setTargetAngleFromProfile() {
-        if (angleMotorProfile == null) {
-            stopAngleMotor();
-        }
-
-        TrapezoidProfile.State targetState = angleMotorProfile.calculate(getAngleMotorProfileTime());
-        ANGLE_MOTOR.setVoltage(calculateAngleMotorOutput());
     }
 
     private double calculateAngleMotorOutput() {
@@ -85,7 +85,7 @@ public class SideShooter extends SubsystemBase {
     }
 
     private void stopAngleMotor() {
-        ANGLE_MOTOR.stopMotor();
+        angleMotor.stopMotor();
     }
 }
 
