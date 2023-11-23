@@ -1,12 +1,10 @@
 package frc.trigon.robot.subsystems.arm;
 
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.*;
-import frc.trigon.robot.subsystems.arm.toohardarm.ToohardArmConstants;
 import frc.trigon.robot.utilities.Conversions;
 import org.littletonrobotics.junction.Logger;
 
@@ -16,11 +14,13 @@ public class Arm extends SubsystemBase {
     private final static Arm INSTANCE = new Arm();
     private final ArmIO armIO = ArmIO.generateIO();
     private final ArmInputsAutoLogged armInputs = new ArmInputsAutoLogged();
+
     @Override
     public void periodic() {
         armIO.updateInputs(armInputs);
         Logger.processInputs("Arm", armInputs);
     }
+
     private TrapezoidProfile
             angleMotorProfile = null,
             elevatorMotorProfile = null;
@@ -162,7 +162,7 @@ public class Arm extends SubsystemBase {
     }
 
     private double getAngleVelocityDegreesPerSecond() {
-        return Conversions.perHundredMsToPerSecond(armInputs.angleEncoderVelocitySignal.getValue());
+        return Conversions.perHundredMsToPerSecond(Conversions.revolutionsToDegrees(armInputs.angleEncoderVelocitySignal.getValue()));
     }
 
     private double getElevatorVelocityRevolutionsPerSecond() {

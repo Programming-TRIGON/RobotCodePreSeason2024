@@ -23,12 +23,16 @@ public class ToohardArmIO extends ArmIO {
         inputs.followerAngleMotorVoltage = followerAngleMotor.getBusVoltage();
         inputs.masterElevatorMotorVoltage = masterElevatorMotor.getBusVoltage();
         inputs.followerElevatorMotorVoltage = followerElevatorMotor.getBusVoltage();
+
         inputs.elevatorPositionRevolutions = elevatorEncoder.getSelectedSensorPosition();
         inputs.elevatorVelocityRevolutions = elevatorEncoder.getSelectedSensorVelocity();
+
         inputs.anglePIDController = ToohardArmConstants.ANGLE_PID_CONTROLLER;
         inputs.elevatorPIDController = ToohardArmConstants.ELEVATOR_PID_CONTROLLER;
+
         inputs.angleFeedforward = ToohardArmConstants.ANGLE_FEEDFORWARD;
         inputs.elevatorFeedforward = ToohardArmConstants.ELEVATOR_FEEDFORWARD;
+
         inputs.angleEncoderPositionSignal = angleEncoderPositionSignal;
         inputs.angleEncoderVelocitySignal = angleEncoderVelocitySignal;
     }
