@@ -19,12 +19,13 @@ public class KablamaArmIO extends ArmIO {
     protected void updateInputs(ArmInputsAutoLogged inputs) {
         inputs.angleMotorVoltage = masterAngleMotor.getBusVoltage();
         inputs.angleMotorCurrent = masterAngleMotor.getOutputCurrent();
+        inputs.angleVelocityDegreesPerSecond = getAngleVelocityDegreesPerSecond();
+        inputs.anglePositionDegrees = getAngleMotorPositionDegrees().getDegrees();
+
         inputs.elevatorMotorVoltage = masterElevatorMotor.getBusVoltage();
         inputs.elevatorMotorCurrent = masterElevatorMotor.getOutputCurrent();
         inputs.elevatorPositionRevolution = getElevatorPositionRevolutions();
-        inputs.angleVelocityDegreesPerSecond = getAngleVelocityDegreesPerSecond();
         inputs.elevatorVelocityRevolutionsPerSecond = getElevatorVelocityRevolutionsPerSecond();
-        inputs.anglePositionDegrees = getAngleMotorPositionDegrees().getDegrees();
     }
 
     @Override
@@ -49,37 +50,45 @@ public class KablamaArmIO extends ArmIO {
                 Units.degreesToRadians(targetState.position),
                 Units.degreesToRadians(targetState.velocity)
         );
-        masterAngleMotor.setVoltage(pidOutput + feedforward);
-        followerAngleMotor.setVoltage(pidOutput + feedforward);
+        setElevatorVoltage(pidOutput + feedforward);
     }
 
     @Override
-    protected void setTargetElevatorPositionState(TrapezoidProfile.State targetState) {
+    protected void setTargetElevatorState(TrapezoidProfile.State targetState) {
         double pidOutput = KablamaArmConstants.ELEVATOR_PID_CONTROLLER.calculate(
                 getElevatorPositionRevolutions(),
                 targetState.position
         );
         double feedforward = KablamaArmConstants.ELEVATOR_FEEDFORWARD.calculate(targetState.velocity);
 
-        masterElevatorMotor.setVoltage(pidOutput + feedforward);
-        followerElevatorMotor.setVoltage(pidOutput + feedforward);
+        setAngleVoltage(pidOutput + feedforward);
     }
 
-    protected double getElevatorPositionRevolutions() {
+    private void setAngleVoltage(double voltage) {
+        masterAngleMotor.setVoltage(voltage);
+        followerAngleMotor.setVoltage(voltage);
+    }
+
+    private void setElevatorVoltage(double voltage) {
+        masterElevatorMotor.setVoltage(voltage);
+        followerElevatorMotor.setVoltage(voltage);
+    }
+
+    private double getElevatorPositionRevolutions() {
         return Conversions.magTicksToRevolutions(KablamaArmConstants.ELEVATOR_ENCODER.getSelectedSensorPosition());
     }
 
-    protected double getAngleVelocityDegreesPerSecond() {
+    private double getAngleVelocityDegreesPerSecond() {
         double positionRevolutions = KablamaArmConstants.ANGLE_MOTOR_VELOCITY_SIGNAL.refresh().getValue();
         return Conversions.revolutionsToDegrees(positionRevolutions);
     }
 
-    protected double getElevatorVelocityRevolutionsPerSecond() {
+    private double getElevatorVelocityRevolutionsPerSecond() {
         double magTicksPerSecond = Conversions.perHundredMsToPerSecond(KablamaArmConstants.ELEVATOR_ENCODER.getSelectedSensorVelocity());
         return Conversions.magTicksToRevolutions(magTicksPerSecond);
     }
 
-    protected Rotation2d getAngleMotorPositionDegrees() {
+    private Rotation2d getAngleMotorPositionDegrees() {
         double positionRevolutions = KablamaArmConstants.ANGLE_MOTOR_POSITION_SIGNAL.refresh().getValue();
         return Rotation2d.fromRotations(positionRevolutions);
     }

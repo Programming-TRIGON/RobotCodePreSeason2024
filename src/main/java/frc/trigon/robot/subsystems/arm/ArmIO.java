@@ -27,7 +27,7 @@ public class ArmIO {
     protected void setTargetAngleState(TrapezoidProfile.State targetState) {
     }
 
-    protected void setTargetElevatorPositionState(TrapezoidProfile.State targetState) {
+    protected void setTargetElevatorState(TrapezoidProfile.State targetState) {
     }
 
     @AutoLog
@@ -36,7 +36,6 @@ public class ArmIO {
         public double angleMotorVoltage = 0;
         public double anglePositionDegrees = 0;
         public double angleVelocityDegreesPerSecond = 0;
-
 
         public double elevatorMotorCurrent = 0;
         public double elevatorMotorVoltage = 0;
