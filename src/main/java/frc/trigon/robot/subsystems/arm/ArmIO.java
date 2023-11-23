@@ -19,12 +19,6 @@ public class ArmIO {
     protected void updateInputs(ArmInputsAutoLogged inputs) {
     }
 
-    protected void setAnglePower(double power) {
-    }
-
-    protected void setElevatorPower(double power) {
-    }
-
     protected void stopAngleMotors() {
     }
 
@@ -41,13 +35,13 @@ public class ArmIO {
     protected static class ArmInputs {
         public double angleMotorCurrent = 0;
         public double angleMotorVoltage = 0;
+        public double anglePositionDegrees = 0;
+        public double angleVelocityDegreesPerSecond = 0;
+
 
         public double elevatorMotorCurrent = 0;
         public double elevatorMotorVoltage = 0;
-
-        public double anglePositionDegrees = 0;
         public double elevatorPositionRevolution = 0;
-        public double angleVelocityDegreesPerSecond = 0;
         public double elevatorVelocityRevolutionsPerSecond = 0;
     }
 }

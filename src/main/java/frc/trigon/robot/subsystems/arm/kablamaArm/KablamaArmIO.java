@@ -4,7 +4,6 @@ import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import frc.trigon.robot.subsystems.arm.ArmConstants;
 import frc.trigon.robot.subsystems.arm.ArmIO;
 import frc.trigon.robot.subsystems.arm.ArmInputsAutoLogged;
 import frc.trigon.robot.utilities.Conversions;
@@ -29,18 +28,6 @@ public class KablamaArmIO extends ArmIO {
     }
 
     @Override
-    protected void setAnglePower(double power) {
-        masterAngleMotor.setVoltage(power);
-        followerAngleMotor.setVoltage(power);
-    }
-
-    @Override
-    protected void setElevatorPower(double power) {
-        masterElevatorMotor.setVoltage(power);
-        followerElevatorMotor.setVoltage(power);
-    }
-
-    @Override
     protected void stopAngleMotors() {
         masterAngleMotor.stopMotor();
         followerAngleMotor.stopMotor();
@@ -53,7 +40,7 @@ public class KablamaArmIO extends ArmIO {
     }
 
     @Override
-    protected void setTargetAngle (TrapezoidProfile.State targetState) {
+    protected void setTargetAngle(TrapezoidProfile.State targetState) {
         double pidOutput = KablamaArmConstants.ANGLE_PID_CONTROLLER.calculate(
                 getAngleMotorPositionDegrees().getDegrees(),
                 targetState.position
@@ -62,7 +49,8 @@ public class KablamaArmIO extends ArmIO {
                 Units.degreesToRadians(targetState.position),
                 Units.degreesToRadians(targetState.velocity)
         );
-        setAnglePower(pidOutput + feedforward);
+        masterAngleMotor.setVoltage(pidOutput + feedforward);
+        followerAngleMotor.setVoltage(pidOutput + feedforward);
     }
 
     @Override
@@ -73,7 +61,8 @@ public class KablamaArmIO extends ArmIO {
         );
         double feedforward = KablamaArmConstants.ELEVATOR_FEEDFORWARD.calculate(targetState.velocity);
 
-        setElevatorPower(pidOutput + feedforward);
+        masterElevatorMotor.setVoltage(pidOutput + feedforward);
+        followerElevatorMotor.setVoltage(pidOutput + feedforward);
     }
 
     protected double getElevatorPositionRevolutions() {

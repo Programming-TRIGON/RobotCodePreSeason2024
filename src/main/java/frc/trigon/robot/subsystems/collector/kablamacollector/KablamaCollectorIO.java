@@ -18,6 +18,7 @@ public class KablamaCollectorIO extends CollectorIO {
     protected void setPower(double power) {
         motor.set(ControlMode.PercentOutput, power);
     }
+
     @Override
     protected void stop() {
         motor.set(ControlMode.Disabled, 0);
