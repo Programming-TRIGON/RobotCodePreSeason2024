@@ -112,11 +112,11 @@ public class Roller extends SubsystemBase {
     }
 
     private boolean isOpen() {
-        return !ToohardRollerConstants.FORWARD_LIMIT_SWITCH.get();
+        return !rollerInputs.forwardLimitSwitch;
     }
 
     private boolean isClosed() {
-        return !ToohardRollerConstants.BACKWARD_LIMIT_SWITCH.get();
+        return !rollerInputs.backwardLimitSwitch;
     }
 }
 

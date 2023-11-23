@@ -24,8 +24,9 @@ public class ToohardRollerConstants {
     static final TalonSRX ANGLE_MOTOR = new TalonSRX(ANGLE_MOTOR_ID);
     static final CANSparkMax COLLECTION_MOTOR = new CANSparkMax(COLLECTION_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless);
 
-    public static final DigitalInput FORWARD_LIMIT_SWITCH = new DigitalInput(FORWARD_LIMIT_SWITCH_CHANNEL);
-    public static final DigitalInput BACKWARD_LIMIT_SWITCH = new DigitalInput(BACKWARD_LIMIT_SWITCH_CHANNEL);
+    static final DigitalInput
+            FORWARD_LIMIT_SWITCH = new DigitalInput(FORWARD_LIMIT_SWITCH_CHANNEL),
+            BACKWARD_LIMIT_SWITCH = new DigitalInput(BACKWARD_LIMIT_SWITCH_CHANNEL);
 
     static {
         configureAngleMotor();
