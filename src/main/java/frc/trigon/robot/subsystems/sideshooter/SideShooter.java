@@ -55,7 +55,7 @@ public class SideShooter extends SubsystemBase {
     }
 
     private double getAngleVelocityDegreesPerSecond() {
-        return Conversions.perHundredMsToPerSecond(Conversions.revolutionsToDegrees(SideShooterConstants.ANGLE_ENCODER_VELOCITY_SIGNAL.refresh().getValue()));
+        return Conversions.revolutionsToDegrees(SideShooterConstants.ANGLE_ENCODER_VELOCITY_SIGNAL.refresh().getValue());
     }
 
     private double getAngleMotorProfileTime() {
