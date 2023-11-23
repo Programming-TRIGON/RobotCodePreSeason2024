@@ -12,7 +12,6 @@ import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.trigon.robot.utilities.Conversions;
 
 public class ToohardArmConstants {
