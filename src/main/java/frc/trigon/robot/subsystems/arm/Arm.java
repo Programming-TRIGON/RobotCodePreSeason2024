@@ -9,6 +9,9 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.trigon.robot.utilities.Conversions;
 
+import java.util.Set;
+import java.util.function.Supplier;
+
 public class Arm extends SubsystemBase {
     private final static Arm INSTANCE = new Arm();
 
@@ -31,6 +34,12 @@ public class Arm extends SubsystemBase {
     }
 
     private Arm() {
+    }
+
+    public Command getSetCommand(ArmConstants.ArmState targetState){
+        Supplier<Command> commandSupplier = () -> getSetTargetStateCommand(targetState);
+        Set<Subsystem> subsystem = Set.of(this);
+        return new DeferredCommand(commandSupplier, subsystem);
     }
 
     public Command getSetTargetStateCommand(ArmConstants.ArmState targetState) {
@@ -67,7 +76,6 @@ public class Arm extends SubsystemBase {
                 this
         );
     }
-
 
     private boolean isElevatorOpening(double targetElevatorPosition) {
         return targetElevatorPosition > getElevatorPositionRevolutions();
@@ -145,7 +153,7 @@ public class Arm extends SubsystemBase {
 
     private double getElevatorVelocityRevolutionsPerSecond() {
         double magTicksPerSecond = Conversions.perHundredMsToPerSecond(elevatorEncoder.getSelectedSensorVelocity());
-        return Conversions.magTicksToRevolutions(magTicksPerSecond );
+        return Conversions.magTicksToRevolutions(magTicksPerSecond);
     }
 
     private Rotation2d getAnglePosition() {
