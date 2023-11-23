@@ -17,33 +17,6 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.trigon.robot.utilities.Conversions;
 
 public class ArmConstants {
-    static final double
-            ANGLE_P = 1,
-            ANGLE_I = 0,
-            ANGLE_D = 0,
-            ELEVATOR_P = 1,
-            ELEVATOR_I = 0,
-            ELEVATOR_D = 0;
-    static final PIDController
-            ANGLE_PID_CONTROLLER = new PIDController(ANGLE_P, ANGLE_I, ANGLE_D),
-            ELEVATOR_PID_CONTROLLER = new PIDController(ELEVATOR_P, ELEVATOR_I, ELEVATOR_D);
-
-    private static final double
-            ANGLE_MOTOR_KS = 0,
-            ANGLE_MOTOR_KV = 0,
-            ANGLE_MOTOR_KA = 0,
-            ANGLE_MOTOR_KG = 0,
-            ELEVATOR_MOTOR_KS = 0,
-            ELEVATOR_MOTOR_KV = 0,
-            ELEVATOR_MOTOR_KA = 0,
-            ELEVATOR_MOTOR_KG = 0;
-    static final ArmFeedforward ANGLE_FEEDFORWARD = new ArmFeedforward(
-            ANGLE_MOTOR_KS, ANGLE_MOTOR_KG, ANGLE_MOTOR_KV, ANGLE_MOTOR_KA
-    );
-    static final ElevatorFeedforward ELEVATOR_FEEDFORWARD = new ElevatorFeedforward(
-            ELEVATOR_MOTOR_KS, ELEVATOR_MOTOR_KG, ELEVATOR_MOTOR_KV, ELEVATOR_MOTOR_KA
-    );
-
     private static final double
             MAX_ANGLE_VELOCITY = 100,
             MAX_ANGLE_ACCELERATION = 100,

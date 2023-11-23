@@ -7,6 +7,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.*;
+import frc.trigon.robot.subsystems.arm.kablamaArm.KablamaArmConstants;
 import frc.trigon.robot.utilities.Conversions;
 import org.littletonrobotics.junction.Logger;
 
@@ -155,11 +156,11 @@ public class Arm extends SubsystemBase {
     }
 
     private double calculateAngleMotorOutput(TrapezoidProfile.State targetState) {
-        double pidOutput = ArmConstants.ANGLE_PID_CONTROLLER.calculate(
+        double pidOutput = KablamaArmConstants.ANGLE_PID_CONTROLLER.calculate(
                 armInputs.anglePositionDegrees,
                 targetState.position
         );
-        double feedforward = ArmConstants.ANGLE_FEEDFORWARD.calculate(
+        double feedforward = KablamaArmConstants.ANGLE_FEEDFORWARD.calculate(
                 Units.degreesToRadians(targetState.position),
                 Units.degreesToRadians(targetState.velocity)
         );
@@ -168,11 +169,11 @@ public class Arm extends SubsystemBase {
     }
 
     private double calculateElevatorMotorOutput(TrapezoidProfile.State targetState) {
-        double pidOutput = ArmConstants.ELEVATOR_PID_CONTROLLER.calculate(
+        double pidOutput = KablamaArmConstants.ELEVATOR_PID_CONTROLLER.calculate(
                 armInputs.elevatorPositionRevolution,
                 targetState.position
         );
-        double feedforward = ArmConstants.ELEVATOR_FEEDFORWARD.calculate(targetState.velocity);
+        double feedforward = KablamaArmConstants.ELEVATOR_FEEDFORWARD.calculate(targetState.velocity);
         return pidOutput + feedforward;
     }
 
