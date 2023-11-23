@@ -155,5 +155,3 @@ public class ArmConstants {
         }
     }
 }
-
-// bcdedit /set hypervisorlaunchtype off

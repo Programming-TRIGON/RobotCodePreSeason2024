@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj2.command.*;
 import frc.trigon.robot.utilities.Conversions;
 
 import java.util.Set;
-import java.util.function.Supplier;
 
 public class Arm extends SubsystemBase {
     private final static Arm INSTANCE = new Arm();
@@ -37,12 +36,13 @@ public class Arm extends SubsystemBase {
     }
 
     public Command getSetCommand(ArmConstants.ArmState targetState){
-        Supplier<Command> commandSupplier = () -> getSetTargetStateCommand(targetState);
-        Set<Subsystem> subsystem = Set.of(this);
-        return new DeferredCommand(commandSupplier, subsystem);
+        return new DeferredCommand(
+                () -> getCurrentSetTargetStateCommand(targetState),
+                Set.of(this)
+        );
     }
 
-    public Command getSetTargetStateCommand(ArmConstants.ArmState targetState) {
+    public Command getCurrentSetTargetStateCommand(ArmConstants.ArmState targetState) {
         if (isElevatorOpening(targetState.elevatorPosition)) {
             return new SequentialCommandGroup(
                     getSetTargetAngleCommand(targetState.angle),
