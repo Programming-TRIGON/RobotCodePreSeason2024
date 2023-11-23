@@ -35,7 +35,7 @@ public class Arm extends SubsystemBase {
     private Arm() {
     }
 
-    public Command getSetCommand(ArmConstants.ArmState targetState){
+    public Command getSetTargetArmPositionCommand(ArmConstants.ArmState targetState){
         return new DeferredCommand(
                 () -> getCurrentSetTargetStateCommand(targetState),
                 Set.of(this)
