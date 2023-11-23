@@ -40,7 +40,7 @@ public class KablamaArmIO extends ArmIO {
     }
 
     @Override
-    protected void setTargetAngle(TrapezoidProfile.State targetState) {
+    protected void setTargetAngleState(TrapezoidProfile.State targetState) {
         double pidOutput = KablamaArmConstants.ANGLE_PID_CONTROLLER.calculate(
                 getAngleMotorPositionDegrees().getDegrees(),
                 targetState.position
@@ -54,7 +54,7 @@ public class KablamaArmIO extends ArmIO {
     }
 
     @Override
-    protected void setTargetElevatorPosition(TrapezoidProfile.State targetState) {
+    protected void setTargetElevatorPositionState(TrapezoidProfile.State targetState) {
         double pidOutput = KablamaArmConstants.ELEVATOR_PID_CONTROLLER.calculate(
                 getElevatorPositionRevolutions(),
                 targetState.position

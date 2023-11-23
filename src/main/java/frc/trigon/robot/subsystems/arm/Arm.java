@@ -1,13 +1,9 @@
 package frc.trigon.robot.subsystems.arm;
 
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.*;
-import frc.trigon.robot.subsystems.arm.kablamaArm.KablamaArmConstants;
 import frc.trigon.robot.utilities.Conversions;
 import org.littletonrobotics.junction.Logger;
 
@@ -120,7 +116,7 @@ public class Arm extends SubsystemBase {
         }
 
         TrapezoidProfile.State targetState = angleMotorProfile.calculate(getAngleMotorProfileTime());
-        armIO.setTargetAngle(targetState);
+        armIO.setTargetAngleState(targetState);
     }
 
     private void setTargetElevatorPositionFromProfile() {
@@ -130,7 +126,7 @@ public class Arm extends SubsystemBase {
         }
 
         TrapezoidProfile.State targetState = elevatorMotorProfile.calculate(getElevatorMotorProfileTime());
-        armIO.setTargetElevatorPosition(targetState);
+        armIO.setTargetElevatorPositionState(targetState);
     }
 
     private void generateAngleMotorProfile(Rotation2d targetAngle, double speedPercentage) {

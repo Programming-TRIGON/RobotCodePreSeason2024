@@ -1,6 +1,5 @@
 package frc.trigon.robot.subsystems.arm;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.subsystems.arm.kablamaArm.KablamaArmIO;
@@ -25,10 +24,10 @@ public class ArmIO {
     protected void stopElevatorMotors() {
     }
 
-    protected void setTargetAngle(TrapezoidProfile.State targetState) {
+    protected void setTargetAngleState(TrapezoidProfile.State targetState) {
     }
 
-    protected void setTargetElevatorPosition(TrapezoidProfile.State targetState) {
+    protected void setTargetElevatorPositionState(TrapezoidProfile.State targetState) {
     }
 
     @AutoLog
