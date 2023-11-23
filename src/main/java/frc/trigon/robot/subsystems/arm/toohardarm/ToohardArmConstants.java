@@ -43,8 +43,8 @@ public class ToohardArmConstants {
     private static final SensorDirectionValue ANGLE_MOTOR_DIRECTION = SensorDirectionValue.Clockwise_Positive;
     private static final boolean ELEVATOR_MOTOR_PHASE = false;
     private static final AbsoluteSensorRangeValue ANGLE_MOTOR_RANGE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
-    public static final CANcoder ANGLE_ENCODER = new CANcoder(ANGLE_ENCODER_ID);
-    public static final TalonSRX ELEVATOR_ENCODER = new TalonSRX(ELEVATOR_ENCODER_ID);
+    private static final CANcoder ANGLE_ENCODER = new CANcoder(ANGLE_ENCODER_ID);
+    static final TalonSRX ELEVATOR_ENCODER = new TalonSRX(ELEVATOR_ENCODER_ID);
 
     private static final double
             ANGLE_P = 0,
@@ -79,8 +79,9 @@ public class ToohardArmConstants {
             ELEVATOR_MOTOR_KA
     );
 
-    public static final StatusSignal<Double> ANGLE_ENCODER_POSITION_SIGNAL = ANGLE_ENCODER.getPosition();
-    public static final StatusSignal<Double> ANGLE_ENCODER_VELOCITY_SIGNAL = ANGLE_ENCODER.getVelocity();
+    static final StatusSignal<Double>
+            ANGLE_ENCODER_POSITION_SIGNAL = ANGLE_ENCODER.getPosition(),
+            ANGLE_ENCODER_VELOCITY_SIGNAL = ANGLE_ENCODER.getVelocity();
 
     static {
         configureAngleMotors();

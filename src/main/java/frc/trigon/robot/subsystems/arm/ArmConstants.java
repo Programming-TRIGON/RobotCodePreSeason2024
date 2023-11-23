@@ -4,8 +4,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 public class ArmConstants {
-
-    public static final double
+    private static final double
             MAX_ANGLE_VELOCITY = 100,
             MAX_ELEVATOR_VELOCITY = 100,
             MAX_ANGLE_ACCELERATION = 100,

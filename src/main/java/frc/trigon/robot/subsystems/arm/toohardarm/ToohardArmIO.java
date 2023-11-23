@@ -5,27 +5,23 @@ import com.ctre.phoenix6.StatusSignal;
 import com.revrobotics.CANSparkMax;
 import frc.trigon.robot.subsystems.arm.ArmIO;
 import frc.trigon.robot.subsystems.arm.ArmInputsAutoLogged;
+import frc.trigon.robot.utilities.Conversions;
 
 public class ToohardArmIO extends ArmIO {
-
     private final CANSparkMax
             masterAngleMotor = ToohardArmConstants.MASTER_ANGLE_MOTOR,
             followerAngleMotor = ToohardArmConstants.FOLLOWER_ANGLE_MOTOR,
             masterElevatorMotor = ToohardArmConstants.MASTER_ELEVATOR_MOTOR,
             followerElevatorMotor = ToohardArmConstants.FOLLOWER_ELEVATOR_MOTOR;
-    protected final TalonSRX elevatorEncoder = ToohardArmConstants.ELEVATOR_ENCODER;
-    protected final StatusSignal<Double> angleEncoderPositionSignal = ToohardArmConstants.ANGLE_ENCODER_POSITION_SIGNAL;
-    protected final StatusSignal<Double> angleEncoderVelocitySignal = ToohardArmConstants.ANGLE_ENCODER_VELOCITY_SIGNAL;
+    private final TalonSRX elevatorEncoder = ToohardArmConstants.ELEVATOR_ENCODER;
 
     @Override
     protected void updateInputs(ArmInputsAutoLogged inputs) {
-        inputs.masterAngleMotorVoltage = masterAngleMotor.getBusVoltage();
-        inputs.followerAngleMotorVoltage = followerAngleMotor.getBusVoltage();
-        inputs.masterElevatorMotorVoltage = masterElevatorMotor.getBusVoltage();
-        inputs.followerElevatorMotorVoltage = followerElevatorMotor.getBusVoltage();
+        inputs.angleMotorsVoltage = masterAngleMotor.getBusVoltage();
+        inputs.elevatorMotorsVoltage = masterElevatorMotor.getBusVoltage();
 
         inputs.elevatorPositionRevolutions = elevatorEncoder.getSelectedSensorPosition();
-        inputs.elevatorVelocityRevolutions = elevatorEncoder.getSelectedSensorVelocity();
+        inputs.elevatorVelocityRevolutionsPerSecond = Conversions.perHundredMsToPerSecond(elevatorEncoder.getSelectedSensorVelocity());
 
         inputs.anglePIDController = ToohardArmConstants.ANGLE_PID_CONTROLLER;
         inputs.elevatorPIDController = ToohardArmConstants.ELEVATOR_PID_CONTROLLER;
@@ -33,8 +29,8 @@ public class ToohardArmIO extends ArmIO {
         inputs.angleFeedforward = ToohardArmConstants.ANGLE_FEEDFORWARD;
         inputs.elevatorFeedforward = ToohardArmConstants.ELEVATOR_FEEDFORWARD;
 
-        inputs.angleEncoderPositionSignal = angleEncoderPositionSignal;
-        inputs.angleEncoderVelocitySignal = angleEncoderVelocitySignal;
+        inputs.angleEncoderPositionSignal = ToohardArmConstants.ANGLE_ENCODER_POSITION_SIGNAL;
+        inputs.angleEncoderVelocitySignal = ToohardArmConstants.ANGLE_ENCODER_VELOCITY_SIGNAL;
     }
 
     @Override
@@ -50,13 +46,13 @@ public class ToohardArmIO extends ArmIO {
     }
 
     @Override
-    protected void stopAngleMotor() {
+    protected void stopAngleMotors() {
         masterAngleMotor.stopMotor();
         followerAngleMotor.stopMotor();
     }
 
     @Override
-    protected void stopElevatorMotor() {
+    protected void stopElevatorMotors() {
         masterElevatorMotor.stopMotor();
         followerElevatorMotor.stopMotor();
     }
