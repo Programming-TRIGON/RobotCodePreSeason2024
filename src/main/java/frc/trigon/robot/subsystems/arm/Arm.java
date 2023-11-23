@@ -120,8 +120,7 @@ public class Arm extends SubsystemBase {
         }
 
         TrapezoidProfile.State targetState = angleMotorProfile.calculate(getAngleMotorProfileTime());
-        double voltage = calculateAngleMotorOutput(targetState);
-        armIO.setAnglePower(voltage);
+        armIO.setTargetAngle(targetState);
     }
 
     private void setTargetElevatorPositionFromProfile() {
@@ -131,8 +130,7 @@ public class Arm extends SubsystemBase {
         }
 
         TrapezoidProfile.State targetState = elevatorMotorProfile.calculate(getElevatorMotorProfileTime());
-        double voltage = calculateElevatorMotorOutput(targetState);
-        armIO.setElevatorPower(voltage);
+        armIO.setTargetElevatorPosition(targetState);
     }
 
     private void generateAngleMotorProfile(Rotation2d targetAngle, double speedPercentage) {
@@ -153,28 +151,6 @@ public class Arm extends SubsystemBase {
         );
 
         lastElevatorMotorProfileGenerationTime = Timer.getFPGATimestamp();
-    }
-
-    private double calculateAngleMotorOutput(TrapezoidProfile.State targetState) {
-        double pidOutput = KablamaArmConstants.ANGLE_PID_CONTROLLER.calculate(
-                armInputs.anglePositionDegrees,
-                targetState.position
-        );
-        double feedforward = KablamaArmConstants.ANGLE_FEEDFORWARD.calculate(
-                Units.degreesToRadians(targetState.position),
-                Units.degreesToRadians(targetState.velocity)
-        );
-
-        return pidOutput + feedforward;
-    }
-
-    private double calculateElevatorMotorOutput(TrapezoidProfile.State targetState) {
-        double pidOutput = KablamaArmConstants.ELEVATOR_PID_CONTROLLER.calculate(
-                armInputs.elevatorPositionRevolution,
-                targetState.position
-        );
-        double feedforward = KablamaArmConstants.ELEVATOR_FEEDFORWARD.calculate(targetState.velocity);
-        return pidOutput + feedforward;
     }
 
     private double getAngleMotorProfileTime() {

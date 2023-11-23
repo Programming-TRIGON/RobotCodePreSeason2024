@@ -2,6 +2,7 @@ package frc.trigon.robot.subsystems.arm.kablamaArm;
 
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.trigon.robot.subsystems.arm.ArmConstants;
 import frc.trigon.robot.subsystems.arm.ArmIO;
@@ -45,9 +46,34 @@ public class KablamaArmIO extends ArmIO {
         followerAngleMotor.stopMotor();
     }
 
+    @Override
     protected void stopElevatorMotors() {
         masterElevatorMotor.stopMotor();
         followerElevatorMotor.stopMotor();
+    }
+
+    @Override
+    protected void setTargetAngle (TrapezoidProfile.State targetState) {
+        double pidOutput = KablamaArmConstants.ANGLE_PID_CONTROLLER.calculate(
+                getAngleMotorPositionDegrees().getDegrees(),
+                targetState.position
+        );
+        double feedforward = KablamaArmConstants.ANGLE_FEEDFORWARD.calculate(
+                Units.degreesToRadians(targetState.position),
+                Units.degreesToRadians(targetState.velocity)
+        );
+        setAnglePower(pidOutput + feedforward);
+    }
+
+    @Override
+    protected void setTargetElevatorPosition(TrapezoidProfile.State targetState) {
+        double pidOutput = KablamaArmConstants.ELEVATOR_PID_CONTROLLER.calculate(
+                getElevatorPositionRevolutions(),
+                targetState.position
+        );
+        double feedforward = KablamaArmConstants.ELEVATOR_FEEDFORWARD.calculate(targetState.velocity);
+
+        setElevatorPower(pidOutput + feedforward);
     }
 
     protected double getElevatorPositionRevolutions() {
