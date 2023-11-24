@@ -57,7 +57,7 @@ public class KablamaArmConstants {
             ELEVATOR_P = 1,
             ELEVATOR_I = 0,
             ELEVATOR_D = 0;
-    protected static final PIDController
+    static final PIDController
             ANGLE_PID_CONTROLLER = new PIDController(ANGLE_P, ANGLE_I, ANGLE_D),
             ELEVATOR_PID_CONTROLLER = new PIDController(ELEVATOR_P, ELEVATOR_I, ELEVATOR_D);
 
@@ -76,7 +76,6 @@ public class KablamaArmConstants {
     public static final ElevatorFeedforward ELEVATOR_FEEDFORWARD = new ElevatorFeedforward(
             ELEVATOR_MOTOR_KS, ELEVATOR_MOTOR_KG, ELEVATOR_MOTOR_KV, ELEVATOR_MOTOR_KA
     );
-
 
     static {
         configureAngleEncoder();

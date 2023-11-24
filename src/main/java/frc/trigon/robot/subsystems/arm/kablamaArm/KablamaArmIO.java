@@ -42,26 +42,13 @@ public class KablamaArmIO extends ArmIO {
 
     @Override
     protected void setTargetAngleState(TrapezoidProfile.State targetState) {
-        double pidOutput = KablamaArmConstants.ANGLE_PID_CONTROLLER.calculate(
-                getAngleMotorPositionDegrees().getDegrees(),
-                targetState.position
-        );
-        double feedforward = KablamaArmConstants.ANGLE_FEEDFORWARD.calculate(
-                Units.degreesToRadians(targetState.position),
-                Units.degreesToRadians(targetState.velocity)
-        );
-        setElevatorVoltage(pidOutput + feedforward);
+        setAngleVoltage(calculateAnglePosition(targetState));
+
     }
 
     @Override
     protected void setTargetElevatorState(TrapezoidProfile.State targetState) {
-        double pidOutput = KablamaArmConstants.ELEVATOR_PID_CONTROLLER.calculate(
-                getElevatorPositionRevolutions(),
-                targetState.position
-        );
-        double feedforward = KablamaArmConstants.ELEVATOR_FEEDFORWARD.calculate(targetState.velocity);
-
-        setAngleVoltage(pidOutput + feedforward);
+        setAngleVoltage(calculateElevatorPosition(targetState));
     }
 
     private void setAngleVoltage(double voltage) {
@@ -81,6 +68,27 @@ public class KablamaArmIO extends ArmIO {
     private double getAngleVelocityDegreesPerSecond() {
         double positionRevolutions = KablamaArmConstants.ANGLE_MOTOR_VELOCITY_SIGNAL.refresh().getValue();
         return Conversions.revolutionsToDegrees(positionRevolutions);
+    }
+
+    private double calculateAnglePosition(TrapezoidProfile.State targetState) {
+        double pidOutput = KablamaArmConstants.ANGLE_PID_CONTROLLER.calculate(
+                getAngleMotorPositionDegrees().getDegrees(),
+                targetState.position
+        );
+        double feedforward = KablamaArmConstants.ANGLE_FEEDFORWARD.calculate(
+                Units.degreesToRadians(targetState.position),
+                Units.degreesToRadians(targetState.velocity)
+        );
+        return pidOutput + feedforward;
+    }
+
+    private double calculateElevatorPosition(TrapezoidProfile.State targetState) {
+        double pidOutput = KablamaArmConstants.ELEVATOR_PID_CONTROLLER.calculate(
+                getElevatorPositionRevolutions(),
+                targetState.position
+        );
+        double feedforward = KablamaArmConstants.ELEVATOR_FEEDFORWARD.calculate(targetState.velocity);
+        return pidOutput + feedforward;
     }
 
     private double getElevatorVelocityRevolutionsPerSecond() {
