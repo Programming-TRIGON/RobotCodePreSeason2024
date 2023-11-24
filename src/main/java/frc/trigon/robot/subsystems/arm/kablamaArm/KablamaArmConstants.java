@@ -70,10 +70,10 @@ public class KablamaArmConstants {
             ELEVATOR_MOTOR_KV = 0,
             ELEVATOR_MOTOR_KA = 0,
             ELEVATOR_MOTOR_KG = 0;
-    public static final ArmFeedforward ANGLE_FEEDFORWARD = new ArmFeedforward(
+    static final ArmFeedforward ANGLE_FEEDFORWARD = new ArmFeedforward(
             ANGLE_MOTOR_KS, ANGLE_MOTOR_KG, ANGLE_MOTOR_KV, ANGLE_MOTOR_KA
     );
-    public static final ElevatorFeedforward ELEVATOR_FEEDFORWARD = new ElevatorFeedforward(
+    static final ElevatorFeedforward ELEVATOR_FEEDFORWARD = new ElevatorFeedforward(
             ELEVATOR_MOTOR_KS, ELEVATOR_MOTOR_KG, ELEVATOR_MOTOR_KV, ELEVATOR_MOTOR_KA
     );
 
