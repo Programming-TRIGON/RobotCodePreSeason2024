@@ -20,7 +20,7 @@ public class KablamaArmIO extends ArmIO {
         inputs.angleMotorVoltage = masterAngleMotor.getBusVoltage();
         inputs.angleMotorCurrent = masterAngleMotor.getOutputCurrent();
         inputs.angleVelocityDegreesPerSecond = getAngleVelocityDegreesPerSecond();
-        inputs.anglePositionDegrees = getAngleMotorPositionDegrees().getDegrees();
+        inputs.anglePositionDegrees = getAngleMotorPosition().getDegrees();
 
         inputs.elevatorMotorVoltage = masterElevatorMotor.getBusVoltage();
         inputs.elevatorMotorCurrent = masterElevatorMotor.getOutputCurrent();
@@ -63,7 +63,7 @@ public class KablamaArmIO extends ArmIO {
 
     private double calculateAngleOutput(TrapezoidProfile.State targetState) {
         double pidOutput = KablamaArmConstants.ANGLE_PID_CONTROLLER.calculate(
-                getAngleMotorPositionDegrees().getDegrees(),
+                getAngleMotorPosition().getDegrees(),
                 targetState.position
         );
         double feedforward = KablamaArmConstants.ANGLE_FEEDFORWARD.calculate(
@@ -81,7 +81,7 @@ public class KablamaArmIO extends ArmIO {
         double feedforward = KablamaArmConstants.ELEVATOR_FEEDFORWARD.calculate(targetState.velocity);
         return pidOutput + feedforward;
     }
-    
+
     private double getElevatorPositionRevolutions() {
         return Conversions.magTicksToRevolutions(KablamaArmConstants.ELEVATOR_ENCODER.getSelectedSensorPosition());
     }
@@ -96,7 +96,7 @@ public class KablamaArmIO extends ArmIO {
         return Conversions.magTicksToRevolutions(magTicksPerSecond);
     }
 
-    private Rotation2d getAngleMotorPositionDegrees() {
+    private Rotation2d getAngleMotorPosition() {
         double positionRevolutions = KablamaArmConstants.ANGLE_MOTOR_POSITION_SIGNAL.refresh().getValue();
         return Rotation2d.fromRotations(positionRevolutions);
     }
