@@ -35,11 +35,38 @@ public class Arm extends SubsystemBase {
     private Arm() {
     }
 
-    public Command getSetTargetArmPositionCommand(double elevatorPosition, Rotation2d angle, double anglePercentage, double elevatorPercentage){
-        generateElevatorMotorProfile(elevatorPosition, elevatorPercentage);
-        generateAngleMotorProfile(angle, anglePercentage);
-        return new FunctionalCommand(
+    public Command getSetTargetArmPositionCommand(ArmConstants.ArmState targetState){
+        return new DeferredCommand(
+                () -> getCurrentSetTargetStateCommand(targetState),
+                Set.of(this)
+        );
+    }
 
+    public Command getSetTargetArmPositionCommand(double elevatorPosition, Rotation2d angle, double anglePercentage){
+        return new DeferredCommand(
+                () -> getCurrentSetTargetStateCommand(elevatorPosition, angle),
+                Set.of(this)
+        );
+    }
+
+    public Command getSetTargetElevatorCommand(double elevatorPosition, double elevatorPercentage){
+        return new FunctionalCommand(
+                () -> generateElevatorMotorProfile(elevatorPosition,elevatorPercentage),
+                this:: setTargetElevatorFromProfile,
+                (interrupted) -> {
+                },
+                () -> false,
+                this
+        );
+    }
+    public Command getSetTargetAngleCommand(Rotation2d angle, double anglePercentage){
+        return new FunctionalCommand(
+                () -> generateAngleMotorProfile(angle,anglePercentage),
+                this:: setTargetAngleFromProfile,
+                (interrupted) -> {
+                },
+                () -> false,
+                this
         );
     }
 
@@ -50,10 +77,16 @@ public class Arm extends SubsystemBase {
         );
     }
 
-    public Command getSetTargetArmPositionCommand(ArmConstants.ArmState targetState){
-        return new DeferredCommand(
-                () -> getCurrentSetTargetStateCommand(targetState),
-                Set.of(this)
+    public Command getCurrentSetTargetStateCommand(double elevatorPosition, Rotation2d angle) {
+        if (isElevatorOpening(elevatorPosition)) {
+            return new SequentialCommandGroup(
+                    getSetTargetAngleCommand(angle),
+                    getSetTargetElevatorPositionCommand(elevatorPosition)
+            );
+        }
+        return new SequentialCommandGroup(
+                getSetTargetElevatorPositionCommand(elevatorPosition),
+                getSetTargetAngleCommand(angle)
         );
     }
 
