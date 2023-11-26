@@ -1,6 +1,6 @@
 package frc.trigon.robot.subsystems.sideshooter;
 
-
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkMax;
@@ -10,6 +10,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.trigon.robot.utilities.Conversions;
 
@@ -19,6 +20,8 @@ public class SideShooter extends SubsystemBase {
     private final TalonFX shootingMotor = SideShooterConstants.SHOOTING_MOTOR;
     private final CANSparkMax angleMotor = SideShooterConstants.ANGLE_MOTOR;
     private final CANcoder angleEncoder = SideShooterConstants.ANGLE_ENCODER;
+
+    private final VoltageOut shootingVoltageRequest = new VoltageOut(0,SideShooterConstants.FOC_ENABLE,false);
 
     private TrapezoidProfile angleMotorProfile = null;
     private double lastAngleMotorProfileGenerationTime;
@@ -41,6 +44,14 @@ public class SideShooter extends SubsystemBase {
         );
     }
 
+    public Command getSetTargetShootingVoltageCommand(double voltage){
+        return new StartEndCommand(
+                () -> setTargetShootingVoltage(voltage),
+                this::stopAngleMotor,
+                this
+        );
+    }
+
     private void generateAngleMotorProfile(Rotation2d targetAngle) {
         angleMotorProfile = new TrapezoidProfile(
                 SideShooterConstants.ANGLE_CONSTRAINTS,
@@ -53,10 +64,24 @@ public class SideShooter extends SubsystemBase {
     private void setTargetAngleFromProfile() {
         if (angleMotorProfile == null) {
             stopAngleMotor();
+            return;
         }
 
         TrapezoidProfile.State targetState = angleMotorProfile.calculate(getAngleMotorProfileTime());
         angleMotor.setVoltage(calculateAngleMotorOutput());
+    }
+
+    private double calculateAngleMotorOutput() {
+        TrapezoidProfile.State targetState = angleMotorProfile.calculate(getAngleMotorProfileTime());
+        double pidOutput = SideShooterConstants.ANGLE_PID_CONTROLLER.calculate(
+                getAnglePosition().getDegrees(),
+                targetState.position
+        );
+        double feedforward = SideShooterConstants.ANGLE_MOTOR_FEEDFORWARD.calculate(
+                Units.degreesToRadians(targetState.position),
+                Units.degreesToRadians(targetState.velocity)
+        );
+        return pidOutput + feedforward;
     }
 
     private Rotation2d getAnglePosition() {
@@ -71,17 +96,8 @@ public class SideShooter extends SubsystemBase {
         return Timer.getFPGATimestamp() - lastAngleMotorProfileGenerationTime;
     }
 
-    private double calculateAngleMotorOutput() {
-        TrapezoidProfile.State targetState = angleMotorProfile.calculate(getAngleMotorProfileTime());
-        double pidOutput = SideShooterConstants.ANGLE_PID_CONTROLLER.calculate(
-                getAnglePosition().getDegrees(),
-                targetState.position
-        );
-        double feedforward = SideShooterConstants.ANGLE_MOTOR_FEEDFORWARD.calculate(
-                Units.degreesToRadians(targetState.position),
-                Units.degreesToRadians(targetState.velocity)
-        );
-        return pidOutput + feedforward;
+    private void setTargetShootingVoltage(double voltage){
+        shootingMotor.setControl(shootingVoltageRequest.withOutput(voltage));
     }
 
     private void stopAngleMotor() {

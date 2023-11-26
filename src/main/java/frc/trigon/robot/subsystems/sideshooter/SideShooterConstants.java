@@ -55,8 +55,11 @@ public class SideShooterConstants {
       ANGLE_MOTOR_KS,ANGLE_MOTOR_KG,ANGLE_MOTOR_KV,ANGLE_MOTOR_KA
     );
 
-    static final StatusSignal<Double> ANGLE_ENCODER_POSITION_SIGNAL = ANGLE_ENCODER.getPosition();
-    static final StatusSignal<Double> ANGLE_ENCODER_VELOCITY_SIGNAL = ANGLE_ENCODER.getVelocity();
+    static final StatusSignal<Double>
+            ANGLE_ENCODER_POSITION_SIGNAL = ANGLE_ENCODER.getPosition(),
+            ANGLE_ENCODER_VELOCITY_SIGNAL = ANGLE_ENCODER.getVelocity();
+
+    static final boolean FOC_ENABLE = true;
 
     static {
         configureAngleEncoder();
@@ -89,6 +92,7 @@ public class SideShooterConstants {
         config.MagnetSensor.SensorDirection = ANGLE_ENCODER_DIRECTION;
         ANGLE_ENCODER.getConfigurator().apply(config);
 
+        ANGLE_ENCODER_VELOCITY_SIGNAL.setUpdateFrequency(100);
         ANGLE_ENCODER_POSITION_SIGNAL.setUpdateFrequency(100);
         ANGLE_ENCODER.optimizeBusUtilization();
     }
