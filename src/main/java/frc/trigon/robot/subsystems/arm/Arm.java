@@ -35,6 +35,21 @@ public class Arm extends SubsystemBase {
     private Arm() {
     }
 
+    public Command getSetTargetArmPositionCommand(double elevatorPosition, Rotation2d angle, double anglePercentage, double elevatorPercentage){
+        generateElevatorMotorProfile(elevatorPosition, elevatorPercentage);
+        generateAngleMotorProfile(angle, anglePercentage);
+        return new FunctionalCommand(
+
+        );
+    }
+
+    public Command getSetTargetArmPositionCommand(double elevatorPosition, Rotation2d angle){
+        return new SequentialCommandGroup(
+                getSetTargetAngleCommand(angle),
+                getSetTargetElevatorPositionCommand(elevatorPosition)
+        );
+    }
+
     public Command getSetTargetArmPositionCommand(ArmConstants.ArmState targetState){
         return new DeferredCommand(
                 () -> getCurrentSetTargetStateCommand(targetState),
@@ -90,10 +105,28 @@ public class Arm extends SubsystemBase {
         lastAngleProfileGenerationTime = Timer.getFPGATimestamp();
     }
 
+    private void generateAngleMotorProfile(Rotation2d targetAngle, double speedPercentage) {
+        angleMotorProfile = new TrapezoidProfile(
+                Conversions.scaleConstraints(ArmConstants.ANGLE_CONSTRAINS, speedPercentage),
+                new TrapezoidProfile.State(targetAngle.getDegrees(), 0),
+                new TrapezoidProfile.State(getAnglePosition().getDegrees(), getAngleVelocityDegreesPerSecond())
+        );
+        lastAngleProfileGenerationTime = Timer.getFPGATimestamp();
+    }
+
     private void generateElevatorMotorProfile(double targetElevatorPosition) {
         elevatorMotorProfile = new TrapezoidProfile(
                 ArmConstants.ELEVATOR_CONSTRAINS,
                 new TrapezoidProfile.State(targetElevatorPosition, 0),
+                new TrapezoidProfile.State(getElevatorPositionRevolutions(), getElevatorVelocityRevolutionsPerSecond())
+        );
+        lastElevatorProfileGenerationTime = Timer.getFPGATimestamp();
+    }
+
+    private void generateElevatorMotorProfile(double targetElevator, double speedPercentage) {
+        elevatorMotorProfile = new TrapezoidProfile(
+                Conversions.scaleConstraints(ArmConstants.ELEVATOR_CONSTRAINS, speedPercentage),
+                new TrapezoidProfile.State(targetElevator, 0),
                 new TrapezoidProfile.State(getElevatorPositionRevolutions(), getElevatorVelocityRevolutionsPerSecond())
         );
         lastElevatorProfileGenerationTime = Timer.getFPGATimestamp();
