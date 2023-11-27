@@ -1,6 +1,6 @@
 package frc.trigon.robot.subsystems.arm;
 
-import com.ctre.phoenix6.StatusSignal;
+import edu.wpi.first.math.geometry.Rotation2d;
 import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.subsystems.arm.toohardarm.ToohardArmIO;
 import org.littletonrobotics.junction.AutoLog;
@@ -19,11 +19,11 @@ public class ArmIO {
 
     }
 
-    protected void setAngleMotorPower(double power) {
+    protected void setTargetAngle(Rotation2d targetAngle) {
 
     }
 
-    protected void setElevatorMotorPower(double power) {
+    protected void setTargetElevatorPosition(double targetPosition) {
 
     }
 
@@ -41,7 +41,7 @@ public class ArmIO {
         public double elevatorMotorsVoltage = 0;
         public double elevatorPositionRevolutions = 0;
         public double elevatorVelocityRevolutionsPerSecond = 0;
-        public StatusSignal<Double> angleEncoderPositionSignal = null;
-        public StatusSignal<Double> angleEncoderVelocitySignal = null;
+        public double angleEncoderPositionSignal = 0;
+        public double angleEncoderVelocitySignal = 0;
     }
 }

@@ -1,8 +1,9 @@
 package frc.trigon.robot.subsystems.arm.toohardarm;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix6.StatusSignal;
 import com.revrobotics.CANSparkMax;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import frc.trigon.robot.subsystems.arm.ArmIO;
 import frc.trigon.robot.subsystems.arm.ArmInputsAutoLogged;
 import frc.trigon.robot.utilities.Conversions;
@@ -14,6 +15,8 @@ public class ToohardArmIO extends ArmIO {
             masterElevatorMotor = ToohardArmConstants.MASTER_ELEVATOR_MOTOR,
             followerElevatorMotor = ToohardArmConstants.FOLLOWER_ELEVATOR_MOTOR;
     private final TalonSRX elevatorEncoder = ToohardArmConstants.ELEVATOR_ENCODER;
+    private final double angleEncoderPositionSignal = ToohardArmConstants.ANGLE_ENCODER_POSITION_SIGNAL.getValue();
+    private final double angleEncoderVelocitySignal = ToohardArmConstants.ANGLE_ENCODER_VELOCITY_SIGNAL.getValue();
 
     @Override
     protected void updateInputs(ArmInputsAutoLogged inputs) {
@@ -23,26 +26,36 @@ public class ToohardArmIO extends ArmIO {
         inputs.elevatorPositionRevolutions = elevatorEncoder.getSelectedSensorPosition();
         inputs.elevatorVelocityRevolutionsPerSecond = Conversions.perHundredMsToPerSecond(elevatorEncoder.getSelectedSensorVelocity());
 
-        inputs.anglePIDController = ToohardArmConstants.ANGLE_PID_CONTROLLER;
-        inputs.elevatorPIDController = ToohardArmConstants.ELEVATOR_PID_CONTROLLER;
-
-        inputs.angleFeedforward = ToohardArmConstants.ANGLE_FEEDFORWARD;
-        inputs.elevatorFeedforward = ToohardArmConstants.ELEVATOR_FEEDFORWARD;
-
-        inputs.angleEncoderPositionSignal = ToohardArmConstants.ANGLE_ENCODER_POSITION_SIGNAL;
-        inputs.angleEncoderVelocitySignal = ToohardArmConstants.ANGLE_ENCODER_VELOCITY_SIGNAL;
+        inputs.angleEncoderPositionSignal = angleEncoderPositionSignal;
+        inputs.angleEncoderVelocitySignal = angleEncoderVelocitySignal;
     }
 
     @Override
-    protected void setAngleMotorPower(double power) {
-        masterAngleMotor.set(power);
-        followerAngleMotor.set(power);
+    protected void setTargetAngle(Rotation2d targetAngle) {
+        double pidOutput = ToohardArmConstants.ANGLE_PID_CONTROLLER.calculate(
+                angleEncoderPositionSignal,
+                targetAngle.getDegrees()
+        );
+        double feedforward = ToohardArmConstants.ANGLE_FEEDFORWARD.calculate(
+                targetAngle.getRadians(),
+                Units.degreesToRadians(angleEncoderVelocitySignal)
+        );
+        masterAngleMotor.set(pidOutput + feedforward);
+        followerAngleMotor.set(pidOutput + feedforward);
     }
 
     @Override
-    protected void setElevatorMotorPower(double power) {
-        masterElevatorMotor.set(power);
-        followerElevatorMotor.set(power);
+    protected void setTargetElevatorPosition(double targetPosition) {
+        double pidOutput = ToohardArmConstants.ELEVATOR_PID_CONTROLLER.calculate(
+                elevatorEncoder.getSelectedSensorPosition(),
+                targetPosition
+        );
+        double feedforward = ToohardArmConstants.ELEVATOR_FEEDFORWARD.calculate(
+                Units.degreesToRadians(elevatorEncoder.getSelectedSensorPosition()),
+                Units.degreesToRadians(elevatorEncoder.getSelectedSensorVelocity())
+        );
+        masterElevatorMotor.set(pidOutput + feedforward);
+        followerElevatorMotor.set(pidOutput + feedforward);
     }
 
     @Override
