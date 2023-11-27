@@ -1,5 +1,6 @@
 package frc.trigon.robot.subsystems.sideshooter;
 
+import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -9,6 +10,9 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 public class SideShooterConstants {
     private static final int
@@ -22,9 +26,27 @@ public class SideShooterConstants {
     private static final double ENCODER_OFFSET = 0;
     private static final AbsoluteSensorRangeValue ENCODER_RANGE_VALUE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
     private static final double VOLTAGE_COMPENSATION_VALUE = 0;
+    private static final double
+            MAX_ANGLE_VELOCITY = 0,
+            MAX_ANGLE_ACCELERATION = 0;
     static final CANcoder ANGLE_ENCODER = new CANcoder(ANGLE_ENCODER_ID);
     static final TalonFX SHOOTING_MOTOR = new TalonFX(SHOOTING_MOTOR_ID);
     static final CANSparkMax ANGEL_MOTOR = new CANSparkMax(ANGLE_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless);
+    static final boolean FOC_ENABLED = true;
+    static final TrapezoidProfile.Constraints ANGLE_CONSTRAINTS = new TrapezoidProfile.Constraints(
+            MAX_ANGLE_VELOCITY, MAX_ANGLE_ACCELERATION
+    );
+    static final StatusSignal<Double> ANGEL_ENCODER_POSITION_SIGNAL = ANGLE_ENCODER.getPosition();
+    static final StatusSignal<Double> ANGEL_ENCODER_VELOCITY_SIGNAL = ANGLE_ENCODER.getVelocity();
+    private static final double
+            ANGLE_P = 0,
+            ANGLE_I = 0,
+            ANGLE_D = 0;
+    static final PIDController ANGLE_PID_CONTROLLER = new PIDController(
+            ANGLE_P,
+            ANGLE_I,
+            ANGLE_D
+    );
 
     static {
         configureShootingMotor();
@@ -42,19 +64,35 @@ public class SideShooterConstants {
         SHOOTING_MOTOR.optimizeBusUtilization();
     }
 
-    private static void configureAngleMotor(){
+    private static void configureAngleMotor() {
         ANGEL_MOTOR.restoreFactoryDefaults();
         ANGEL_MOTOR.setIdleMode(ANGLE_IDLE_MODE);
         ANGEL_MOTOR.setInverted(ANGLE_INVERTED);
         ANGEL_MOTOR.enableVoltageCompensation(VOLTAGE_COMPENSATION_VALUE);
     }
 
-    private static void configureAngleEncoder(){
+    private static void configureAngleEncoder() {
         CANcoderConfiguration config = new CANcoderConfiguration();
         config.MagnetSensor.MagnetOffset = ENCODER_OFFSET;
         config.MagnetSensor.AbsoluteSensorRange = ENCODER_RANGE_VALUE;
         ANGLE_ENCODER.getConfigurator().apply(config);
+        ANGEL_ENCODER_POSITION_SIGNAL.setUpdateFrequency(100);
+        ANGEL_ENCODER_VELOCITY_SIGNAL.setUpdateFrequency(100);
         ANGLE_ENCODER.optimizeBusUtilization();
     }
 
+    public enum SideShooterState {
+        COLLECTION(Rotation2d.fromDegrees(0),0),
+        HIGH_STATE(Rotation2d.fromDegrees(0), 0),
+        MID_STATE(Rotation2d.fromDegrees(0), 0),
+        LOW_STATE(Rotation2d.fromDegrees(0), 0);
+
+        final Rotation2d angle;
+        final double voltage;
+
+        SideShooterState(Rotation2d angle, double voltage) {
+            this.angle = angle;
+            this.voltage = voltage;
+        }
+    }
 }
