@@ -1,25 +1,28 @@
 package frc.trigon.robot.subsystems.collector.simulationcollector;
 
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
+import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.subsystems.collector.CollectorIO;
 import frc.trigon.robot.subsystems.collector.CollectorInputsAutoLogged;
 
 public class SimulationCollectorIO extends CollectorIO {
-    private final DCMotorSim dcMotorSim = SimulationCollectorIOConstants.DC_MOTOR_SIM;
+    private final DCMotorSim motor = SimulationCollectorIOConstants.MOTOR;
+    private double voltage;
 
     @Override
     protected void updateInputs(CollectorInputsAutoLogged inputs) {
-        inputs.motorVoltage = dcMotorSim.getOutput().get(0, 0);
-        inputs.motorCurrent = dcMotorSim.getCurrentDrawAmps();
+        motor.update(RobotConstants.PERIODIC_TIME_SECONDS);
+        inputs.motorVoltage = voltage;
+        inputs.motorCurrent = motor.getCurrentDrawAmps();
     }
 
-    @Override
-    protected void setPower(double power) {
-        dcMotorSim.setInputVoltage(power);
+    protected void setVoltage(double voltage) {
+        this.voltage = voltage;
+        motor.setInputVoltage(voltage);
     }
 
     @Override
     protected void stop() {
-        dcMotorSim.setInputVoltage(0);
+        motor.setInputVoltage(0);
     }
 }
