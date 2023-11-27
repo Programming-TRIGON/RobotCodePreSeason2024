@@ -1,7 +1,6 @@
 package frc.trigon.robot.subsystems.arm.toohardarm;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix6.StatusSignal;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
@@ -19,39 +18,25 @@ public class ToohardArmIO extends ArmIO {
 
     @Override
     protected void updateInputs(ArmInputsAutoLogged inputs) {
-        inputs.angleMotorVoltage = masterAngleMotor.getBusVoltage();
         inputs.elevatorMotorVoltage = masterElevatorMotor.getBusVoltage();
-
         inputs.elevatorPositionRevolutions = getElevatorPositionRevolutions();
         inputs.elevatorVelocityRevolutionsPerSecond = getElevatorVelocityRevolutionsPerSecond();
 
+        inputs.angleMotorVoltage = masterAngleMotor.getBusVoltage();
         inputs.angleEncoderPositionSignal = getAngleEncoderPosition();
         inputs.angleEncoderVelocitySignal = Conversions.perHundredMsToPerSecond(Conversions.revolutionsToDegrees(getAngleEncoderVelocity()));
     }
 
     @Override
     protected void setTargetAngle(TrapezoidProfile.State targetState) {
-        double pidOutput = ToohardArmConstants.ANGLE_PID_CONTROLLER.calculate(
-                getAngleEncoderPosition(),
-                targetState.position
-        );
-        double feedforward = ToohardArmConstants.ANGLE_FEEDFORWARD.calculate(
-                Units.degreesToRadians(targetState.position),
-                targetState.velocity
-        );
-        masterAngleMotor.set(pidOutput + feedforward);
-        followerAngleMotor.set(pidOutput + feedforward);
+        masterAngleMotor.set(setAnglePowerFromProfile(targetState));
+        followerAngleMotor.set(setAnglePowerFromProfile(targetState));
     }
 
     @Override
     protected void setTargetElevatorPosition(TrapezoidProfile.State targetState) {
-        double pidOutput = ToohardArmConstants.ELEVATOR_PID_CONTROLLER.calculate(
-                elevatorEncoder.getSelectedSensorPosition(),
-                targetState.position
-        );
-        double feedforward = ToohardArmConstants.ELEVATOR_FEEDFORWARD.calculate(targetState.velocity);
-        masterElevatorMotor.set(pidOutput + feedforward);
-        followerElevatorMotor.set(pidOutput + feedforward);
+        masterElevatorMotor.set(setElevatorPowerFromProfile(targetState));
+        followerElevatorMotor.set(setElevatorPowerFromProfile(targetState));
     }
 
     @Override
@@ -80,5 +65,26 @@ public class ToohardArmIO extends ArmIO {
 
     private double getAngleEncoderVelocity() {
         return ToohardArmConstants.ANGLE_ENCODER_VELOCITY_SIGNAL.refresh().getValue();
+    }
+
+    private double setElevatorPowerFromProfile(TrapezoidProfile.State targetState) {
+        double pidOutput = ToohardArmConstants.ELEVATOR_PID_CONTROLLER.calculate(
+                elevatorEncoder.getSelectedSensorPosition(),
+                targetState.position
+        );
+        double feedforward = ToohardArmConstants.ELEVATOR_FEEDFORWARD.calculate(targetState.velocity);
+        return pidOutput + feedforward;
+    }
+
+    private double setAnglePowerFromProfile(TrapezoidProfile.State targetState) {
+        double pidOutput = ToohardArmConstants.ANGLE_PID_CONTROLLER.calculate(
+                getAngleEncoderPosition(),
+                targetState.position
+        );
+        double feedforward = ToohardArmConstants.ANGLE_FEEDFORWARD.calculate(
+                Units.degreesToRadians(targetState.position),
+                targetState.velocity
+        );
+        return pidOutput + feedforward;
     }
 }
