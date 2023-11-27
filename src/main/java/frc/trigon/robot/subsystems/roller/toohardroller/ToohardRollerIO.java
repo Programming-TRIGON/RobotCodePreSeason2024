@@ -3,7 +3,6 @@ package frc.trigon.robot.subsystems.roller.toohardroller;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
-import edu.wpi.first.wpilibj.DigitalInput;
 import frc.trigon.robot.subsystems.roller.RollerIO;
 import frc.trigon.robot.subsystems.roller.RollerInputsAutoLogged;
 
@@ -17,7 +16,7 @@ public class ToohardRollerIO extends RollerIO {
         inputs.angleMotorVoltage = angleMotor.getMotorOutputVoltage();
         inputs.collectionMotorCurrent = collectionMotor.getOutputCurrent();
         inputs.collectionMotorVoltage = collectionMotor.getBusVoltage();
-        inputs.forwardLimitSwitch =  ToohardRollerConstants.FORWARD_LIMIT_SWITCH.get();
+        inputs.forwardLimitSwitch = ToohardRollerConstants.FORWARD_LIMIT_SWITCH.get();
         inputs.backwardLimitSwitch = ToohardRollerConstants.BACKWARD_LIMIT_SWITCH.get();
     }
 
@@ -27,13 +26,13 @@ public class ToohardRollerIO extends RollerIO {
     }
 
     @Override
-    protected void stopAngleMotor() {
-        angleMotor.set(ControlMode.Disabled, 0);
+    protected void setCollectionMotorPower(double power) {
+        collectionMotor.set(power);
     }
 
     @Override
-    protected void setCollectionMotorPower(double power) {
-        collectionMotor.set(power);
+    protected void stopAngleMotor() {
+        angleMotor.set(ControlMode.Disabled, 0);
     }
 
     @Override
