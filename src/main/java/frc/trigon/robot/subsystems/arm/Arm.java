@@ -131,7 +131,7 @@ public class Arm extends SubsystemBase {
         }
 
         TrapezoidProfile.State targetState = angleMotorProfile.calculate(getAngleProfileTime());
-        armIO.setTargetAngle(Rotation2d.fromDegrees(targetState.position));
+        armIO.setTargetAngle(targetState);
     }
 
     private void setTargetElevatorPositionFromProfile() {
@@ -141,7 +141,7 @@ public class Arm extends SubsystemBase {
         }
 
         TrapezoidProfile.State targetState = elevatorMotorProfile.calculate(getElevatorProfileTime());
-        armIO.setTargetElevatorPosition(targetState.position);
+        armIO.setTargetElevatorPosition(targetState);
     }
 
     private double getAngleProfileTime() {

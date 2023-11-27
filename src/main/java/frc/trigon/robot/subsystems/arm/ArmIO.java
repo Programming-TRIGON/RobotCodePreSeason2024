@@ -1,6 +1,6 @@
 package frc.trigon.robot.subsystems.arm;
 
-import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.subsystems.arm.toohardarm.ToohardArmIO;
 import org.littletonrobotics.junction.AutoLog;
@@ -19,11 +19,11 @@ public class ArmIO {
 
     }
 
-    protected void setTargetAngle(ArmConstants.ArmState targetState) {
+    protected void setTargetAngle(TrapezoidProfile.State targetState) {
 
     }
 
-    protected void setTargetElevatorPosition(ArmConstants.ArmState targetState) {
+    protected void setTargetElevatorPosition(TrapezoidProfile.State targetState) {
 
     }
 

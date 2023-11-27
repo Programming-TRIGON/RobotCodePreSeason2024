@@ -3,8 +3,8 @@ package frc.trigon.robot.subsystems.arm.toohardarm;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix6.StatusSignal;
 import com.revrobotics.CANSparkMax;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import frc.trigon.robot.subsystems.arm.ArmConstants;
 import frc.trigon.robot.subsystems.arm.ArmIO;
 import frc.trigon.robot.subsystems.arm.ArmInputsAutoLogged;
 import frc.trigon.robot.utilities.Conversions;
@@ -48,26 +48,26 @@ public class ToohardArmIO extends ArmIO {
     }
 
     @Override
-    protected void setTargetAngle(ArmConstants.ArmState targetState) {
+    protected void setTargetAngle(TrapezoidProfile.State targetState) {
         double pidOutput = ToohardArmConstants.ANGLE_PID_CONTROLLER.calculate(
                 angleEncoderPositionSignal.getValue(),
-                Target Angle
+                targetState.position
         );
         double feedforward = ToohardArmConstants.ANGLE_FEEDFORWARD.calculate(
-                Units.degreesToRadians(Target Angle),
-                Target Velocity
+                Units.degreesToRadians(targetState.position),
+                targetState.velocity
         );
         masterAngleMotor.set(pidOutput + feedforward);
         followerAngleMotor.set(pidOutput + feedforward);
     }
 
     @Override
-    protected void setTargetElevatorPosition(ArmConstants.ArmState targetState) {
+    protected void setTargetElevatorPosition(TrapezoidProfile.State targetState) {
         double pidOutput = ToohardArmConstants.ELEVATOR_PID_CONTROLLER.calculate(
                 elevatorEncoder.getSelectedSensorPosition(),
-                Target Position
+                targetState.position
         );
-        double feedforward = ToohardArmConstants.ELEVATOR_FEEDFORWARD.calculate(Target Velocity);
+        double feedforward = ToohardArmConstants.ELEVATOR_FEEDFORWARD.calculate(targetState.velocity);
         masterElevatorMotor.set(pidOutput + feedforward);
         followerElevatorMotor.set(pidOutput + feedforward);
     }
