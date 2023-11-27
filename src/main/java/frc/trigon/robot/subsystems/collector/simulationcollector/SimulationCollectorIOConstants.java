@@ -4,21 +4,14 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 
 public class SimulationCollectorIOConstants {
-    private static final double
-            NOMINAL_VOLTAGE_VOLTS = 1,
-            STALL_TORQUE_NEWTON_METERS = 1,
-            STALL_CURRENT_AMPS = 1,
-            FREE_CURRENT_AMPS = 1,
-            MOMENT_OF_INERTIA = 1;
-    private static final int NUM_MOTORS = 1;
-    private static final DCMotor GEARBOX = DCMotor.getFalcon500(NUM_MOTORS);
-    private static final double
-            JKG_METERS_SQUARED = 1,
-            GEARING = 1;
-    static final DCMotorSim MOTOR =
-            new DCMotorSim(
-                    GEARBOX,
-                    GEARING,
-                    JKG_METERS_SQUARED
+    private static final int MOTOR_AMOUNT = 1;
+    private static final DCMotor MOTOR_GEARBOX = DCMotor.getBag(MOTOR_AMOUNT);
+    private static final double MOMENT_OF_INERTIA = 1;
+    private static final double GEAR_RATIO = 12.8;
+    static final int VOLTAGE_COMPENSATION_SATURATION = 12;
+    static final DCMotorSim MOTOR = new DCMotorSim(
+                    MOTOR_GEARBOX,
+                    GEAR_RATIO,
+                    MOMENT_OF_INERTIA
             );
 }
