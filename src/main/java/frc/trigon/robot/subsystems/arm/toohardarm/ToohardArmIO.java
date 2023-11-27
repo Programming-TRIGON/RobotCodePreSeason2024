@@ -1,9 +1,10 @@
 package frc.trigon.robot.subsystems.arm.toohardarm;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix6.StatusSignal;
 import com.revrobotics.CANSparkMax;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import frc.trigon.robot.subsystems.arm.ArmConstants;
 import frc.trigon.robot.subsystems.arm.ArmIO;
 import frc.trigon.robot.subsystems.arm.ArmInputsAutoLogged;
 import frc.trigon.robot.utilities.Conversions;
@@ -15,45 +16,58 @@ public class ToohardArmIO extends ArmIO {
             masterElevatorMotor = ToohardArmConstants.MASTER_ELEVATOR_MOTOR,
             followerElevatorMotor = ToohardArmConstants.FOLLOWER_ELEVATOR_MOTOR;
     private final TalonSRX elevatorEncoder = ToohardArmConstants.ELEVATOR_ENCODER;
-    private final double angleEncoderPositionSignal = ToohardArmConstants.ANGLE_ENCODER_POSITION_SIGNAL.getValue();
-    private final double angleEncoderVelocitySignal = ToohardArmConstants.ANGLE_ENCODER_VELOCITY_SIGNAL.getValue();
+    private final StatusSignal<Double> angleEncoderPositionSignal = ToohardArmConstants.ANGLE_ENCODER_POSITION_SIGNAL;
+    private final StatusSignal<Double> angleEncoderVelocitySignal = ToohardArmConstants.ANGLE_ENCODER_VELOCITY_SIGNAL;
 
     @Override
     protected void updateInputs(ArmInputsAutoLogged inputs) {
-        inputs.angleMotorsVoltage = masterAngleMotor.getBusVoltage();
-        inputs.elevatorMotorsVoltage = masterElevatorMotor.getBusVoltage();
+        inputs.angleMotorVoltage = masterAngleMotor.getBusVoltage();
+        inputs.elevatorMotorVoltage = masterElevatorMotor.getBusVoltage();
 
-        inputs.elevatorPositionRevolutions = Conversions.magTicksToRevolutions(elevatorEncoder.getSelectedSensorPosition());
-        inputs.elevatorVelocityRevolutionsPerSecond = Conversions.perHundredMsToPerSecond(Conversions.magTicksToRevolutions(elevatorEncoder.getSelectedSensorVelocity()));
+        inputs.elevatorPositionRevolutions = getElevatorPositionRevolutions();
+        inputs.elevatorVelocityRevolutionsPerSecond = getElevatorVelocityRevolutionsPerSecond();
 
-        inputs.angleEncoderPositionSignal = angleEncoderPositionSignal;
-        inputs.angleEncoderVelocitySignal = angleEncoderVelocitySignal;
+        inputs.angleEncoderPositionSignal = getAngleEncoderPositionSignal();
+        inputs.angleEncoderVelocitySignal = getAngleEncoderVelocitySignal();
+    }
+
+    private double getElevatorPositionRevolutions() {
+        return Conversions.magTicksToRevolutions(elevatorEncoder.getSelectedSensorPosition());
+    }
+
+    private double getElevatorVelocityRevolutionsPerSecond() {
+        return Conversions.perHundredMsToPerSecond(Conversions.magTicksToRevolutions(elevatorEncoder.getSelectedSensorVelocity()));
+    }
+
+    private double getAngleEncoderPositionSignal() {
+        return angleEncoderPositionSignal.getValue();
+    }
+
+    private double getAngleEncoderVelocitySignal() {
+        return angleEncoderVelocitySignal.getValue();
     }
 
     @Override
-    protected void setTargetAngle(Rotation2d targetAngle) {
+    protected void setTargetAngle(ArmConstants.ArmState targetState) {
         double pidOutput = ToohardArmConstants.ANGLE_PID_CONTROLLER.calculate(
-                angleEncoderPositionSignal,
-                targetAngle.getDegrees()
+                angleEncoderPositionSignal.getValue(),
+                Target Angle
         );
         double feedforward = ToohardArmConstants.ANGLE_FEEDFORWARD.calculate(
-                targetAngle.getRadians(),
-                Units.degreesToRadians(angleEncoderVelocitySignal)
+                Units.degreesToRadians(Target Angle),
+                Target Velocity
         );
         masterAngleMotor.set(pidOutput + feedforward);
         followerAngleMotor.set(pidOutput + feedforward);
     }
 
     @Override
-    protected void setTargetElevatorPosition(double targetPosition) {
+    protected void setTargetElevatorPosition(ArmConstants.ArmState targetState) {
         double pidOutput = ToohardArmConstants.ELEVATOR_PID_CONTROLLER.calculate(
                 elevatorEncoder.getSelectedSensorPosition(),
-                targetPosition
+                Target Position
         );
-        double feedforward = ToohardArmConstants.ELEVATOR_FEEDFORWARD.calculate(
-                Units.degreesToRadians(elevatorEncoder.getSelectedSensorPosition()),
-                Units.degreesToRadians(elevatorEncoder.getSelectedSensorVelocity())
-        );
+        double feedforward = ToohardArmConstants.ELEVATOR_FEEDFORWARD.calculate(Target Velocity);
         masterElevatorMotor.set(pidOutput + feedforward);
         followerElevatorMotor.set(pidOutput + feedforward);
     }

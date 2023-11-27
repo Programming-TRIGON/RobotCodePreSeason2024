@@ -19,11 +19,11 @@ public class ArmIO {
 
     }
 
-    protected void setTargetAngle(Rotation2d targetAngle) {
+    protected void setTargetAngle(ArmConstants.ArmState targetState) {
 
     }
 
-    protected void setTargetElevatorPosition(double targetPosition) {
+    protected void setTargetElevatorPosition(ArmConstants.ArmState targetState) {
 
     }
 
@@ -37,10 +37,11 @@ public class ArmIO {
 
     @AutoLog
     protected static class ArmInputs {
-        public double angleMotorsVoltage = 0;
-        public double elevatorMotorsVoltage = 0;
+        public double elevatorMotorVoltage = 0;
         public double elevatorPositionRevolutions = 0;
         public double elevatorVelocityRevolutionsPerSecond = 0;
+
+        public double angleMotorVoltage = 0;
         public double angleEncoderPositionSignal = 0;
         public double angleEncoderVelocitySignal = 0;
     }
