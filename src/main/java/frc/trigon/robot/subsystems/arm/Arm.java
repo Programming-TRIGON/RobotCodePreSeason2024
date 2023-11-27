@@ -160,26 +160,5 @@ public class Arm extends SubsystemBase {
     private double getAngleVelocityDegreesPerSecond() {
         return Conversions.perHundredMsToPerSecond(Conversions.revolutionsToDegrees(armInputs.angleEncoderVelocitySignal));
     }
-
-    private double calculateAngleMotorVoltage(TrapezoidProfile.State targetState) {
-        double pidOutput = armInputs.anglePIDController.calculate(
-                armInputs.angleEncoderPositionSignal,
-                targetState.position
-        );
-        double feedforward = armInputs.angleFeedforward.calculate(
-                Units.degreesToRadians(targetState.position),
-                Units.degreesToRadians(targetState.velocity)
-        );
-        return pidOutput + feedforward;
-    }
-
-    private double calculateElevatorMotorVoltage(TrapezoidProfile.State targetState) {
-        double pidOutput = armInputs.elevatorPIDController.calculate(
-                armInputs.elevatorPositionRevolutions,
-                targetState.position
-        );
-        double feedforward = armInputs.elevatorFeedforward.calculate(targetState.velocity);
-        return pidOutput + feedforward;
-    }
 }
 
