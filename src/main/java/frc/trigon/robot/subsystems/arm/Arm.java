@@ -157,7 +157,7 @@ public class Arm extends SubsystemBase {
     }
 
     private double getAngleVelocityDegreesPerSecond() {
-        return Conversions.perHundredMsToPerSecond(Conversions.revolutionsToDegrees(armInputs.angleEncoderVelocitySignal));
+        return armInputs.angleEncoderVelocitySignal;
     }
 }
 

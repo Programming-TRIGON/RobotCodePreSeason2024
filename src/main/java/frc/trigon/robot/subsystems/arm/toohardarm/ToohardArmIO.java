@@ -16,8 +16,6 @@ public class ToohardArmIO extends ArmIO {
             masterElevatorMotor = ToohardArmConstants.MASTER_ELEVATOR_MOTOR,
             followerElevatorMotor = ToohardArmConstants.FOLLOWER_ELEVATOR_MOTOR;
     private final TalonSRX elevatorEncoder = ToohardArmConstants.ELEVATOR_ENCODER;
-    private final StatusSignal<Double> angleEncoderPositionSignal = ToohardArmConstants.ANGLE_ENCODER_POSITION_SIGNAL;
-    private final StatusSignal<Double> angleEncoderVelocitySignal = ToohardArmConstants.ANGLE_ENCODER_VELOCITY_SIGNAL;
 
     @Override
     protected void updateInputs(ArmInputsAutoLogged inputs) {
@@ -27,30 +25,14 @@ public class ToohardArmIO extends ArmIO {
         inputs.elevatorPositionRevolutions = getElevatorPositionRevolutions();
         inputs.elevatorVelocityRevolutionsPerSecond = getElevatorVelocityRevolutionsPerSecond();
 
-        inputs.angleEncoderPositionSignal = getAngleEncoderPositionSignal();
-        inputs.angleEncoderVelocitySignal = getAngleEncoderVelocitySignal();
-    }
-
-    private double getElevatorPositionRevolutions() {
-        return Conversions.magTicksToRevolutions(elevatorEncoder.getSelectedSensorPosition());
-    }
-
-    private double getElevatorVelocityRevolutionsPerSecond() {
-        return Conversions.perHundredMsToPerSecond(Conversions.magTicksToRevolutions(elevatorEncoder.getSelectedSensorVelocity()));
-    }
-
-    private double getAngleEncoderPositionSignal() {
-        return angleEncoderPositionSignal.getValue();
-    }
-
-    private double getAngleEncoderVelocitySignal() {
-        return angleEncoderVelocitySignal.getValue();
+        inputs.angleEncoderPositionSignal = getAngleEncoderPosition();
+        inputs.angleEncoderVelocitySignal = Conversions.perHundredMsToPerSecond(Conversions.revolutionsToDegrees(getAngleEncoderVelocity()));
     }
 
     @Override
     protected void setTargetAngle(TrapezoidProfile.State targetState) {
         double pidOutput = ToohardArmConstants.ANGLE_PID_CONTROLLER.calculate(
-                angleEncoderPositionSignal.getValue(),
+                getAngleEncoderPosition(),
                 targetState.position
         );
         double feedforward = ToohardArmConstants.ANGLE_FEEDFORWARD.calculate(
@@ -82,5 +64,21 @@ public class ToohardArmIO extends ArmIO {
     protected void stopElevatorMotors() {
         masterElevatorMotor.stopMotor();
         followerElevatorMotor.stopMotor();
+    }
+
+    private double getElevatorPositionRevolutions() {
+        return Conversions.magTicksToRevolutions(elevatorEncoder.getSelectedSensorPosition());
+    }
+
+    private double getElevatorVelocityRevolutionsPerSecond() {
+        return Conversions.perHundredMsToPerSecond(Conversions.magTicksToRevolutions(elevatorEncoder.getSelectedSensorVelocity()));
+    }
+
+    private double getAngleEncoderPosition() {
+        return ToohardArmConstants.ANGLE_ENCODER_POSITION_SIGNAL.refresh().getValue();
+    }
+
+    private double getAngleEncoderVelocity() {
+        return ToohardArmConstants.ANGLE_ENCODER_VELOCITY_SIGNAL.refresh().getValue();
     }
 }
