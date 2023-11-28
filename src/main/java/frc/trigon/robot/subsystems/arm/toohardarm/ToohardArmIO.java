@@ -75,7 +75,8 @@ public class ToohardArmIO extends ArmIO {
     }
 
     private double getElevatorVelocityRevolutionsPerSecond() {
-        return Conversions.perHundredMsToPerSecond(Conversions.magTicksToRevolutions(elevatorEncoder.getSelectedSensorVelocity()));
+        double elevatorVelocityRevolutions = Conversions.magTicksToRevolutions(elevatorEncoder.getSelectedSensorVelocity());
+        return Conversions.perHundredMsToPerSecond(elevatorVelocityRevolutions);
     }
 
     private double getAnglePositionDegrees() {
@@ -83,7 +84,7 @@ public class ToohardArmIO extends ArmIO {
     }
 
     private double getAngleVelocityDegreesPerSecond() {
-        return Conversions.perHundredMsToPerSecond(Conversions.revolutionsToDegrees(ToohardArmConstants.ANGLE_ENCODER_VELOCITY_SIGNAL.refresh().getValue()));
+        return Conversions.revolutionsToDegrees(ToohardArmConstants.ANGLE_ENCODER_VELOCITY_SIGNAL.refresh().getValue());
     }
 
     private void setAngleMotorsState(TrapezoidProfile.State targetState)    {
