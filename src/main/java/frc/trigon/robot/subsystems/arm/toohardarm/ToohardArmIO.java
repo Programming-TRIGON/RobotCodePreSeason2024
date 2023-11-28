@@ -29,12 +29,12 @@ public class ToohardArmIO extends ArmIO {
 
     @Override
     protected void setTargetAngle(TrapezoidProfile.State targetState) {
-        setAngleMotorsState(targetState);
+        setAngleMotorsState(setAnglePowerFromProfile(targetState));
     }
 
     @Override
     protected void setTargetElevatorPosition(TrapezoidProfile.State targetState) {
-        setElevatorMotorsState(targetState);
+        setElevatorMotorsState(setElevatorPowerFromProfile(targetState));
     }
 
     @Override
@@ -87,13 +87,13 @@ public class ToohardArmIO extends ArmIO {
         return Conversions.revolutionsToDegrees(ToohardArmConstants.ANGLE_ENCODER_VELOCITY_SIGNAL.refresh().getValue());
     }
 
-    private void setAngleMotorsState(TrapezoidProfile.State targetState)    {
-        masterAngleMotor.set(setAnglePowerFromProfile(targetState));
-        followerAngleMotor.set(setAnglePowerFromProfile(targetState));
+    private void setAngleMotorsState(double power)    {
+        masterAngleMotor.set(power);
+        followerAngleMotor.set(power);
     }
 
-    private void setElevatorMotorsState(TrapezoidProfile.State targetState)    {
-        masterElevatorMotor.set(setElevatorPowerFromProfile(targetState));
-        followerElevatorMotor.set(setElevatorPowerFromProfile(targetState));
+    private void setElevatorMotorsState(double power)    {
+        masterElevatorMotor.set(power);
+        followerElevatorMotor.set(power);
     }
 }
