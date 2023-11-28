@@ -50,7 +50,7 @@ public class KablamaArmConstants {
             ANGLE_MOTOR_POSITION_SIGNAL = ANGLE_ENCODER.getPosition(),
             ANGLE_MOTOR_VELOCITY_SIGNAL = ANGLE_ENCODER.getVelocity();
 
-    static final double
+    private static final double
             ANGLE_P = 1,
             ANGLE_I = 0,
             ANGLE_D = 0,
