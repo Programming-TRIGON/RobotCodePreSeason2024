@@ -7,20 +7,25 @@ import frc.trigon.robot.subsystems.arm.ArmIO;
 import frc.trigon.robot.subsystems.arm.ArmInputsAutoLogged;
 
 public class SimulationArmIO extends ArmIO {
-    private final SingleJointedArmSim angleMotor = SimulationArmIOConstants.ANGLE_MOTOR;
-    private final ElevatorSim elevatorMotor = SimulationArmIOConstants.ELEVATOR_MOTOR;
+    private final SingleJointedArmSim
+            masterAngleMotor = SimulationArmIOConstants.MASTER_ANGLE_MOTOR,
+            followerAngleMotor = SimulationArmIOConstants.FOLLOWER_ANGLE_MOTOR;
+    private final ElevatorSim
+            masterElevatorMotor = SimulationArmIOConstants.MASTER_ELEVATOR_MOTOR,
+            followerElevatorMotor = SimulationArmIOConstants.FOLLOWER_ELEVATOR_MOTOR;
+
     @Override
     protected void updateInputs(ArmInputsAutoLogged inputs) {
     }
 
     @Override
     protected void stopAngleMotors() {
-        angleMotor.setInputVoltage(0);
+        setAngleVoltage(0);
     }
 
     @Override
     protected void stopElevatorMotors() {
-        elevatorMotor.setInputVoltage(0);
+        setElevatorVoltage(0);
     }
 
     @Override
@@ -32,10 +37,12 @@ public class SimulationArmIO extends ArmIO {
     }
 
     private void setAngleVoltage(double voltage) {
-        angleMotor.setInputVoltage(voltage);
+        masterAngleMotor.setInputVoltage(voltage);
+        followerAngleMotor.setInputVoltage(voltage);
     }
 
     private void setElevatorVoltage(double voltage) {
-        elevatorMotor.setInputVoltage(voltage);
+        masterElevatorMotor.setInputVoltage(voltage);
+        followerElevatorMotor.setInputVoltage(voltage);
     }
 }

@@ -1,5 +1,6 @@
 package frc.trigon.robot.subsystems.collector.simulationcollector;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.subsystems.collector.CollectorIO;
@@ -18,13 +19,15 @@ public class SimulationCollectorIO extends CollectorIO {
         inputs.motorCurrent = motor.getCurrentDrawAmps();
     }
 
-    protected void setVoltage(double power) {
+    @Override
+    protected void setPower(double power) {
         this.motorVoltage = Conversions.compensatedPowerToVoltage(power, SimulationCollectorIOConstants.VOLTAGE_COMPENSATION_SATURATION);
+        this.motorVoltage = MathUtil.clamp(this.motorVoltage, SimulationCollectorIOConstants.VOLTAGE_COMPENSATION_SATURATION * -1, SimulationCollectorIOConstants.VOLTAGE_COMPENSATION_SATURATION);
         motor.setInputVoltage(motorVoltage);
     }
 
     @Override
     protected void stop() {
-        motor.setInputVoltage(0);
+        setPower(0);
     }
 }
