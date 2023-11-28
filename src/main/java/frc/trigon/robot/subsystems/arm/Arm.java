@@ -11,7 +11,6 @@ import java.util.Set;
 
 public class Arm extends SubsystemBase {
     private final static Arm INSTANCE = new Arm();
-
     private final ArmIO armIO = ArmIO.generateIO();
     private final ArmInputsAutoLogged armInputs = new ArmInputsAutoLogged();
     private TrapezoidProfile
