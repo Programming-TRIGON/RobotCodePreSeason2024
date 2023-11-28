@@ -15,10 +15,12 @@ public class SimulationArmIO extends ArmIO {
 
     @Override
     protected void stopAngleMotors() {
+        angleMotor.setInputVoltage(0);
     }
 
     @Override
     protected void stopElevatorMotors() {
+        elevatorMotor.setInputVoltage(0);
     }
 
     @Override
@@ -27,5 +29,13 @@ public class SimulationArmIO extends ArmIO {
 
     @Override
     protected void setTargetElevatorState(TrapezoidProfile.State targetState) {
+    }
+
+    private void setAngleVoltage(double voltage) {
+        angleMotor.setInputVoltage(voltage);
+    }
+
+    private void setElevatorVoltage(double voltage) {
+        elevatorMotor.setInputVoltage(voltage);
     }
 }

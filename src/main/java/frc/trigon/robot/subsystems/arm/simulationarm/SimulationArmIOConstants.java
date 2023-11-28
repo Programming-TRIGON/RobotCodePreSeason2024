@@ -5,10 +5,10 @@ import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 
 public class SimulationArmIOConstants {
-    private static final int MOTOR_AMOUNT = 1;
+    private static final int MOTOR_AMOUNT = 2;
     private static final DCMotor
-            ANGLE_MOTOR_GEARBOX = DCMotor.getBag(MOTOR_AMOUNT),
-            ELEVATOR_MOTOR_GEARBOX = DCMotor.getBag(MOTOR_AMOUNT);
+            ANGLE_MOTOR_GEARBOX = DCMotor.getNEO(MOTOR_AMOUNT),
+            ELEVATOR_MOTOR_GEARBOX = DCMotor.getNEO(MOTOR_AMOUNT);
     private static final double MOMENT_OF_INERTIA = 1;
     private static final double GEAR_RATIO = 12.8;
     private static final double
