@@ -23,20 +23,18 @@ public class ToohardArmIO extends ArmIO {
         inputs.elevatorVelocityRevolutionsPerSecond = getElevatorVelocityRevolutionsPerSecond();
 
         inputs.angleMotorVoltage = masterAngleMotor.getBusVoltage();
-        inputs.angleEncoderPositionSignal = getAngleEncoderPosition();
-        inputs.angleEncoderVelocitySignal = Conversions.perHundredMsToPerSecond(Conversions.revolutionsToDegrees(getAngleEncoderVelocity()));
+        inputs.angleEncoderPosition = getAngleEncoderPositionRotations();
+        inputs.angleEncoderVelocity = getAngleEncoderVelocityRotationsPerSecond();
     }
 
     @Override
     protected void setTargetAngle(TrapezoidProfile.State targetState) {
-        masterAngleMotor.set(setAnglePowerFromProfile(targetState));
-        followerAngleMotor.set(setAnglePowerFromProfile(targetState));
+        setAngleMotorsPower(targetState);
     }
 
     @Override
     protected void setTargetElevatorPosition(TrapezoidProfile.State targetState) {
-        masterElevatorMotor.set(setElevatorPowerFromProfile(targetState));
-        followerElevatorMotor.set(setElevatorPowerFromProfile(targetState));
+        setElevatorMotorsPower(targetState);
     }
 
     @Override
@@ -51,25 +49,9 @@ public class ToohardArmIO extends ArmIO {
         followerElevatorMotor.stopMotor();
     }
 
-    private double getElevatorPositionRevolutions() {
-        return Conversions.magTicksToRevolutions(elevatorEncoder.getSelectedSensorPosition());
-    }
-
-    private double getElevatorVelocityRevolutionsPerSecond() {
-        return Conversions.perHundredMsToPerSecond(Conversions.magTicksToRevolutions(elevatorEncoder.getSelectedSensorVelocity()));
-    }
-
-    private double getAngleEncoderPosition() {
-        return ToohardArmConstants.ANGLE_ENCODER_POSITION_SIGNAL.refresh().getValue();
-    }
-
-    private double getAngleEncoderVelocity() {
-        return ToohardArmConstants.ANGLE_ENCODER_VELOCITY_SIGNAL.refresh().getValue();
-    }
-
     private double setElevatorPowerFromProfile(TrapezoidProfile.State targetState) {
         double pidOutput = ToohardArmConstants.ELEVATOR_PID_CONTROLLER.calculate(
-                elevatorEncoder.getSelectedSensorPosition(),
+                getElevatorPositionRevolutions(),
                 targetState.position
         );
         double feedforward = ToohardArmConstants.ELEVATOR_FEEDFORWARD.calculate(targetState.velocity);
@@ -78,7 +60,7 @@ public class ToohardArmIO extends ArmIO {
 
     private double setAnglePowerFromProfile(TrapezoidProfile.State targetState) {
         double pidOutput = ToohardArmConstants.ANGLE_PID_CONTROLLER.calculate(
-                getAngleEncoderPosition(),
+                getAngleEncoderPositionRotations(),
                 targetState.position
         );
         double feedforward = ToohardArmConstants.ANGLE_FEEDFORWARD.calculate(
@@ -86,5 +68,31 @@ public class ToohardArmIO extends ArmIO {
                 targetState.velocity
         );
         return pidOutput + feedforward;
+    }
+
+    private double getElevatorPositionRevolutions() {
+        return Conversions.magTicksToRevolutions(elevatorEncoder.getSelectedSensorPosition());
+    }
+
+    private double getElevatorVelocityRevolutionsPerSecond() {
+        return Conversions.perHundredMsToPerSecond(Conversions.magTicksToRevolutions(elevatorEncoder.getSelectedSensorVelocity()));
+    }
+
+    private double getAngleEncoderPositionRotations() {
+        return ToohardArmConstants.ANGLE_ENCODER_POSITION_SIGNAL.refresh().getValue();
+    }
+
+    private double getAngleEncoderVelocityRotationsPerSecond() {
+        return Conversions.perHundredMsToPerSecond(Conversions.revolutionsToDegrees(ToohardArmConstants.ANGLE_ENCODER_VELOCITY_SIGNAL.refresh().getValue()));
+    }
+
+    private void setAngleMotorsPower(TrapezoidProfile.State targetState)    {
+        masterAngleMotor.set(setAnglePowerFromProfile(targetState));
+        followerAngleMotor.set(setAnglePowerFromProfile(targetState));
+    }
+
+    private void setElevatorMotorsPower(TrapezoidProfile.State targetState)    {
+        masterElevatorMotor.set(setElevatorPowerFromProfile(targetState));
+        followerElevatorMotor.set(setElevatorPowerFromProfile(targetState));
     }
 }
