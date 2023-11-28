@@ -1,6 +1,7 @@
 package frc.trigon.robot.subsystems.roller;
 
 import edu.wpi.first.wpilibj2.command.*;
+import frc.trigon.robot.subsystems.arm.ArmIO;
 import frc.trigon.robot.subsystems.roller.toohardroller.ToohardRollerConstants;
 import frc.trigon.robot.utilities.Commands;
 import org.littletonrobotics.junction.Logger;
@@ -31,7 +32,7 @@ public class Roller extends SubsystemBase {
                 this::openRoller,
                 () -> {
                 },
-                (interrupted) -> stopAngleMotor(),
+                (interrupted) -> rollerIO.stopAngleMotor(),
                 this::isOpen,
                 this
         );
@@ -45,7 +46,7 @@ public class Roller extends SubsystemBase {
                 this::closeRoller,
                 () -> {
                 },
-                (interrupted) -> stopAngleMotor(),
+                (interrupted) -> rollerIO.stopAngleMotor(),
                 this::isClosed
         );
     }
@@ -56,7 +57,7 @@ public class Roller extends SubsystemBase {
     public Command getCollectCommand() {
         return new StartEndCommand(
                 this::collect,
-                this::stopCollection,
+                rollerIO::stopCollectionMotor,
                 this
         );
     }
@@ -66,7 +67,7 @@ public class Roller extends SubsystemBase {
      */
     public Command getStopCollectionCommand() {
         return new InstantCommand(
-                this::stopCollection,
+                rollerIO::stopCollectionMotor,
                 this
         );
     }
@@ -101,14 +102,6 @@ public class Roller extends SubsystemBase {
 
     private void collect() {
         rollerIO.setCollectionMotorPower(RollerConstants.COLLECTION_MOTOR_SPEED);
-    }
-
-    private void stopCollection() {
-        rollerIO.stopCollectionMotor();
-    }
-
-    private void stopAngleMotor() {
-        rollerIO.stopAngleMotor();
     }
 
     private boolean isOpen() {
