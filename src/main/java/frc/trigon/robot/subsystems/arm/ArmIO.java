@@ -37,7 +37,7 @@ public class ArmIO {
         public double elevatorVelocityRevolutionsPerSecond = 0;
 
         public double angleMotorVoltage = 0;
-        public double angleEncoderPosition = 0;
-        public double angleEncoderVelocity = 0;
+        public double anglePositionDegrees = 0;
+        public double angleVelocityDegreesPerSecond = 0;
     }
 }

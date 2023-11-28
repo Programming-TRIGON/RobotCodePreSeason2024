@@ -110,7 +110,7 @@ public class Arm extends SubsystemBase {
         angleMotorProfile = new TrapezoidProfile(
                 Conversions.scaleConstraints(ArmConstants.ANGLE_CONSTRAINTS, speedPercentage),
                 new TrapezoidProfile.State(targetAngle.getDegrees(), 0),
-                new TrapezoidProfile.State(armInputs.angleEncoderPosition, armInputs.angleEncoderVelocity)
+                new TrapezoidProfile.State(armInputs.anglePositionDegrees, armInputs.angleVelocityDegreesPerSecond)
         );
         lastAngleMotorProfileGenerationTime = Timer.getFPGATimestamp();
     }

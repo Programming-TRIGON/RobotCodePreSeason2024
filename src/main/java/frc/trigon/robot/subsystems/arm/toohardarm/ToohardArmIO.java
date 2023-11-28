@@ -23,18 +23,18 @@ public class ToohardArmIO extends ArmIO {
         inputs.elevatorVelocityRevolutionsPerSecond = getElevatorVelocityRevolutionsPerSecond();
 
         inputs.angleMotorVoltage = masterAngleMotor.getBusVoltage();
-        inputs.angleEncoderPosition = getAngleEncoderPositionRotations();
-        inputs.angleEncoderVelocity = getAngleEncoderVelocityRotationsPerSecond();
+        inputs.anglePositionDegrees = getAnglePositionDegrees();
+        inputs.angleVelocityDegreesPerSecond = getAngleVelocityDegreesPerSecond();
     }
 
     @Override
     protected void setTargetAngle(TrapezoidProfile.State targetState) {
-        setAngleMotorsPower(targetState);
+        setAngleMotorsState(targetState);
     }
 
     @Override
     protected void setTargetElevatorPosition(TrapezoidProfile.State targetState) {
-        setElevatorMotorsPower(targetState);
+        setElevatorMotorsState(targetState);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class ToohardArmIO extends ArmIO {
 
     private double setAnglePowerFromProfile(TrapezoidProfile.State targetState) {
         double pidOutput = ToohardArmConstants.ANGLE_PID_CONTROLLER.calculate(
-                getAngleEncoderPositionRotations(),
+                getAnglePositionDegrees(),
                 targetState.position
         );
         double feedforward = ToohardArmConstants.ANGLE_FEEDFORWARD.calculate(
@@ -78,20 +78,20 @@ public class ToohardArmIO extends ArmIO {
         return Conversions.perHundredMsToPerSecond(Conversions.magTicksToRevolutions(elevatorEncoder.getSelectedSensorVelocity()));
     }
 
-    private double getAngleEncoderPositionRotations() {
-        return ToohardArmConstants.ANGLE_ENCODER_POSITION_SIGNAL.refresh().getValue();
+    private double getAnglePositionDegrees() {
+        return Conversions.revolutionsToDegrees(ToohardArmConstants.ANGLE_ENCODER_POSITION_SIGNAL.refresh().getValue());
     }
 
-    private double getAngleEncoderVelocityRotationsPerSecond() {
+    private double getAngleVelocityDegreesPerSecond() {
         return Conversions.perHundredMsToPerSecond(Conversions.revolutionsToDegrees(ToohardArmConstants.ANGLE_ENCODER_VELOCITY_SIGNAL.refresh().getValue()));
     }
 
-    private void setAngleMotorsPower(TrapezoidProfile.State targetState)    {
+    private void setAngleMotorsState(TrapezoidProfile.State targetState)    {
         masterAngleMotor.set(setAnglePowerFromProfile(targetState));
         followerAngleMotor.set(setAnglePowerFromProfile(targetState));
     }
 
-    private void setElevatorMotorsPower(TrapezoidProfile.State targetState)    {
+    private void setElevatorMotorsState(TrapezoidProfile.State targetState)    {
         masterElevatorMotor.set(setElevatorPowerFromProfile(targetState));
         followerElevatorMotor.set(setElevatorPowerFromProfile(targetState));
     }
