@@ -21,9 +21,9 @@ public class SimulationArmIOConstants {
             MIN_ELEVATOR_HEIGHT_METERS = 0,
             MAX_ELEVATOR_HEIGHT_METERS = 1;
     private static final Rotation2d
-            STARTING_ANGLE_RADIANS = Rotation2d.fromRadians(5),
-            MIN_ANGLE_RADIANS = Rotation2d.fromRadians(5),
-            MAX_ANGLE_RADIANS = Rotation2d.fromRadians(5);
+            STARTING_ANGLE_RADIANS = Rotation2d.fromDegrees(5),
+            MIN_ANGLE_RADIANS = Rotation2d.fromDegrees(5),
+            MAX_ANGLE_RADIANS = Rotation2d.fromDegrees(5);
     private static final boolean
             ANGLE_SIMULATE_GRAVITY = true,
             ELEVATOR_SIMULATE_GRAVITY = true;
