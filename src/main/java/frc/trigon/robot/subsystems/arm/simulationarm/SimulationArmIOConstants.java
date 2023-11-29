@@ -13,47 +13,45 @@ public class SimulationArmIOConstants {
             ANGLE_MOTOR_AMOUNT = 2,
             ELEVATOR_MOTOR_AMOUNT = 2;
     private static final DCMotor
-            MASTER_ANGLE_MOTOR_GEARBOX = DCMotor.getNEO(ANGLE_MOTOR_AMOUNT),
-            MASTER_ELEVATOR_MOTOR_GEARBOX = DCMotor.getNEO(ELEVATOR_MOTOR_AMOUNT);
+            ANGLE_MOTOR_GEARBOX = DCMotor.getNEO(ANGLE_MOTOR_AMOUNT),
+            ELEVATOR_MOTOR_GEARBOX = DCMotor.getNEO(ELEVATOR_MOTOR_AMOUNT);
     private static final double
             ANGLE_GEAR_RATIO = 12.8;
-    private static final double
-            MIN_ELEVATOR_HEIGHT_METERS = 0,
-            MAX_ELEVATOR_HEIGHT_METERS = 1;
+    private static final double MAX_ELEVATOR_HEIGHT_METERS = 1;
     private static final Rotation2d
-            STARTING_ANGLE_RADIANS = Rotation2d.fromDegrees(5),
             MIN_ANGLE_RADIANS = Rotation2d.fromDegrees(5),
             MAX_ANGLE_RADIANS = Rotation2d.fromDegrees(5);
     private static final boolean
             ANGLE_SIMULATE_GRAVITY = true,
             ELEVATOR_SIMULATE_GRAVITY = true;
-    private static final double
-            RETRACTED_ARM_LENGTH_METERS = 1,
-            ELEVATOR_STARTING_HEIGHT_METERS = 1;
+    private static final double RETRACTED_ARM_LENGTH_METERS = 1;
     private static final double
             ARM_MASS = 1,
+            ELEVATOR_MASS = 1,
             DRUM_RADIUS_METERS = 1;
+
+    static final double MIN_ELEVATOR_HEIGHT_METERS = 0;
     static final double METERS_PER_REVOLUTION = 2048;
 
     static final SingleJointedArmSim ANGLE_MOTOR = new SingleJointedArmSim(
-            MASTER_ANGLE_MOTOR_GEARBOX,
+            ANGLE_MOTOR_GEARBOX,
             ANGLE_GEAR_RATIO,
             SingleJointedArmSim.estimateMOI(RETRACTED_ARM_LENGTH_METERS, ARM_MASS),
             RETRACTED_ARM_LENGTH_METERS,
             MIN_ANGLE_RADIANS.getRadians(),
             MAX_ANGLE_RADIANS.getRadians(),
             ANGLE_SIMULATE_GRAVITY,
-            STARTING_ANGLE_RADIANS.getRadians()
+            MIN_ANGLE_RADIANS.getRadians()
     );
     static final ElevatorSim ELEVATOR_MOTOR = new ElevatorSim(
-            MASTER_ELEVATOR_MOTOR_GEARBOX,
-            SingleJointedArmSim.estimateMOI(RETRACTED_ARM_LENGTH_METERS, ARM_MASS),
+            ELEVATOR_MOTOR_GEARBOX,
+            SingleJointedArmSim.estimateMOI(RETRACTED_ARM_LENGTH_METERS, ELEVATOR_MASS),
             ARM_MASS,
             DRUM_RADIUS_METERS,
-            MIN_ELEVATOR_HEIGHT_METERS,
+            RETRACTED_ARM_LENGTH_METERS,
             MAX_ELEVATOR_HEIGHT_METERS,
             ELEVATOR_SIMULATE_GRAVITY,
-            ELEVATOR_STARTING_HEIGHT_METERS
+            MIN_ELEVATOR_HEIGHT_METERS
     );
 
     private static final double

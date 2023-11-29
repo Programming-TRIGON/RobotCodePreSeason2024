@@ -9,11 +9,11 @@ import frc.trigon.robot.subsystems.arm.ArmIO;
 import frc.trigon.robot.subsystems.arm.ArmInputsAutoLogged;
 
 public class SimulationArmIO extends ArmIO {
+    private final SingleJointedArmSim angleMotor = SimulationArmIOConstants.ANGLE_MOTOR;
+    private final ElevatorSim elevatorMotor = SimulationArmIOConstants.ELEVATOR_MOTOR;
     private double
             angleVoltage = 0,
             elevatorVoltage = 0;
-    private final SingleJointedArmSim angleMotor = SimulationArmIOConstants.ANGLE_MOTOR;
-    private final ElevatorSim elevatorMotor = SimulationArmIOConstants.ELEVATOR_MOTOR;
 
     @Override
     protected void updateInputs(ArmInputsAutoLogged inputs) {
@@ -27,7 +27,7 @@ public class SimulationArmIO extends ArmIO {
 
         inputs.elevatorMotorVoltage = elevatorVoltage;
         inputs.elevatorMotorCurrent = elevatorMotor.getCurrentDrawAmps();
-        inputs.elevatorPositionRevolution = elevatorMotor.getPositionMeters();
+        inputs.elevatorPositionRevolution = getElevatorPositionRevolution();
         inputs.elevatorVelocityRevolutionsPerSecond = elevatorMotor.getVelocityMetersPerSecond() * SimulationArmIOConstants.METERS_PER_REVOLUTION;
     }
 
@@ -84,5 +84,11 @@ public class SimulationArmIO extends ArmIO {
 
     private double getAngleVelocityDegreesPerSecond() {
         return Units.radiansToDegrees(angleMotor.getAngleRads());
+    }
+
+    private double getElevatorPositionRevolution() {
+        if (elevatorMotor.getPositionMeters() == SimulationArmIOConstants.MIN_ELEVATOR_HEIGHT_METERS)
+            return 0;
+        return elevatorMotor.getPositionMeters() * SimulationArmIOConstants.METERS_PER_REVOLUTION;
     }
 }
