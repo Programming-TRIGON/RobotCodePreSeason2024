@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.subsystems.arm.ArmIO;
 import frc.trigon.robot.subsystems.arm.ArmInputsAutoLogged;
-import frc.trigon.robot.subsystems.arm.kablamaArm.KablamaArmConstants;
 
 public class SimulationArmIO extends ArmIO {
     private double
@@ -91,7 +90,7 @@ public class SimulationArmIO extends ArmIO {
         return pidOutput + feedforward;
     }
 
-    private double getAngleVelocityDegreesPerSecond(){
+    private double getAngleVelocityDegreesPerSecond() {
         return Rotation2d.fromRadians(masterAngleMotor.getAngleRads()).getDegrees();
     }
 }

@@ -28,12 +28,13 @@ public class Collector extends SubsystemBase {
     public Command getSetTargetStateCommand(CollectorConstants.CollectorStates state) {
         return new StartEndCommand(
                 () -> collectorIO.setPower(state.power),
-                () -> {},
+                () -> {
+                },
                 this
         );
     }
 
-    private void startCurrentWatcher(){
+    private void startCurrentWatcher() {
         new CurrentWatcher(
                 collectorIO::stop,
                 () -> collectorInputs.motorCurrent,
