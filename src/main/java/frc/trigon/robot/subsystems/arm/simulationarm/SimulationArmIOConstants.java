@@ -9,19 +9,14 @@ import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 
 public class SimulationArmIOConstants {
-    private static final int MOTOR_AMOUNT = 1;
+    private static final int
+            ANGLE_MOTOR_AMOUNT = 2,
+            ELEVATOR_MOTOR_AMOUNT = 2;
     private static final DCMotor
-            MASTER_ANGLE_MOTOR_GEARBOX = DCMotor.getNEO(MOTOR_AMOUNT),
-            FOLLOWER_ANGLE_MOTOR_GEARBOX = DCMotor.getNEO(MOTOR_AMOUNT),
-            MASTER_ELEVATOR_MOTOR_GEARBOX = DCMotor.getNEO(MOTOR_AMOUNT),
-            FOLLOWER_ELEVATOR_MOTOR_GEARBOX = DCMotor.getNEO(MOTOR_AMOUNT);
-    private static final double MOMENT_OF_INERTIA = 0.003;
+            MASTER_ANGLE_MOTOR_GEARBOX = DCMotor.getNEO(ANGLE_MOTOR_AMOUNT),
+            MASTER_ELEVATOR_MOTOR_GEARBOX = DCMotor.getNEO(ELEVATOR_MOTOR_AMOUNT);
     private static final double
-            ANGLE_GEAR_RATIO = 12.8,
-            ELEVATOR_GEAR_RATIO = 12.8;
-    private static final double
-            KA = 1,
-            KV = 1;
+            ANGLE_GEAR_RATIO = 12.8;
     private static final double
             MIN_ELEVATOR_HEIGHT_METERS = 0,
             MAX_ELEVATOR_HEIGHT_METERS = 1;
@@ -36,43 +31,24 @@ public class SimulationArmIOConstants {
             RETRACTED_ARM_LENGTH_METERS = 1,
             ELEVATOR_STARTING_HEIGHT_METERS = 1;
     private static final double
-            CARRIAGE_MASS_KG = 1,
+            ARM_MASS = 1,
             DRUM_RADIUS_METERS = 1;
+    static final double METERS_PER_REVOLUTION = 2048;
 
-    static final SingleJointedArmSim MASTER_ANGLE_MOTOR = new SingleJointedArmSim(
+    static final SingleJointedArmSim ANGLE_MOTOR = new SingleJointedArmSim(
             MASTER_ANGLE_MOTOR_GEARBOX,
             ANGLE_GEAR_RATIO,
-            MOMENT_OF_INERTIA,
+            SingleJointedArmSim.estimateMOI(RETRACTED_ARM_LENGTH_METERS, ARM_MASS),
             RETRACTED_ARM_LENGTH_METERS,
             MIN_ANGLE_RADIANS.getRadians(),
             MAX_ANGLE_RADIANS.getRadians(),
             ANGLE_SIMULATE_GRAVITY,
             STARTING_ANGLE_RADIANS.getRadians()
     );
-    static final SingleJointedArmSim FOLLOWER_ANGLE_MOTOR = new SingleJointedArmSim(
-            FOLLOWER_ANGLE_MOTOR_GEARBOX,
-            ANGLE_GEAR_RATIO,
-            SingleJointedArmSim.estimateMOI(RETRACTED_ARM_LENGTH_METERS, CARRIAGE_MASS_KG),
-            RETRACTED_ARM_LENGTH_METERS,
-            MIN_ANGLE_RADIANS.getRadians(),
-            MAX_ANGLE_RADIANS.getRadians(),
-            ANGLE_SIMULATE_GRAVITY,
-            STARTING_ANGLE_RADIANS.getRadians()
-    );
-    static final ElevatorSim MASTER_ELEVATOR_MOTOR = new ElevatorSim(
+    static final ElevatorSim ELEVATOR_MOTOR = new ElevatorSim(
             MASTER_ELEVATOR_MOTOR_GEARBOX,
-            SingleJointedArmSim.estimateMOI(RETRACTED_ARM_LENGTH_METERS, CARRIAGE_MASS_KG),
-            CARRIAGE_MASS_KG,
-            DRUM_RADIUS_METERS,
-            MIN_ELEVATOR_HEIGHT_METERS,
-            MAX_ELEVATOR_HEIGHT_METERS,
-            ELEVATOR_SIMULATE_GRAVITY,
-            ELEVATOR_STARTING_HEIGHT_METERS
-    );
-    static final ElevatorSim FOLLOWER_ELEVATOR_MOTOR = new ElevatorSim(
-            FOLLOWER_ELEVATOR_MOTOR_GEARBOX,
-            ELEVATOR_GEAR_RATIO,
-            CARRIAGE_MASS_KG,
+            SingleJointedArmSim.estimateMOI(RETRACTED_ARM_LENGTH_METERS, ARM_MASS),
+            ARM_MASS,
             DRUM_RADIUS_METERS,
             MIN_ELEVATOR_HEIGHT_METERS,
             MAX_ELEVATOR_HEIGHT_METERS,

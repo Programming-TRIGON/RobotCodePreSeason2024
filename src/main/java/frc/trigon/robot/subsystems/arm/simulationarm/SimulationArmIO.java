@@ -1,6 +1,5 @@
 package frc.trigon.robot.subsystems.arm.simulationarm;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
@@ -13,28 +12,23 @@ public class SimulationArmIO extends ArmIO {
     private double
             angleVoltage = 0,
             elevatorVoltage = 0;
-    private final SingleJointedArmSim
-            masterAngleMotor = SimulationArmIOConstants.MASTER_ANGLE_MOTOR,
-            followerAngleMotor = SimulationArmIOConstants.FOLLOWER_ANGLE_MOTOR;
-    private final ElevatorSim
-            masterElevatorMotor = SimulationArmIOConstants.MASTER_ELEVATOR_MOTOR,
-            followerElevatorMotor = SimulationArmIOConstants.FOLLOWER_ELEVATOR_MOTOR;
+    private final SingleJointedArmSim angleMotor = SimulationArmIOConstants.ANGLE_MOTOR;
+    private final ElevatorSim elevatorMotor = SimulationArmIOConstants.ELEVATOR_MOTOR;
 
     @Override
     protected void updateInputs(ArmInputsAutoLogged inputs) {
-        masterAngleMotor.update(RobotConstants.PERIODIC_TIME_SECONDS);
-        followerAngleMotor.update(RobotConstants.PERIODIC_TIME_SECONDS);
-        masterElevatorMotor.update(RobotConstants.PERIODIC_TIME_SECONDS);
-        followerElevatorMotor.update(RobotConstants.PERIODIC_TIME_SECONDS);
+        angleMotor.update(RobotConstants.PERIODIC_TIME_SECONDS);
+        elevatorMotor.update(RobotConstants.PERIODIC_TIME_SECONDS);
 
         inputs.angleMotorVoltage = angleVoltage;
-        inputs.angleMotorCurrent = masterAngleMotor.getCurrentDrawAmps();
+        inputs.angleMotorCurrent = angleMotor.getCurrentDrawAmps();
         inputs.angleVelocityDegreesPerSecond = getAngleVelocityDegreesPerSecond();
+        inputs.anglePositionDegrees = Units.radiansToDegrees(angleMotor.getAngleRads());
 
         inputs.elevatorMotorVoltage = elevatorVoltage;
-        inputs.elevatorMotorCurrent = masterElevatorMotor.getCurrentDrawAmps();
-        inputs.elevatorPositionRevolution = masterElevatorMotor.getPositionMeters();
-        inputs.elevatorVelocityRevolutionsPerSecond = masterElevatorMotor.getVelocityMetersPerSecond();
+        inputs.elevatorMotorCurrent = elevatorMotor.getCurrentDrawAmps();
+        inputs.elevatorPositionRevolution = elevatorMotor.getPositionMeters();
+        inputs.elevatorVelocityRevolutionsPerSecond = elevatorMotor.getVelocityMetersPerSecond() * SimulationArmIOConstants.METERS_PER_REVOLUTION;
     }
 
     @Override
@@ -59,19 +53,17 @@ public class SimulationArmIO extends ArmIO {
 
     private void setAngleVoltage(double voltage) {
         this.angleVoltage = voltage;
-        masterAngleMotor.setInputVoltage(voltage);
-        followerAngleMotor.setInputVoltage(voltage);
+        angleMotor.setInputVoltage(voltage);
     }
 
     private void setElevatorVoltage(double voltage) {
         this.elevatorVoltage = voltage;
-        masterElevatorMotor.setInputVoltage(voltage);
-        followerElevatorMotor.setInputVoltage(voltage);
+        elevatorMotor.setInputVoltage(voltage);
     }
 
     private double calculateAngleOutput(TrapezoidProfile.State targetState) {
         double pidOutput = SimulationArmIOConstants.ANGLE_PID_CONTROLLER.calculate(
-                masterAngleMotor.getAngleRads(),
+                angleMotor.getAngleRads(),
                 targetState.position
         );
         double feedforward = SimulationArmIOConstants.ANGLE_FEEDFORWARD.calculate(
@@ -83,7 +75,7 @@ public class SimulationArmIO extends ArmIO {
 
     private double calculateElevatorOutput(TrapezoidProfile.State targetState) {
         double pidOutput = SimulationArmIOConstants.ELEVATOR_PID_CONTROLLER.calculate(
-                masterElevatorMotor.getPositionMeters(),
+                elevatorMotor.getPositionMeters(),
                 targetState.position
         );
         double feedforward = SimulationArmIOConstants.ELEVATOR_FEEDFORWARD.calculate(targetState.velocity);
@@ -91,6 +83,6 @@ public class SimulationArmIO extends ArmIO {
     }
 
     private double getAngleVelocityDegreesPerSecond() {
-        return Rotation2d.fromRadians(masterAngleMotor.getAngleRads()).getDegrees();
+        return Units.radiansToDegrees(angleMotor.getAngleRads());
     }
 }
