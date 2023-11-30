@@ -27,8 +27,8 @@ public class SimulationArmIO extends ArmIO {
 
         inputs.elevatorMotorVoltage = elevatorVoltage;
         inputs.elevatorMotorCurrent = elevatorMotor.getCurrentDrawAmps();
-        inputs.elevatorPositionRevolution = getElevatorPositionRevolution();
-        inputs.elevatorVelocityRevolutionsPerSecond = elevatorMotor.getVelocityMetersPerSecond() * SimulationArmIOConstants.METERS_PER_REVOLUTION;
+        inputs.elevatorPositionRevolution = getElevatorPositionRevolutions();
+        inputs.elevatorVelocityRevolutionsPerSecond = elevatorMotor.getVelocityMetersPerSecond() / SimulationArmIOConstants.METERS_PER_REVOLUTION;
     }
 
     @Override
@@ -86,9 +86,8 @@ public class SimulationArmIO extends ArmIO {
         return Units.radiansToDegrees(angleMotor.getAngleRads());
     }
 
-    private double getElevatorPositionRevolution() {
-        if (elevatorMotor.getPositionMeters() == SimulationArmIOConstants.MIN_ELEVATOR_HEIGHT_METERS)
-            return 0;
-        return elevatorMotor.getPositionMeters() * SimulationArmIOConstants.METERS_PER_REVOLUTION;
+    private double getElevatorPositionRevolutions() {
+        double positionAfterOffset = elevatorMotor.getPositionMeters() - SimulationArmIOConstants.MIN_ELEVATOR_HEIGHT_METERS;
+        return positionAfterOffset / SimulationArmIOConstants.METERS_PER_REVOLUTION;
     }
 }

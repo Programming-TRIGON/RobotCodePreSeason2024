@@ -22,9 +22,8 @@ public class SimulationCollectorIO extends CollectorIO {
     @Override
     protected void setPower(double power) {
         double voltage = Conversions.compensatedPowerToVoltage(power, SimulationCollectorIOConstants.VOLTAGE_COMPENSATION_SATURATION);
-        double clampedVoltage = MathUtil.clamp(voltage, -SimulationCollectorIOConstants.VOLTAGE_COMPENSATION_SATURATION, SimulationCollectorIOConstants.VOLTAGE_COMPENSATION_SATURATION);
-        this.motorVoltage = clampedVoltage;
-        motor.setInputVoltage(clampedVoltage);
+        this.motorVoltage = MathUtil.clamp(voltage, -SimulationCollectorIOConstants.VOLTAGE_COMPENSATION_SATURATION, SimulationCollectorIOConstants.VOLTAGE_COMPENSATION_SATURATION);
+        motor.setInputVoltage(this.motorVoltage);
     }
 
     @Override
