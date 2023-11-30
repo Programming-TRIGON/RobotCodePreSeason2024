@@ -8,10 +8,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.FunctionalCommand;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.*;
 import frc.trigon.robot.utilities.Conversions;
 
 public class SideShooter extends SubsystemBase {
@@ -21,7 +18,7 @@ public class SideShooter extends SubsystemBase {
     private final CANSparkMax angleMotor = SideShooterConstants.ANGLE_MOTOR;
     private final CANcoder angleEncoder = SideShooterConstants.ANGLE_ENCODER;
 
-    private final VoltageOut shootingVoltageRequest = new VoltageOut(0,SideShooterConstants.FOC_ENABLE,false);
+    private final VoltageOut shootingVoltageRequest = new VoltageOut(0, SideShooterConstants.FOC_ENABLE, false);
 
     private TrapezoidProfile angleMotorProfile = null;
     private double lastAngleMotorProfileGenerationTime;
@@ -44,12 +41,30 @@ public class SideShooter extends SubsystemBase {
         );
     }
 
-    public Command getSetTargetShootingVoltageCommand(double voltage){
+    public Command getSetTargetShootingVoltageCommand(double voltage) {
         return new StartEndCommand(
                 () -> setTargetShootingVoltage(voltage),
                 this::stopAngleMotor,
                 this
         );
+    }
+
+
+
+    public Command getSetNotByOrderCommand(double voltage, Rotation2d targetAngle) {
+        return new ParallelCommandGroup(
+                getSetTargetShooterAngleCommand(targetAngle),
+                getSetTargetShootingVoltageCommand(voltage)
+        );
+    }
+
+    private void iDoNotHaveName(double voltage, Rotation2d targetAngle, boolean byOrder) {
+        if (!byOrder) {
+            getSetNotByOrderCommand(voltage, targetAngle);
+        } else {
+            getSetTargetShooterAngleCommand(targetAngle);
+            getSetTargetShootingVoltageCommand(voltage);
+        }
     }
 
     private void generateAngleMotorProfile(Rotation2d targetAngle) {
@@ -96,7 +111,7 @@ public class SideShooter extends SubsystemBase {
         return Timer.getFPGATimestamp() - lastAngleMotorProfileGenerationTime;
     }
 
-    private void setTargetShootingVoltage(double voltage){
+    private void setTargetShootingVoltage(double voltage) {
         shootingMotor.setControl(shootingVoltageRequest.withOutput(voltage));
     }
 
