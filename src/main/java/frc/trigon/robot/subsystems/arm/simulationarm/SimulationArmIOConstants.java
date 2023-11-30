@@ -7,6 +7,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 
 public class SimulationArmIOConstants {
     private static final int
@@ -24,11 +25,15 @@ public class SimulationArmIOConstants {
     private static final boolean
             ANGLE_SIMULATE_GRAVITY = true,
             ELEVATOR_SIMULATE_GRAVITY = true;
+    private static final double
+            MECHANISM2D_WIDTH = 1,
+            MECHANISM2D_HEIGHT = 1;
     private static final double ARM_MASS = 1;
     private static final double DRUM_RADIUS_METERS = 1;
     private static final double FULLY_OPENED_ARM_LENGTH_METERS = 1;
     static final double RETRACTED_ARM_LENGTH_METERS = 1;
     static final double METERS_PER_REVOLUTION = 2048;
+    static final Mechanism2d MECHANISM2D = new Mechanism2d(MECHANISM2D_WIDTH, MECHANISM2D_HEIGHT);
     static final SingleJointedArmSim ANGLE_MOTOR = new SingleJointedArmSim(
             ANGLE_MOTOR_GEARBOX,
             ANGLE_GEAR_RATIO,

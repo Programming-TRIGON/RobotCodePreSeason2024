@@ -4,13 +4,16 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.subsystems.arm.ArmIO;
 import frc.trigon.robot.subsystems.arm.ArmInputsAutoLogged;
+import org.littletonrobotics.junction.LogTable;
 
 public class SimulationArmIO extends ArmIO {
     private final SingleJointedArmSim angleMotor = SimulationArmIOConstants.ANGLE_MOTOR;
     private final ElevatorSim elevatorMotor = SimulationArmIOConstants.ELEVATOR_MOTOR;
+    private final Mechanism2d mechanism2d = SimulationArmIOConstants.MECHANISM2D;
     private double
             angleVoltage = 0,
             elevatorVoltage = 0;
@@ -49,6 +52,10 @@ public class SimulationArmIO extends ArmIO {
     @Override
     protected void setTargetElevatorState(TrapezoidProfile.State targetState) {
         setElevatorVoltage(calculateElevatorOutput(targetState));
+    }
+
+    protected void startAdvantageKitLogging(LogTable logTable) {
+        mechanism2d.akitLog(logTable);
     }
 
     private void setAngleVoltage(double voltage) {
