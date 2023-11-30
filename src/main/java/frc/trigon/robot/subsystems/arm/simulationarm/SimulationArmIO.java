@@ -75,7 +75,7 @@ public class SimulationArmIO extends ArmIO {
 
     private double calculateElevatorOutput(TrapezoidProfile.State targetState) {
         double pidOutput = SimulationArmIOConstants.ELEVATOR_PID_CONTROLLER.calculate(
-                elevatorMotor.getPositionMeters(),
+                getElevatorPositionRevolutions(),
                 targetState.position
         );
         double feedforward = SimulationArmIOConstants.ELEVATOR_FEEDFORWARD.calculate(targetState.velocity);
@@ -87,7 +87,7 @@ public class SimulationArmIO extends ArmIO {
     }
 
     private double getElevatorPositionRevolutions() {
-        double positionAfterOffset = elevatorMotor.getPositionMeters() - SimulationArmIOConstants.MIN_ELEVATOR_HEIGHT_METERS;
-        return positionAfterOffset / SimulationArmIOConstants.METERS_PER_REVOLUTION;
+        double offsettedPosition = elevatorMotor.getPositionMeters() - SimulationArmIOConstants.RETRACTED_ARM_LENGTH_METERS;
+        return offsettedPosition / SimulationArmIOConstants.METERS_PER_REVOLUTION;
     }
 }
