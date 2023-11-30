@@ -5,5 +5,4 @@ public class RollerConstants {
             OPEN_POWER = 1,
             CLOSE_POWER = 1,
             COLLECTION_MOTOR_SPEED = 1;
-    protected static final double ROLLER_LENGTH = 200;
 }
