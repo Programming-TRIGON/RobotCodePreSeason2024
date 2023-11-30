@@ -29,7 +29,6 @@ public class SimulationArmIOConstants {
             FULLY_OPENED_ARM_LENGTH = 1;
     private static final double ARM_MASS = 1;
     private static final double DRUM_RADIUS_METERS = 1;
-
     static final double MIN_ELEVATOR_HEIGHT_METERS = 0;
     static final double METERS_PER_REVOLUTION = 2048;
     static final SingleJointedArmSim ANGLE_MOTOR = new SingleJointedArmSim(
