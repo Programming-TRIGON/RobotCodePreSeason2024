@@ -30,6 +30,21 @@ public class SideShooter extends SubsystemBase {
         return INSTANCE;
     }
 
+    private Command getSetTargetStateCommand(boolean byOrder, Rotation2d targetAngle, double targetVoltage){
+        if (!byOrder){
+            return new ParallelCommandGroup(
+                    getSetTargetShooterAngleCommand(targetAngle),
+                    getSetTargetShootingVoltageCommand(targetVoltage)
+            );
+        }
+        else{
+            return new SequentialCommandGroup(
+                    getSetTargetShooterAngleCommand(targetAngle),
+                    getSetTargetShootingVoltageCommand(targetVoltage)
+            );
+        }
+    }
+
     public Command getSetTargetShooterAngleCommand(Rotation2d targetAngle) {
         return new FunctionalCommand(
                 () -> generateAngleMotorProfile(targetAngle),
@@ -41,30 +56,12 @@ public class SideShooter extends SubsystemBase {
         );
     }
 
-    public Command getSetTargetShootingVoltageCommand(double voltage) {
+    public Command getSetTargetShootingVoltageCommand(double targetVoltage) {
         return new StartEndCommand(
-                () -> setTargetShootingVoltage(voltage),
+                () -> setTargetShootingVoltage(targetVoltage),
                 this::stopAngleMotor,
                 this
         );
-    }
-
-
-
-    public Command getSetNotByOrderCommand(double voltage, Rotation2d targetAngle) {
-        return new ParallelCommandGroup(
-                getSetTargetShooterAngleCommand(targetAngle),
-                getSetTargetShootingVoltageCommand(voltage)
-        );
-    }
-
-    private void iDoNotHaveName(double voltage, Rotation2d targetAngle, boolean byOrder) {
-        if (!byOrder) {
-            getSetNotByOrderCommand(voltage, targetAngle);
-        } else {
-            getSetTargetShooterAngleCommand(targetAngle);
-            getSetTargetShootingVoltageCommand(voltage);
-        }
     }
 
     private void generateAngleMotorProfile(Rotation2d targetAngle) {
@@ -111,8 +108,8 @@ public class SideShooter extends SubsystemBase {
         return Timer.getFPGATimestamp() - lastAngleMotorProfileGenerationTime;
     }
 
-    private void setTargetShootingVoltage(double voltage) {
-        shootingMotor.setControl(shootingVoltageRequest.withOutput(voltage));
+    private void setTargetShootingVoltage(double targetVoltage) {
+        shootingMotor.setControl(shootingVoltageRequest.withOutput(targetVoltage));
     }
 
     private void stopAngleMotor() {
