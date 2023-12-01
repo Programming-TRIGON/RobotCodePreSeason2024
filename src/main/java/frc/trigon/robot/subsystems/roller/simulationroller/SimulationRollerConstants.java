@@ -23,7 +23,7 @@ public class SimulationRollerConstants {
     private static DCMotor
             ANGLE_MOTOR_GEARBOX = DCMotor.getNEO(ANGLE_MOTOR_AMOUNT),
             COLLECTOR_MOTOR_GEARBOX = DCMotor.getNEO(COLLECTOR_MOTOR_AMOUNT);
-    private static SingleJointedArmSim ANGLE_MOTOR = new SingleJointedArmSim(
+    static SingleJointedArmSim ANGLE_MOTOR = new SingleJointedArmSim(
             ANGLE_MOTOR_GEARBOX,
             ANGLE_GEAR_RATIO,
             SingleJointedArmSim.estimateMOI(ROLLER_LENGTH, ROLLER_MASS),
@@ -33,7 +33,7 @@ public class SimulationRollerConstants {
             ANGLE_SIMULATE_GRAVITY,
             MAX_ANGLE.getRadians()
     );
-    private static DCMotorSim COLLECTOR_MOTOR = new DCMotorSim(
+    static DCMotorSim COLLECTOR_MOTOR = new DCMotorSim(
             COLLECTOR_MOTOR_GEARBOX,
             COLLECTOR_GEAR_RATIO,
             COLLECTOR_MOMENT_OF_INERTIA
