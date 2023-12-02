@@ -4,7 +4,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.*;
 import java.util.Set;
 
-public class ArmCommands extends SubsystemBase {
+public class ArmCommands {
 
     public Command getSetTargetArmStateCommand(ArmConstants.ArmState targetState) {
 
@@ -39,7 +39,7 @@ public class ArmCommands extends SubsystemBase {
     public Command getSetTargetArmPositionCommand(Rotation2d targetAngle, double targetElevatorPosition, double angleSpeedPercentage, double elevatorSpeedPercentage) {
         return new DeferredCommand(
                 () -> getCurrentSetTargetArmStateCommand(targetAngle, targetElevatorPosition, angleSpeedPercentage, elevatorSpeedPercentage),
-                Set.of(this)
+                Set.of(Arm.getInstance())
         );
     }
 
@@ -63,7 +63,7 @@ public class ArmCommands extends SubsystemBase {
                 (interrupted) -> {
                 },
                 () -> false,
-                this
+                Arm.getInstance()
         );
     }
 
@@ -74,7 +74,7 @@ public class ArmCommands extends SubsystemBase {
                 (interrupted) -> {
                 },
                 () -> false,
-                this
+                Arm.getInstance()
         );
     }
 }
