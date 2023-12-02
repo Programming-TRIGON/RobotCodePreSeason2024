@@ -3,7 +3,9 @@ package frc.trigon.robot.subsystems.arm;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj2.command.*;
+import frc.trigon.robot.subsystems.arm.kablamaArm.KablamaArmConstants;
 import frc.trigon.robot.utilities.Conversions;
 import org.littletonrobotics.junction.Logger;
 
@@ -13,6 +15,7 @@ public class Arm extends SubsystemBase {
     private final static Arm INSTANCE = new Arm();
     private final ArmIO armIO = ArmIO.generateIO();
     private final ArmInputsAutoLogged armInputs = new ArmInputsAutoLogged();
+    private final Mechanism2d mechanism2d = armInputs.mechanism2d;
     private TrapezoidProfile
             angleMotorProfile = null,
             elevatorMotorProfile = null;
@@ -31,6 +34,7 @@ public class Arm extends SubsystemBase {
     public void periodic() {
         armIO.updateInputs(armInputs);
         Logger.processInputs("Arm", armInputs);
+        Logger.recordOutput("Arm", mechanism2d);
     }
 
     public Command getSetTargetArmStateCommand(ArmConstants.ArmState targetState) {

@@ -33,6 +33,8 @@ public class SimulationArmIO extends ArmIO {
         inputs.elevatorMotorCurrent = elevatorMotor.getCurrentDrawAmps();
         inputs.elevatorPositionRevolution = getElevatorPositionRevolutions();
         inputs.elevatorVelocityRevolutionsPerSecond = elevatorMotor.getVelocityMetersPerSecond() / SimulationArmIOConstants.METERS_PER_REVOLUTION;
+
+        inputs.mechanism2d = mechanism2d;
     }
 
     @Override
