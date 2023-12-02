@@ -38,9 +38,6 @@ public class KablamaArmConstants {
             ELEVATOR_ENCODER_OFFSET = 0,
             ANGLE_ENCODER_OFFSET = 0;
     private static final AbsoluteSensorRangeValue ANGLE_ENCODER_RANGE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
-    private static final double
-            MECHANISM2D_WIDTH = 1,
-            MECHANISM2D_HEIGHT = 1;
     static final CANcoder ANGLE_ENCODER = new CANcoder(ANGLE_ENCODER_ID);
     static final TalonSRX ELEVATOR_ENCODER = new TalonSRX(ELEVATOR_ENCODER_ID);
     static final CANSparkMax
@@ -48,8 +45,6 @@ public class KablamaArmConstants {
             MASTER_ELEVATOR_MOTOR = new CANSparkMax(MASTER_ELEVATOR_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless),
             FOLLOWER_ANGLE_MOTOR = new CANSparkMax(FOLLOWER_ANGLE_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless),
             FOLLOWER_ELEVATOR_MOTOR = new CANSparkMax(FOLLOWER_ELEVATOR_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless);
-
-    static final Mechanism2d MECHANISM2D = new Mechanism2d(MECHANISM2D_WIDTH, MECHANISM2D_HEIGHT);
 
     static final StatusSignal<Double>
             ANGLE_MOTOR_POSITION_SIGNAL = ANGLE_ENCODER.getPosition(),

@@ -18,7 +18,6 @@ public class KablamaArmIO extends ArmIO {
             followerAngleMotor = KablamaArmConstants.FOLLOWER_ANGLE_MOTOR,
             masterElevatorMotor = KablamaArmConstants.MASTER_ELEVATOR_MOTOR,
             followerElevatorMotor = KablamaArmConstants.FOLLOWER_ELEVATOR_MOTOR;
-    private final Mechanism2d mechanism2d = KablamaArmConstants.MECHANISM2D;
 
     @Override
     protected void updateInputs(ArmInputsAutoLogged inputs) {
@@ -31,8 +30,6 @@ public class KablamaArmIO extends ArmIO {
         inputs.elevatorMotorCurrent = masterElevatorMotor.getOutputCurrent();
         inputs.elevatorPositionRevolution = getElevatorPositionRevolutions();
         inputs.elevatorVelocityRevolutionsPerSecond = getElevatorVelocityRevolutionsPerSecond();
-
-        inputs.mechanism2d = mechanism2d;
     }
 
     @Override
@@ -56,12 +53,6 @@ public class KablamaArmIO extends ArmIO {
     @Override
     protected void setTargetElevatorState(TrapezoidProfile.State targetState) {
         setElevatorVoltage(calculateElevatorOutput(targetState));
-    }
-
-    @Override
-    protected void startAdvantageKitLogging(LogTable logTable) {
-        mechanism2d.akitLog(logTable);
-        SmartDashboard.putData("Mech2d", mechanism2d);
     }
 
     private void setAngleVoltage(double voltage) {

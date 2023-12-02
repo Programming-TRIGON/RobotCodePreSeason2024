@@ -1,7 +1,6 @@
 package frc.trigon.robot.subsystems.arm;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.subsystems.arm.kablamaArm.KablamaArmIO;
 import frc.trigon.robot.subsystems.arm.simulationarm.SimulationArmIO;
@@ -46,7 +45,5 @@ public class ArmIO {
         public double elevatorMotorVoltage = 0;
         public double elevatorPositionRevolution = 0;
         public double elevatorVelocityRevolutionsPerSecond = 0;
-
-        public Mechanism2d mechanism2d;
     }
 }

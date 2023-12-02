@@ -14,7 +14,7 @@ import org.littletonrobotics.junction.LogTable;
 public class SimulationArmIO extends ArmIO {
     private final SingleJointedArmSim angleMotor = SimulationArmIOConstants.ANGLE_MOTOR;
     private final ElevatorSim elevatorMotor = SimulationArmIOConstants.ELEVATOR_MOTOR;
-    private final Mechanism2d mechanism2d = SimulationArmIOConstants.MECHANISM2D;
+    private final Mechanism2d armMechanism = SimulationArmIOConstants.ARM_MECHANISM;
     private double
             angleVoltage = 0,
             elevatorVoltage = 0;
@@ -33,8 +33,6 @@ public class SimulationArmIO extends ArmIO {
         inputs.elevatorMotorCurrent = elevatorMotor.getCurrentDrawAmps();
         inputs.elevatorPositionRevolution = getElevatorPositionRevolutions();
         inputs.elevatorVelocityRevolutionsPerSecond = elevatorMotor.getVelocityMetersPerSecond() / SimulationArmIOConstants.METERS_PER_REVOLUTION;
-
-        inputs.mechanism2d = mechanism2d;
     }
 
     @Override
@@ -59,8 +57,8 @@ public class SimulationArmIO extends ArmIO {
 
     @Override
     protected void startAdvantageKitLogging(LogTable logTable) {
-        mechanism2d.akitLog(logTable);
-        SmartDashboard.putData("Mech2d", mechanism2d);
+        armMechanism.akitLog(logTable);
+        SmartDashboard.putData("Mech2d", armMechanism);
     }
 
     private void setAngleVoltage(double voltage) {

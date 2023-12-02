@@ -5,7 +5,6 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj2.command.*;
-import frc.trigon.robot.subsystems.arm.kablamaArm.KablamaArmConstants;
 import frc.trigon.robot.utilities.Conversions;
 import org.littletonrobotics.junction.Logger;
 
@@ -15,7 +14,7 @@ public class Arm extends SubsystemBase {
     private final static Arm INSTANCE = new Arm();
     private final ArmIO armIO = ArmIO.generateIO();
     private final ArmInputsAutoLogged armInputs = new ArmInputsAutoLogged();
-    private final Mechanism2d mechanism2d = armInputs.mechanism2d;
+    private final Mechanism2d armMechanism = ArmConstants.ARM_MECHANISM;
     private TrapezoidProfile
             angleMotorProfile = null,
             elevatorMotorProfile = null;
@@ -34,85 +33,14 @@ public class Arm extends SubsystemBase {
     public void periodic() {
         armIO.updateInputs(armInputs);
         Logger.processInputs("Arm", armInputs);
-        Logger.recordOutput("Arm", mechanism2d);
+        Logger.recordOutput("Arm", armMechanism);
     }
 
-    public Command getSetTargetArmStateCommand(ArmConstants.ArmState targetState) {
-        return getSetTargetArmStateCommand(targetState, 100, 100);
-    }
-
-    public Command getSetTargetArmPositionCommand(Rotation2d angle, double elevatorPosition) {
-        return getSetTargetArmPositionCommand(angle, elevatorPosition, 100, 100);
-    }
-
-    /**
-     * Creates a command that sets the target state of the arm.
-     *
-     * @param targetState             the target state of the arm
-     * @param angleSpeedPercentage    the percentage of speed that the angle will move in
-     * @param elevatorSpeedPercentage the percentage of speed that the elevator will move in
-     * @return the command
-     */
-    public Command getSetTargetArmStateCommand(ArmConstants.ArmState targetState, double angleSpeedPercentage, double elevatorSpeedPercentage) {
-        return getSetTargetArmPositionCommand(targetState.angle, targetState.elevatorPosition, angleSpeedPercentage, elevatorSpeedPercentage);
-    }
-
-    /**
-     * Creates a command that sets the target position of the arm.
-     *
-     * @param targetAngle             the target angle of the arm
-     * @param targetElevatorPosition  the target position of the arm's elevator
-     * @param angleSpeedPercentage    the percentage of speed that the angle will move in
-     * @param elevatorSpeedPercentage the percentage of speed that the elevator will move in
-     * @return the command
-     */
-    public Command getSetTargetArmPositionCommand(Rotation2d targetAngle, double targetElevatorPosition, double angleSpeedPercentage, double elevatorSpeedPercentage) {
-        return new DeferredCommand(
-                () -> getCurrentSetTargetArmStateCommand(targetAngle, targetElevatorPosition, angleSpeedPercentage, elevatorSpeedPercentage),
-                Set.of(this)
-        );
-    }
-
-    private Command getCurrentSetTargetArmStateCommand(Rotation2d angle, double elevatorPosition, double angleSpeedPercentage, double elevatorSpeedPercentage) {
-        if (isElevatorOpening(elevatorPosition)) {
-            return new SequentialCommandGroup(
-                    getSetTargetAngleCommand(angle, angleSpeedPercentage),
-                    getSetTargetElevatorPositionCommand(elevatorPosition, elevatorSpeedPercentage)
-            );
-        }
-        return new SequentialCommandGroup(
-                getSetTargetElevatorPositionCommand(elevatorPosition, elevatorSpeedPercentage),
-                getSetTargetAngleCommand(angle, angleSpeedPercentage)
-        );
-    }
-
-    private Command getSetTargetAngleCommand(Rotation2d targetAngle, double speedPercentage) {
-        return new FunctionalCommand(
-                () -> generateAngleMotorProfile(targetAngle, speedPercentage),
-                this::setTargetAngleFromProfile,
-                (interrupted) -> {
-                },
-                () -> false,
-                this
-        );
-    }
-
-    private Command getSetTargetElevatorPositionCommand(double targetElevatorPosition, double speedPercentage) {
-        return new FunctionalCommand(
-                () -> generateElevatorMotorProfile(targetElevatorPosition, speedPercentage),
-                this::setTargetElevatorPositionFromProfile,
-                (interrupted) -> {
-                },
-                () -> false,
-                this
-        );
-    }
-
-    private boolean isElevatorOpening(double targetElevatorPosition) {
+    boolean isElevatorOpening(double targetElevatorPosition) {
         return armInputs.elevatorPositionRevolution < targetElevatorPosition;
     }
 
-    private void setTargetAngleFromProfile() {
+    void setTargetAngleFromProfile() {
         if (angleMotorProfile == null) {
             armIO.stopAngleMotors();
             return;
@@ -122,7 +50,7 @@ public class Arm extends SubsystemBase {
         armIO.setTargetAngleState(targetState);
     }
 
-    private void setTargetElevatorPositionFromProfile() {
+    void setTargetElevatorPositionFromProfile() {
         if (elevatorMotorProfile == null) {
             armIO.stopElevatorMotors();
             return;
@@ -132,7 +60,7 @@ public class Arm extends SubsystemBase {
         armIO.setTargetElevatorState(targetState);
     }
 
-    private void generateAngleMotorProfile(Rotation2d targetAngle, double speedPercentage) {
+    void generateAngleMotorProfile(Rotation2d targetAngle, double speedPercentage) {
         angleMotorProfile = new TrapezoidProfile(
                 Conversions.scaleConstraints(ArmConstants.ANGLE_CONSTRAINTS, speedPercentage),
                 new TrapezoidProfile.State(targetAngle.getDegrees(), 0),
@@ -142,7 +70,7 @@ public class Arm extends SubsystemBase {
         lastAngleMotorProfileGenerationTime = Timer.getFPGATimestamp();
     }
 
-    private void generateElevatorMotorProfile(double targetElevatorPosition, double speedPercentage) {
+    void generateElevatorMotorProfile(double targetElevatorPosition, double speedPercentage) {
         elevatorMotorProfile = new TrapezoidProfile(
                 Conversions.scaleConstraints(ArmConstants.ELEVATOR_CONSTRAINTS, speedPercentage),
                 new TrapezoidProfile.State(targetElevatorPosition, 0),

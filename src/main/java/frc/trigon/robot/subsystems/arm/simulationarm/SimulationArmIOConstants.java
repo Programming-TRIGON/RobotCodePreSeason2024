@@ -33,7 +33,7 @@ public class SimulationArmIOConstants {
     private static final double FULLY_OPENED_ARM_LENGTH_METERS = 1;
     static final double RETRACTED_ARM_LENGTH_METERS = 1;
     static final double METERS_PER_REVOLUTION = 2048;
-    static final Mechanism2d MECHANISM2D = new Mechanism2d(MECHANISM2D_WIDTH, MECHANISM2D_HEIGHT);
+    static final Mechanism2d ARM_MECHANISM = new Mechanism2d(MECHANISM2D_WIDTH, MECHANISM2D_HEIGHT);
     static final SingleJointedArmSim ANGLE_MOTOR = new SingleJointedArmSim(
             ANGLE_MOTOR_GEARBOX,
             ANGLE_GEAR_RATIO,
