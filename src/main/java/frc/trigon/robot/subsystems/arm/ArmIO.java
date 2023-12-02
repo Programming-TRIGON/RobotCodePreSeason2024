@@ -3,7 +3,9 @@ package frc.trigon.robot.subsystems.arm;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.subsystems.arm.kablamaArm.KablamaArmIO;
+import frc.trigon.robot.subsystems.arm.simulationarm.SimulationArmIO;
 import org.littletonrobotics.junction.AutoLog;
+import org.littletonrobotics.junction.LogTable;
 
 public class ArmIO {
     static ArmIO generateIO() {
@@ -11,8 +13,7 @@ public class ArmIO {
             return new ArmIO();
         if (RobotConstants.ROBOT_TYPE == RobotConstants.RobotType.KABLAMA)
             return new KablamaArmIO();
-        //return new SimulationArmIO();
-        return new ArmIO();
+        return new SimulationArmIO();
     }
 
     protected void updateInputs(ArmInputsAutoLogged inputs) {
@@ -28,6 +29,9 @@ public class ArmIO {
     }
 
     protected void setTargetElevatorState(TrapezoidProfile.State targetState) {
+    }
+
+    protected void startAdvantageKitLogging(LogTable logTable) {
     }
 
     @AutoLog

@@ -4,9 +4,13 @@ import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.trigon.robot.subsystems.arm.ArmIO;
 import frc.trigon.robot.subsystems.arm.ArmInputsAutoLogged;
+import frc.trigon.robot.subsystems.arm.simulationarm.SimulationArmIOConstants;
 import frc.trigon.robot.utilities.Conversions;
+import org.littletonrobotics.junction.LogTable;
 
 public class KablamaArmIO extends ArmIO {
     private final CANSparkMax
@@ -14,6 +18,7 @@ public class KablamaArmIO extends ArmIO {
             followerAngleMotor = KablamaArmConstants.FOLLOWER_ANGLE_MOTOR,
             masterElevatorMotor = KablamaArmConstants.MASTER_ELEVATOR_MOTOR,
             followerElevatorMotor = KablamaArmConstants.FOLLOWER_ELEVATOR_MOTOR;
+    private final Mechanism2d mechanism2d = KablamaArmConstants.MECHANISM2D;
 
     @Override
     protected void updateInputs(ArmInputsAutoLogged inputs) {
@@ -49,6 +54,12 @@ public class KablamaArmIO extends ArmIO {
     @Override
     protected void setTargetElevatorState(TrapezoidProfile.State targetState) {
         setElevatorVoltage(calculateElevatorOutput(targetState));
+    }
+
+    @Override
+    protected void startAdvantageKitLogging(LogTable logTable) {
+        mechanism2d.akitLog(logTable);
+        SmartDashboard.putData("Mech2d", mechanism2d);
     }
 
     private void setAngleVoltage(double voltage) {
