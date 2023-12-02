@@ -1,5 +1,6 @@
 package frc.trigon.robot.subsystems.collector;
 
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -8,9 +9,9 @@ import org.littletonrobotics.junction.Logger;
 
 public class Collector extends SubsystemBase {
     private final static Collector INSTANCE = new Collector();
-    private final CollectorIO collectorIO = CollectorIO.generateIO();
     private final CollectorInputsAutoLogged collectorInputs = new CollectorInputsAutoLogged();
-
+    private final Mechanism2d collectorMechanism = CollectorConstants.COLLECTOR_MECHANISM;
+    final CollectorIO collectorIO = CollectorIO.generateIO();
     public static Collector getInstance() {
         return INSTANCE;
     }
@@ -23,15 +24,7 @@ public class Collector extends SubsystemBase {
     public void periodic() {
         collectorIO.updateInputs(collectorInputs);
         Logger.processInputs("Collector", collectorInputs);
-    }
-
-    public Command getSetTargetStateCommand(CollectorConstants.CollectorStates state) {
-        return new StartEndCommand(
-                () -> collectorIO.setPower(state.power),
-                () -> {
-                },
-                this
-        );
+        Logger.recordOutput("Collector", collectorMechanism);
     }
 
     private void startCurrentWatcher() {

@@ -2,7 +2,9 @@ package frc.trigon.robot.subsystems.collector;
 
 import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.subsystems.collector.kablamacollector.KablamaCollectorIO;
+import frc.trigon.robot.subsystems.collector.simulationcollector.SimulationCollectorIO;
 import org.littletonrobotics.junction.AutoLog;
+import org.littletonrobotics.junction.LogTable;
 
 public class CollectorIO {
     static CollectorIO generateIO() {
@@ -10,8 +12,7 @@ public class CollectorIO {
             return new CollectorIO();
         if (RobotConstants.ROBOT_TYPE == RobotConstants.RobotType.KABLAMA)
             return new KablamaCollectorIO();
-        //return new SimulationCollectorIO();
-        return new CollectorIO();
+        return new SimulationCollectorIO();
     }
 
     protected void updateInputs(CollectorInputsAutoLogged inputs) {
@@ -21,6 +22,9 @@ public class CollectorIO {
     }
 
     protected void stop() {
+    }
+
+    protected void startAdvantageKitLogging(LogTable logTable) {
     }
 
     @AutoLog

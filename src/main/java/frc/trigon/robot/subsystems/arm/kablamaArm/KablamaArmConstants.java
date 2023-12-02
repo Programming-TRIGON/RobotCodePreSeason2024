@@ -12,7 +12,6 @@ import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import frc.trigon.robot.utilities.Conversions;
 
 public class KablamaArmConstants {
