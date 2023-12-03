@@ -10,6 +10,7 @@ import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.subsystems.arm.ArmIO;
 import frc.trigon.robot.subsystems.arm.ArmInputsAutoLogged;
 import org.littletonrobotics.junction.LogTable;
+import org.littletonrobotics.junction.Logger;
 
 public class SimulationArmIO extends ArmIO {
     private final SingleJointedArmSim angleMotor = SimulationArmIOConstants.ANGLE_MOTOR;
@@ -58,7 +59,7 @@ public class SimulationArmIO extends ArmIO {
     @Override
     protected void startAdvantageKitLogging(LogTable logTable) {
         armMechanism.akitLog(logTable);
-        SmartDashboard.putData("Mech2d", armMechanism);
+        Logger.recordOutput("Arm", armMechanism);
     }
 
     private void setAngleVoltage(double voltage) {
