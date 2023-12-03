@@ -1,11 +1,11 @@
 package frc.trigon.robot.subsystems.roller.simulationroller;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.subsystems.roller.RollerIO;
 import frc.trigon.robot.subsystems.roller.RollerInputsAutoLogged;
+import frc.trigon.robot.subsystems.roller.toohardroller.ToohardRollerConstants;
 
 public class SimulationRollerIO extends RollerIO {
     private final SingleJointedArmSim angleSimulation = SimulationRollerConstants.ANGLE_MOTOR;
@@ -28,12 +28,12 @@ public class SimulationRollerIO extends RollerIO {
 
     @Override
     protected void setAngleMotorPower(double power) {
-        angleSimulation.setInputVoltage();
+        angleSimulation.setInputVoltage(getAngleVoltageFromPower(power));
     }
 
     @Override
     protected void setCollectionMotorPower(double power) {
-        collectorSimulation.setInputVoltage(power);
+        collectorSimulation.setInputVoltage(getCollectorMotorVoltageFromPower(power));
     }
 
     @Override
@@ -44,5 +44,13 @@ public class SimulationRollerIO extends RollerIO {
     @Override
     protected void stopCollectionMotor() {
         collectorSimulation.setInputVoltage(0);
+    }
+
+    private double getAngleVoltageFromPower(double power) {
+        return power * ToohardRollerConstants.ANGLE_VOLTAGE_COMPENSATION_SATURATION;
+    }
+
+    private double getCollectorMotorVoltageFromPower(double power) {
+        return power * ToohardRollerConstants.COLLECTION_VOLTAGE_COMPENSATION_SATURATION;
     }
 }
