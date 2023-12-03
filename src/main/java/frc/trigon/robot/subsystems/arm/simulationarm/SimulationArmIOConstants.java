@@ -8,6 +8,8 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 
 public class SimulationArmIOConstants {
     private static final int
@@ -28,12 +30,20 @@ public class SimulationArmIOConstants {
     private static final double
             MECHANISM2D_WIDTH = 1,
             MECHANISM2D_HEIGHT = 1;
+    private static final double
+            MECHANISM2D_ROOT_X = 0,
+            MECHANISM2D_ROOT_Y = 0;
+    private static final double
+            MECHANISM2D_LIGAMENT_LENGTH = 1,
+            MECHANISM2D_LIGAMENT_ANGLE = 1;
     private static final double ARM_MASS = 1;
     private static final double DRUM_RADIUS_METERS = 1;
     private static final double FULLY_OPENED_ARM_LENGTH_METERS = 1;
     static final double RETRACTED_ARM_LENGTH_METERS = 1;
     static final double METERS_PER_REVOLUTION = 2048;
     static final Mechanism2d ARM_MECHANISM = new Mechanism2d(MECHANISM2D_WIDTH, MECHANISM2D_HEIGHT);
+    private static final MechanismRoot2d ARM_ROOT = ARM_MECHANISM.getRoot("ARM", MECHANISM2D_ROOT_X, MECHANISM2D_ROOT_Y);
+    static final MechanismLigament2d ARM_Ligament = ARM_ROOT.append(new MechanismLigament2d("Arm", MECHANISM2D_LIGAMENT_LENGTH, MECHANISM2D_LIGAMENT_ANGLE));
     static final SingleJointedArmSim ANGLE_MOTOR = new SingleJointedArmSim(
             ANGLE_MOTOR_GEARBOX,
             ANGLE_GEAR_RATIO,

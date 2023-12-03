@@ -56,12 +56,6 @@ public class SimulationArmIO extends ArmIO {
         setElevatorVoltage(calculateElevatorOutput(targetState));
     }
 
-    @Override
-    protected void startAdvantageKitLogging(LogTable logTable) {
-        armMechanism.akitLog(logTable);
-        Logger.recordOutput("Arm", armMechanism);
-    }
-
     private void setAngleVoltage(double voltage) {
         this.angleVoltage = voltage;
         angleMotor.setInputVoltage(voltage);

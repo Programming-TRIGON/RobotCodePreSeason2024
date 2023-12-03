@@ -34,6 +34,8 @@ public class Arm extends SubsystemBase {
         armIO.updateInputs(armInputs);
         Logger.processInputs("Arm", armInputs);
         Logger.recordOutput("Arm", armMechanism);
+        ArmConstants.ARM_LIGAMENT.setLength(armInputs.elevatorPositionRevolution);
+        ArmConstants.ARM_LIGAMENT.setAngle(armInputs.anglePositionDegrees);
     }
 
     boolean isElevatorOpening(double targetElevatorPosition) {

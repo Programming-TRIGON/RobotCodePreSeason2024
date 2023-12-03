@@ -31,9 +31,6 @@ public class ArmIO {
     protected void setTargetElevatorState(TrapezoidProfile.State targetState) {
     }
 
-    protected void startAdvantageKitLogging(LogTable logTable) {
-    }
-
     @AutoLog
     protected static class ArmInputs {
         public double angleMotorCurrent = 0;
