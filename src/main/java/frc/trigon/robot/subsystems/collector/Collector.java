@@ -11,7 +11,8 @@ public class Collector extends SubsystemBase {
     private final static Collector INSTANCE = new Collector();
     private final CollectorInputsAutoLogged collectorInputs = new CollectorInputsAutoLogged();
     private final Mechanism2d collectorMechanism = CollectorConstants.COLLECTOR_MECHANISM;
-    final CollectorIO collectorIO = CollectorIO.generateIO();
+    private final CollectorIO collectorIO = CollectorIO.generateIO();
+
     public static Collector getInstance() {
         return INSTANCE;
     }
@@ -24,7 +25,10 @@ public class Collector extends SubsystemBase {
     public void periodic() {
         collectorIO.updateInputs(collectorInputs);
         Logger.processInputs("Collector", collectorInputs);
-        Logger.recordOutput("Collector", collectorMechanism);
+    }
+
+    void setPower(double power) {
+        collectorIO.setPower(power);
     }
 
     private void startCurrentWatcher() {

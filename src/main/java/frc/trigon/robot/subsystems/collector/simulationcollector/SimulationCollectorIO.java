@@ -12,7 +12,6 @@ import org.littletonrobotics.junction.LogTable;
 
 public class SimulationCollectorIO extends CollectorIO {
     private final DCMotorSim motor = SimulationCollectorIOConstants.MOTOR;
-    private final Mechanism2d collectorMechanism = SimulationCollectorIOConstants.COLLECTOR_MECHANISM;
     private double motorVoltage;
 
     @Override
@@ -33,11 +32,5 @@ public class SimulationCollectorIO extends CollectorIO {
     @Override
     protected void stop() {
         setPower(0);
-    }
-
-    @Override
-    protected void startAdvantageKitLogging(LogTable logTable) {
-        collectorMechanism.akitLog(logTable);
-        SmartDashboard.putData("Mech2d", collectorMechanism);
     }
 }

@@ -24,9 +24,6 @@ public class CollectorIO {
     protected void stop() {
     }
 
-    protected void startAdvantageKitLogging(LogTable logTable) {
-    }
-
     @AutoLog
     protected static class CollectorInputs {
         public double motorCurrent = 0;

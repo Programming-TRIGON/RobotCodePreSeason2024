@@ -10,11 +10,6 @@ public class SimulationCollectorIOConstants {
     private static final double MOMENT_OF_INERTIA = 0.003;
     private static final double GEAR_RATIO = 12.8;
     static final int VOLTAGE_COMPENSATION_SATURATION = 12;
-    private static final double
-            MECHANISM2D_WIDTH = 1,
-            MECHANISM2D_HEIGHT = 1;
-
-    static final Mechanism2d COLLECTOR_MECHANISM = new Mechanism2d(MECHANISM2D_WIDTH, MECHANISM2D_HEIGHT);
 
     static final DCMotorSim MOTOR = new DCMotorSim(
             MOTOR_GEARBOX,

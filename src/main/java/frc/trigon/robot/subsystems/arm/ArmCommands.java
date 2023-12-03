@@ -5,9 +5,7 @@ import edu.wpi.first.wpilibj2.command.*;
 import java.util.Set;
 
 public class ArmCommands {
-
     public static Command getSetTargetArmStateCommand(ArmConstants.ArmState targetState) {
-
         return getSetTargetArmStateCommand(targetState, 100, 100);
     }
 
