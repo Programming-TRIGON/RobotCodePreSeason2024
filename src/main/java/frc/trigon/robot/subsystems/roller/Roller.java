@@ -1,9 +1,6 @@
 package frc.trigon.robot.subsystems.roller;
 
-import edu.wpi.first.wpilibj2.command.*;
-import frc.trigon.robot.subsystems.arm.ArmIO;
-import frc.trigon.robot.subsystems.roller.toohardroller.ToohardRollerConstants;
-import frc.trigon.robot.utilities.Commands;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
 public class Roller extends SubsystemBase {
@@ -24,92 +21,32 @@ public class Roller extends SubsystemBase {
         Logger.processInputs("Roller", rollerInputs);
     }
 
-    /**
-     * @return a command that only opens the angle of the roller
-     */
-    public Command getOpenRollerCommand() {
-        return new FunctionalCommand(
-                this::openRoller,
-                () -> {
-                },
-                (interrupted) -> rollerIO.stopAngleMotor(),
-                this::isOpen,
-                this
-        );
-    }
-
-    /**
-     * @return a command that only closes the angle of the roller
-     */
-    public Command getCloseRollerCommand() {
-        return new FunctionalCommand(
-                this::closeRoller,
-                () -> {
-                },
-                (interrupted) -> rollerIO.stopAngleMotor(),
-                this::isClosed
-        );
-    }
-
-    /**
-     * @return a command that activates the collection motor with collection power
-     */
-    public Command getCollectCommand() {
-        return new StartEndCommand(
-                this::collect,
-                rollerIO::stopCollectionMotor,
-                this
-        );
-    }
-
-    /**
-     * @return a command that stops the collection motor
-     */
-    public Command getStopCollectionCommand() {
-        return new InstantCommand(
-                rollerIO::stopCollectionMotor,
-                this
-        );
-    }
-
-    /**
-     * @return a command that opens the angle of the roller and activates the collection motor
-     */
-    public Command getFullOpeningCommand() {
-        return new ParallelCommandGroup(
-                getOpenRollerCommand(),
-                Commands.removeRequirements(getCollectCommand())
-        );
-    }
-
-    /**
-     * @return a command that closes the angle of the roller and stops the collection motor
-     */
-    public Command getFullStopCommand() {
-        return new ParallelCommandGroup(
-                getCloseRollerCommand(),
-                Commands.removeRequirements(getStopCollectionCommand())
-        );
-    }
-
-    private void openRoller() {
+    void openRoller() {
         rollerIO.setAngleMotorPower(RollerConstants.OPEN_POWER);
     }
 
-    private void closeRoller() {
+    void closeRoller() {
         rollerIO.setAngleMotorPower(RollerConstants.CLOSE_POWER);
     }
 
-    private void collect() {
+    void collect() {
         rollerIO.setCollectionMotorPower(RollerConstants.COLLECTION_MOTOR_SPEED);
     }
 
-    private boolean isOpen() {
+    boolean isOpen() {
         return !rollerInputs.forwardLimitSwitch;
     }
 
-    private boolean isClosed() {
+    boolean isClosed() {
         return !rollerInputs.backwardLimitSwitch;
+    }
+
+    void stopAngleMotor() {
+        rollerIO.stopAngleMotor();
+    }
+
+    void stopCollectionMotor() {
+        rollerIO.stopCollectionMotor();
     }
 }
 
