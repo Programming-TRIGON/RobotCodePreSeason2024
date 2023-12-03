@@ -4,13 +4,9 @@ import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.trigon.robot.subsystems.arm.ArmIO;
 import frc.trigon.robot.subsystems.arm.ArmInputsAutoLogged;
-import frc.trigon.robot.subsystems.arm.simulationarm.SimulationArmIOConstants;
 import frc.trigon.robot.utilities.Conversions;
-import org.littletonrobotics.junction.LogTable;
 
 public class KablamaArmIO extends ArmIO {
     private final CANSparkMax
@@ -47,7 +43,6 @@ public class KablamaArmIO extends ArmIO {
     @Override
     protected void setTargetAngleState(TrapezoidProfile.State targetState) {
         setAngleVoltage(calculateAngleOutput(targetState));
-
     }
 
     @Override

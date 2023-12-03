@@ -10,7 +10,6 @@ import org.littletonrobotics.junction.Logger;
 public class Collector extends SubsystemBase {
     private final static Collector INSTANCE = new Collector();
     private final CollectorInputsAutoLogged collectorInputs = new CollectorInputsAutoLogged();
-    private final Mechanism2d collectorMechanism = CollectorConstants.COLLECTOR_MECHANISM;
     private final CollectorIO collectorIO = CollectorIO.generateIO();
 
     public static Collector getInstance() {
