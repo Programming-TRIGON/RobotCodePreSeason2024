@@ -21,14 +21,14 @@ public class SimulationRollerIO extends RollerIO {
         inputs.angleMotorVoltage = angleMotorVoltage;
         inputs.angleMotorCurrent = angleSimulation.getCurrentDrawAmps();
         inputs.collectionMotorVoltage = collectorMotorVoltage;
-        inputs.collectionMotorVoltage = collectorSimulation.getCurrentDrawAmps();
+        inputs.collectionMotorCurrent = collectorSimulation.getCurrentDrawAmps();
         inputs.forwardLimitSwitch = angleSimulation.hasHitUpperLimit();
         inputs.backwardLimitSwitch = angleSimulation.hasHitLowerLimit();
     }
 
     @Override
     protected void setAngleMotorPower(double power) {
-        angleSimulation.setInputVoltage(power);
+        angleSimulation.setInputVoltage();
     }
 
     @Override
