@@ -32,6 +32,7 @@ public class SideShooterConstants {
     static final CANcoder ANGLE_ENCODER = new CANcoder(ANGLE_ENCODER_ID);
     static final TalonFX SHOOTING_MOTOR = new TalonFX(SHOOTING_MOTOR_ID);
     static final CANSparkMax ANGEL_MOTOR = new CANSparkMax(ANGLE_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless);
+
     private static final double
             MAX_ANGLE_VELOCITY = 0,
             MAX_ANGLE_ACCELERATION = 0;
@@ -39,9 +40,11 @@ public class SideShooterConstants {
             MAX_ANGLE_VELOCITY,
             MAX_ANGLE_ACCELERATION
     );
+
     static final StatusSignal<Double>
             ANGEL_ENCODER_POSITION_SIGNAL = ANGLE_ENCODER.getPosition(),
             ANGEL_ENCODER_VELOCITY_SIGNAL = ANGLE_ENCODER.getVelocity();
+
     private static final double
             ANGLE_P = 0,
             ANGLE_I = 0,
@@ -88,7 +91,7 @@ public class SideShooterConstants {
     }
 
     public enum SideShooterState {
-        COLLECTION(Rotation2d.fromDegrees(0),0),
+        COLLECTION(Rotation2d.fromDegrees(0), 0),
         HIGH_STATE(Rotation2d.fromDegrees(0), 0),
         MID_STATE(Rotation2d.fromDegrees(0), 0),
         LOW_STATE(Rotation2d.fromDegrees(0), 0);

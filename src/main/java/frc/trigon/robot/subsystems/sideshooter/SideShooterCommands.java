@@ -5,41 +5,36 @@ import edu.wpi.first.wpilibj2.command.*;
 
 public class SideShooterCommands {
     private static final SideShooter SIDE_SHOOTER = SideShooter.getInstance();
-    public static Command getSetTargetAngleCommand(Rotation2d targetAngle){
+
+    public static Command getSetTargetStateCommand(boolean byOrder, SideShooterConstants.SideShooterState targetState) {
+        if (!byOrder) {
+            return new ParallelCommandGroup(
+                    getSetTargetAngleCommand(targetState.angle),
+                    getSetTargetShootingVoltageCommand(targetState.voltage)
+            );
+        }
+        return new SequentialCommandGroup(
+                getSetTargetAngleCommand(targetState.angle).until(()-> SIDE_SHOOTER.atAngle(targetState.angle)),
+                getSetTargetShootingVoltageCommand(targetState.voltage)
+        );
+    }
+
+    public static Command getSetTargetAngleCommand(Rotation2d targetAngle) {
         return new FunctionalCommand(
-                ()-> SideShooter.getInstance().generateAngleMotorProfile(targetAngle),
+                () -> SideShooter.getInstance().generateAngleMotorProfile(targetAngle),
                 SIDE_SHOOTER::setTargetAngleFromProfile,
                 (interrupted) -> {
                 },
-                ()-> false,
+                () -> false,
                 SIDE_SHOOTER
         );
     }
 
-    public static Command getSetVoltageShootingCommand(double Voltage){
+    public static Command getSetTargetShootingVoltageCommand(double targetVoltage) {
         return new StartEndCommand(
-                ()-> SideShooter.getInstance().setTargetShootingVoltage(Voltage),
-                ()-> SideShooter.getInstance().stopShooting(),
+                () -> SIDE_SHOOTER.setTargetShootingVoltage(targetVoltage),
+                SIDE_SHOOTER::stopShooting,
                 SIDE_SHOOTER
         );
-    }
-
-    public static Command getSetTargetStateCommand(boolean byOrder, SideShooterConstants.SideShooterState state){
-        if (byOrder){
-            return new ParallelCommandGroup(
-                    getSetTargetAngleCommand(state.angle),
-                    getSetVoltageShootingCommand(state.voltage)
-            );
-        }else {
-            return new SequentialCommandGroup(
-                    getSetTargetAngleCommand(state.angle),
-                    getSetVoltageShootingCommand(state.voltage)
-            );
-        }
     }
 }
-
-
-
-
-
