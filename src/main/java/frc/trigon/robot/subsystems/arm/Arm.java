@@ -8,8 +8,6 @@ import edu.wpi.first.wpilibj2.command.*;
 import frc.trigon.robot.utilities.Conversions;
 import org.littletonrobotics.junction.Logger;
 
-import java.util.Set;
-
 public class Arm extends SubsystemBase {
     private final static Arm INSTANCE = new Arm();
     private final ArmIO armIO = ArmIO.generateIO();
@@ -33,9 +31,8 @@ public class Arm extends SubsystemBase {
     public void periodic() {
         armIO.updateInputs(armInputs);
         Logger.processInputs("Arm", armInputs);
+        updateMechanism();
         Logger.recordOutput("Arm", armMechanism);
-        ArmConstants.ARM_LIGAMENT.setLength(armInputs.elevatorPositionRevolution);
-        ArmConstants.ARM_LIGAMENT.setAngle(armInputs.anglePositionDegrees);
     }
 
     boolean isElevatorOpening(double targetElevatorPosition) {
@@ -89,5 +86,9 @@ public class Arm extends SubsystemBase {
     private double getElevatorMotorProfileTime() {
         return Timer.getFPGATimestamp() - lastElevatorMotorProfileGenerationTime;
     }
-}
 
+    private void updateMechanism() {
+        ArmConstants.ARM_MECHANISM_LIGAMENT.setLength(armInputs.elevatorPositionRevolution);
+        ArmConstants.ARM_MECHANISM_LIGAMENT.setAngle(armInputs.anglePositionDegrees);
+    }
+}

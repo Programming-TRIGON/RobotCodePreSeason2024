@@ -20,17 +20,17 @@ public class ArmConstants {
                     MAX_ELEVATOR_VELOCITY, MAX_ELEVATOR_ACCELERATION
             );
     private static final double
-            MECHANISM2D_WIDTH = 1,
-            MECHANISM2D_HEIGHT = 1;
+            ARM_WIDTH = 1,
+            ARM_HEIGHT = 1;
     private static final double
-            MECHANISM2D_ROOT_X = 0,
-            MECHANISM2D_ROOT_Y = 0;
+            ARM_ROOT_WIDTH = 0,
+            ARM_ROOT_LENGTH = 0;
     private static final double
-            MECHANISM2D_LIGAMENT_LENGTH = 0,
-            MECHANISM2D_LIGAMENT_ANGLE = 0;
-    static final Mechanism2d ARM_MECHANISM = new Mechanism2d(MECHANISM2D_WIDTH, MECHANISM2D_HEIGHT);
-    static final MechanismRoot2d ARM_ROOT = ARM_MECHANISM.getRoot("Arm", MECHANISM2D_ROOT_X, MECHANISM2D_ROOT_Y);
-    static final MechanismLigament2d ARM_LIGAMENT = ARM_ROOT.append(new MechanismLigament2d("Arm", MECHANISM2D_LIGAMENT_LENGTH, MECHANISM2D_LIGAMENT_ANGLE));
+            ARM_LIGAMENT_LENGTH = 0,
+            ARM_LIGAMENT_ANGLE = 0;
+    static final Mechanism2d ARM_MECHANISM = new Mechanism2d(ARM_WIDTH, ARM_HEIGHT);
+    private static final MechanismRoot2d ARM_MECHANISM_ROOT = ARM_MECHANISM.getRoot("Arm root", ARM_ROOT_WIDTH, ARM_ROOT_LENGTH);
+    static final MechanismLigament2d ARM_MECHANISM_LIGAMENT = ARM_MECHANISM_ROOT.append(new MechanismLigament2d("Arm ligament", ARM_LIGAMENT_LENGTH, ARM_LIGAMENT_ANGLE));
 
     public enum ArmState {
         FIRST_STATE(Rotation2d.fromDegrees(100), 7),

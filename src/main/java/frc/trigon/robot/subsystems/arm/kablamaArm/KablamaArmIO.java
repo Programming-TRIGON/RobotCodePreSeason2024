@@ -1,5 +1,6 @@
 package frc.trigon.robot.subsystems.arm.kablamaArm;
 
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -14,6 +15,7 @@ public class KablamaArmIO extends ArmIO {
             followerAngleMotor = KablamaArmConstants.FOLLOWER_ANGLE_MOTOR,
             masterElevatorMotor = KablamaArmConstants.MASTER_ELEVATOR_MOTOR,
             followerElevatorMotor = KablamaArmConstants.FOLLOWER_ELEVATOR_MOTOR;
+    private final TalonSRX elevatorEncoder = KablamaArmConstants.ELEVATOR_ENCODER;
 
     @Override
     protected void updateInputs(ArmInputsAutoLogged inputs) {
@@ -82,7 +84,7 @@ public class KablamaArmIO extends ArmIO {
     }
 
     private double getElevatorPositionRevolutions() {
-        return Conversions.magTicksToRevolutions(KablamaArmConstants.ELEVATOR_ENCODER.getSelectedSensorPosition());
+        return Conversions.magTicksToRevolutions(elevatorEncoder.getSelectedSensorPosition());
     }
 
     private double getAngleVelocityDegreesPerSecond() {
@@ -91,7 +93,7 @@ public class KablamaArmIO extends ArmIO {
     }
 
     private double getElevatorVelocityRevolutionsPerSecond() {
-        double magTicksPerSecond = Conversions.perHundredMsToPerSecond(KablamaArmConstants.ELEVATOR_ENCODER.getSelectedSensorVelocity());
+        double magTicksPerSecond = Conversions.perHundredMsToPerSecond(elevatorEncoder.getSelectedSensorVelocity());
         return Conversions.magTicksToRevolutions(magTicksPerSecond);
     }
 

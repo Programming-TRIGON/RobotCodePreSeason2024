@@ -15,7 +15,6 @@ import org.littletonrobotics.junction.Logger;
 public class SimulationArmIO extends ArmIO {
     private final SingleJointedArmSim angleMotor = SimulationArmIOConstants.ANGLE_MOTOR;
     private final ElevatorSim elevatorMotor = SimulationArmIOConstants.ELEVATOR_MOTOR;
-    private final Mechanism2d armMechanism = SimulationArmIOConstants.ARM_MECHANISM;
     private double
             angleVoltage = 0,
             elevatorVoltage = 0;
