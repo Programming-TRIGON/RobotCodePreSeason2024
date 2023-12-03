@@ -1,11 +1,12 @@
 package frc.trigon.robot.subsystems.roller.simulationroller;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.subsystems.roller.RollerIO;
 import frc.trigon.robot.subsystems.roller.RollerInputsAutoLogged;
-import frc.trigon.robot.subsystems.roller.toohardroller.ToohardRollerConstants;
+import frc.trigon.robot.utilities.Conversions;
 
 public class SimulationRollerIO extends RollerIO {
     private final SingleJointedArmSim angleSimulation = SimulationRollerConstants.ANGLE_MOTOR;
@@ -28,12 +29,12 @@ public class SimulationRollerIO extends RollerIO {
 
     @Override
     protected void setAngleMotorPower(double power) {
-        angleSimulation.setInputVoltage(getAngleVoltageFromPower(power));
+        setAngleMotorPower(power);
     }
 
     @Override
     protected void setCollectionMotorPower(double power) {
-        collectorSimulation.setInputVoltage(getCollectorMotorVoltageFromPower(power));
+        setCollectionMotorPower(power);
     }
 
     @Override
@@ -47,10 +48,28 @@ public class SimulationRollerIO extends RollerIO {
     }
 
     private double getAngleVoltageFromPower(double power) {
-        return power * ToohardRollerConstants.ANGLE_VOLTAGE_COMPENSATION_SATURATION;
+        return Conversions.compensatedPowerToVoltage(power, SimulationRollerConstants.getVoltageCompensationSaturation());
     }
 
     private double getCollectorMotorVoltageFromPower(double power) {
-        return power * ToohardRollerConstants.COLLECTION_VOLTAGE_COMPENSATION_SATURATION;
+        return Conversions.compensatedPowerToVoltage(power, SimulationRollerConstants.getVoltageCompensationSaturation());
+    }
+
+    private void setAngleMotorVoltage(double voltage) {
+        angleMotorVoltage = MathUtil.clamp(
+                voltage,
+                -SimulationRollerConstants.getVoltageCompensationSaturation(),
+                SimulationRollerConstants.getVoltageCompensationSaturation()
+        );
+        angleSimulation.setInputVoltage(angleMotorVoltage);
+    }
+
+    private void setCollectorMotorVoltage(double voltage) {
+        collectorMotorVoltage = MathUtil.clamp(
+                voltage,
+                -SimulationRollerConstants.getVoltageCompensationSaturation(),
+                SimulationRollerConstants.getVoltageCompensationSaturation()
+        );
+        collectorSimulation.setInputVoltage(collectorMotorVoltage);
     }
 }

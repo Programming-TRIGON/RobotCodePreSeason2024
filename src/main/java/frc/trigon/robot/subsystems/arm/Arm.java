@@ -3,11 +3,9 @@ package frc.trigon.robot.subsystems.arm;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.*;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.trigon.robot.utilities.Conversions;
 import org.littletonrobotics.junction.Logger;
-
-import java.util.Set;
 
 public class Arm extends SubsystemBase {
     private final static Arm INSTANCE = new Arm();
@@ -79,6 +77,10 @@ public class Arm extends SubsystemBase {
 
     private double getElevatorProfileTime() {
         return Timer.getFPGATimestamp() - lastElevatorMotorProfileGenerationTime;
+    }
+
+    double getElevatorPositionRevolutions() {
+        return armInputs.elevatorPositionRevolutions;
     }
 }
 

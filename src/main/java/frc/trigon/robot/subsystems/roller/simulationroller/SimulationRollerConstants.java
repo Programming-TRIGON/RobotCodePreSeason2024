@@ -22,6 +22,7 @@ public class SimulationRollerConstants {
             MAX_ANGLE = Rotation2d.fromDegrees(90);
     private static final boolean ANGLE_SIMULATE_GRAVITY = true;
     private static final double COLLECTOR_MOMENT_OF_INERTIA = 0.0003;
+    private static final double VOLTAGE_COMPENSATION_SATURATION = 12;
     static final SingleJointedArmSim ANGLE_MOTOR = new SingleJointedArmSim(
             ANGLE_MOTOR_GEARBOX,
             ANGLE_GEAR_RATIO,
@@ -37,4 +38,7 @@ public class SimulationRollerConstants {
             COLLECTOR_GEAR_RATIO,
             COLLECTOR_MOMENT_OF_INERTIA
     );
+    static double getVoltageCompensationSaturation()    {
+        return VOLTAGE_COMPENSATION_SATURATION;
+    }
 }
