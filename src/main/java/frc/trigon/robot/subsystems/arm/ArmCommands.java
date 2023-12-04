@@ -9,6 +9,8 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import java.util.Set;
 
 public class ArmCommands {
+    private static final Arm arm = Arm.getInstance();
+
     public static Command getSetTargetArmStateCommand(ArmConstants.ArmState targetState) {
         return getSetTargetArmStateCommand(targetState, 100, 100);
     }
@@ -41,42 +43,46 @@ public class ArmCommands {
     public static Command getSetTargetArmPositionCommand(Rotation2d targetAngle, double targetElevatorPosition, double angleSpeedPercentage, double elevatorSpeedPercentage) {
         return new DeferredCommand(
                 () -> getCurrentSetTargetArmPositionCommand(targetAngle, targetElevatorPosition, angleSpeedPercentage, elevatorSpeedPercentage),
-                Set.of(Arm.getInstance())
+                Set.of(arm)
         );
     }
 
     public static Command getCurrentSetTargetArmPositionCommand(Rotation2d targetAngle, double targetElevatorPosition, double angleSpeedPercentage, double elevatorSpeedPercentage) {
-        if (targetElevatorPosition >= Arm.getInstance().getElevatorPositionRevolutions()) {
+        if (isElevatorRising(targetElevatorPosition)) {
             return new SequentialCommandGroup(
-                    getSetTargetAngleCommand(targetAngle, angleSpeedPercentage),
+                    getSetTargetAngleCommand(targetAngle, angleSpeedPercentage).until(arm.atTargetAngle(targetAngle)),
                     getSetTargetElevatorPositionCommand(targetElevatorPosition, elevatorSpeedPercentage)
             );
         }
         return new SequentialCommandGroup(
-                getSetTargetElevatorPositionCommand(targetElevatorPosition, elevatorSpeedPercentage),
+                getSetTargetElevatorPositionCommand(targetElevatorPosition, elevatorSpeedPercentage).until(arm.atTargetElevatorPosition(targetElevatorPosition)),
                 getSetTargetAngleCommand(targetAngle, angleSpeedPercentage)
         );
     }
 
     private static Command getSetTargetAngleCommand(Rotation2d targetAngle, double speedPercentage) {
         return new FunctionalCommand(
-                () -> Arm.getInstance().generateAngleMotorProfile(targetAngle, speedPercentage),
-                Arm.getInstance()::setTargetAngleFromProfile,
+                () -> arm.generateAngleMotorProfile(targetAngle, speedPercentage),
+                arm::setTargetAngleFromProfile,
                 (interrupted) -> {
                 },
                 () -> false,
-                Arm.getInstance()
+                arm
         );
     }
 
     private static Command getSetTargetElevatorPositionCommand(double targetElevatorPosition, double speedPercentage) {
         return new FunctionalCommand(
-                () -> Arm.getInstance().generateElevatorMotorProfile(targetElevatorPosition, speedPercentage),
-                Arm.getInstance()::setTargetElevatorPositionFromProfile,
+                () -> arm.generateElevatorMotorProfile(targetElevatorPosition, speedPercentage),
+                arm::setTargetElevatorPositionFromProfile,
                 (interrupted) -> {
                 },
                 () -> false,
-                Arm.getInstance()
+                arm
         );
+    }
+
+    private static boolean isElevatorRising(double targetElevatorPosition) {
+        return targetElevatorPosition >= arm.getElevatorPositionRevolutions();
     }
 }

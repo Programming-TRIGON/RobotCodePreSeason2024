@@ -82,5 +82,12 @@ public class Arm extends SubsystemBase {
     double getElevatorPositionRevolutions() {
         return armInputs.elevatorPositionRevolutions;
     }
-}
 
+    boolean atTargetAngle(Rotation2d targetAngle) {
+        return targetAngle.getDegrees() == armInputs.anglePositionDegrees;
+    }
+
+    boolean atTargetElevatorPosition(double targetElevatorPosition) {
+        return targetElevatorPosition == armInputs.elevatorPositionRevolutions;
+    }
+}

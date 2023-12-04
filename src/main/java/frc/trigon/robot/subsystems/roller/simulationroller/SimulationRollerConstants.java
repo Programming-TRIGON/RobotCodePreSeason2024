@@ -38,7 +38,4 @@ public class SimulationRollerConstants {
             COLLECTOR_GEAR_RATIO,
             COLLECTOR_MOMENT_OF_INERTIA
     );
-    static double getVoltageCompensationSaturation()    {
-        return VOLTAGE_COMPENSATION_SATURATION;
-    }
 }

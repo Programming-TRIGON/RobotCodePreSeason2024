@@ -29,12 +29,12 @@ public class SimulationRollerIO extends RollerIO {
 
     @Override
     protected void setAngleMotorPower(double power) {
-        setAngleMotorPower(power);
+        setAngleMotorVoltage(powerToVoltage(power));
     }
 
     @Override
     protected void setCollectionMotorPower(double power) {
-        setCollectionMotorPower(power);
+        setCollectorMotorVoltage(powerToVoltage(power));
     }
 
     @Override
@@ -47,19 +47,15 @@ public class SimulationRollerIO extends RollerIO {
         collectorSimulation.setInputVoltage(0);
     }
 
-    private double getAngleVoltageFromPower(double power) {
-        return Conversions.compensatedPowerToVoltage(power, SimulationRollerConstants.getVoltageCompensationSaturation());
-    }
-
-    private double getCollectorMotorVoltageFromPower(double power) {
-        return Conversions.compensatedPowerToVoltage(power, SimulationRollerConstants.getVoltageCompensationSaturation());
+    private double powerToVoltage(double power) {
+        return Conversions.compensatedPowerToVoltage(power, 12);
     }
 
     private void setAngleMotorVoltage(double voltage) {
         angleMotorVoltage = MathUtil.clamp(
                 voltage,
-                -SimulationRollerConstants.getVoltageCompensationSaturation(),
-                SimulationRollerConstants.getVoltageCompensationSaturation()
+                -12,
+                12
         );
         angleSimulation.setInputVoltage(angleMotorVoltage);
     }
@@ -67,8 +63,8 @@ public class SimulationRollerIO extends RollerIO {
     private void setCollectorMotorVoltage(double voltage) {
         collectorMotorVoltage = MathUtil.clamp(
                 voltage,
-                -SimulationRollerConstants.getVoltageCompensationSaturation(),
-                SimulationRollerConstants.getVoltageCompensationSaturation()
+                -12,
+                12
         );
         collectorSimulation.setInputVoltage(collectorMotorVoltage);
     }

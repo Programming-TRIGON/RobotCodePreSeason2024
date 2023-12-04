@@ -4,58 +4,59 @@ import edu.wpi.first.wpilibj2.command.*;
 import frc.trigon.robot.utilities.Commands;
 
 public class RollerCommands {
+    private static final Roller roller = Roller.getInstance();
     /**
      * @return a command that only opens the angle of the roller
      */
-    public Command getOpenRollerCommand() {
+    public static Command getOpenRollerCommand() {
         return new FunctionalCommand(
-                Roller.getInstance()::openRoller,
+                roller::openRoller,
                 () -> {
                 },
-                (interrupted) -> Roller.getInstance().stopAngleMotor(),
-                Roller.getInstance()::isOpen,
-                Roller.getInstance()
+                (interrupted) -> roller.stopAngleMotor(),
+                roller::isOpen,
+                roller
         );
     }
 
     /**
      * @return a command that only closes the angle of the roller
      */
-    public Command getCloseRollerCommand() {
+    public static Command getCloseRollerCommand() {
         return new FunctionalCommand(
-                Roller.getInstance()::closeRoller,
+                roller::closeRoller,
                 () -> {
                 },
-                (interrupted) -> Roller.getInstance().stopAngleMotor(),
-                Roller.getInstance()::isClosed
+                (interrupted) -> roller.stopAngleMotor(),
+                roller::isClosed
         );
     }
 
     /**
      * @return a command that activates the collection motor with collection power
      */
-    public Command getCollectCommand() {
+    public static Command getCollectCommand() {
         return new StartEndCommand(
-                Roller.getInstance()::collect,
-                Roller.getInstance()::stopCollectionMotor,
-                Roller.getInstance()
+                roller::collect,
+                roller::stopCollectionMotor,
+                roller
         );
     }
 
     /**
      * @return a command that stops the collection motor
      */
-    public Command getStopCollectionCommand() {
+    public static Command getStopCollectionCommand() {
         return new InstantCommand(
-                Roller.getInstance()::stopCollectionMotor,
-                Roller.getInstance()
+                roller::stopCollectionMotor,
+                roller
         );
     }
 
     /**
      * @return a command that opens the angle of the roller and activates the collection motor
      */
-    public Command getFullOpeningCommand() {
+    public static Command getFullOpeningCommand() {
         return new ParallelCommandGroup(
                 getOpenRollerCommand(),
                 frc.trigon.robot.utilities.Commands.removeRequirements(getCollectCommand())
@@ -65,7 +66,7 @@ public class RollerCommands {
     /**
      * @return a command that closes the angle of the roller and stops the collection motor
      */
-    public Command getFullStopCommand() {
+    public static Command getFullStopCommand() {
         return new ParallelCommandGroup(
                 getCloseRollerCommand(),
                 Commands.removeRequirements(getStopCollectionCommand())
