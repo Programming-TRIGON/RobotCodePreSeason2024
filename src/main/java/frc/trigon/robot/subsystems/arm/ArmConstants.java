@@ -19,18 +19,19 @@ public class ArmConstants {
             ELEVATOR_CONSTRAINTS = new TrapezoidProfile.Constraints(
                     MAX_ELEVATOR_VELOCITY, MAX_ELEVATOR_ACCELERATION
             );
+
     private static final double
-            ARM_WIDTH = 1,
-            ARM_HEIGHT = 1;
+            ARM_MECHANISM_WIDTH = 1,
+            ARM_MECHANISM_HEIGHT = 1;
     private static final double
             ARM_ROOT_WIDTH = 0,
             ARM_ROOT_LENGTH = 0;
     private static final double
             ARM_LIGAMENT_LENGTH = 0,
             ARM_LIGAMENT_ANGLE = 0;
-    static final Mechanism2d ARM_MECHANISM = new Mechanism2d(ARM_WIDTH, ARM_HEIGHT);
-    private static final MechanismRoot2d ARM_MECHANISM_ROOT = ARM_MECHANISM.getRoot("Arm root", ARM_ROOT_WIDTH, ARM_ROOT_LENGTH);
-    static final MechanismLigament2d ARM_MECHANISM_LIGAMENT = ARM_MECHANISM_ROOT.append(new MechanismLigament2d("Arm ligament", ARM_LIGAMENT_LENGTH, ARM_LIGAMENT_ANGLE));
+    static final Mechanism2d ARM_MECHANISM = new Mechanism2d(ARM_MECHANISM_WIDTH, ARM_MECHANISM_HEIGHT);
+    private static final MechanismRoot2d ARM_ROOT = ARM_MECHANISM.getRoot("ArmRoot", ARM_ROOT_WIDTH, ARM_ROOT_LENGTH);
+    static final MechanismLigament2d ARM_LIGAMENT = ARM_ROOT.append(new MechanismLigament2d("ArmLigament", ARM_LIGAMENT_LENGTH, ARM_LIGAMENT_ANGLE));
 
     public enum ArmState {
         FIRST_STATE(Rotation2d.fromDegrees(100), 7),

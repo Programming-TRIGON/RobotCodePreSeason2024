@@ -3,7 +3,6 @@ package frc.trigon.robot.subsystems.arm;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.trigon.robot.utilities.Conversions;
 import org.littletonrobotics.junction.Logger;
@@ -12,7 +11,6 @@ public class Arm extends SubsystemBase {
     private final static Arm INSTANCE = new Arm();
     private final ArmIO armIO = ArmIO.generateIO();
     private final ArmInputsAutoLogged armInputs = new ArmInputsAutoLogged();
-    private final Mechanism2d armMechanism = ArmConstants.ARM_MECHANISM;
     private TrapezoidProfile
             angleMotorProfile = null,
             elevatorMotorProfile = null;
@@ -32,7 +30,6 @@ public class Arm extends SubsystemBase {
         armIO.updateInputs(armInputs);
         Logger.processInputs("Arm", armInputs);
         updateMechanism();
-        Logger.recordOutput("Arm", armMechanism);
     }
 
     boolean isElevatorOpening(double targetElevatorPosition) {
@@ -88,7 +85,8 @@ public class Arm extends SubsystemBase {
     }
 
     private void updateMechanism() {
-        ArmConstants.ARM_MECHANISM_LIGAMENT.setLength(armInputs.elevatorPositionRevolution);
-        ArmConstants.ARM_MECHANISM_LIGAMENT.setAngle(armInputs.anglePositionDegrees);
+        ArmConstants.ARM_LIGAMENT.setLength(armInputs.elevatorPositionRevolution);
+        ArmConstants.ARM_LIGAMENT.setAngle(armInputs.anglePositionDegrees);
+        Logger.recordOutput("Arm mechanism", ArmConstants.ARM_MECHANISM);
     }
 }
