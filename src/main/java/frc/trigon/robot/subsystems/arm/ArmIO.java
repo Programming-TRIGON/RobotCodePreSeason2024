@@ -18,10 +18,10 @@ public class ArmIO {
     protected void updateInputs(ArmInputsAutoLogged inputs) {
     }
 
-    protected void setTargetAngle(TrapezoidProfile.State targetState) {
+    protected void setTargetAngleState(TrapezoidProfile.State targetState) {
     }
 
-    protected void setTargetElevatorPosition(TrapezoidProfile.State targetState) {
+    protected void setTargetElevatorState(TrapezoidProfile.State targetState) {
     }
 
     protected void stopAngleMotors() {

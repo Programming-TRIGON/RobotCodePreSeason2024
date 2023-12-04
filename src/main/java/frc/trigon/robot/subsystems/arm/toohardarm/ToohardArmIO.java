@@ -28,12 +28,12 @@ public class ToohardArmIO extends ArmIO {
     }
 
     @Override
-    protected void setTargetAngle(TrapezoidProfile.State targetState) {
+    protected void setTargetAngleState(TrapezoidProfile.State targetState) {
         setAngleMotorsState(setAnglePowerFromProfile(targetState));
     }
 
     @Override
-    protected void setTargetElevatorPosition(TrapezoidProfile.State targetState) {
+    protected void setTargetElevatorState(TrapezoidProfile.State targetState) {
         setElevatorMotorsState(setElevatorPowerFromProfile(targetState));
     }
 

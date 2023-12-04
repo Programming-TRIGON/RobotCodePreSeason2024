@@ -4,18 +4,19 @@ import edu.wpi.first.wpilibj2.command.*;
 import frc.trigon.robot.utilities.Commands;
 
 public class RollerCommands {
-    private static final Roller roller = Roller.getInstance();
+    private static final Roller ROLLER = Roller.getInstance();
+
     /**
      * @return a command that only opens the angle of the roller
      */
     public static Command getOpenRollerCommand() {
         return new FunctionalCommand(
-                roller::openRoller,
+                ROLLER::openRoller,
                 () -> {
                 },
-                (interrupted) -> roller.stopAngleMotor(),
-                roller::isOpen,
-                roller
+                (interrupted) -> ROLLER.stopAngleMotor(),
+                ROLLER::isOpen,
+                ROLLER
         );
     }
 
@@ -24,11 +25,11 @@ public class RollerCommands {
      */
     public static Command getCloseRollerCommand() {
         return new FunctionalCommand(
-                roller::closeRoller,
+                ROLLER::closeRoller,
                 () -> {
                 },
-                (interrupted) -> roller.stopAngleMotor(),
-                roller::isClosed
+                (interrupted) -> ROLLER.stopAngleMotor(),
+                ROLLER::isClosed
         );
     }
 
@@ -37,9 +38,9 @@ public class RollerCommands {
      */
     public static Command getCollectCommand() {
         return new StartEndCommand(
-                roller::collect,
-                roller::stopCollectionMotor,
-                roller
+                ROLLER::collect,
+                ROLLER::stopCollectionMotor,
+                ROLLER
         );
     }
 
@@ -48,8 +49,8 @@ public class RollerCommands {
      */
     public static Command getStopCollectionCommand() {
         return new InstantCommand(
-                roller::stopCollectionMotor,
-                roller
+                ROLLER::stopCollectionMotor,
+                ROLLER
         );
     }
 
