@@ -32,6 +32,14 @@ public class Arm extends SubsystemBase {
         updateMechanism();
     }
 
+    boolean reachedTargetAngle(double targetAngle) {
+        return armInputs.anglePositionDegrees == targetAngle;
+    }
+
+    boolean reachedTargetElevatorPosition(double targetElevatorPosition) {
+        return armInputs.elevatorPositionRevolution == targetElevatorPosition;
+    }
+
     boolean isElevatorOpening(double targetElevatorPosition) {
         return armInputs.elevatorPositionRevolution < targetElevatorPosition;
     }
