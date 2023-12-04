@@ -24,7 +24,6 @@ public class Arm extends SubsystemBase {
     }
 
     private Arm() {
-
     }
 
     @Override
