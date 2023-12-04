@@ -17,49 +17,42 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 public class SideShooterConstants {
+    static final boolean FOC_ENABLED = true;
     private static final double VOLTAGE_COMPENSATION_SATURATION = 12;
     private static final int
             SHOOTING_MOTOR_ID = 0,
             ANGLE_MOTOR_ID = 1,
             ANGLE_ENCODER_ID = 2;
+    static final TalonFX SHOOTING_MOTOR = new TalonFX(SHOOTING_MOTOR_ID);
     private static final double ANGLE_ENCODER_OFFSET = 0;
     private static final AbsoluteSensorRangeValue ANGLE_ENCODER_RANGE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
     private static final InvertedValue SHOOTING_MOTOR_INVERTED_VALUE = InvertedValue.CounterClockwise_Positive;
     private static final boolean ANGLE_MOTOR_INVERTED = false;
-
     private static final SensorDirectionValue ANGLE_ENCODER_DIRECTION = SensorDirectionValue.Clockwise_Positive;
     private static final NeutralModeValue SHOOTING_NEUTRAL_MODE_VALUE = NeutralModeValue.Coast;
     private static final CANSparkMax.IdleMode ANGLE_MOTOR_IDLE_MODE = CANSparkMax.IdleMode.kBrake;
-
     static final CANSparkMax ANGLE_MOTOR = new CANSparkMax(ANGLE_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless);
     static final CANcoder ANGLE_ENCODER = new CANcoder(ANGLE_ENCODER_ID);
-    static final TalonFX SHOOTING_MOTOR = new TalonFX(SHOOTING_MOTOR_ID);
-
+    static final StatusSignal<Double>
+            ANGLE_ENCODER_POSITION_SIGNAL = ANGLE_ENCODER.getPosition(),
+            ANGLE_ENCODER_VELOCITY_SIGNAL = ANGLE_ENCODER.getVelocity();
     private static final double
-        MAX_ANGLE_VELOCITY = 600,
-        MAX_ANGLE_ACCELERATION = 500;
+            MAX_ANGLE_VELOCITY = 600,
+            MAX_ANGLE_ACCELERATION = 500;
     static final TrapezoidProfile.Constraints ANGLE_CONSTRAINTS = new TrapezoidProfile.Constraints(MAX_ANGLE_VELOCITY, MAX_ANGLE_ACCELERATION);
-
     private static final double
             ANGLE_MOTOR_P = 1,
             ANGLE_MOTOR_I = 0,
             ANGLE_MOTOR_D = 0;
     static final PIDController ANGLE_PID_CONTROLLER = new PIDController(ANGLE_MOTOR_P, ANGLE_MOTOR_I, ANGLE_MOTOR_D);
-
     private static final double
-        ANGLE_MOTOR_KS = 0.5990,
-        ANGLE_MOTOR_KV = 0.5990,
-        ANGLE_MOTOR_KA = 0.5990,
-        ANGLE_MOTOR_KG = 0.5990;
+            ANGLE_MOTOR_KS = 0.5990,
+            ANGLE_MOTOR_KV = 0.5990,
+            ANGLE_MOTOR_KA = 0.5990,
+            ANGLE_MOTOR_KG = 0.5990;
     static final ArmFeedforward ANGLE_MOTOR_FEEDFORWARD = new ArmFeedforward(
-      ANGLE_MOTOR_KS,ANGLE_MOTOR_KG,ANGLE_MOTOR_KV,ANGLE_MOTOR_KA
+            ANGLE_MOTOR_KS, ANGLE_MOTOR_KG, ANGLE_MOTOR_KV, ANGLE_MOTOR_KA
     );
-
-    static final StatusSignal<Double>
-            ANGLE_ENCODER_POSITION_SIGNAL = ANGLE_ENCODER.getPosition(),
-            ANGLE_ENCODER_VELOCITY_SIGNAL = ANGLE_ENCODER.getVelocity();
-
-    static final boolean FOC_ENABLE = true;
 
     static {
         configureAngleEncoder();
