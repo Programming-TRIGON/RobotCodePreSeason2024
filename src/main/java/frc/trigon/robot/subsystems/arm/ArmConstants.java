@@ -121,7 +121,7 @@ public class ArmConstants {
         CONE_HIGH_STATE(Rotation2d.fromDegrees(0), 0),
         CONE_MID_STATE(Rotation2d.fromDegrees(0), 0),
         CONE_LOW_STATE(Rotation2d.fromDegrees(0), 0);
-        
+
         final Rotation2d angle;
         final double elevatorPosition;
 
