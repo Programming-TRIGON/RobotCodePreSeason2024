@@ -1,10 +1,8 @@
 package frc.trigon.robot.subsystems.sideshooter;
 
 import com.ctre.phoenix6.controls.VoltageOut;
-import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkMax;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Timer;
@@ -14,10 +12,10 @@ public class SideShooter extends SubsystemBase {
     private final static SideShooter INSTANCE = new SideShooter();
     private final TalonFX shootingMotor = SideShooterConstants.SHOOTING_MOTOR;
     private final CANSparkMax angelMotor = SideShooterConstants.ANGEL_MOTOR;
-    private final CANcoder angleEncoder = SideShooterConstants.ANGLE_ENCODER;
     private final VoltageOut shootingVoltageRequest = new VoltageOut(0, SideShooterConstants.FOC_ENABLED, false);
     private TrapezoidProfile angleMotorProfile = null;
     private double lastAngleMotorProfileGeneration;
+    private double angleTolerance = 1;
 
     public static SideShooter getInstance() {
         return INSTANCE;
@@ -56,7 +54,7 @@ public class SideShooter extends SubsystemBase {
     }
 
     boolean atAngle(Rotation2d angle){
-        return getAnglePosition() == angle;
+        return  Math.abs(angle.getDegrees() - getAnglePosition().getDegrees()) < angleTolerance;
     }
 
     private Rotation2d getAnglePosition() {
