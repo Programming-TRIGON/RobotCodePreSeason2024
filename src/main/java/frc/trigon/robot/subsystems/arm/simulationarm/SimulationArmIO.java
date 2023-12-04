@@ -4,17 +4,13 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
-import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.subsystems.arm.ArmIO;
 import frc.trigon.robot.subsystems.arm.ArmInputsAutoLogged;
-import org.littletonrobotics.junction.LogTable;
-import org.littletonrobotics.junction.Logger;
 
 public class SimulationArmIO extends ArmIO {
-    private final SingleJointedArmSim angleMotor = SimulationArmIOConstants.ANGLE_MOTOR;
-    private final ElevatorSim elevatorMotor = SimulationArmIOConstants.ELEVATOR_MOTOR;
+    private final SingleJointedArmSim angleMotor = SimulationArmConstants.ANGLE_MOTOR;
+    private final ElevatorSim elevatorMotor = SimulationArmConstants.ELEVATOR_MOTOR;
     private double
             angleVoltage = 0,
             elevatorVoltage = 0;
@@ -32,7 +28,7 @@ public class SimulationArmIO extends ArmIO {
         inputs.elevatorMotorVoltage = elevatorVoltage;
         inputs.elevatorMotorCurrent = elevatorMotor.getCurrentDrawAmps();
         inputs.elevatorPositionRevolution = getElevatorPositionRevolutions();
-        inputs.elevatorVelocityRevolutionsPerSecond = elevatorMotor.getVelocityMetersPerSecond() / SimulationArmIOConstants.METERS_PER_REVOLUTION;
+        inputs.elevatorVelocityRevolutionsPerSecond = elevatorMotor.getVelocityMetersPerSecond() / SimulationArmConstants.METERS_PER_REVOLUTION;
     }
 
     @Override
@@ -66,11 +62,11 @@ public class SimulationArmIO extends ArmIO {
     }
 
     private double calculateAngleOutput(TrapezoidProfile.State targetState) {
-        double pidOutput = SimulationArmIOConstants.ANGLE_PID_CONTROLLER.calculate(
+        double pidOutput = SimulationArmConstants.ANGLE_PID_CONTROLLER.calculate(
                 angleMotor.getAngleRads(),
                 targetState.position
         );
-        double feedforward = SimulationArmIOConstants.ANGLE_FEEDFORWARD.calculate(
+        double feedforward = SimulationArmConstants.ANGLE_FEEDFORWARD.calculate(
                 Units.degreesToRadians(targetState.position),
                 Units.degreesToRadians(targetState.velocity)
         );
@@ -78,11 +74,11 @@ public class SimulationArmIO extends ArmIO {
     }
 
     private double calculateElevatorOutput(TrapezoidProfile.State targetState) {
-        double pidOutput = SimulationArmIOConstants.ELEVATOR_PID_CONTROLLER.calculate(
+        double pidOutput = SimulationArmConstants.ELEVATOR_PID_CONTROLLER.calculate(
                 getElevatorPositionRevolutions(),
                 targetState.position
         );
-        double feedforward = SimulationArmIOConstants.ELEVATOR_FEEDFORWARD.calculate(targetState.velocity);
+        double feedforward = SimulationArmConstants.ELEVATOR_FEEDFORWARD.calculate(targetState.velocity);
         return pidOutput + feedforward;
     }
 
@@ -91,7 +87,7 @@ public class SimulationArmIO extends ArmIO {
     }
 
     private double getElevatorPositionRevolutions() {
-        double offsettedPosition = elevatorMotor.getPositionMeters() - SimulationArmIOConstants.RETRACTED_ARM_LENGTH_METERS;
-        return offsettedPosition / SimulationArmIOConstants.METERS_PER_REVOLUTION;
+        double offsettedPosition = elevatorMotor.getPositionMeters() - SimulationArmConstants.RETRACTED_ARM_LENGTH_METERS;
+        return offsettedPosition / SimulationArmConstants.METERS_PER_REVOLUTION;
     }
 }

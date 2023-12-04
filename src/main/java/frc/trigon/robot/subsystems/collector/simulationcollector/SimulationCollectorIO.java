@@ -2,16 +2,13 @@ package frc.trigon.robot.subsystems.collector.simulationcollector;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
-import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.subsystems.collector.CollectorIO;
 import frc.trigon.robot.subsystems.collector.CollectorInputsAutoLogged;
 import frc.trigon.robot.utilities.Conversions;
-import org.littletonrobotics.junction.LogTable;
 
 public class SimulationCollectorIO extends CollectorIO {
-    private final DCMotorSim motor = SimulationCollectorIOConstants.MOTOR;
+    private final DCMotorSim motor = SimulationCollectorConstants.MOTOR;
     private double motorVoltage;
 
     @Override
@@ -24,8 +21,8 @@ public class SimulationCollectorIO extends CollectorIO {
 
     @Override
     protected void setPower(double power) {
-        double voltage = Conversions.compensatedPowerToVoltage(power, SimulationCollectorIOConstants.VOLTAGE_COMPENSATION_SATURATION);
-        this.motorVoltage = MathUtil.clamp(voltage, -SimulationCollectorIOConstants.VOLTAGE_COMPENSATION_SATURATION, SimulationCollectorIOConstants.VOLTAGE_COMPENSATION_SATURATION);
+        double voltage = Conversions.compensatedPowerToVoltage(power, SimulationCollectorConstants.VOLTAGE_COMPENSATION_SATURATION);
+        this.motorVoltage = MathUtil.clamp(voltage, -SimulationCollectorConstants.VOLTAGE_COMPENSATION_SATURATION, SimulationCollectorConstants.VOLTAGE_COMPENSATION_SATURATION);
         motor.setInputVoltage(this.motorVoltage);
     }
 

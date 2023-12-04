@@ -7,11 +7,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
-import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
-import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
-import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 
-public class SimulationArmIOConstants {
+public class SimulationArmConstants {
     private static final int
             ANGLE_MOTOR_AMOUNT = 2,
             ELEVATOR_MOTOR_AMOUNT = 2;
@@ -19,28 +16,28 @@ public class SimulationArmIOConstants {
             ANGLE_MOTOR_GEARBOX = DCMotor.getNEO(ANGLE_MOTOR_AMOUNT),
             ELEVATOR_MOTOR_GEARBOX = DCMotor.getNEO(ELEVATOR_MOTOR_AMOUNT);
     private static final double
-            ANGLE_GEAR_RATIO = 12.8,
-            ELEVATOR_GEAR_RATIO = 12.8;
+            ANGLE_GEAR_RATIO = 95.2,
+            ELEVATOR_GEAR_RATIO = 13.29;
     private static final Rotation2d
-            MIN_ANGLE_RADIANS = Rotation2d.fromDegrees(5),
-            MAX_ANGLE_RADIANS = Rotation2d.fromDegrees(5);
+            MINIMUM_ANGLE = Rotation2d.fromDegrees(-45),
+            MAXIMUM_ANGLE = Rotation2d.fromDegrees(180);
     private static final boolean
             ANGLE_SIMULATE_GRAVITY = true,
             ELEVATOR_SIMULATE_GRAVITY = true;
-    private static final double ARM_MASS = 1;
-    private static final double DRUM_RADIUS_METERS = 1;
-    private static final double FULLY_OPENED_ARM_LENGTH_METERS = 1;
-    static final double RETRACTED_ARM_LENGTH_METERS = 1;
-    static final double METERS_PER_REVOLUTION = 2048;
+    private static final double ARM_MASS = 12;
+    private static final double DRUM_RADIUS_METERS = 0.1256 / 2;
+    private static final double FULLY_OPENED_ARM_LENGTH_METERS = 1.7;
+    static final double RETRACTED_ARM_LENGTH_METERS = 0.65;
+    static final double METERS_PER_REVOLUTION = 0.1256;
     static final SingleJointedArmSim ANGLE_MOTOR = new SingleJointedArmSim(
             ANGLE_MOTOR_GEARBOX,
             ANGLE_GEAR_RATIO,
             SingleJointedArmSim.estimateMOI(RETRACTED_ARM_LENGTH_METERS, ARM_MASS),
             RETRACTED_ARM_LENGTH_METERS,
-            MIN_ANGLE_RADIANS.getRadians(),
-            MAX_ANGLE_RADIANS.getRadians(),
+            MINIMUM_ANGLE.getRadians(),
+            MAXIMUM_ANGLE.getRadians(),
             ANGLE_SIMULATE_GRAVITY,
-            MIN_ANGLE_RADIANS.getRadians()
+            MINIMUM_ANGLE.getRadians()
     );
     static final ElevatorSim ELEVATOR_MOTOR = new ElevatorSim(
             ELEVATOR_MOTOR_GEARBOX,
