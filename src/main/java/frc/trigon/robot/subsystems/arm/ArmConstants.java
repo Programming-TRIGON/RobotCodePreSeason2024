@@ -28,16 +28,15 @@ public class ArmConstants {
             ARM_MECHANISM_WIDTH = 2,
             ARM_MECHANISM_HEIGHT = 2;
     private static final double
-            ARM_ROOT_WIDTH = 2,
-            ARM_ROOT_LENGTH = 2;
+            ARM_ROOT_WIDTH = 1,
+            ARM_ROOT_LENGTH = 1;
     private static final double
             ARM_LIGAMENT_LENGTH = 2,
             ARM_LIGAMENT_ANGLE = 2;
     private static final double ARM_MECHANISM_LENGTH = 1;
     static final Mechanism2d ARM_MECHANISM = new Mechanism2d(ARM_MECHANISM_WIDTH, ARM_MECHANISM_HEIGHT);
-    static final Mechanism2d TARGET_POSITION_MECHANISM = new Mechanism2d(ARM_MECHANISM_WIDTH, ARM_MECHANISM_HEIGHT);
     private static final MechanismRoot2d ARM_ROOT = ARM_MECHANISM.getRoot("ArmRoot", ARM_ROOT_WIDTH, ARM_ROOT_LENGTH);
-    private static final MechanismRoot2d TARGET_POSITION_ROOT = TARGET_POSITION_MECHANISM.getRoot("TargetPositionRoot", ARM_ROOT_WIDTH, ARM_ROOT_LENGTH);
+    private static final MechanismRoot2d TARGET_POSITION_ROOT = ARM_MECHANISM.getRoot("TargetPositionRoot", ARM_ROOT_WIDTH, ARM_ROOT_LENGTH);
     static final MechanismLigament2d ARM_LIGAMENT = ARM_ROOT.append(new MechanismLigament2d("ArmLigament", ARM_LIGAMENT_LENGTH, ARM_LIGAMENT_ANGLE, ARM_MECHANISM_LENGTH, new Color8Bit(Color.kBlue)));
     static final MechanismLigament2d TARGET_POSITION_LIGAMENT = TARGET_POSITION_ROOT.append(new MechanismLigament2d("TargetPositionLigament", ARM_LIGAMENT_LENGTH, ARM_LIGAMENT_ANGLE, ARM_MECHANISM_LENGTH, new Color8Bit(Color.kGray)));
     static final double TOLERANCE = 1;

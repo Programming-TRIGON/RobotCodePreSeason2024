@@ -50,12 +50,12 @@ public class KablamaArmConstants {
             ANGLE_MOTOR_VELOCITY_SIGNAL = ANGLE_ENCODER.getVelocity();
 
     private static final double
-            ANGLE_P = 1,
-            ANGLE_I = 0,
-            ANGLE_D = 0,
-            ELEVATOR_P = 1,
-            ELEVATOR_I = 0,
-            ELEVATOR_D = 0;
+            ANGLE_P = 5,
+            ANGLE_I = 1,
+            ANGLE_D = 1,
+            ELEVATOR_P = 5,
+            ELEVATOR_I = 1,
+            ELEVATOR_D = 1;
     static final PIDController
             ANGLE_PID_CONTROLLER = new PIDController(ANGLE_P, ANGLE_I, ANGLE_D),
             ELEVATOR_PID_CONTROLLER = new PIDController(ELEVATOR_P, ELEVATOR_I, ELEVATOR_D);

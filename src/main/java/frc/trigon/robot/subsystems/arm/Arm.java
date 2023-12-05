@@ -33,11 +33,11 @@ public class Arm extends SubsystemBase {
     }
 
     boolean isAtAngle(Rotation2d targetAngle) {
-        return Math.abs(armInputs.anglePositionDegrees - targetAngle.getDegrees()) >= ArmConstants.TOLERANCE;
+        return Math.abs(armInputs.anglePositionDegrees - targetAngle.getDegrees()) <= ArmConstants.TOLERANCE;
     }
 
     boolean isAtPosition(double targetElevatorPosition) {
-        return Math.abs(armInputs.elevatorPositionRevolution - targetElevatorPosition) >= ArmConstants.TOLERANCE;
+        return Math.abs(armInputs.elevatorPositionRevolution - targetElevatorPosition) <= ArmConstants.TOLERANCE;
     }
 
     boolean isElevatorOpening(double targetElevatorPosition) {
@@ -61,7 +61,7 @@ public class Arm extends SubsystemBase {
             return;
         }
 
-        TrapezoidProfile.State targetState = elevatorMotorProfile.calculate(getElevatorMotorProfileTime());
+        TrapezoidProfile.State targetState = elevatorMotorProfile.calculate(getElevatorMotorProfileTime() + ArmConstants.RETRACTED_ARM_LENGTH);
         ArmConstants.TARGET_POSITION_LIGAMENT.setLength(targetState.position);
         armIO.setTargetElevatorState(targetState);
     }

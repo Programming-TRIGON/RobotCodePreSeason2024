@@ -25,11 +25,11 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         return null;
     }
-    private final Rotation2d rotation2d =  Rotation2d.fromDegrees(90);
+    private final Rotation2d rotation2d =  Rotation2d.fromDegrees(300);
 
     private void configureBindings() {
-        arm.setDefaultCommand(ArmCommands.getSetTargetArmPositionCommand(rotation2d, 50));
-        ArmCommands.getSetTargetArmPositionCommand(rotation2d, 50).schedule();
+        arm.setDefaultCommand(ArmCommands.getSetTargetArmPositionCommand(rotation2d, 150));
+        ArmCommands.getSetTargetArmPositionCommand(rotation2d, 19).schedule();
         controller.a().whileTrue(ArmCommands.getSetTargetArmPositionCommand(rotation2d, 50));
 
     }
