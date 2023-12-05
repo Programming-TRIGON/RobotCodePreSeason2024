@@ -32,8 +32,8 @@ public class Arm extends SubsystemBase {
         updateMechanism();
     }
 
-    boolean isAtAngle(double targetAngle) {
-        return Math.abs(armInputs.anglePositionDegrees - targetAngle) >= ArmConstants.TOLERANCE;
+    boolean isAtAngle(Rotation2d targetAngle) {
+        return Math.abs(armInputs.anglePositionDegrees - targetAngle.getDegrees()) >= ArmConstants.TOLERANCE;
     }
 
     boolean isAtPosition(double targetElevatorPosition) {
@@ -95,7 +95,7 @@ public class Arm extends SubsystemBase {
     }
 
     private void updateMechanism() {
-        ArmConstants.ARM_LIGAMENT.setLength(armInputs.elevatorPositionRevolution);
+        ArmConstants.ARM_LIGAMENT.setLength(armInputs.elevatorPositionRevolution + ArmConstants.RETRACTED_ARM_LENGTH);
         ArmConstants.ARM_LIGAMENT.setAngle(armInputs.anglePositionDegrees);
         Logger.recordOutput("ArmMechanism", ArmConstants.ARM_MECHANISM);
     }
