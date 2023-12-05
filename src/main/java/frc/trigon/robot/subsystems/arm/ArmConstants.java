@@ -13,7 +13,9 @@ public class ArmConstants {
     static final TrapezoidProfile.Constraints
             ANGLE_CONSTRAINTS = new TrapezoidProfile.Constraints(MAX_ANGLE_VELOCITY, MAX_ANGLE_ACCELERATION),
             ELEVATOR_CONSTRAINTS = new TrapezoidProfile.Constraints(MAX_ELEVATOR_VELOCITY, MAX_ELEVATOR_ACCELERATION);
-    static final double TOLERANCE = 0.5;
+    static final double
+            ANGLE_TOLERANCE = 0.5,
+            ELEVATOR_TOLERANCE = 0.7;
 
     public enum ArmState {
         DEFAULT(Rotation2d.fromDegrees(0), 0),

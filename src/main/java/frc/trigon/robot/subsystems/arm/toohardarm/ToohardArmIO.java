@@ -87,12 +87,12 @@ public class ToohardArmIO extends ArmIO {
         return Conversions.revolutionsToDegrees(ToohardArmConstants.ANGLE_ENCODER_VELOCITY_SIGNAL.refresh().getValue());
     }
 
-    private void setAngleMotorsState(double power)    {
+    private void setAngleMotorsState(double power) {
         masterAngleMotor.set(power);
         followerAngleMotor.set(power);
     }
 
-    private void setElevatorMotorsState(double power)    {
+    private void setElevatorMotorsState(double power) {
         masterElevatorMotor.set(power);
         followerElevatorMotor.set(power);
     }

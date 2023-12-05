@@ -31,12 +31,12 @@ public class SimulationArmIO extends ArmIO {
 
     @Override
     protected void setTargetAngleState(TrapezoidProfile.State targetState) {
-        setAngleMotorsState(setAnglePowerFromProfile(targetState));
+        setAngleMotorsPower(calculateAnglePowerFromProfile(targetState));
     }
 
     @Override
     protected void setTargetElevatorState(TrapezoidProfile.State targetState) {
-        setElevatorMotorsState(setElevatorPowerFromProfile(targetState));
+        setElevatorMotorsPower(calculateElevatorPowerFromProfile(targetState));
     }
 
     @Override
@@ -49,7 +49,7 @@ public class SimulationArmIO extends ArmIO {
         elevatorSimulation.setInputVoltage(0);
     }
 
-    private double setElevatorPowerFromProfile(TrapezoidProfile.State targetState) {
+    private double calculateElevatorPowerFromProfile(TrapezoidProfile.State targetState) {
         double pidOutput = SimulationArmConstants.ELEVATOR_PID_CONTROLLER.calculate(
                 getElevatorPositionRevolutions(),
                 targetState.position
@@ -58,7 +58,7 @@ public class SimulationArmIO extends ArmIO {
         return pidOutput + feedforward;
     }
 
-    private double setAnglePowerFromProfile(TrapezoidProfile.State targetState) {
+    private double calculateAnglePowerFromProfile(TrapezoidProfile.State targetState) {
         double pidOutput = SimulationArmConstants.ANGLE_PID_CONTROLLER.calculate(
                 getAnglePositionDegrees(),
                 targetState.position
@@ -83,10 +83,10 @@ public class SimulationArmIO extends ArmIO {
     }
 
     private double getAngleVelocityDegreesPerSecond() {
-        return (Units.radiansToDegrees(angleSimulation.getVelocityRadPerSec()));
+        return Units.radiansToDegrees(angleSimulation.getVelocityRadPerSec());
     }
 
-    private void setAngleMotorsState(double power) {
+    private void setAngleMotorsPower(double power) {
         angleMotorVoltage = MathUtil.clamp(
                 powerToVoltage(power),
                 -SimulationArmConstants.VOLTAGE_COMPENSATION_SATURATION,
@@ -95,7 +95,7 @@ public class SimulationArmIO extends ArmIO {
         angleSimulation.setInputVoltage(power);
     }
 
-    private void setElevatorMotorsState(double power) {
+    private void setElevatorMotorsPower(double power) {
         elevatorMotorVoltage = MathUtil.clamp(
                 powerToVoltage(power),
                 -SimulationArmConstants.VOLTAGE_COMPENSATION_SATURATION,
