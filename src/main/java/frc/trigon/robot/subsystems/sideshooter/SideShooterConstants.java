@@ -49,7 +49,6 @@ public class SideShooterConstants {
             ANGLE_MOTOR_P = 1,
             ANGLE_MOTOR_I = 0,
             ANGLE_MOTOR_D = 0;
-
     static final PIDController ANGLE_PID_CONTROLLER = new PIDController(ANGLE_MOTOR_P, ANGLE_MOTOR_I, ANGLE_MOTOR_D);
 
     private static final double

@@ -28,8 +28,11 @@ public class SideShooter extends SubsystemBase {
     private SideShooter() {
     }
 
-    boolean ifGotToAngle(double targetAngle){
-        return targetAngle == getAnglePosition().getDegrees();
+    boolean ifGotToAngle(double atAngle){
+        if (Math.abs(atAngle - getAnglePosition().getDegrees()) <= 1){
+            return true;
+        };
+        return false;
     }
 
     void generateAngleMotorProfile(Rotation2d targetAngle) {
