@@ -64,7 +64,7 @@ public class SimulationArmIO extends ArmIO {
 
     private double calculateAngleOutput(TrapezoidProfile.State targetState) {
         double pidOutput = SimulationArmConstants.ANGLE_PID_CONTROLLER.calculate(
-                angleMotor.getAngleRads(),
+                Units.radiansToDegrees(angleMotor.getAngleRads()),
                 targetState.position
         );
         double feedforward = SimulationArmConstants.ANGLE_FEEDFORWARD.calculate(

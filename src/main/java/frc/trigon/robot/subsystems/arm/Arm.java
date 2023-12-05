@@ -36,7 +36,7 @@ public class Arm extends SubsystemBase {
         return Math.abs(armInputs.anglePositionDegrees - targetAngle.getDegrees()) <= ArmConstants.ANGLE_TOLERANCE;
     }
 
-    boolean atPosition(double targetElevatorPosition) {
+    boolean atTargetPosition(double targetElevatorPosition) {
         return Math.abs(armInputs.elevatorPositionRevolution - targetElevatorPosition) <= ArmConstants.ELEVATOR_TOLERANCE;
     }
 

@@ -50,7 +50,7 @@ public class SimulationArmConstants {
     );
 
     private static final double
-            ANGLE_P = 1,
+            ANGLE_P = 1.5,
             ANGLE_I = 0,
             ANGLE_D = 0,
             ELEVATOR_P = 1,
