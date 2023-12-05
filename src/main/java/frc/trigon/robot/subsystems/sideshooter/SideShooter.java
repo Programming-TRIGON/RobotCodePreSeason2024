@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class SideShooter extends SubsystemBase {
     private final static SideShooter INSTANCE = new SideShooter();
     private final TalonFX shootingMotor = SideShooterConstants.SHOOTING_MOTOR;
-    private final CANSparkMax angelMotor = SideShooterConstants.ANGEL_MOTOR;
+    private final CANSparkMax angleMotor = SideShooterConstants.ANGLE_MOTOR;
     private final VoltageOut shootingVoltageRequest = new VoltageOut(0, SideShooterConstants.FOC_ENABLED, false);
     private TrapezoidProfile angleMotorProfile = null;
     private double lastAngleMotorProfileGeneration;
@@ -40,13 +40,13 @@ public class SideShooter extends SubsystemBase {
 
     void setTargetAngleFromProfile() {
         if (angleMotorProfile == null) {
-            angelMotor.stopMotor();
+            angleMotor.stopMotor();
             return;
         }
 
         TrapezoidProfile.State targetState = angleMotorProfile.calculate(getAngleProfileTime());
         double output = SideShooterConstants.ANGLE_PID_CONTROLLER.calculate(getAnglePosition().getDegrees(), targetState.position);
-        angelMotor.setVoltage(output);
+        angleMotor.setVoltage(output);
     }
 
     void stopShooting() {
@@ -58,12 +58,12 @@ public class SideShooter extends SubsystemBase {
     }
 
     private Rotation2d getAnglePosition() {
-        double positionRevolutions = SideShooterConstants.ANGEL_ENCODER_POSITION_SIGNAL.refresh().getValue();
+        double positionRevolutions = SideShooterConstants.ANGLE_ENCODER_POSITION_SIGNAL.refresh().getValue();
         return Rotation2d.fromRotations(positionRevolutions);
     }
 
     private double getAngleVelocity() {
-        return SideShooterConstants.ANGEL_ENCODER_VELOCITY_SIGNAL.refresh().getValue();
+        return SideShooterConstants.ANGLE_ENCODER_VELOCITY_SIGNAL.refresh().getValue();
     }
 
     private double getAngleProfileTime() {

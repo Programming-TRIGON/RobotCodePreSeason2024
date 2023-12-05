@@ -31,7 +31,7 @@ public class SideShooterConstants {
     static final boolean FOC_ENABLED = true;
     static final CANcoder ANGLE_ENCODER = new CANcoder(ANGLE_ENCODER_ID);
     static final TalonFX SHOOTING_MOTOR = new TalonFX(SHOOTING_MOTOR_ID);
-    static final CANSparkMax ANGEL_MOTOR = new CANSparkMax(ANGLE_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless);
+    static final CANSparkMax ANGLE_MOTOR = new CANSparkMax(ANGLE_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless);
 
     private static final double
             MAX_ANGLE_VELOCITY = 0,
@@ -42,8 +42,8 @@ public class SideShooterConstants {
     );
 
     static final StatusSignal<Double>
-            ANGEL_ENCODER_POSITION_SIGNAL = ANGLE_ENCODER.getPosition(),
-            ANGEL_ENCODER_VELOCITY_SIGNAL = ANGLE_ENCODER.getVelocity();
+            ANGLE_ENCODER_POSITION_SIGNAL = ANGLE_ENCODER.getPosition(),
+            ANGLE_ENCODER_VELOCITY_SIGNAL = ANGLE_ENCODER.getVelocity();
 
     private static final double
             ANGLE_P = 0,
@@ -72,10 +72,10 @@ public class SideShooterConstants {
     }
 
     private static void configureAngleMotor() {
-        ANGEL_MOTOR.restoreFactoryDefaults();
-        ANGEL_MOTOR.setIdleMode(ANGLE_IDLE_MODE);
-        ANGEL_MOTOR.setInverted(ANGLE_INVERTED);
-        ANGEL_MOTOR.enableVoltageCompensation(VOLTAGE_COMPENSATION_SATURATION);
+        ANGLE_MOTOR.restoreFactoryDefaults();
+        ANGLE_MOTOR.setIdleMode(ANGLE_IDLE_MODE);
+        ANGLE_MOTOR.setInverted(ANGLE_INVERTED);
+        ANGLE_MOTOR.enableVoltageCompensation(VOLTAGE_COMPENSATION_SATURATION);
     }
 
     private static void configureAngleEncoder() {
@@ -85,8 +85,8 @@ public class SideShooterConstants {
         config.MagnetSensor.SensorDirection = ANGLE_ENCODER_SENSOR_DIRECTION_VALUE;
         ANGLE_ENCODER.getConfigurator().apply(config);
 
-        ANGEL_ENCODER_POSITION_SIGNAL.setUpdateFrequency(100);
-        ANGEL_ENCODER_VELOCITY_SIGNAL.setUpdateFrequency(100);
+        ANGLE_ENCODER_POSITION_SIGNAL.setUpdateFrequency(100);
+        ANGLE_ENCODER_VELOCITY_SIGNAL.setUpdateFrequency(100);
         ANGLE_ENCODER.optimizeBusUtilization();
     }
 

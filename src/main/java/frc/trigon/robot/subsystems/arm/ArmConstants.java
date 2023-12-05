@@ -23,10 +23,8 @@ public class ArmConstants {
             ANGLE_ENCODER_ID = 0,
             ELEVATOR_ENCODER_ID = 0;
     private static final CANSparkMax.IdleMode
-            MASTER_ANGLE_IDLE_MODE = CANSparkMax.IdleMode.kBrake,
-            FOLLOWER_ANGLE_IDLE_MODE = CANSparkMax.IdleMode.kBrake,
-            MASTER_ELEVATOR_IDLE_MODE = CANSparkMax.IdleMode.kBrake,
-            FOLLOWER_ELEVATOR_IDLE_MODE = CANSparkMax.IdleMode.kBrake;
+            ANGLE_IDLE_MODE = CANSparkMax.IdleMode.kBrake,
+            ELEVATOR_IDLE_MODE = CANSparkMax.IdleMode.kBrake;
     private static final boolean
             MASTER_ANGLE_INVERTED = false,
             FOLLOWER_ANGLE_INVERTED = false,
@@ -56,8 +54,8 @@ public class ArmConstants {
     );
 
     static final StatusSignal<Double>
-            ANGEL_ENCODER_POSITION_SIGNAL = ANGLE_ENCODER.getPosition(),
-            ANGEL_ENCODER_VELOCITY_SIGNAL = ANGLE_ENCODER.getVelocity();
+            ANGLE_ENCODER_POSITION_SIGNAL = ANGLE_ENCODER.getPosition(),
+            ANGLE_ENCODER_VELOCITY_SIGNAL = ANGLE_ENCODER.getVelocity();
     private static final double
             ANGLE_P = 0,
             ANGLE_I = 0,
@@ -78,8 +76,8 @@ public class ArmConstants {
     private static void configureAngleMotors() {
         MASTER_ANGLE_MOTOR.restoreFactoryDefaults();
         FOLLOWER_ANGLE_MOTOR.restoreFactoryDefaults();
-        MASTER_ANGLE_MOTOR.setIdleMode(MASTER_ANGLE_IDLE_MODE);
-        FOLLOWER_ANGLE_MOTOR.setIdleMode(FOLLOWER_ANGLE_IDLE_MODE);
+        MASTER_ANGLE_MOTOR.setIdleMode(ANGLE_IDLE_MODE);
+        FOLLOWER_ANGLE_MOTOR.setIdleMode(ANGLE_IDLE_MODE);
         MASTER_ANGLE_MOTOR.setInverted(MASTER_ANGLE_INVERTED);
         FOLLOWER_ANGLE_MOTOR.setInverted(FOLLOWER_ANGLE_INVERTED);
         MASTER_ANGLE_MOTOR.enableVoltageCompensation(VOLTAGE_COMPENSATION_SATURATION);
@@ -89,8 +87,8 @@ public class ArmConstants {
     private static void configureElevatorMotors() {
         MASTER_ELEVATOR_MOTOR.restoreFactoryDefaults();
         FOLLOWER_ELEVATOR_MOTOR.restoreFactoryDefaults();
-        MASTER_ELEVATOR_MOTOR.setIdleMode(MASTER_ELEVATOR_IDLE_MODE);
-        FOLLOWER_ELEVATOR_MOTOR.setIdleMode(FOLLOWER_ELEVATOR_IDLE_MODE);
+        MASTER_ELEVATOR_MOTOR.setIdleMode(ELEVATOR_IDLE_MODE);
+        FOLLOWER_ELEVATOR_MOTOR.setIdleMode(ELEVATOR_IDLE_MODE);
         MASTER_ELEVATOR_MOTOR.setInverted(MASTER_ELEVATOR_INVERTED);
         FOLLOWER_ELEVATOR_MOTOR.setInverted(FOLLOWER_ELEVATOR_INVERTED);
         MASTER_ELEVATOR_MOTOR.enableVoltageCompensation(VOLTAGE_COMPENSATION_SATURATION);
@@ -104,8 +102,8 @@ public class ArmConstants {
         config.MagnetSensor.SensorDirection = ANGLE_ENCODER_SENSOR_DIRECTION_VALUE;
         ANGLE_ENCODER.getConfigurator().apply(config);
 
-        ANGEL_ENCODER_POSITION_SIGNAL.setUpdateFrequency(100);
-        ANGEL_ENCODER_VELOCITY_SIGNAL.setUpdateFrequency(100);
+        ANGLE_ENCODER_POSITION_SIGNAL.setUpdateFrequency(100);
+        ANGLE_ENCODER_VELOCITY_SIGNAL.setUpdateFrequency(100);
         ANGLE_ENCODER.optimizeBusUtilization();
     }
 
