@@ -7,13 +7,11 @@ import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.trigon.robot.utilities.Conversions;
 
 public class SideShooter extends SubsystemBase {
     private final static SideShooter INSTANCE = new SideShooter();
-
     private final TalonFX shootingMotor = SideShooterConstants.SHOOTING_MOTOR;
     private final CANSparkMax angleMotor = SideShooterConstants.ANGLE_MOTOR;
     private final CANcoder angleEncoder = SideShooterConstants.ANGLE_ENCODER;
@@ -30,13 +28,17 @@ public class SideShooter extends SubsystemBase {
     private SideShooter() {
     }
 
+    boolean ifGotToAngle(double targetAngle){
+        return targetAngle == getAnglePosition().getDegrees();
+    }
+
     void generateAngleMotorProfile(Rotation2d targetAngle) {
         angleMotorProfile = new TrapezoidProfile(
                 SideShooterConstants.ANGLE_CONSTRAINTS,
                 new TrapezoidProfile.State(targetAngle.getDegrees(), 0),
                 new TrapezoidProfile.State(getAnglePosition().getDegrees(), getAngleVelocityDegreesPerSecond())
         );
-        lastAngleMotorProfileGenerationTime = Timer.getFPGATimestamp();
+        lastAngleMotorProfileGenerationTime  = Timer.getFPGATimestamp();
     }
 
     void setTargetAngleFromProfile() {
@@ -47,6 +49,14 @@ public class SideShooter extends SubsystemBase {
 
         TrapezoidProfile.State targetState = angleMotorProfile.calculate(getAngleMotorProfileTime());
         angleMotor.setVoltage(calculateAngleMotorOutput());
+    }
+
+    void setTargetShootingVoltage(double targetVoltage) {
+        shootingMotor.setControl(shootingVoltageRequest.withOutput(targetVoltage));
+    }
+
+    void stopAngleMotor() {
+        angleMotor.stopMotor();
     }
 
     private double calculateAngleMotorOutput() {
@@ -72,14 +82,6 @@ public class SideShooter extends SubsystemBase {
 
     private double getAngleMotorProfileTime() {
         return Timer.getFPGATimestamp() - lastAngleMotorProfileGenerationTime;
-    }
-
-    void setTargetShootingVoltage(double targetVoltage) {
-        shootingMotor.setControl(shootingVoltageRequest.withOutput(targetVoltage));
-    }
-
-    void stopAngleMotor() {
-        angleMotor.stopMotor();
     }
 }
 

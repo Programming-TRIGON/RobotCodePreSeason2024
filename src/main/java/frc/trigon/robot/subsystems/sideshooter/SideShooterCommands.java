@@ -2,37 +2,40 @@ package frc.trigon.robot.subsystems.sideshooter;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.*;
+import frc.trigon.robot.utilities.Commands;
 
 public class SideShooterCommands {
-    public Command getSetTargetStateCommand(Rotation2d targetAngle, double targetVoltage, boolean byOrder) {
+
+    private static final SideShooter sideShooter = SideShooter.getInstance();
+    public static Command getSetTargetStateCommand(Rotation2d targetAngle, double targetVoltage, boolean byOrder) {
         if (!byOrder) {
             return new ParallelCommandGroup(
-                    getSetTargetShooterAngleCommand(targetAngle),
+                    Commands.removeRequirements(getSetTargetShooterAngleCommand(targetAngle)),
                     getSetTargetShootingVoltageCommand(targetVoltage)
             );
         }
         return new SequentialCommandGroup(
-                getSetTargetShooterAngleCommand(targetAngle),
+                getSetTargetShooterAngleCommand(targetAngle).until(()->sideShooter.ifGotToAngle(targetAngle.getDegrees())),
                 getSetTargetShootingVoltageCommand(targetVoltage)
         );
     }
 
     public static Command getSetTargetShooterAngleCommand(Rotation2d targetAngle) {
         return new FunctionalCommand(
-                () -> SideShooter.getInstance().generateAngleMotorProfile(targetAngle),
-                () -> SideShooter.getInstance().setTargetAngleFromProfile(),
+                () -> sideShooter.generateAngleMotorProfile(targetAngle),
+                () -> sideShooter.setTargetAngleFromProfile(),
                 (interrupted) -> {
                 },
                 () -> false,
-                SideShooter.getInstance()
+                sideShooter
         );
     }
 
-    public Command getSetTargetShootingVoltageCommand(double targetVoltage) {
+    public static Command getSetTargetShootingVoltageCommand(double targetVoltage) {
         return new StartEndCommand(
-                () -> SideShooter.getInstance().setTargetShootingVoltage(targetVoltage),
-                () -> SideShooter.getInstance().stopAngleMotor(),
-                SideShooter.getInstance()
+                () -> sideShooter.setTargetShootingVoltage(targetVoltage),
+                () -> sideShooter.stopAngleMotor(),
+                sideShooter
         );
     }
 }
