@@ -31,8 +31,8 @@ public class ArmConstants {
             MASTER_ELEVATOR_INVERTED = false,
             FOLLOWER_ELEVATOR_INVERTED = false,
             ELEVATOR_ENCODER_PHASE = false;
-    private static final double VOLTAGE_COMPENSATION_SATURATION = 12;
     private static final SensorDirectionValue ANGLE_ENCODER_SENSOR_DIRECTION_VALUE = SensorDirectionValue.CounterClockwise_Positive;
+    private static final double VOLTAGE_COMPENSATION_SATURATION = 12;
     private static final double
             ANGLE_ENCODER_OFFSET = 0,
             ELEVATOR_ENCODER_OFFSET = 0;
@@ -56,6 +56,7 @@ public class ArmConstants {
     static final StatusSignal<Double>
             ANGLE_ENCODER_POSITION_SIGNAL = ANGLE_ENCODER.getPosition(),
             ANGLE_ENCODER_VELOCITY_SIGNAL = ANGLE_ENCODER.getVelocity();
+
     private static final double
             ANGLE_P = 0,
             ANGLE_I = 0,

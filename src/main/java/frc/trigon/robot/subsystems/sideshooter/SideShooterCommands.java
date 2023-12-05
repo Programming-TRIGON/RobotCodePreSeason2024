@@ -11,6 +11,12 @@ import frc.trigon.robot.utilities.Commands;
 public class SideShooterCommands {
     private static final SideShooter SIDE_SHOOTER = SideShooter.getInstance();
 
+    /**
+     * goes to the wanted state.
+     * @param byOrder causing it to be in parallel or one after the other
+     * @param targetState the wanted state
+     * @return a command that goes to the wanted state
+     */
     public static Command getSetTargetStateCommand(boolean byOrder, SideShooterConstants.SideShooterState targetState) {
         if (!byOrder) {
             return new ParallelCommandGroup(
@@ -19,7 +25,7 @@ public class SideShooterCommands {
             );
         }
         return new SequentialCommandGroup(
-                Commands.removeRequirements(getSetTargetAngleCommand(targetState.angle).until(() -> SIDE_SHOOTER.atAngle(targetState.angle))),
+                getSetTargetAngleCommand(targetState.angle).until(() -> SIDE_SHOOTER.atAngle(targetState.angle)),
                 getSetTargetShootingVoltageCommand(targetState.voltage)
         );
     }

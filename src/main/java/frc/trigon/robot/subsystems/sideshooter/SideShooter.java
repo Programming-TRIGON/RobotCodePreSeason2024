@@ -7,6 +7,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.trigon.robot.utilities.Conversions;
 
 public class SideShooter extends SubsystemBase {
     private final static SideShooter INSTANCE = new SideShooter();
@@ -15,7 +16,6 @@ public class SideShooter extends SubsystemBase {
     private final VoltageOut shootingVoltageRequest = new VoltageOut(0, SideShooterConstants.FOC_ENABLED, false);
     private TrapezoidProfile angleMotorProfile = null;
     private double lastAngleMotorProfileGeneration;
-    private double angleTolerance = 1;
 
     public static SideShooter getInstance() {
         return INSTANCE;
@@ -32,7 +32,7 @@ public class SideShooter extends SubsystemBase {
         angleMotorProfile = new TrapezoidProfile(
                 SideShooterConstants.ANGLE_CONSTRAINTS,
                 new TrapezoidProfile.State(targetAngle.getDegrees(), 0),
-                new TrapezoidProfile.State(getAnglePosition().getDegrees(), getAngleVelocity())
+                new TrapezoidProfile.State(getAnglePosition().getDegrees(), getAngleVelocityInDegreesPerSeconds())
         );
 
         lastAngleMotorProfileGeneration = Timer.getFPGATimestamp();
@@ -54,7 +54,7 @@ public class SideShooter extends SubsystemBase {
     }
 
     boolean atAngle(Rotation2d angle){
-        return  Math.abs(angle.getDegrees() - getAnglePosition().getDegrees()) < angleTolerance;
+        return  Math.abs(angle.getDegrees() - getAnglePosition().getDegrees()) < SideShooterConstants.angleTolerance;
     }
 
     private Rotation2d getAnglePosition() {
@@ -62,8 +62,8 @@ public class SideShooter extends SubsystemBase {
         return Rotation2d.fromRotations(positionRevolutions);
     }
 
-    private double getAngleVelocity() {
-        return SideShooterConstants.ANGLE_ENCODER_VELOCITY_SIGNAL.refresh().getValue();
+    private double getAngleVelocityInDegreesPerSeconds() {
+        return Conversions.revolutionsToDegrees(SideShooterConstants.ANGLE_ENCODER_VELOCITY_SIGNAL.refresh().getValue());
     }
 
     private double getAngleProfileTime() {

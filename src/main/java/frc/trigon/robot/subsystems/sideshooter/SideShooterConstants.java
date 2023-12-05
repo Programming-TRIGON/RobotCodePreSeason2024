@@ -28,6 +28,7 @@ public class SideShooterConstants {
     private static final double ENCODER_OFFSET = 0;
     private static final AbsoluteSensorRangeValue ENCODER_RANGE_VALUE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
     private static final double VOLTAGE_COMPENSATION_SATURATION = 12;
+    static double angleTolerance = 1;
     static final boolean FOC_ENABLED = true;
     static final CANcoder ANGLE_ENCODER = new CANcoder(ANGLE_ENCODER_ID);
     static final TalonFX SHOOTING_MOTOR = new TalonFX(SHOOTING_MOTOR_ID);
