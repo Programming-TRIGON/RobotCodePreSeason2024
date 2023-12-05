@@ -22,7 +22,7 @@ public class SideShooterConstants {
     private static final int ENCODER_ID = 0;
     private static final double ANGLE_ENCODER_OFFSET = 0;
     private static final CANSparkMax.IdleMode ANGLE_MOTOR_IDLE_MODE = CANSparkMax.IdleMode.kBrake;
-    private static final AbsoluteSensorRangeValue ANGEL_ENCODER_VALUE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
+    private static final AbsoluteSensorRangeValue ANGLE_ENCODER_VALUE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
     private static final SensorDirectionValue ANGLE_ENCODER_SENSOR_DIRECTION = SensorDirectionValue.CounterClockwise_Positive;
     private static final InvertedValue SHOOTER_INVERTED_VALUE = InvertedValue.CounterClockwise_Positive;
     private static final NeutralModeValue SHOOTING_NEUTRAL_MODE_VALUE = NeutralModeValue.Coast;
@@ -33,10 +33,10 @@ public class SideShooterConstants {
     private static final CANcoder ANGLE_ENCODER = new CANcoder(ENCODER_ID);
 
     private static final double
-            MAX_ANGEL_VELOCITY = 600,
-            MAX_ANGEL_ACCELERATION = 500;
+            MAX_ANGLE_VELOCITY = 600,
+            MAX_ANGLE_ACCELERATION = 500;
     static final TrapezoidProfile.Constraints ANGLE_Constraints = new TrapezoidProfile.Constraints(
-            MAX_ANGEL_VELOCITY, MAX_ANGEL_ACCELERATION
+            MAX_ANGLE_VELOCITY, MAX_ANGLE_ACCELERATION
     );
 
     private static final double
@@ -85,7 +85,7 @@ public class SideShooterConstants {
 
     private static void configureAngleEncoder() {
         CANcoderConfiguration configureAngleMotor = new CANcoderConfiguration();
-        configureAngleMotor.MagnetSensor.AbsoluteSensorRange = ANGEL_ENCODER_VALUE;
+        configureAngleMotor.MagnetSensor.AbsoluteSensorRange = ANGLE_ENCODER_VALUE;
         configureAngleMotor.MagnetSensor.MagnetOffset = ANGLE_ENCODER_OFFSET;
         configureAngleMotor.MagnetSensor.SensorDirection = ANGLE_ENCODER_SENSOR_DIRECTION;
         ANGLE_ENCODER.getConfigurator().apply(configureAngleMotor);
@@ -102,8 +102,8 @@ public class SideShooterConstants {
         final Rotation2d angle;
         final double shootingVoltage;
 
-        SideShooterState(Rotation2d angel, double shootingVoltage) {
-            this.angle = angel;
+        SideShooterState(Rotation2d angle, double shootingVoltage) {
+            this.angle = angle;
             this.shootingVoltage = shootingVoltage;
         }
     }
