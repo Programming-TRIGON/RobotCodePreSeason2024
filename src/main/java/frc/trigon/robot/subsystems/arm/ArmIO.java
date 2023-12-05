@@ -2,6 +2,7 @@ package frc.trigon.robot.subsystems.arm;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.trigon.robot.constants.RobotConstants;
+import frc.trigon.robot.subsystems.arm.simulationarm.SimulationArmIO;
 import frc.trigon.robot.subsystems.arm.toohardarm.ToohardArmIO;
 import org.littletonrobotics.junction.AutoLog;
 
@@ -11,8 +12,7 @@ public class ArmIO {
             return new ArmIO();
         if (RobotConstants.ROBOT_TYPE == RobotConstants.RobotType.KABLAMA)
             return new ToohardArmIO();
-//        return new SimulationArmIO();
-        return new ArmIO();
+        return new SimulationArmIO();
     }
 
     protected void updateInputs(ArmInputsAutoLogged inputs) {
