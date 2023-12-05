@@ -119,7 +119,7 @@ public class KablamaArmConstants {
 
     private static void configureElevatorEncoder() {
         ELEVATOR_ENCODER.configFactoryDefault();
-        ELEVATOR_ENCODER.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0, 0);
+        ELEVATOR_ENCODER.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
         ELEVATOR_ENCODER.setSensorPhase(ELEVATOR_ENCODER_PHASE);
         ELEVATOR_ENCODER.setSelectedSensorPosition(Conversions.offsetRead(ELEVATOR_ENCODER.getSelectedSensorPosition(), ELEVATOR_ENCODER_OFFSET));
     }
