@@ -60,7 +60,7 @@ public class RollerCommands {
     public static Command getFullOpeningCommand() {
         return new ParallelCommandGroup(
                 getOpenRollerCommand(),
-                frc.trigon.robot.utilities.Commands.removeRequirements(getCollectCommand())
+                Commands.removeRequirements(getCollectCommand())
         );
     }
 

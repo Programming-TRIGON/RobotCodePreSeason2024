@@ -48,7 +48,7 @@ public class ArmCommands {
     }
 
     public static Command getCurrentSetTargetArmPositionCommand(Rotation2d targetAngle, double targetElevatorPosition, double angleSpeedPercentage, double elevatorSpeedPercentage) {
-        if (isElevatorRising(targetElevatorPosition)) {
+        if (ARM.isElevatorRising(targetElevatorPosition)) {
             return new SequentialCommandGroup(
                     getSetTargetAngleCommand(targetAngle, angleSpeedPercentage).until(() -> ARM.atAngle(targetAngle)),
                     getSetTargetElevatorPositionCommand(targetElevatorPosition, elevatorSpeedPercentage)
@@ -80,9 +80,5 @@ public class ArmCommands {
                 () -> false,
                 ARM
         );
-    }
-
-    private static boolean isElevatorRising(double targetElevatorPosition) {
-        return targetElevatorPosition >= ARM.getElevatorPositionRevolutions();
     }
 }

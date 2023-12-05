@@ -18,8 +18,8 @@ public class SimulationArmConstants {
     private static final double
             ANGLE_GEAR_RATIO = 12.4,
             ELEVATOR_GEAR_RATIO = 23952853.3;
-    private static final double MINIMUM_ARM_LENGTH = 5;
-    private static final double ARM_LENGTH = 20;
+    private static final double MINIMUM_ARM_LENGTH = 5,
+            MAXIMUM_ARM_LENGTH = 20;
     private static final double ARM_MASS = 2;
     private static final Rotation2d
             MINIMUM_ANGLE = Rotation2d.fromDegrees(0),
@@ -66,8 +66,8 @@ public class SimulationArmConstants {
     static final SingleJointedArmSim ANGLE_MOTOR = new SingleJointedArmSim(
             ANGLE_MOTOR_GEARBOX,
             ANGLE_GEAR_RATIO,
-            SingleJointedArmSim.estimateMOI(ARM_LENGTH, ARM_MASS),
-            ARM_LENGTH,
+            SingleJointedArmSim.estimateMOI(MAXIMUM_ARM_LENGTH, ARM_MASS),
+            MAXIMUM_ARM_LENGTH,
             MINIMUM_ANGLE.getRadians(),
             MAXIMUM_ANGLE.getRadians(),
             ANGLE_SIMULATE_GRAVITY,
@@ -80,7 +80,7 @@ public class SimulationArmConstants {
             ARM_MASS,
             ARM_DRUM_RADIUS,
             MINIMUM_ARM_LENGTH,
-            ARM_LENGTH,
+            MAXIMUM_ARM_LENGTH,
             ELEVATOR_SIMULATE_GRAVITY,
             MINIMUM_ARM_LENGTH
     );
