@@ -9,26 +9,17 @@ import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 
 public class SimulationArmConstants {
-    private static final int
-            ANGLE_MOTOR_AMOUNT = 2,
-            ELEVATOR_MOTOR_AMOUNT = 2;
-    private static final DCMotor
-            ANGLE_MOTOR_GEARBOX = DCMotor.getNEO(ANGLE_MOTOR_AMOUNT),
-            ELEVATOR_MOTOR_GEARBOX = DCMotor.getNEO(ELEVATOR_MOTOR_AMOUNT);
+    private static final int ANGLE_MOTOR_AMOUNT = 2;
+    private static final DCMotor ANGLE_MOTOR_GEARBOX = DCMotor.getNEO(ANGLE_MOTOR_AMOUNT);
+    private static final double ANGLE_GEAR_RATIO = 12.4;
     private static final double
-            ANGLE_GEAR_RATIO = 12.4,
-            ELEVATOR_GEAR_RATIO = 23952853.3;
-    private static final double MINIMUM_ARM_LENGTH = 5,
+            MINIMUM_ARM_LENGTH = 5,
             MAXIMUM_ARM_LENGTH = 20;
     private static final double ARM_MASS = 2;
     private static final Rotation2d
             MINIMUM_ANGLE = Rotation2d.fromDegrees(0),
             MAXIMUM_ANGLE = Rotation2d.fromDegrees(90);
-    private static final boolean
-            ANGLE_SIMULATE_GRAVITY = true,
-            ELEVATOR_SIMULATE_GRAVITY = true;
-    static final double ELEVATOR_METERS_PER_REVOLUTION = 0.3;
-    static final double ARM_DRUM_RADIUS = 3;
+    private static final boolean ANGLE_SIMULATE_GRAVITY = true;
 
     static final SingleJointedArmSim ANGLE_MOTOR = new SingleJointedArmSim(
             ANGLE_MOTOR_GEARBOX,
@@ -40,6 +31,12 @@ public class SimulationArmConstants {
             ANGLE_SIMULATE_GRAVITY,
             MINIMUM_ANGLE.getRadians()
     );
+    private static final int ELEVATOR_MOTOR_AMOUNT = 2;
+    private static final DCMotor ELEVATOR_MOTOR_GEARBOX = DCMotor.getNEO(ELEVATOR_MOTOR_AMOUNT);
+    private static final double ELEVATOR_GEAR_RATIO = 23952853.3;
+    static final double ARM_DRUM_RADIUS = 3;
+    private static final boolean ELEVATOR_SIMULATE_GRAVITY = true;
+    static final double ELEVATOR_METERS_PER_REVOLUTION = 0.3;
 
     static final ElevatorSim ELEVATOR_MOTOR = new ElevatorSim(
             ELEVATOR_MOTOR_GEARBOX,
