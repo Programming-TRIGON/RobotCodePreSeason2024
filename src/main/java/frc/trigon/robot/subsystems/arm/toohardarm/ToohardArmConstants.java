@@ -30,7 +30,7 @@ public class ToohardArmConstants {
     private static final CANSparkMax.IdleMode
             ANGLE_MOTORS_IDLE_MODE = CANSparkMax.IdleMode.kBrake,
             ELEVATOR_MOTORS_IDLE_MODE = CANSparkMax.IdleMode.kBrake;
-    private static final int VOLTAGE_COMPENSATION_SATURATION = 12;
+    static final int VOLTAGE_COMPENSATION_SATURATION = 12;
     static final CANSparkMax
             MASTER_ANGLE_MOTOR = new CANSparkMax(MASTER_ANGLE_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless),
             FOLLOWER_ANGLE_MOTOR = new CANSparkMax(FOLLOWER_ANGLE_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless),

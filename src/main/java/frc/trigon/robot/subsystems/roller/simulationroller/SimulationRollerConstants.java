@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 
 public class SimulationRollerConstants {
+    static final double VOLTAGE_COMPENSATION_SATURATION = 12;
     private static final int
             ANGLE_MOTOR_AMOUNT = 1,
             COLLECTOR_MOTOR_AMOUNT = 1;
@@ -39,6 +40,4 @@ public class SimulationRollerConstants {
             COLLECTOR_GEAR_RATIO,
             COLLECTOR_MOMENT_OF_INERTIA
     );
-
-    static final double VOLTAGE_COMPENSATION_SATURATION = 12;
 }

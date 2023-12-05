@@ -74,7 +74,7 @@ public class Arm extends SubsystemBase {
         return targetElevatorPosition >= getElevatorPositionRevolutions();
     }
 
-    double getElevatorPositionRevolutions() {
+    private double getElevatorPositionRevolutions() {
         return armInputs.elevatorPositionRevolutions;
     }
 

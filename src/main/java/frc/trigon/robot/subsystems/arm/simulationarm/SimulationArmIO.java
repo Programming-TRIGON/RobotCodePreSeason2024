@@ -31,25 +31,25 @@ public class SimulationArmIO extends ArmIO {
 
     @Override
     protected void setTargetAngleState(TrapezoidProfile.State targetState) {
-        setAngleMotorsPower(calculateAnglePowerFromProfile(targetState));
+        setAngleMotorsPower(calculateAnglePowerFromState(targetState));
     }
 
     @Override
     protected void setTargetElevatorState(TrapezoidProfile.State targetState) {
-        setElevatorMotorsPower(calculateElevatorPowerFromProfile(targetState));
+        setElevatorMotorsPower(calculateElevatorPowerFromState(targetState));
     }
 
     @Override
     protected void stopAngleMotors() {
-        angleSimulation.setInputVoltage(0);
+        setAngleMotorsPower(0);
     }
 
     @Override
     protected void stopElevatorMotors() {
-        elevatorSimulation.setInputVoltage(0);
+        setElevatorMotorsPower(0);
     }
 
-    private double calculateElevatorPowerFromProfile(TrapezoidProfile.State targetState) {
+    private double calculateElevatorPowerFromState(TrapezoidProfile.State targetState) {
         double pidOutput = SimulationArmConstants.ELEVATOR_PID_CONTROLLER.calculate(
                 getElevatorPositionRevolutions(),
                 targetState.position
@@ -58,7 +58,7 @@ public class SimulationArmIO extends ArmIO {
         return pidOutput + feedforward;
     }
 
-    private double calculateAnglePowerFromProfile(TrapezoidProfile.State targetState) {
+    private double calculateAnglePowerFromState(TrapezoidProfile.State targetState) {
         double pidOutput = SimulationArmConstants.ANGLE_PID_CONTROLLER.calculate(
                 getAnglePositionDegrees(),
                 targetState.position

@@ -6,6 +6,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.trigon.robot.subsystems.arm.ArmIO;
 import frc.trigon.robot.subsystems.arm.ArmInputsAutoLogged;
+import frc.trigon.robot.subsystems.arm.simulationarm.SimulationArmConstants;
 import frc.trigon.robot.utilities.Conversions;
 
 public class ToohardArmIO extends ArmIO {
@@ -29,12 +30,12 @@ public class ToohardArmIO extends ArmIO {
 
     @Override
     protected void setTargetAngleState(TrapezoidProfile.State targetState) {
-        setAngleMotorsState(setAnglePowerFromProfile(targetState));
+        setAngleMotorsPower(calculateAnglePowerFromState(targetState));
     }
 
     @Override
     protected void setTargetElevatorState(TrapezoidProfile.State targetState) {
-        setElevatorMotorsState(setElevatorPowerFromProfile(targetState));
+        setElevatorMotorsPower(calculateElevatorPowerFromState(targetState));
     }
 
     @Override
@@ -49,7 +50,7 @@ public class ToohardArmIO extends ArmIO {
         followerElevatorMotor.stopMotor();
     }
 
-    private double setElevatorPowerFromProfile(TrapezoidProfile.State targetState) {
+    private double calculateElevatorPowerFromState(TrapezoidProfile.State targetState) {
         double pidOutput = ToohardArmConstants.ELEVATOR_PID_CONTROLLER.calculate(
                 getElevatorPositionRevolutions(),
                 targetState.position
@@ -58,7 +59,7 @@ public class ToohardArmIO extends ArmIO {
         return pidOutput + feedforward;
     }
 
-    private double setAnglePowerFromProfile(TrapezoidProfile.State targetState) {
+    private double calculateAnglePowerFromState(TrapezoidProfile.State targetState) {
         double pidOutput = ToohardArmConstants.ANGLE_PID_CONTROLLER.calculate(
                 getAnglePositionDegrees(),
                 targetState.position
@@ -87,13 +88,17 @@ public class ToohardArmIO extends ArmIO {
         return Conversions.revolutionsToDegrees(ToohardArmConstants.ANGLE_ENCODER_VELOCITY_SIGNAL.refresh().getValue());
     }
 
-    private void setAngleMotorsState(double power) {
-        masterAngleMotor.set(power);
-        followerAngleMotor.set(power);
+    private void setAngleMotorsPower(double power) {
+        masterAngleMotor.set(powerToVoltage(power));
+        followerAngleMotor.set(powerToVoltage(power));
     }
 
-    private void setElevatorMotorsState(double power) {
-        masterElevatorMotor.set(power);
-        followerElevatorMotor.set(power);
+    private void setElevatorMotorsPower(double power) {
+        masterElevatorMotor.set(powerToVoltage(power));
+        followerElevatorMotor.set(powerToVoltage(power));
+    }
+
+    private double powerToVoltage(double power) {
+        return Conversions.compensatedPowerToVoltage(power, ToohardArmConstants.VOLTAGE_COMPENSATION_SATURATION);
     }
 }

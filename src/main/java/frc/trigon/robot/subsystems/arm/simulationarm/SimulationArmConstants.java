@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 
 public class SimulationArmConstants {
+    static final double VOLTAGE_COMPENSATION_SATURATION = 12;
     private static final int
             ANGLE_MOTOR_AMOUNT = 2,
             ELEVATOR_MOTOR_AMOUNT = 2;
@@ -84,5 +85,4 @@ public class SimulationArmConstants {
             ELEVATOR_MOTOR_KV,
             ELEVATOR_MOTOR_KA
     );
-    static final double VOLTAGE_COMPENSATION_SATURATION = 12;
 }
