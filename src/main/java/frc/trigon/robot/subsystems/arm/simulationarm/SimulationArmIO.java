@@ -5,6 +5,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import frc.trigon.robot.constants.RobotConstants;
+import frc.trigon.robot.subsystems.arm.ArmConstants;
 import frc.trigon.robot.subsystems.arm.ArmIO;
 import frc.trigon.robot.subsystems.arm.ArmInputsAutoLogged;
 
@@ -28,7 +29,7 @@ public class SimulationArmIO extends ArmIO {
         inputs.elevatorMotorVoltage = elevatorVoltage;
         inputs.elevatorMotorCurrent = elevatorMotor.getCurrentDrawAmps();
         inputs.elevatorPositionRevolution = getElevatorPositionRevolutions();
-        inputs.elevatorVelocityRevolutionsPerSecond = elevatorMotor.getVelocityMetersPerSecond() / SimulationArmConstants.METERS_PER_REVOLUTION;
+        inputs.elevatorVelocityRevolutionsPerSecond = elevatorMotor.getVelocityMetersPerSecond() / ArmConstants.THEORETICAL_METERS_PER_REVOLUTION;
     }
 
     @Override
@@ -87,7 +88,7 @@ public class SimulationArmIO extends ArmIO {
     }
 
     private double getElevatorPositionRevolutions() {
-        double offsettedPosition = elevatorMotor.getPositionMeters() - SimulationArmConstants.RETRACTED_ARM_LENGTH_METERS;
-        return offsettedPosition / SimulationArmConstants.METERS_PER_REVOLUTION;
+        double offsettedPosition = elevatorMotor.getPositionMeters() - ArmConstants.RETRACTED_ARM_LENGTH_METERS;
+        return offsettedPosition / ArmConstants.THEORETICAL_METERS_PER_REVOLUTION;
     }
 }

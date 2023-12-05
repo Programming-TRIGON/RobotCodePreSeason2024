@@ -46,12 +46,12 @@ public class ArmCommands {
     private static Command getCurrentSetTargetArmStateCommand(Rotation2d angle, double elevatorPosition, double angleSpeedPercentage, double elevatorSpeedPercentage) {
         if (ARM.isElevatorOpening(elevatorPosition)) {
             return new SequentialCommandGroup(
-                    getSetTargetAngleCommand(angle, angleSpeedPercentage).until(() -> ARM.isAtAngle(angle)),
+                    getSetTargetAngleCommand(angle, angleSpeedPercentage).until(() -> ARM.atAngle(angle)),
                     getSetTargetElevatorPositionCommand(elevatorPosition, elevatorSpeedPercentage)
             );
         }
         return new SequentialCommandGroup(
-                getSetTargetElevatorPositionCommand(elevatorPosition, elevatorSpeedPercentage).until(() -> ARM.isAtPosition(elevatorPosition)),
+                getSetTargetElevatorPositionCommand(elevatorPosition, elevatorSpeedPercentage).until(() -> ARM.atPosition(elevatorPosition)),
                 getSetTargetAngleCommand(angle, angleSpeedPercentage)
         );
     }

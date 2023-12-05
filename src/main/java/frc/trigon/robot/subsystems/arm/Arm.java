@@ -32,38 +32,16 @@ public class Arm extends SubsystemBase {
         updateMechanism();
     }
 
-    boolean isAtAngle(Rotation2d targetAngle) {
-        return Math.abs(armInputs.anglePositionDegrees - targetAngle.getDegrees()) <= ArmConstants.TOLERANCE;
+    boolean atAngle(Rotation2d targetAngle) {
+        return Math.abs(armInputs.anglePositionDegrees - targetAngle.getDegrees()) <= ArmConstants.ANGLE_TOLERANCE;
     }
 
-    boolean isAtPosition(double targetElevatorPosition) {
-        return Math.abs(armInputs.elevatorPositionRevolution - targetElevatorPosition) <= ArmConstants.TOLERANCE;
+    boolean atPosition(double targetElevatorPosition) {
+        return Math.abs(armInputs.elevatorPositionRevolution - targetElevatorPosition) <= ArmConstants.ELEVATOR_TOLERANCE;
     }
 
     boolean isElevatorOpening(double targetElevatorPosition) {
         return armInputs.elevatorPositionRevolution < targetElevatorPosition;
-    }
-
-    void setTargetAngleFromProfile() {
-        if (angleMotorProfile == null) {
-            armIO.stopAngleMotors();
-            return;
-        }
-
-        TrapezoidProfile.State targetState = angleMotorProfile.calculate(getAngleMotorProfileTime());
-        ArmConstants.TARGET_POSITION_LIGAMENT.setAngle(targetState.position);
-        armIO.setTargetAngleState(targetState);
-    }
-
-    void setTargetElevatorPositionFromProfile() {
-        if (elevatorMotorProfile == null) {
-            armIO.stopElevatorMotors();
-            return;
-        }
-
-        TrapezoidProfile.State targetState = elevatorMotorProfile.calculate(getElevatorMotorProfileTime() + ArmConstants.RETRACTED_ARM_LENGTH);
-        ArmConstants.TARGET_POSITION_LIGAMENT.setLength(targetState.position);
-        armIO.setTargetElevatorState(targetState);
     }
 
     void generateAngleMotorProfile(Rotation2d targetAngle, double speedPercentage) {
@@ -86,6 +64,28 @@ public class Arm extends SubsystemBase {
         lastElevatorMotorProfileGenerationTime = Timer.getFPGATimestamp();
     }
 
+    void setTargetAngleFromProfile() {
+        if (angleMotorProfile == null) {
+            armIO.stopAngleMotors();
+            return;
+        }
+
+        TrapezoidProfile.State targetState = angleMotorProfile.calculate(getAngleMotorProfileTime());
+        ArmConstants.TARGET_POSITION_LIGAMENT.setAngle(targetState.position);
+        armIO.setTargetAngleState(targetState);
+    }
+
+    void setTargetElevatorPositionFromProfile() {
+        if (elevatorMotorProfile == null) {
+            armIO.stopElevatorMotors();
+            return;
+        }
+
+        TrapezoidProfile.State targetState = elevatorMotorProfile.calculate(getElevatorMotorProfileTime());
+        ArmConstants.TARGET_POSITION_LIGAMENT.setLength(targetState.position + ArmConstants.RETRACTED_ARM_LENGTH_METERS * ArmConstants.THEORETICAL_METERS_PER_REVOLUTION);
+        armIO.setTargetElevatorState(targetState);
+    }
+
     private double getAngleMotorProfileTime() {
         return Timer.getFPGATimestamp() - lastAngleMotorProfileGenerationTime;
     }
@@ -95,7 +95,7 @@ public class Arm extends SubsystemBase {
     }
 
     private void updateMechanism() {
-        ArmConstants.ARM_LIGAMENT.setLength(armInputs.elevatorPositionRevolution + ArmConstants.RETRACTED_ARM_LENGTH);
+        ArmConstants.ARM_LIGAMENT.setLength(armInputs.elevatorPositionRevolution + ArmConstants.RETRACTED_ARM_LENGTH_METERS);
         ArmConstants.ARM_LIGAMENT.setAngle(armInputs.anglePositionDegrees);
         Logger.recordOutput("ArmMechanism", ArmConstants.ARM_MECHANISM);
     }
