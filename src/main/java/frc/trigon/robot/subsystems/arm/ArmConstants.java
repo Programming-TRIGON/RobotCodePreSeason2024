@@ -44,6 +44,27 @@ public class ArmConstants {
             FOLLOWER_ANGLE_MOTOR = new CANSparkMax(FOLLOWER_ELEVATOR_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless);
     static final CANcoder ANGLE_ENCODER = new CANcoder(ANGLE_ENCODER_ID);
     static final WPI_TalonSRX ELEVATOR_ENCODER = new WPI_TalonSRX(ELEVATOR_ENCODER_ID);
+    static final double ELEVATOR_METERS_PER_REVOLUTION = 1;
+    static final double ANGLE_TOLERANCE = 1;
+    static final double ELEVATOR_TOLERANCE = 1;
+
+    private static final double
+            MAX_ELEVATOR_VELOCITY = 0,
+            MAX_ELEVATOR_ACCELERATION = 0;
+    static final TrapezoidProfile.Constraints ELEVATOR_CONSTRAINTS = new TrapezoidProfile.Constraints(
+            MAX_ELEVATOR_VELOCITY,
+            MAX_ELEVATOR_ACCELERATION
+    );
+
+    private static final double
+            ELEVATOR_P = 0,
+            ELEVATOR_I = 0,
+            ELEVATOR_D = 0;
+    static final PIDController ELEVATOR_PID_CONTROLLER = new PIDController(
+            ELEVATOR_P,
+            ELEVATOR_I,
+            ELEVATOR_D
+    );
 
     private static final double
             MAX_ANGLE_VELOCITY = 0,
@@ -122,11 +143,11 @@ public class ArmConstants {
         CONE_LOW_STATE(Rotation2d.fromDegrees(0), 0);
 
         final Rotation2d angle;
-        final double elevatorPosition;
+        final double elevatorMeters;
 
         ArmState(Rotation2d angle, double elevatorPosition) {
             this.angle = angle;
-            this.elevatorPosition = elevatorPosition;
+            this.elevatorMeters = elevatorPosition;
         }
     }
 }
