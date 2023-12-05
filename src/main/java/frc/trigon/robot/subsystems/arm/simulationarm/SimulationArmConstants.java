@@ -30,6 +30,28 @@ public class SimulationArmConstants {
     static final double ELEVATOR_METERS_PER_REVOLUTION = 0.3;
     static final double ARM_DRUM_RADIUS = 3;
 
+    static final SingleJointedArmSim ANGLE_MOTOR = new SingleJointedArmSim(
+            ANGLE_MOTOR_GEARBOX,
+            ANGLE_GEAR_RATIO,
+            SingleJointedArmSim.estimateMOI(MAXIMUM_ARM_LENGTH, ARM_MASS),
+            MAXIMUM_ARM_LENGTH,
+            MINIMUM_ANGLE.getRadians(),
+            MAXIMUM_ANGLE.getRadians(),
+            ANGLE_SIMULATE_GRAVITY,
+            MINIMUM_ANGLE.getRadians()
+    );
+
+    static final ElevatorSim ELEVATOR_MOTOR = new ElevatorSim(
+            ELEVATOR_MOTOR_GEARBOX,
+            ELEVATOR_GEAR_RATIO,
+            ARM_MASS,
+            ARM_DRUM_RADIUS,
+            MINIMUM_ARM_LENGTH,
+            MAXIMUM_ARM_LENGTH,
+            ELEVATOR_SIMULATE_GRAVITY,
+            MINIMUM_ARM_LENGTH
+    );
+
     private static final double
             ANGLE_P = 0,
             ANGLE_I = 0,
@@ -62,26 +84,5 @@ public class SimulationArmConstants {
             ELEVATOR_MOTOR_KV,
             ELEVATOR_MOTOR_KA
     );
-
-    static final SingleJointedArmSim ANGLE_MOTOR = new SingleJointedArmSim(
-            ANGLE_MOTOR_GEARBOX,
-            ANGLE_GEAR_RATIO,
-            SingleJointedArmSim.estimateMOI(MAXIMUM_ARM_LENGTH, ARM_MASS),
-            MAXIMUM_ARM_LENGTH,
-            MINIMUM_ANGLE.getRadians(),
-            MAXIMUM_ANGLE.getRadians(),
-            ANGLE_SIMULATE_GRAVITY,
-            MINIMUM_ANGLE.getRadians()
-    );
-
-    static final ElevatorSim ELEVATOR_MOTOR = new ElevatorSim(
-            ELEVATOR_MOTOR_GEARBOX,
-            ELEVATOR_GEAR_RATIO,
-            ARM_MASS,
-            ARM_DRUM_RADIUS,
-            MINIMUM_ARM_LENGTH,
-            MAXIMUM_ARM_LENGTH,
-            ELEVATOR_SIMULATE_GRAVITY,
-            MINIMUM_ARM_LENGTH
-    );
+    static final double VOLTAGE_COMPENSATION_SATURATION = 12;
 }

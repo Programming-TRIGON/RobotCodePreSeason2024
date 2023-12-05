@@ -89,8 +89,8 @@ public class SimulationArmIO extends ArmIO {
     private void setAngleMotorsState(double power) {
         angleMotorVoltage = MathUtil.clamp(
                 powerToVoltage(power),
-                -12,
-                12
+                -SimulationArmConstants.VOLTAGE_COMPENSATION_SATURATION,
+                SimulationArmConstants.VOLTAGE_COMPENSATION_SATURATION
         );
         angleSimulation.setInputVoltage(power);
     }
@@ -98,13 +98,13 @@ public class SimulationArmIO extends ArmIO {
     private void setElevatorMotorsState(double power) {
         elevatorMotorVoltage = MathUtil.clamp(
                 powerToVoltage(power),
-                -12,
-                12
+                -SimulationArmConstants.VOLTAGE_COMPENSATION_SATURATION,
+                SimulationArmConstants.VOLTAGE_COMPENSATION_SATURATION
         );
         elevatorSimulation.setInputVoltage(elevatorMotorVoltage);
     }
 
     private double powerToVoltage(double power) {
-        return Conversions.compensatedPowerToVoltage(power, 12);
+        return Conversions.compensatedPowerToVoltage(power, SimulationArmConstants.VOLTAGE_COMPENSATION_SATURATION);
     }
 }
