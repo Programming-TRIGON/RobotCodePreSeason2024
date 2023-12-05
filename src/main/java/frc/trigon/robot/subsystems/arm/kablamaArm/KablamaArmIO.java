@@ -5,6 +5,7 @@ import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import frc.trigon.robot.subsystems.arm.ArmConstants;
 import frc.trigon.robot.subsystems.arm.ArmIO;
 import frc.trigon.robot.subsystems.arm.ArmInputsAutoLogged;
 import frc.trigon.robot.utilities.Conversions;
@@ -26,7 +27,7 @@ public class KablamaArmIO extends ArmIO {
 
         inputs.elevatorMotorVoltage = masterElevatorMotor.getBusVoltage();
         inputs.elevatorMotorCurrent = masterElevatorMotor.getOutputCurrent();
-        inputs.elevatorPositionRevolution = getElevatorPositionRevolutions();
+        inputs.elevatorPositionRevolution = getElevatorPositionMeters();
         inputs.elevatorVelocityRevolutionsPerSecond = getElevatorVelocityRevolutionsPerSecond();
     }
 
@@ -76,15 +77,15 @@ public class KablamaArmIO extends ArmIO {
 
     private double calculateElevatorOutput(TrapezoidProfile.State targetState) {
         double pidOutput = KablamaArmConstants.ELEVATOR_PID_CONTROLLER.calculate(
-                getElevatorPositionRevolutions(),
+                getElevatorPositionMeters(),
                 targetState.position
         );
         double feedforward = KablamaArmConstants.ELEVATOR_FEEDFORWARD.calculate(targetState.velocity);
         return pidOutput + feedforward;
     }
 
-    private double getElevatorPositionRevolutions() {
-        return Conversions.magTicksToRevolutions(elevatorEncoder.getSelectedSensorPosition());
+    private double getElevatorPositionMeters() {
+        return Conversions.magTicksToRevolutions(elevatorEncoder.getSelectedSensorPosition()) / ArmConstants.THEORETICAL_METERS_PER_REVOLUTION;
     }
 
     private double getAngleVelocityDegreesPerSecond() {
