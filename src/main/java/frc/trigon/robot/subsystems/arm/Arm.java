@@ -51,6 +51,7 @@ public class Arm extends SubsystemBase {
         }
 
         TrapezoidProfile.State targetState = angleMotorProfile.calculate(getAngleMotorProfileTime());
+        ArmConstants.TARGET_POSITION_LIGAMENT.setAngle(targetState.position);
         armIO.setTargetAngleState(targetState);
     }
 
@@ -61,6 +62,7 @@ public class Arm extends SubsystemBase {
         }
 
         TrapezoidProfile.State targetState = elevatorMotorProfile.calculate(getElevatorMotorProfileTime());
+        ArmConstants.TARGET_POSITION_LIGAMENT.setLength(targetState.position);
         armIO.setTargetElevatorState(targetState);
     }
 
@@ -96,9 +98,5 @@ public class Arm extends SubsystemBase {
         ArmConstants.ARM_LIGAMENT.setLength(armInputs.elevatorPositionRevolution);
         ArmConstants.ARM_LIGAMENT.setAngle(armInputs.anglePositionDegrees);
         Logger.recordOutput("ArmMechanism", ArmConstants.ARM_MECHANISM);
-
-        ArmConstants.TARGET_POSITION_LIGAMENT.setLength(armInputs.elevatorPositionRevolution);
-        ArmConstants.TARGET_POSITION_LIGAMENT.setAngle(armInputs.anglePositionDegrees);
-        Logger.recordOutput("TargetPositionMechanism", ArmConstants.TARGET_POSITION_MECHANISM);
     }
 }
