@@ -33,8 +33,8 @@ public class ArmIO {
     @AutoLog
     protected static class ArmInputs {
         public double elevatorMotorVoltage = 0;
-        public double elevatorPositionRevolutions = 0;
-        public double elevatorVelocityRevolutionsPerSecond = 0;
+        public double elevatorPositionMeters = 0;
+        public double elevatorVelocityMetersPerSecond = 0;
 
         public double angleMotorVoltage = 0;
         public double anglePositionDegrees = 0;

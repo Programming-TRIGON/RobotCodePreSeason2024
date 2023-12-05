@@ -25,8 +25,8 @@ public class SimulationArmIO extends ArmIO {
         inputs.anglePositionDegrees = getAnglePositionDegrees();
         inputs.angleVelocityDegreesPerSecond = getAngleVelocityDegreesPerSecond();
         inputs.elevatorMotorVoltage = elevatorMotorVoltage;
-        inputs.elevatorPositionRevolutions = getElevatorPositionRevolutions();
-        inputs.elevatorVelocityRevolutionsPerSecond = getElevatorVelocityRevolutionsPerSecond();
+        inputs.elevatorPositionMeters = elevatorSimulation.getPositionMeters();
+        inputs.elevatorVelocityMetersPerSecond = elevatorSimulation.getVelocityMetersPerSecond();
     }
 
     @Override
@@ -51,7 +51,7 @@ public class SimulationArmIO extends ArmIO {
 
     private double calculateElevatorVoltageFromState(TrapezoidProfile.State targetState) {
         double pidOutput = SimulationArmConstants.ELEVATOR_PID_CONTROLLER.calculate(
-                getElevatorPositionRevolutions(),
+                elevatorSimulation.getPositionMeters(),
                 targetState.position
         );
         double feedforward = SimulationArmConstants.ELEVATOR_FEEDFORWARD.calculate(targetState.velocity);
@@ -68,14 +68,6 @@ public class SimulationArmIO extends ArmIO {
                 targetState.velocity
         );
         return Conversions.compensatedPowerToVoltage(pidOutput + feedforward, SimulationArmConstants.VOLTAGE_COMPENSATION_SATURATION);
-    }
-
-    private double getElevatorPositionRevolutions() {
-        return Conversions.distanceToRevolutions(elevatorSimulation.getPositionMeters(), SimulationArmConstants.ELEVATOR_METERS_PER_REVOLUTION);
-    }
-
-    private double getElevatorVelocityRevolutionsPerSecond() {
-        return Conversions.distanceToRevolutions(elevatorSimulation.getVelocityMetersPerSecond(), SimulationArmConstants.ELEVATOR_METERS_PER_REVOLUTION);
     }
 
     private double getAnglePositionDegrees() {

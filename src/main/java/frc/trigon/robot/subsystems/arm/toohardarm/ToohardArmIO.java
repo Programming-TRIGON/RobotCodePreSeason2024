@@ -7,7 +7,6 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.trigon.robot.subsystems.arm.ArmIO;
 import frc.trigon.robot.subsystems.arm.ArmInputsAutoLogged;
-import frc.trigon.robot.subsystems.arm.simulationarm.SimulationArmConstants;
 import frc.trigon.robot.utilities.Conversions;
 
 public class ToohardArmIO extends ArmIO {
@@ -21,8 +20,8 @@ public class ToohardArmIO extends ArmIO {
     @Override
     protected void updateInputs(ArmInputsAutoLogged inputs) {
         inputs.elevatorMotorVoltage = masterElevatorMotor.getBusVoltage();
-        inputs.elevatorPositionRevolutions = getElevatorPositionRevolutions();
-        inputs.elevatorVelocityRevolutionsPerSecond = getElevatorVelocityRevolutionsPerSecond();
+        inputs.elevatorPositionMeters = getElevatorPositionMeters();
+        inputs.elevatorVelocityMetersPerSecond = getElevatorVelocityMetersPerSecond();
 
         inputs.angleMotorVoltage = masterAngleMotor.getBusVoltage();
         inputs.anglePositionDegrees = getAnglePositionDegrees();
@@ -53,7 +52,7 @@ public class ToohardArmIO extends ArmIO {
 
     private double calculateElevatorVoltageFromState(TrapezoidProfile.State targetState) {
         double pidOutput = ToohardArmConstants.ELEVATOR_PID_CONTROLLER.calculate(
-                getElevatorPositionRevolutions(),
+                getElevatorPositionMeters(),
                 targetState.position
         );
         double feedforward = ToohardArmConstants.ELEVATOR_FEEDFORWARD.calculate(targetState.velocity);
@@ -82,13 +81,12 @@ public class ToohardArmIO extends ArmIO {
         );
     }
 
-    private double getElevatorPositionRevolutions() {
-        return Conversions.magTicksToRevolutions(elevatorEncoder.getSelectedSensorPosition());
+    private double getElevatorPositionMeters() {
+        return Conversions.magTicksToRevolutions(elevatorEncoder.getSelectedSensorPosition()) * ToohardArmConstants.ELEVATOR_REVOLUTION_DISTANCE_METERS;
     }
 
-    private double getElevatorVelocityRevolutionsPerSecond() {
-        double elevatorVelocityRevolutions = Conversions.magTicksToRevolutions(elevatorEncoder.getSelectedSensorVelocity());
-        return Conversions.perHundredMsToPerSecond(elevatorVelocityRevolutions);
+    private double getElevatorVelocityMetersPerSecond() {
+        return Conversions.magTicksToRevolutions(elevatorEncoder.getSelectedSensorVelocity()) * ToohardArmConstants.ELEVATOR_REVOLUTION_DISTANCE_METERS;
     }
 
     private double getAnglePositionDegrees() {

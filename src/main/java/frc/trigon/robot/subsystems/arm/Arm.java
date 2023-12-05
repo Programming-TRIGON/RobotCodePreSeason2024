@@ -45,7 +45,7 @@ public class Arm extends SubsystemBase {
         elevatorMotorProfile = new TrapezoidProfile(
                 Conversions.scaleConstraints(ArmConstants.ELEVATOR_CONSTRAINTS, speedPercentage),
                 new TrapezoidProfile.State(targetElevatorPosition, 0),
-                new TrapezoidProfile.State(armInputs.elevatorPositionRevolutions, armInputs.elevatorVelocityRevolutionsPerSecond)
+                new TrapezoidProfile.State(armInputs.elevatorPositionMeters, armInputs.elevatorVelocityMetersPerSecond)
         );
         lastElevatorMotorProfileGenerationTime = Timer.getFPGATimestamp();
     }
@@ -79,11 +79,11 @@ public class Arm extends SubsystemBase {
     }
 
     boolean atElevatorPosition(double targetElevatorPosition) {
-        return Math.abs(armInputs.elevatorPositionRevolutions - targetElevatorPosition) <= ArmConstants.ELEVATOR_TOLERANCE;
+        return Math.abs(armInputs.elevatorPositionMeters - targetElevatorPosition) <= ArmConstants.ELEVATOR_TOLERANCE;
     }
 
     private double getElevatorPositionRevolutions() {
-        return armInputs.elevatorPositionRevolutions;
+        return armInputs.elevatorPositionMeters;
     }
 
     private double getAngleProfileTime() {
