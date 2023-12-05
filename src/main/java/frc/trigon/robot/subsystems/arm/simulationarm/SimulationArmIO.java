@@ -31,34 +31,34 @@ public class SimulationArmIO extends ArmIO {
 
     @Override
     protected void setTargetAngleState(TrapezoidProfile.State targetState) {
-        setAngleMotorsPower(calculateAnglePowerFromState(targetState));
+        setAngleMotorsVoltage(calculateAngleVoltageFromState(targetState));
     }
 
     @Override
     protected void setTargetElevatorState(TrapezoidProfile.State targetState) {
-        setElevatorMotorsPower(calculateElevatorPowerFromState(targetState));
+        setElevatorMotorsVoltage(calculateElevatorVoltageFromState(targetState));
     }
 
     @Override
     protected void stopAngleMotors() {
-        setAngleMotorsPower(0);
+        setAngleMotorsVoltage(0);
     }
 
     @Override
     protected void stopElevatorMotors() {
-        setElevatorMotorsPower(0);
+        setElevatorMotorsVoltage(0);
     }
 
-    private double calculateElevatorPowerFromState(TrapezoidProfile.State targetState) {
+    private double calculateElevatorVoltageFromState(TrapezoidProfile.State targetState) {
         double pidOutput = SimulationArmConstants.ELEVATOR_PID_CONTROLLER.calculate(
                 getElevatorPositionRevolutions(),
                 targetState.position
         );
         double feedforward = SimulationArmConstants.ELEVATOR_FEEDFORWARD.calculate(targetState.velocity);
-        return pidOutput + feedforward;
+        return Conversions.compensatedPowerToVoltage(pidOutput + feedforward, SimulationArmConstants.VOLTAGE_COMPENSATION_SATURATION);
     }
 
-    private double calculateAnglePowerFromState(TrapezoidProfile.State targetState) {
+    private double calculateAngleVoltageFromState(TrapezoidProfile.State targetState) {
         double pidOutput = SimulationArmConstants.ANGLE_PID_CONTROLLER.calculate(
                 getAnglePositionDegrees(),
                 targetState.position
@@ -67,7 +67,7 @@ public class SimulationArmIO extends ArmIO {
                 Units.degreesToRadians(targetState.position),
                 targetState.velocity
         );
-        return pidOutput + feedforward;
+        return Conversions.compensatedPowerToVoltage(pidOutput + feedforward, SimulationArmConstants.VOLTAGE_COMPENSATION_SATURATION);
     }
 
     private double getElevatorPositionRevolutions() {
@@ -86,25 +86,21 @@ public class SimulationArmIO extends ArmIO {
         return Units.radiansToDegrees(angleSimulation.getVelocityRadPerSec());
     }
 
-    private void setAngleMotorsPower(double power) {
+    private void setAngleMotorsVoltage(double voltage) {
         angleMotorVoltage = MathUtil.clamp(
-                powerToVoltage(power),
+                voltage,
                 -SimulationArmConstants.VOLTAGE_COMPENSATION_SATURATION,
                 SimulationArmConstants.VOLTAGE_COMPENSATION_SATURATION
         );
-        angleSimulation.setInputVoltage(power);
+        angleSimulation.setInputVoltage(voltage);
     }
 
-    private void setElevatorMotorsPower(double power) {
+    private void setElevatorMotorsVoltage(double voltage) {
         elevatorMotorVoltage = MathUtil.clamp(
-                powerToVoltage(power),
+                voltage,
                 -SimulationArmConstants.VOLTAGE_COMPENSATION_SATURATION,
                 SimulationArmConstants.VOLTAGE_COMPENSATION_SATURATION
         );
         elevatorSimulation.setInputVoltage(elevatorMotorVoltage);
-    }
-
-    private double powerToVoltage(double power) {
-        return Conversions.compensatedPowerToVoltage(power, SimulationArmConstants.VOLTAGE_COMPENSATION_SATURATION);
     }
 }

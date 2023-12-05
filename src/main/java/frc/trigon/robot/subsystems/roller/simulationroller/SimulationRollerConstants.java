@@ -17,7 +17,7 @@ public class SimulationRollerConstants {
             ANGLE_GEAR_RATIO = 8.4,
             COLLECTOR_GEAR_RATIO = 23452234.1;
     private static final double
-            ROLLER_LENGTH = 200,
+            ROLLER_LENGTH_METERS = 200,
             ROLLER_MASS = 10;
     private static final Rotation2d
             MINIMUM_ANGLE = Rotation2d.fromDegrees(0),
@@ -28,8 +28,8 @@ public class SimulationRollerConstants {
     static final SingleJointedArmSim ANGLE_MOTOR = new SingleJointedArmSim(
             ANGLE_MOTOR_GEARBOX,
             ANGLE_GEAR_RATIO,
-            SingleJointedArmSim.estimateMOI(ROLLER_LENGTH, ROLLER_MASS),
-            ROLLER_LENGTH,
+            SingleJointedArmSim.estimateMOI(ROLLER_LENGTH_METERS, ROLLER_MASS),
+            ROLLER_LENGTH_METERS,
             MINIMUM_ANGLE.getRadians(),
             MAXIMUM_ANGLE.getRadians(),
             ANGLE_SIMULATE_GRAVITY,

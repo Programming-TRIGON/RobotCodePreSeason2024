@@ -2,6 +2,7 @@ package frc.trigon.robot.subsystems.arm.toohardarm;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import frc.trigon.robot.subsystems.arm.ArmIO;
@@ -30,12 +31,12 @@ public class ToohardArmIO extends ArmIO {
 
     @Override
     protected void setTargetAngleState(TrapezoidProfile.State targetState) {
-        setAngleMotorsPower(calculateAnglePowerFromState(targetState));
+        setAngleMotorsVoltage(calculateAngleVoltageFromState(targetState));
     }
 
     @Override
     protected void setTargetElevatorState(TrapezoidProfile.State targetState) {
-        setElevatorMotorsPower(calculateElevatorPowerFromState(targetState));
+        setElevatorMotorsVoltage(calculateElevatorVoltageFromState(targetState));
     }
 
     @Override
@@ -50,16 +51,21 @@ public class ToohardArmIO extends ArmIO {
         followerElevatorMotor.stopMotor();
     }
 
-    private double calculateElevatorPowerFromState(TrapezoidProfile.State targetState) {
+    private double calculateElevatorVoltageFromState(TrapezoidProfile.State targetState) {
         double pidOutput = ToohardArmConstants.ELEVATOR_PID_CONTROLLER.calculate(
                 getElevatorPositionRevolutions(),
                 targetState.position
         );
         double feedforward = ToohardArmConstants.ELEVATOR_FEEDFORWARD.calculate(targetState.velocity);
-        return pidOutput + feedforward;
+        double voltage = Conversions.compensatedPowerToVoltage(pidOutput + feedforward, ToohardArmConstants.VOLTAGE_COMPENSATION_SATURATION);
+        return MathUtil.clamp(
+                voltage,
+                -ToohardArmConstants.VOLTAGE_COMPENSATION_SATURATION,
+                ToohardArmConstants.VOLTAGE_COMPENSATION_SATURATION
+        );
     }
 
-    private double calculateAnglePowerFromState(TrapezoidProfile.State targetState) {
+    private double calculateAngleVoltageFromState(TrapezoidProfile.State targetState) {
         double pidOutput = ToohardArmConstants.ANGLE_PID_CONTROLLER.calculate(
                 getAnglePositionDegrees(),
                 targetState.position
@@ -68,7 +74,12 @@ public class ToohardArmIO extends ArmIO {
                 Units.degreesToRadians(targetState.position),
                 targetState.velocity
         );
-        return pidOutput + feedforward;
+        double voltage = Conversions.compensatedPowerToVoltage(pidOutput + feedforward, ToohardArmConstants.VOLTAGE_COMPENSATION_SATURATION);
+        return  MathUtil.clamp(
+                voltage,
+                -ToohardArmConstants.VOLTAGE_COMPENSATION_SATURATION,
+                ToohardArmConstants.VOLTAGE_COMPENSATION_SATURATION
+        );
     }
 
     private double getElevatorPositionRevolutions() {
@@ -88,17 +99,13 @@ public class ToohardArmIO extends ArmIO {
         return Conversions.revolutionsToDegrees(ToohardArmConstants.ANGLE_ENCODER_VELOCITY_SIGNAL.refresh().getValue());
     }
 
-    private void setAngleMotorsPower(double power) {
-        masterAngleMotor.set(powerToVoltage(power));
-        followerAngleMotor.set(powerToVoltage(power));
+    private void setAngleMotorsVoltage(double voltage) {
+        masterAngleMotor.setVoltage(voltage);
+        followerAngleMotor.setVoltage(voltage);
     }
 
-    private void setElevatorMotorsPower(double power) {
-        masterElevatorMotor.set(powerToVoltage(power));
-        followerElevatorMotor.set(powerToVoltage(power));
-    }
-
-    private double powerToVoltage(double power) {
-        return Conversions.compensatedPowerToVoltage(power, ToohardArmConstants.VOLTAGE_COMPENSATION_SATURATION);
+    private void setElevatorMotorsVoltage(double voltage) {
+        masterElevatorMotor.setVoltage(voltage);
+        followerElevatorMotor.setVoltage(voltage);
     }
 }

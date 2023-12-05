@@ -74,16 +74,16 @@ public class Arm extends SubsystemBase {
         return targetElevatorPosition >= getElevatorPositionRevolutions();
     }
 
-    private double getElevatorPositionRevolutions() {
-        return armInputs.elevatorPositionRevolutions;
-    }
-
     boolean atAngle(Rotation2d targetAngle) {
         return Math.abs(armInputs.anglePositionDegrees - targetAngle.getDegrees()) <= ArmConstants.ANGLE_TOLERANCE;
     }
 
     boolean atElevatorPosition(double targetElevatorPosition) {
         return Math.abs(armInputs.elevatorPositionRevolutions - targetElevatorPosition) <= ArmConstants.ELEVATOR_TOLERANCE;
+    }
+
+    private double getElevatorPositionRevolutions() {
+        return armInputs.elevatorPositionRevolutions;
     }
 
     private double getAngleProfileTime() {
