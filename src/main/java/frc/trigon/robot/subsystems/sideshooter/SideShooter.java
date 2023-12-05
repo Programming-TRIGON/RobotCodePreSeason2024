@@ -36,7 +36,7 @@ public class SideShooter extends SubsystemBase {
         );
     }
 
-    private Rotation2d getAngleMotorposition() {
+    private Rotation2d getAngleMotorPosition() {
         double positionRevolution = SideShooterConstants.ANGLE_ENCODER_POSITION_SIGNAL.refresh().getValue();
         return Rotation2d.fromRotations(positionRevolution);
     }
@@ -52,7 +52,7 @@ public class SideShooter extends SubsystemBase {
     private void generateAngleMotorProfile(Rotation2d targetAngle) {
         angleMotorProfile = new TrapezoidProfile(SideShooterConstants.ANGLE_Constraints,
                 new TrapezoidProfile.State(targetAngle.getDegrees(), 0),
-                new TrapezoidProfile.State(getAngleMotorposition().getDegrees(), getAngleMotorVelocityRotationsPerSecond()));
+                new TrapezoidProfile.State(getAngleMotorPosition().getDegrees(), getAngleMotorVelocityRotationsPerSecond()));
 
         lastAngleMotorProfileGeneration = Timer.getFPGATimestamp();
     }
@@ -65,7 +65,7 @@ public class SideShooter extends SubsystemBase {
 
         TrapezoidProfile.State targetGetState = angleMotorProfile.calculate(getAngleMotorProfileTime());
         double pidOutPut = SideShooterConstants.ANGLE_PID_CONTROLLER.calculate(
-                getAngleMotorposition().getDegrees(),
+                getAngleMotorPosition().getDegrees(),
                 targetGetState.position
         );
         double Feedforward = SideShooterConstants.SIDE_SHOOTER_FEEDFORWARD.calculate(
