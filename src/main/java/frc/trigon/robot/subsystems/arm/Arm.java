@@ -33,11 +33,11 @@ public class Arm extends SubsystemBase {
     }
 
     boolean isAtAngle(double targetAngle) {
-        return Math.abs(armInputs.anglePositionDegrees - targetAngle) >= 1;
+        return Math.abs(armInputs.anglePositionDegrees - targetAngle) >= ArmConstants.TOLERANCE;
     }
 
     boolean isAtPosition(double targetElevatorPosition) {
-        return Math.abs(armInputs.elevatorPositionRevolution - targetElevatorPosition) >= 1;
+        return Math.abs(armInputs.elevatorPositionRevolution - targetElevatorPosition) >= ArmConstants.TOLERANCE;
     }
 
     boolean isElevatorOpening(double targetElevatorPosition) {

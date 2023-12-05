@@ -40,7 +40,7 @@ public class ArmConstants {
     private static final MechanismRoot2d TARGET_POSITION_ROOT = TARGET_POSITION_MECHANISM.getRoot("TargetPositionRoot", ARM_ROOT_WIDTH, ARM_ROOT_LENGTH);
     static final MechanismLigament2d ARM_LIGAMENT = ARM_ROOT.append(new MechanismLigament2d("ArmLigament", ARM_LIGAMENT_LENGTH, ARM_LIGAMENT_ANGLE, ARM_MECHANISM_LENGTH, BLUE));
     static final MechanismLigament2d TARGET_POSITION_LIGAMENT = TARGET_POSITION_ROOT.append(new MechanismLigament2d("TargetPositionLigament", ARM_LIGAMENT_LENGTH, ARM_LIGAMENT_ANGLE, ARM_MECHANISM_LENGTH, GRAY));
-
+    static final double TOLERANCE = 1;
 
     public enum ArmState {
         FIRST_STATE(Rotation2d.fromDegrees(100), 7),
