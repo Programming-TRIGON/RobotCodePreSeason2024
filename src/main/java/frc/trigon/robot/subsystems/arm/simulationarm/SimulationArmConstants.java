@@ -9,19 +9,19 @@ import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 
 public class SimulationArmConstants {
-    private static int
+    private static final int
             ANGLE_MOTOR_AMOUNT = 2,
             ELEVATOR_MOTOR_AMOUNT = 2;
-    private static DCMotor
+    private static final DCMotor
             ANGLE_MOTOR_GEARBOX = DCMotor.getNEO(ANGLE_MOTOR_AMOUNT),
             ELEVATOR_MOTOR_GEARBOX = DCMotor.getNEO(ELEVATOR_MOTOR_AMOUNT);
-    private static double
+    private static final double
             ANGLE_GEAR_RATIO = 12.4,
             ELEVATOR_GEAR_RATIO = 23952853.3;
-    private static double MINIMUM_ARM_LENGTH = 5;
-    private static double ARM_LENGTH = 20;
-    private static double ARM_MASS = 2;
-    private static Rotation2d
+    private static final double MINIMUM_ARM_LENGTH = 5;
+    private static final double ARM_LENGTH = 20;
+    private static final double ARM_MASS = 2;
+    private static final Rotation2d
             MINIMUM_ANGLE = Rotation2d.fromDegrees(0),
             MAXIMUM_ANGLE = Rotation2d.fromDegrees(90);
     private static final boolean

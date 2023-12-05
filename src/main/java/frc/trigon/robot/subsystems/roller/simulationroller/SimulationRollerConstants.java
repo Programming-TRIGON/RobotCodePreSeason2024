@@ -6,10 +6,10 @@ import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 
 public class SimulationRollerConstants {
-    private static int
+    private static final int
             ANGLE_MOTOR_AMOUNT = 1,
             COLLECTOR_MOTOR_AMOUNT = 1;
-    private static DCMotor
+    private static final DCMotor
             ANGLE_MOTOR_GEARBOX = DCMotor.getNEO(ANGLE_MOTOR_AMOUNT),
             COLLECTOR_MOTOR_GEARBOX = DCMotor.getNEO(COLLECTOR_MOTOR_AMOUNT);
     private static final double
