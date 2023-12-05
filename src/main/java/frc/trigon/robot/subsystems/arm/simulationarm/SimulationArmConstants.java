@@ -28,6 +28,7 @@ public class SimulationArmConstants {
             ANGLE_SIMULATE_GRAVITY = true,
             ELEVATOR_SIMULATE_GRAVITY = true;
     static final double ELEVATOR_METERS_PER_REVOLUTION = 0.3;
+    static final double ARM_DRUM_RADIUS = 3;
 
     private static final double
             ANGLE_P = 0,
@@ -77,7 +78,7 @@ public class SimulationArmConstants {
             ELEVATOR_MOTOR_GEARBOX,
             ELEVATOR_GEAR_RATIO,
             ARM_MASS,
-            900000000,
+            ARM_DRUM_RADIUS,
             MINIMUM_ARM_LENGTH,
             ARM_LENGTH,
             ELEVATOR_SIMULATE_GRAVITY,
