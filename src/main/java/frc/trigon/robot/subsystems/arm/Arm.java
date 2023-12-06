@@ -41,10 +41,10 @@ public class Arm extends SubsystemBase {
         lastAngleMotorProfileGenerationTime = Timer.getFPGATimestamp();
     }
 
-    void generateElevatorMotorProfile(double targetElevatorPosition, double speedPercentage) {
+    void generateElevatorMotorProfile(double targetElevatorPositionMeters, double speedPercentage) {
         elevatorMotorProfile = new TrapezoidProfile(
                 Conversions.scaleConstraints(ArmConstants.ELEVATOR_CONSTRAINTS, speedPercentage),
-                new TrapezoidProfile.State(targetElevatorPosition, 0),
+                new TrapezoidProfile.State(targetElevatorPositionMeters, 0),
                 new TrapezoidProfile.State(armInputs.elevatorPositionMeters, armInputs.elevatorVelocityMetersPerSecond)
         );
         lastElevatorMotorProfileGenerationTime = Timer.getFPGATimestamp();
@@ -70,19 +70,19 @@ public class Arm extends SubsystemBase {
         armIO.setTargetElevatorState(targetState);
     }
 
-    boolean isElevatorRising(double targetElevatorPosition) {
-        return targetElevatorPosition >= getElevatorPositionRevolutions();
+    boolean isElevatorRising(double targetElevatorPositionMeters) {
+        return targetElevatorPositionMeters >= getElevatorPositionMeters();
     }
 
     boolean atAngle(Rotation2d targetAngle) {
         return Math.abs(armInputs.anglePositionDegrees - targetAngle.getDegrees()) <= ArmConstants.ANGLE_TOLERANCE;
     }
 
-    boolean atElevatorPosition(double targetElevatorPosition) {
-        return Math.abs(armInputs.elevatorPositionMeters - targetElevatorPosition) <= ArmConstants.ELEVATOR_TOLERANCE;
+    boolean atElevatorPositionMeters(double targetElevatorPositionMeters) {
+        return Math.abs(armInputs.elevatorPositionMeters - targetElevatorPositionMeters) <= ArmConstants.ELEVATOR_TOLERANCE;
     }
 
-    private double getElevatorPositionRevolutions() {
+    private double getElevatorPositionMeters() {
         return armInputs.elevatorPositionMeters;
     }
 

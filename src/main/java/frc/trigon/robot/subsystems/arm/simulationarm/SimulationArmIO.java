@@ -53,21 +53,21 @@ public class SimulationArmIO extends ArmIO {
         double pidOutput = SimulationArmConstants.ELEVATOR_PID_CONTROLLER.calculate(
                 elevatorSimulation.getPositionMeters(),
                 targetState.position
-        );
-        double feedforward = SimulationArmConstants.ELEVATOR_FEEDFORWARD.calculate(targetState.velocity);
-        return Conversions.compensatedPowerToVoltage(pidOutput + feedforward, SimulationArmConstants.VOLTAGE_COMPENSATION_SATURATION);
+        ) * SimulationArmConstants.VOLTAGE_COMPENSATION_SATURATION;
+        double feedforward = SimulationArmConstants.ELEVATOR_FEEDFORWARD.calculate(targetState.velocity) * SimulationArmConstants.VOLTAGE_COMPENSATION_SATURATION;
+        return pidOutput + feedforward;
     }
 
     private double calculateAngleVoltageFromState(TrapezoidProfile.State targetState) {
         double pidOutput = SimulationArmConstants.ANGLE_PID_CONTROLLER.calculate(
                 getAnglePositionDegrees(),
                 targetState.position
-        );
+        ) * SimulationArmConstants.VOLTAGE_COMPENSATION_SATURATION;
         double feedforward = SimulationArmConstants.ANGLE_FEEDFORWARD.calculate(
                 Units.degreesToRadians(targetState.position),
                 targetState.velocity
-        );
-        return Conversions.compensatedPowerToVoltage(pidOutput + feedforward, SimulationArmConstants.VOLTAGE_COMPENSATION_SATURATION);
+        ) * SimulationArmConstants.VOLTAGE_COMPENSATION_SATURATION;
+        return pidOutput + feedforward;
     }
 
     private double getAnglePositionDegrees() {

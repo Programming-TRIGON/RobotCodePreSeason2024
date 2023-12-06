@@ -54,39 +54,29 @@ public class ToohardArmIO extends ArmIO {
         double pidOutput = ToohardArmConstants.ELEVATOR_PID_CONTROLLER.calculate(
                 getElevatorPositionMeters(),
                 targetState.position
-        );
-        double feedforward = ToohardArmConstants.ELEVATOR_FEEDFORWARD.calculate(targetState.velocity);
-        double voltage = Conversions.compensatedPowerToVoltage(pidOutput + feedforward, ToohardArmConstants.VOLTAGE_COMPENSATION_SATURATION);
-        return MathUtil.clamp(
-                voltage,
-                -ToohardArmConstants.VOLTAGE_COMPENSATION_SATURATION,
-                ToohardArmConstants.VOLTAGE_COMPENSATION_SATURATION
-        );
+        ) * ToohardArmConstants.VOLTAGE_COMPENSATION_SATURATION;
+        double feedforward = ToohardArmConstants.ELEVATOR_FEEDFORWARD.calculate(targetState.velocity) * ToohardArmConstants.VOLTAGE_COMPENSATION_SATURATION;
+        return pidOutput + feedforward;
     }
 
     private double calculateAngleVoltageFromState(TrapezoidProfile.State targetState) {
         double pidOutput = ToohardArmConstants.ANGLE_PID_CONTROLLER.calculate(
                 getAnglePositionDegrees(),
                 targetState.position
-        );
+        ) * ToohardArmConstants.VOLTAGE_COMPENSATION_SATURATION;
         double feedforward = ToohardArmConstants.ANGLE_FEEDFORWARD.calculate(
                 Units.degreesToRadians(targetState.position),
                 targetState.velocity
-        );
-        double voltage = Conversions.compensatedPowerToVoltage(pidOutput + feedforward, ToohardArmConstants.VOLTAGE_COMPENSATION_SATURATION);
-        return  MathUtil.clamp(
-                voltage,
-                -ToohardArmConstants.VOLTAGE_COMPENSATION_SATURATION,
-                ToohardArmConstants.VOLTAGE_COMPENSATION_SATURATION
-        );
+        ) * ToohardArmConstants.VOLTAGE_COMPENSATION_SATURATION;
+        return pidOutput + feedforward;
     }
 
     private double getElevatorPositionMeters() {
-        return Conversions.magTicksToRevolutions(elevatorEncoder.getSelectedSensorPosition()) * ToohardArmConstants.ELEVATOR_REVOLUTION_DISTANCE_METERS;
+        return Conversions.magTicksToRevolutions(elevatorEncoder.getSelectedSensorPosition()) * ToohardArmConstants.ELEVATOR_METERS_PER_REVOLUTION;
     }
 
     private double getElevatorVelocityMetersPerSecond() {
-        return Conversions.magTicksToRevolutions(elevatorEncoder.getSelectedSensorVelocity()) * ToohardArmConstants.ELEVATOR_REVOLUTION_DISTANCE_METERS;
+        return Conversions.magTicksToRevolutions(elevatorEncoder.getSelectedSensorVelocity()) * ToohardArmConstants.ELEVATOR_METERS_PER_REVOLUTION;
     }
 
     private double getAnglePositionDegrees() {

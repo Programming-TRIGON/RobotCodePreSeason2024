@@ -15,8 +15,8 @@ public class ArmCommands {
         return getSetTargetArmStateCommand(targetState, 100, 100);
     }
 
-    public static Command getSetTargetArmPositionCommand(Rotation2d targetAngle, double targetElevatorPosition) {
-        return getSetTargetArmPositionCommand(targetAngle, targetElevatorPosition, 100, 100);
+    public static Command getSetTargetArmPositionCommand(Rotation2d targetAngle, double targetElevatorPositionMeters) {
+        return getSetTargetArmPositionCommand(targetAngle, targetElevatorPositionMeters, 100, 100);
     }
 
     /**
@@ -35,27 +35,27 @@ public class ArmCommands {
      * Creates a command that sets the target position of the arm.
      *
      * @param targetAngle             the target angle of the arm
-     * @param targetElevatorPosition  the target elevator position
+     * @param targetElevatorPositionMeters  the target elevator position
      * @param angleSpeedPercentage    the target speed for angle motor as a percentage of normal speed
      * @param elevatorSpeedPercentage the target speed for elevator motor as a percentage of normal speed
      * @return the command
      */
-    public static Command getSetTargetArmPositionCommand(Rotation2d targetAngle, double targetElevatorPosition, double angleSpeedPercentage, double elevatorSpeedPercentage) {
+    public static Command getSetTargetArmPositionCommand(Rotation2d targetAngle, double targetElevatorPositionMeters, double angleSpeedPercentage, double elevatorSpeedPercentage) {
         return new DeferredCommand(
-                () -> getCurrentSetTargetArmPositionCommand(targetAngle, targetElevatorPosition, angleSpeedPercentage, elevatorSpeedPercentage),
+                () -> getCurrentSetTargetArmPositionCommand(targetAngle, targetElevatorPositionMeters, angleSpeedPercentage, elevatorSpeedPercentage),
                 Set.of(ARM)
         );
     }
 
-    private static Command getCurrentSetTargetArmPositionCommand(Rotation2d targetAngle, double targetElevatorPosition, double angleSpeedPercentage, double elevatorSpeedPercentage) {
-        if (ARM.isElevatorRising(targetElevatorPosition)) {
+    private static Command getCurrentSetTargetArmPositionCommand(Rotation2d targetAngle, double targetElevatorPositionMeters, double angleSpeedPercentage, double elevatorSpeedPercentage) {
+        if (ARM.isElevatorRising(targetElevatorPositionMeters)) {
             return new SequentialCommandGroup(
                     getSetTargetAngleCommand(targetAngle, angleSpeedPercentage).until(() -> ARM.atAngle(targetAngle)),
-                    getSetTargetElevatorPositionCommand(targetElevatorPosition, elevatorSpeedPercentage)
+                    getSetTargetElevatorPositionCommand(targetElevatorPositionMeters, elevatorSpeedPercentage)
             );
         }
         return new SequentialCommandGroup(
-                getSetTargetElevatorPositionCommand(targetElevatorPosition, elevatorSpeedPercentage).until(() -> ARM.atElevatorPosition(targetElevatorPosition)),
+                getSetTargetElevatorPositionCommand(targetElevatorPositionMeters, elevatorSpeedPercentage).until(() -> ARM.atElevatorPositionMeters(targetElevatorPositionMeters)),
                 getSetTargetAngleCommand(targetAngle, angleSpeedPercentage)
         );
     }
@@ -71,9 +71,9 @@ public class ArmCommands {
         );
     }
 
-    private static Command getSetTargetElevatorPositionCommand(double targetElevatorPosition, double speedPercentage) {
+    private static Command getSetTargetElevatorPositionCommand(double targetElevatorPositionMeters, double speedPercentage) {
         return new FunctionalCommand(
-                () -> ARM.generateElevatorMotorProfile(targetElevatorPosition, speedPercentage),
+                () -> ARM.generateElevatorMotorProfile(targetElevatorPositionMeters, speedPercentage),
                 ARM::setTargetElevatorPositionFromProfile,
                 (interrupted) -> {
                 },
