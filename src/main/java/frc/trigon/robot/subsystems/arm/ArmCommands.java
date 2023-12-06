@@ -2,6 +2,8 @@ package frc.trigon.robot.subsystems.arm;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.*;
+import frc.trigon.robot.utilities.Commands;
+
 import java.util.Set;
 
 public class ArmCommands {
@@ -11,8 +13,8 @@ public class ArmCommands {
         return getSetTargetArmStateCommand(targetState, 100, 100);
     }
 
-    public static Command getSetTargetArmPositionCommand(Rotation2d angle, double elevatorPosition) {
-        return getSetTargetArmPositionCommand(angle, elevatorPosition, 100, 100);
+    public static Command getSetTargetArmPositionCommand(Rotation2d targetAngle, double elevatorPosition) {
+        return getSetTargetArmPositionCommand(targetAngle, elevatorPosition, 100, 100);
     }
 
     /**
@@ -24,7 +26,7 @@ public class ArmCommands {
      * @return the command
      */
     public static Command getSetTargetArmStateCommand(ArmConstants.ArmState targetState, double angleSpeedPercentage, double elevatorSpeedPercentage) {
-        return getSetTargetArmPositionCommand(targetState.angle, targetState.elevatorPosition, angleSpeedPercentage, elevatorSpeedPercentage);
+        return getSetTargetArmPositionCommand(targetState.angle, targetState.elevatorPositionMeters, angleSpeedPercentage, elevatorSpeedPercentage);
     }
 
     /**
@@ -43,16 +45,20 @@ public class ArmCommands {
         );
     }
 
-    private static Command getCurrentSetTargetArmStateCommand(Rotation2d angle, double elevatorPosition, double angleSpeedPercentage, double elevatorSpeedPercentage) {
+    private static Command getCurrentSetTargetArmStateCommand(Rotation2d targetAngle, double elevatorPosition, double angleSpeedPercentage, double elevatorSpeedPercentage) {
         if (ARM.isElevatorOpening(elevatorPosition)) {
             return new SequentialCommandGroup(
-                    getSetTargetAngleCommand(angle, angleSpeedPercentage).until(() -> ARM.atAngle(angle)),
-                    getSetTargetElevatorPositionCommand(elevatorPosition, elevatorSpeedPercentage)
+                    getSetTargetAngleCommand(targetAngle, angleSpeedPercentage).until(() -> ARM.atAngle(targetAngle)),
+                    getSetTargetElevatorPositionCommand(elevatorPosition, elevatorSpeedPercentage).alongWith(
+                            Commands.removeRequirements(getSetTargetAngleCommand(targetAngle, angleSpeedPercentage))
+                    )
             );
         }
         return new SequentialCommandGroup(
                 getSetTargetElevatorPositionCommand(elevatorPosition, elevatorSpeedPercentage).until(() -> ARM.atTargetPosition(elevatorPosition)),
-                getSetTargetAngleCommand(angle, angleSpeedPercentage)
+                getSetTargetAngleCommand(targetAngle, angleSpeedPercentage).alongWith(
+                        Commands.removeRequirements(getSetTargetElevatorPositionCommand(elevatorPosition, elevatorSpeedPercentage))
+                )
         );
     }
 

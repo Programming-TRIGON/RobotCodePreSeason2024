@@ -10,10 +10,10 @@ import edu.wpi.first.wpilibj.util.Color8Bit;
 
 public class ArmConstants {
     private static final double
-            MAX_ANGLE_VELOCITY = 100,
-            MAX_ANGLE_ACCELERATION = 100,
-            MAX_ELEVATOR_VELOCITY = 100,
-            MAX_ELEVATOR_ACCELERATION = 100;
+            MAX_ANGLE_VELOCITY = 150,
+            MAX_ANGLE_ACCELERATION = 190,
+            MAX_ELEVATOR_VELOCITY = 2,
+            MAX_ELEVATOR_ACCELERATION = 3;
     static final TrapezoidProfile.Constraints
             ANGLE_CONSTRAINTS = new TrapezoidProfile.Constraints(
             MAX_ANGLE_VELOCITY, MAX_ANGLE_ACCELERATION
@@ -23,8 +23,8 @@ public class ArmConstants {
             );
 
     private static final double
-            ARM_MECHANISM_WIDTH = 2,
-            ARM_MECHANISM_HEIGHT = 2;
+            ARM_MECHANISM_WIDTH = 4,
+            ARM_MECHANISM_HEIGHT = 4;
     private static final double
             ARM_ROOT_WIDTH = 1,
             ARM_ROOT_LENGTH = 1;
@@ -42,7 +42,7 @@ public class ArmConstants {
     static final double
             ANGLE_TOLERANCE = 1,
             ELEVATOR_TOLERANCE = 1;
-    public static final double RETRACTED_ARM_LENGTH_METERS = 1;
+    public static final double RETRACTED_ARM_LENGTH_METERS = 0.64;
     public static final double THEORETICAL_METERS_PER_REVOLUTION = 0.1256;
 
     public enum ArmState {
@@ -50,11 +50,11 @@ public class ArmConstants {
         SECOND_STATE(Rotation2d.fromDegrees(70), 5);
 
         final Rotation2d angle;
-        final double elevatorPosition;
+        final double elevatorPositionMeters;
 
-        ArmState(Rotation2d angle, double elevatorPosition) {
+        ArmState(Rotation2d angle, double elevatorPositionMeters) {
             this.angle = angle;
-            this.elevatorPosition = elevatorPosition;
+            this.elevatorPositionMeters = elevatorPositionMeters;
         }
     }
 }

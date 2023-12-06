@@ -23,13 +23,13 @@ public class SimulationArmIO extends ArmIO {
 
         inputs.angleMotorVoltage = angleVoltage;
         inputs.angleMotorCurrent = angleMotor.getCurrentDrawAmps();
-        inputs.angleVelocityDegreesPerSecond = getAngleVelocityDegreesPerSecond();
         inputs.anglePositionDegrees = Units.radiansToDegrees(angleMotor.getAngleRads());
+        inputs.angleVelocityDegreesPerSecond = Units.radiansToDegrees(angleMotor.getVelocityRadPerSec());
 
         inputs.elevatorMotorVoltage = elevatorVoltage;
         inputs.elevatorMotorCurrent = elevatorMotor.getCurrentDrawAmps();
-        inputs.elevatorPositionRevolution = getElevatorPositionMeters();
-        inputs.elevatorVelocityRevolutionsPerSecond = elevatorMotor.getVelocityMetersPerSecond();
+        inputs.elevatorPositionMeters = getElevatorPositionMeters();
+        inputs.elevatorVelocityMetersPerSecond = elevatorMotor.getVelocityMetersPerSecond();
     }
 
     @Override
@@ -81,10 +81,6 @@ public class SimulationArmIO extends ArmIO {
         );
         double feedforward = SimulationArmConstants.ELEVATOR_FEEDFORWARD.calculate(targetState.velocity);
         return pidOutput + feedforward;
-    }
-
-    private double getAngleVelocityDegreesPerSecond() {
-        return Units.radiansToDegrees(angleMotor.getAngleRads());
     }
 
     private double getElevatorPositionMeters() {

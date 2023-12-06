@@ -27,8 +27,8 @@ public class KablamaArmIO extends ArmIO {
 
         inputs.elevatorMotorVoltage = masterElevatorMotor.getBusVoltage();
         inputs.elevatorMotorCurrent = masterElevatorMotor.getOutputCurrent();
-        inputs.elevatorPositionRevolution = getElevatorPositionMeters();
-        inputs.elevatorVelocityRevolutionsPerSecond = getElevatorVelocityRevolutionsPerSecond();
+        inputs.elevatorPositionMeters = getElevatorPositionMeters();
+        inputs.elevatorVelocityMetersPerSecond = getElevatorVelocityRevolutionsPerSecond();
     }
 
     @Override

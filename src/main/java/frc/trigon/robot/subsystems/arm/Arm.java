@@ -37,11 +37,11 @@ public class Arm extends SubsystemBase {
     }
 
     boolean atTargetPosition(double targetElevatorPosition) {
-        return Math.abs(armInputs.elevatorPositionRevolution - targetElevatorPosition) <= ArmConstants.ELEVATOR_TOLERANCE;
+        return Math.abs(armInputs.elevatorPositionMeters - targetElevatorPosition) <= ArmConstants.ELEVATOR_TOLERANCE;
     }
 
     boolean isElevatorOpening(double targetElevatorPosition) {
-        return armInputs.elevatorPositionRevolution < targetElevatorPosition;
+        return armInputs.elevatorPositionMeters < targetElevatorPosition;
     }
 
     void generateAngleMotorProfile(Rotation2d targetAngle, double speedPercentage) {
@@ -58,7 +58,7 @@ public class Arm extends SubsystemBase {
         elevatorMotorProfile = new TrapezoidProfile(
                 Conversions.scaleConstraints(ArmConstants.ELEVATOR_CONSTRAINTS, speedPercentage),
                 new TrapezoidProfile.State(targetElevatorPosition, 0),
-                new TrapezoidProfile.State(armInputs.elevatorPositionRevolution, armInputs.elevatorVelocityRevolutionsPerSecond)
+                new TrapezoidProfile.State(armInputs.elevatorPositionMeters, armInputs.elevatorVelocityMetersPerSecond)
         );
 
         lastElevatorMotorProfileGenerationTime = Timer.getFPGATimestamp();
@@ -82,7 +82,7 @@ public class Arm extends SubsystemBase {
         }
 
         TrapezoidProfile.State targetState = elevatorMotorProfile.calculate(getElevatorMotorProfileTime());
-        ArmConstants.TARGET_POSITION_LIGAMENT.setLength(targetState.position + ArmConstants.RETRACTED_ARM_LENGTH_METERS * ArmConstants.THEORETICAL_METERS_PER_REVOLUTION);
+        ArmConstants.TARGET_POSITION_LIGAMENT.setLength(targetState.position + ArmConstants.RETRACTED_ARM_LENGTH_METERS);
         armIO.setTargetElevatorState(targetState);
     }
 
@@ -95,7 +95,7 @@ public class Arm extends SubsystemBase {
     }
 
     private void updateMechanism() {
-        ArmConstants.ARM_LIGAMENT.setLength(armInputs.elevatorPositionRevolution + ArmConstants.RETRACTED_ARM_LENGTH_METERS);
+        ArmConstants.ARM_LIGAMENT.setLength(armInputs.elevatorPositionMeters + ArmConstants.RETRACTED_ARM_LENGTH_METERS);
         ArmConstants.ARM_LIGAMENT.setAngle(armInputs.anglePositionDegrees);
         Logger.recordOutput("ArmMechanism", ArmConstants.ARM_MECHANISM);
     }

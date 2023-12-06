@@ -53,7 +53,7 @@ public class SimulationArmConstants {
             ANGLE_P = 1.5,
             ANGLE_I = 0,
             ANGLE_D = 0,
-            ELEVATOR_P = 1,
+            ELEVATOR_P = 5,
             ELEVATOR_I = 0,
             ELEVATOR_D = 0;
     static final PIDController

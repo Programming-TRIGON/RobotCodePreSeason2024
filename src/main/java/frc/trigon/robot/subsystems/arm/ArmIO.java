@@ -5,7 +5,6 @@ import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.subsystems.arm.kablamaArm.KablamaArmIO;
 import frc.trigon.robot.subsystems.arm.simulationarm.SimulationArmIO;
 import org.littletonrobotics.junction.AutoLog;
-import org.littletonrobotics.junction.LogTable;
 
 public class ArmIO {
     static ArmIO generateIO() {
@@ -40,7 +39,7 @@ public class ArmIO {
 
         public double elevatorMotorCurrent = 0;
         public double elevatorMotorVoltage = 0;
-        public double elevatorPositionRevolution = 0;
-        public double elevatorVelocityRevolutionsPerSecond = 0;
+        public double elevatorPositionMeters = 0;
+        public double elevatorVelocityMetersPerSecond = 0;
     }
 }
