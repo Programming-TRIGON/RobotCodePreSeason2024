@@ -2,6 +2,9 @@ package frc.trigon.robot.subsystems.arm;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 
 public class ArmConstants {
     private static final double
@@ -16,6 +19,21 @@ public class ArmConstants {
     static final double
             ANGLE_TOLERANCE = 0.5,
             ELEVATOR_TOLERANCE = 0.7;
+    private static final double
+            ARM_WIDTH_METERS = 2,
+            ARM_HEIGHT_METERS = 300;
+
+    private static final double
+            ARM_MECHANISM_ROOT_X = 2,
+            ARM_MECHANISM_ROOT_Y = 0.00001;
+    private static final double ARM_LENGTH_METERS = 0.00201;
+    private static final Rotation2d ARM_ANGLE = Rotation2d.fromDegrees(2);
+    static final Mechanism2d ARM_MECHANISM = new Mechanism2d(
+            ARM_WIDTH_METERS,
+            ARM_HEIGHT_METERS
+    );
+    private static final MechanismRoot2d ARM_ROOT = ARM_MECHANISM.getRoot("ArmMechanismRoot", ARM_MECHANISM_ROOT_X, ARM_MECHANISM_ROOT_Y);
+    static final MechanismLigament2d ARM_LIGAMENT = ARM_ROOT.append(new MechanismLigament2d("ArmLigament", ARM_LENGTH_METERS, ARM_ANGLE.getDegrees()));
 
     public enum ArmState {
         DEFAULT(Rotation2d.fromDegrees(0), 0),
