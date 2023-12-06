@@ -26,11 +26,11 @@ public class ArmConstants {
         PLACE_HIGH_CONE(Rotation2d.fromDegrees(70), 10);
 
         final Rotation2d angle;
-        final double elevatorPosition;
+        final double elevatorPositionMeters;
 
         ArmState(Rotation2d angle, double elevatorPosition) {
             this.angle = angle;
-            this.elevatorPosition = elevatorPosition;
+            this.elevatorPositionMeters = elevatorPosition;
         }
     }
 }

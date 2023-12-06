@@ -62,11 +62,11 @@ public class SimulationArmIO extends ArmIO {
         double pidOutput = SimulationArmConstants.ANGLE_PID_CONTROLLER.calculate(
                 getAnglePositionDegrees(),
                 targetState.position
-        ) * SimulationArmConstants.VOLTAGE_COMPENSATION_SATURATION;
+        );
         double feedforward = SimulationArmConstants.ANGLE_FEEDFORWARD.calculate(
                 Units.degreesToRadians(targetState.position),
                 targetState.velocity
-        ) * SimulationArmConstants.VOLTAGE_COMPENSATION_SATURATION;
+        );
         return pidOutput + feedforward;
     }
 

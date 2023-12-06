@@ -28,16 +28,16 @@ public class ArmCommands {
      * @return the command
      */
     public static Command getSetTargetArmStateCommand(ArmConstants.ArmState targetState, double angleSpeedPercentage, double elevatorSpeedPercentage) {
-        return getSetTargetArmPositionCommand(targetState.angle, targetState.elevatorPosition, angleSpeedPercentage, elevatorSpeedPercentage);
+        return getSetTargetArmPositionCommand(targetState.angle, targetState.elevatorPositionMeters, angleSpeedPercentage, elevatorSpeedPercentage);
     }
 
     /**
      * Creates a command that sets the target position of the arm.
      *
-     * @param targetAngle             the target angle of the arm
-     * @param targetElevatorPositionMeters  the target elevator position
-     * @param angleSpeedPercentage    the target speed for angle motor as a percentage of normal speed
-     * @param elevatorSpeedPercentage the target speed for elevator motor as a percentage of normal speed
+     * @param targetAngle                  the target angle of the arm
+     * @param targetElevatorPositionMeters the target elevator position
+     * @param angleSpeedPercentage         the target speed for angle motor as a percentage of normal speed
+     * @param elevatorSpeedPercentage      the target speed for elevator motor as a percentage of normal speed
      * @return the command
      */
     public static Command getSetTargetArmPositionCommand(Rotation2d targetAngle, double targetElevatorPositionMeters, double angleSpeedPercentage, double elevatorSpeedPercentage) {

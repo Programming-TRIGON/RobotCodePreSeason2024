@@ -54,8 +54,8 @@ public class ToohardArmIO extends ArmIO {
         double pidOutput = ToohardArmConstants.ELEVATOR_PID_CONTROLLER.calculate(
                 getElevatorPositionMeters(),
                 targetState.position
-        ) * ToohardArmConstants.VOLTAGE_COMPENSATION_SATURATION;
-        double feedforward = ToohardArmConstants.ELEVATOR_FEEDFORWARD.calculate(targetState.velocity) * ToohardArmConstants.VOLTAGE_COMPENSATION_SATURATION;
+        );
+        double feedforward = ToohardArmConstants.ELEVATOR_FEEDFORWARD.calculate(targetState.velocity);
         return pidOutput + feedforward;
     }
 
@@ -63,11 +63,11 @@ public class ToohardArmIO extends ArmIO {
         double pidOutput = ToohardArmConstants.ANGLE_PID_CONTROLLER.calculate(
                 getAnglePositionDegrees(),
                 targetState.position
-        ) * ToohardArmConstants.VOLTAGE_COMPENSATION_SATURATION;
+        );
         double feedforward = ToohardArmConstants.ANGLE_FEEDFORWARD.calculate(
                 Units.degreesToRadians(targetState.position),
                 targetState.velocity
-        ) * ToohardArmConstants.VOLTAGE_COMPENSATION_SATURATION;
+        );
         return pidOutput + feedforward;
     }
 
