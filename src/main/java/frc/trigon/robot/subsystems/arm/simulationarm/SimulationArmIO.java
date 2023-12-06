@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.subsystems.arm.ArmIO;
 import frc.trigon.robot.subsystems.arm.ArmInputsAutoLogged;
-import frc.trigon.robot.utilities.Conversions;
 
 public class SimulationArmIO extends ArmIO {
     private final SingleJointedArmSim angleSimulation = SimulationArmConstants.ANGLE_MOTOR;
