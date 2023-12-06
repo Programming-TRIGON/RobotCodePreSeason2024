@@ -42,6 +42,7 @@ public class ArmConstants {
     static final double
             ANGLE_TOLERANCE = 1,
             ELEVATOR_TOLERANCE = 1;
+    public static final double RETRACTED_ARM_LENGTH_METERS = 0.64;
 
     public enum ArmState {
         FIRST_STATE(Rotation2d.fromDegrees(100), 7),

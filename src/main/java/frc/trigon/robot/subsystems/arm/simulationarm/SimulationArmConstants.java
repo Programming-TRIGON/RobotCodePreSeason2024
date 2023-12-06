@@ -8,7 +8,6 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import frc.trigon.robot.subsystems.arm.ArmConstants;
-import frc.trigon.robot.subsystems.arm.kablamaarm.KablamaArmConstants;
 
 public class SimulationArmConstants {
     private static final int
@@ -32,8 +31,8 @@ public class SimulationArmConstants {
     static final SingleJointedArmSim ANGLE_MOTOR = new SingleJointedArmSim(
             ANGLE_MOTOR_GEARBOX,
             ANGLE_GEAR_RATIO,
-            SingleJointedArmSim.estimateMOI(KablamaArmConstants.RETRACTED_ARM_LENGTH_METERS, ARM_MASS),
-            KablamaArmConstants.RETRACTED_ARM_LENGTH_METERS,
+            SingleJointedArmSim.estimateMOI(ArmConstants.RETRACTED_ARM_LENGTH_METERS, ARM_MASS),
+            ArmConstants.RETRACTED_ARM_LENGTH_METERS,
             MINIMUM_ANGLE.getRadians(),
             MAXIMUM_ANGLE.getRadians(),
             ANGLE_SIMULATE_GRAVITY,
@@ -44,10 +43,10 @@ public class SimulationArmConstants {
             ELEVATOR_GEAR_RATIO,
             ARM_MASS,
             DRUM_RADIUS_METERS,
-            KablamaArmConstants.RETRACTED_ARM_LENGTH_METERS,
+            ArmConstants.RETRACTED_ARM_LENGTH_METERS,
             FULLY_OPENED_ARM_LENGTH_METERS,
             ELEVATOR_SIMULATE_GRAVITY,
-            KablamaArmConstants.RETRACTED_ARM_LENGTH_METERS
+            ArmConstants.RETRACTED_ARM_LENGTH_METERS
     );
 
     private static final double

@@ -4,7 +4,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.trigon.robot.subsystems.arm.kablamaarm.KablamaArmConstants;
 import frc.trigon.robot.utilities.Conversions;
 import org.littletonrobotics.junction.Logger;
 
@@ -83,7 +82,7 @@ public class Arm extends SubsystemBase {
         }
 
         TrapezoidProfile.State targetState = elevatorMotorProfile.calculate(getElevatorMotorProfileTime());
-        ArmConstants.TARGET_POSITION_LIGAMENT.setLength(targetState.position + KablamaArmConstants.RETRACTED_ARM_LENGTH_METERS);
+        ArmConstants.TARGET_POSITION_LIGAMENT.setLength(targetState.position + ArmConstants.RETRACTED_ARM_LENGTH_METERS);
         armIO.setTargetElevatorState(targetState);
     }
 
@@ -96,7 +95,7 @@ public class Arm extends SubsystemBase {
     }
 
     private void updateMechanism() {
-        ArmConstants.ARM_LIGAMENT.setLength(armInputs.elevatorPositionMeters + KablamaArmConstants.RETRACTED_ARM_LENGTH_METERS);
+        ArmConstants.ARM_LIGAMENT.setLength(armInputs.elevatorPositionMeters + ArmConstants.RETRACTED_ARM_LENGTH_METERS);
         ArmConstants.ARM_LIGAMENT.setAngle(armInputs.anglePositionDegrees);
         Logger.recordOutput("ArmMechanism", ArmConstants.ARM_MECHANISM);
     }
