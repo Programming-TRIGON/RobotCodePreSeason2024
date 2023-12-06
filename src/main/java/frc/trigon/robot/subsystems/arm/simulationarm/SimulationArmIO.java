@@ -8,6 +8,7 @@ import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.subsystems.arm.ArmConstants;
 import frc.trigon.robot.subsystems.arm.ArmIO;
 import frc.trigon.robot.subsystems.arm.ArmInputsAutoLogged;
+import frc.trigon.robot.subsystems.arm.kablamaarm.KablamaArmConstants;
 
 public class SimulationArmIO extends ArmIO {
     private final SingleJointedArmSim angleMotor = SimulationArmConstants.ANGLE_MOTOR;
@@ -84,6 +85,6 @@ public class SimulationArmIO extends ArmIO {
     }
 
     private double getElevatorPositionMeters() {
-        return elevatorMotor.getPositionMeters() - ArmConstants.RETRACTED_ARM_LENGTH_METERS;
+        return elevatorMotor.getPositionMeters() - KablamaArmConstants.RETRACTED_ARM_LENGTH_METERS;
     }
 }

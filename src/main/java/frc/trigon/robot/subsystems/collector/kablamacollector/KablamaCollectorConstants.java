@@ -1,7 +1,6 @@
 package frc.trigon.robot.subsystems.collector.kablamacollector;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 public class KablamaCollectorConstants {

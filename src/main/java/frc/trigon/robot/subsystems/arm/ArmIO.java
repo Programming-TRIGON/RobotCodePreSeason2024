@@ -2,7 +2,7 @@ package frc.trigon.robot.subsystems.arm;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.trigon.robot.constants.RobotConstants;
-import frc.trigon.robot.subsystems.arm.kablamaArm.KablamaArmIO;
+import frc.trigon.robot.subsystems.arm.kablamaarm.KablamaArmIO;
 import frc.trigon.robot.subsystems.arm.simulationarm.SimulationArmIO;
 import org.littletonrobotics.junction.AutoLog;
 

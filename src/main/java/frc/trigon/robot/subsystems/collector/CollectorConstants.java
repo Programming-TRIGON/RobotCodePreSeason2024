@@ -1,7 +1,5 @@
 package frc.trigon.robot.subsystems.collector;
 
-import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
-
 public class CollectorConstants {
     static final int MAX_CURRENT = 10;
     static final double MAX_CURRENT_TIME = 0.5;

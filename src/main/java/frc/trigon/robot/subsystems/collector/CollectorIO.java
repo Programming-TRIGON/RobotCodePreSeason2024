@@ -4,7 +4,6 @@ import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.subsystems.collector.kablamacollector.KablamaCollectorIO;
 import frc.trigon.robot.subsystems.collector.simulationcollector.SimulationCollectorIO;
 import org.littletonrobotics.junction.AutoLog;
-import org.littletonrobotics.junction.LogTable;
 
 public class CollectorIO {
     static CollectorIO generateIO() {

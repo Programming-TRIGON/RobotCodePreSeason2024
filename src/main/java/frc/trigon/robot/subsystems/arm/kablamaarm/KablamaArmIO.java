@@ -1,11 +1,10 @@
-package frc.trigon.robot.subsystems.arm.kablamaArm;
+package frc.trigon.robot.subsystems.arm.kablamaarm;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import frc.trigon.robot.subsystems.arm.ArmConstants;
 import frc.trigon.robot.subsystems.arm.ArmIO;
 import frc.trigon.robot.subsystems.arm.ArmInputsAutoLogged;
 import frc.trigon.robot.utilities.Conversions;
@@ -28,7 +27,7 @@ public class KablamaArmIO extends ArmIO {
         inputs.elevatorMotorVoltage = masterElevatorMotor.getBusVoltage();
         inputs.elevatorMotorCurrent = masterElevatorMotor.getOutputCurrent();
         inputs.elevatorPositionMeters = getElevatorPositionMeters();
-        inputs.elevatorVelocityMetersPerSecond = getElevatorVelocityRevolutionsPerSecond();
+        inputs.elevatorVelocityMetersPerSecond = getElevatorVelocityMetersPerSecond();
     }
 
     @Override
@@ -85,7 +84,7 @@ public class KablamaArmIO extends ArmIO {
     }
 
     private double getElevatorPositionMeters() {
-        return Conversions.magTicksToRevolutions(elevatorEncoder.getSelectedSensorPosition()) / ArmConstants.THEORETICAL_METERS_PER_REVOLUTION;
+        return Conversions.magTicksToRevolutions(elevatorEncoder.getSelectedSensorPosition()) / KablamaArmConstants.THEORETICAL_METERS_PER_REVOLUTION;
     }
 
     private double getAngleVelocityDegreesPerSecond() {
@@ -93,9 +92,10 @@ public class KablamaArmIO extends ArmIO {
         return Conversions.revolutionsToDegrees(positionRevolutions);
     }
 
-    private double getElevatorVelocityRevolutionsPerSecond() {
+    private double getElevatorVelocityMetersPerSecond() {
         double magTicksPerSecond = Conversions.perHundredMsToPerSecond(elevatorEncoder.getSelectedSensorVelocity());
-        return Conversions.magTicksToRevolutions(magTicksPerSecond);
+        double elevatorPositionRevolutions = Conversions.magTicksToRevolutions(magTicksPerSecond);
+        return elevatorPositionRevolutions / KablamaArmConstants.THEORETICAL_METERS_PER_REVOLUTION;
     }
 
     private Rotation2d getAngleMotorPosition() {

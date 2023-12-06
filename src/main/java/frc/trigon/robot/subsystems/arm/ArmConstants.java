@@ -26,24 +26,22 @@ public class ArmConstants {
             ARM_MECHANISM_WIDTH = 4,
             ARM_MECHANISM_HEIGHT = 4;
     private static final double
-            ARM_ROOT_WIDTH = 1,
-            ARM_ROOT_LENGTH = 1;
+            ARM_ROOT_X = 1,
+            ARM_ROOT_Y = 1;
     private static final double
-            ARM_LIGAMENT_LENGTH = 2,
-            ARM_LIGAMENT_ANGLE = 2;
-    private static final double ARM_MECHANISM_LENGTH = 1;
+            ARM_LIGAMENT_LENGTH = 0,
+            ARM_LIGAMENT_ANGLE = 0;
+    private static final double MECHANISM_LINE_WIDTH = 10;
     static final Mechanism2d ARM_MECHANISM = new Mechanism2d(ARM_MECHANISM_WIDTH, ARM_MECHANISM_HEIGHT);
     private static final MechanismRoot2d
-            ARM_ROOT = ARM_MECHANISM.getRoot("ArmRoot", ARM_ROOT_WIDTH, ARM_ROOT_LENGTH),
-            TARGET_POSITION_ROOT = ARM_MECHANISM.getRoot("TargetPositionRoot", ARM_ROOT_WIDTH, ARM_ROOT_LENGTH);
+            ARM_ROOT = ARM_MECHANISM.getRoot("ArmRoot", ARM_ROOT_X, ARM_ROOT_Y),
+            TARGET_POSITION_ROOT = ARM_MECHANISM.getRoot("TargetPositionRoot", ARM_ROOT_X, ARM_ROOT_Y);
     static final MechanismLigament2d
-            ARM_LIGAMENT = ARM_ROOT.append(new MechanismLigament2d("ArmLigament", ARM_LIGAMENT_LENGTH, ARM_LIGAMENT_ANGLE, ARM_MECHANISM_LENGTH, new Color8Bit(Color.kBlue))),
-            TARGET_POSITION_LIGAMENT = TARGET_POSITION_ROOT.append(new MechanismLigament2d("TargetPositionLigament", ARM_LIGAMENT_LENGTH, ARM_LIGAMENT_ANGLE, ARM_MECHANISM_LENGTH, new Color8Bit(Color.kGray)));
+            ARM_LIGAMENT = ARM_ROOT.append(new MechanismLigament2d("ArmLigament", ARM_LIGAMENT_LENGTH, ARM_LIGAMENT_ANGLE, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kBlue))),
+            TARGET_POSITION_LIGAMENT = TARGET_POSITION_ROOT.append(new MechanismLigament2d("TargetPositionLigament", ARM_LIGAMENT_LENGTH, ARM_LIGAMENT_ANGLE, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kGray)));
     static final double
             ANGLE_TOLERANCE = 1,
             ELEVATOR_TOLERANCE = 1;
-    public static final double RETRACTED_ARM_LENGTH_METERS = 0.64;
-    public static final double THEORETICAL_METERS_PER_REVOLUTION = 0.1256;
 
     public enum ArmState {
         FIRST_STATE(Rotation2d.fromDegrees(100), 7),

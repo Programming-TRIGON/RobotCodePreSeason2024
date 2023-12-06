@@ -1,7 +1,6 @@
-package frc.trigon.robot.subsystems.arm.kablamaArm;
+package frc.trigon.robot.subsystems.arm.kablamaarm;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
@@ -76,6 +75,8 @@ public class KablamaArmConstants {
     static final ElevatorFeedforward ELEVATOR_FEEDFORWARD = new ElevatorFeedforward(
             ELEVATOR_MOTOR_KS, ELEVATOR_MOTOR_KG, ELEVATOR_MOTOR_KV, ELEVATOR_MOTOR_KA
     );
+    public static final double RETRACTED_ARM_LENGTH_METERS = 0.64;
+    public static final double THEORETICAL_METERS_PER_REVOLUTION = 0.1256;
 
     static {
         configureAngleEncoder();
