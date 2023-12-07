@@ -15,7 +15,7 @@ import edu.wpi.first.math.controller.PIDController;
 import frc.trigon.robot.utilities.Conversions;
 
 public class ToohardArmConstants {
-    static final double ELEVATOR_METERS_PER_REVOLUTION = 9999996.7;
+    static final double ELEVATOR_METERS_PER_REVOLUTION = 1;
     private static final int
             MASTER_ANGLE_MOTOR_ID = 0,
             FOLLOWER_ANGLE_MOTOR_ID = 1,

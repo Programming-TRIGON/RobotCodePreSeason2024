@@ -7,6 +7,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
+import frc.trigon.robot.subsystems.arm.ArmConstants;
 
 public class SimulationArmConstants {
     static final double VOLTAGE_COMPENSATION_SATURATION = 12;
@@ -19,13 +20,12 @@ public class SimulationArmConstants {
     private static final double
             ANGLE_GEAR_RATIO = 95.2,
             ELEVATOR_GEAR_RATIO = 13.29;
-    private static final double
-            MINIMUM_ARM_LENGTH_METERS = 0.65,
+    static final double
             MAXIMUM_ARM_LENGTH_METERS = 1.7;
     private static final double ARM_MASS = 12;
     private static final Rotation2d
-            MINIMUM_ANGLE = Rotation2d.fromDegrees(0),
-            MAXIMUM_ANGLE = Rotation2d.fromDegrees(90);
+            MINIMUM_ANGLE = Rotation2d.fromDegrees(-10),
+            MAXIMUM_ANGLE = Rotation2d.fromDegrees(180);
     private static final boolean
             ANGLE_SIMULATE_GRAVITY = true,
             ELEVATOR_SIMULATE_GRAVITY = true;
@@ -46,17 +46,17 @@ public class SimulationArmConstants {
             ELEVATOR_GEAR_RATIO,
             ARM_MASS,
             ARM_DRUM_RADIUS_METERS,
-            MINIMUM_ARM_LENGTH_METERS,
+            ArmConstants.RETRACTED_ARM_LENGTH_METERS,
             MAXIMUM_ARM_LENGTH_METERS,
             ELEVATOR_SIMULATE_GRAVITY,
-            MINIMUM_ARM_LENGTH_METERS
+            ArmConstants.RETRACTED_ARM_LENGTH_METERS
     );
 
     private static final double
             ANGLE_P = 0,
             ANGLE_I = 0,
             ANGLE_D = 0,
-            ELEVATOR_P = 0,
+            ELEVATOR_P = 30,
             ELEVATOR_I = 0,
             ELEVATOR_D = 0;
     static final PIDController
@@ -64,14 +64,14 @@ public class SimulationArmConstants {
             ELEVATOR_PID_CONTROLLER = new PIDController(ELEVATOR_P, ELEVATOR_I, ELEVATOR_D);
 
     private static final double
-            ANGLE_MOTOR_KS = 1,
-            ANGLE_MOTOR_KG = 1,
-            ANGLE_MOTOR_KV = 1,
-            ANGLE_MOTOR_KA = 1,
-            ELEVATOR_MOTOR_KS = 1,
-            ELEVATOR_MOTOR_KG = 1,
-            ELEVATOR_MOTOR_KV = 1,
-            ELEVATOR_MOTOR_KA = 1;
+            ANGLE_MOTOR_KS = 0,
+            ANGLE_MOTOR_KG = 0,
+            ANGLE_MOTOR_KV = 0,
+            ANGLE_MOTOR_KA = 0,
+            ELEVATOR_MOTOR_KS = 0,
+            ELEVATOR_MOTOR_KG = 0,
+            ELEVATOR_MOTOR_KV = 0,
+            ELEVATOR_MOTOR_KA = 0;
     static final ArmFeedforward ANGLE_FEEDFORWARD = new ArmFeedforward(
             ANGLE_MOTOR_KS,
             ANGLE_MOTOR_KG,

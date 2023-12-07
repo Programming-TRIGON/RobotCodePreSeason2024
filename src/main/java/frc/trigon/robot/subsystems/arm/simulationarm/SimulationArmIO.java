@@ -6,6 +6,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import frc.trigon.robot.constants.RobotConstants;
+import frc.trigon.robot.subsystems.arm.ArmConstants;
 import frc.trigon.robot.subsystems.arm.ArmIO;
 import frc.trigon.robot.subsystems.arm.ArmInputsAutoLogged;
 
@@ -24,7 +25,7 @@ public class SimulationArmIO extends ArmIO {
         inputs.anglePositionDegrees = getAnglePositionDegrees();
         inputs.angleVelocityDegreesPerSecond = getAngleVelocityDegreesPerSecond();
         inputs.elevatorMotorVoltage = elevatorMotorVoltage;
-        inputs.elevatorPositionMeters = elevatorSimulation.getPositionMeters();
+        inputs.elevatorPositionMeters = elevatorSimulation.getPositionMeters() - ArmConstants.RETRACTED_ARM_LENGTH_METERS;
         inputs.elevatorVelocityMetersPerSecond = elevatorSimulation.getVelocityMetersPerSecond();
     }
 
@@ -52,7 +53,7 @@ public class SimulationArmIO extends ArmIO {
         double pidOutput = SimulationArmConstants.ELEVATOR_PID_CONTROLLER.calculate(
                 elevatorSimulation.getPositionMeters(),
                 targetState.position
-        ) * SimulationArmConstants.VOLTAGE_COMPENSATION_SATURATION;
+        );
         double feedforward = SimulationArmConstants.ELEVATOR_FEEDFORWARD.calculate(targetState.velocity) * SimulationArmConstants.VOLTAGE_COMPENSATION_SATURATION;
         return pidOutput + feedforward;
     }

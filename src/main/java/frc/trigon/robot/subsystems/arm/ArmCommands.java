@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.trigon.robot.utilities.Commands;
 
 import java.util.Set;
 
@@ -51,12 +52,16 @@ public class ArmCommands {
         if (ARM.isElevatorRising(targetElevatorPositionMeters)) {
             return new SequentialCommandGroup(
                     getSetTargetAngleCommand(targetAngle, angleSpeedPercentage).until(() -> ARM.atAngle(targetAngle)),
-                    getSetTargetElevatorPositionCommand(targetElevatorPositionMeters, elevatorSpeedPercentage)
+                    getSetTargetElevatorPositionCommand(targetElevatorPositionMeters, elevatorSpeedPercentage).alongWith(
+                            Commands.removeRequirements(getSetTargetAngleCommand(targetAngle, angleSpeedPercentage))
+                    )
             );
         }
         return new SequentialCommandGroup(
                 getSetTargetElevatorPositionCommand(targetElevatorPositionMeters, elevatorSpeedPercentage).until(() -> ARM.atElevatorPositionMeters(targetElevatorPositionMeters)),
-                getSetTargetAngleCommand(targetAngle, angleSpeedPercentage)
+                getSetTargetAngleCommand(targetAngle, angleSpeedPercentage).alongWith(
+                        Commands.removeRequirements(getSetTargetElevatorPositionCommand(targetElevatorPositionMeters, elevatorSpeedPercentage))
+                )
         );
     }
 
