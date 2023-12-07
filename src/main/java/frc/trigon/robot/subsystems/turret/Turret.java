@@ -7,12 +7,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import java.util.function.Supplier;
-
 public class Turret extends SubsystemBase {
     private final static Turret INSTANCE = new Turret();
     private final TalonFX motor = TurretConstants.MOTOR;
-    private final Pose2d pose = TurretConstants.POSE;
+    private final Pose2d
+            hubPose = TurretConstants.HUB_POSE,
+            robotPose = TurretConstants.ROBOT_POSE;
     private final VoltageOut voltageRequest = new VoltageOut(0, TurretConstants.FOC_ENABLED, false);
 
     public static Turret getInstance() {
@@ -22,32 +22,34 @@ public class Turret extends SubsystemBase {
     private Turret() {
     }
 
-    public Command getSetTurretPositionCommand(Supplier<Double> targetAngle) {
+    public Command getSetTurretPositionCommand() {
         return new FunctionalCommand(
                 () -> {
                 },
-                () -> turretCalculate(targetAngle.get()),
+                this::turretCalculate,
                 (interrupted) -> stop(),
                 () -> false,
                 this
         );
     }
 
-    private void turretCalculate(double targetAngle) {
+    private void turretCalculate() {
         if (atTarget())
             return;
-        if (!checkTurretSpinLimit(targetAngle))
+        double xDifference = hubPose.getX() - getPosition();
+        double yDifference = hubPose.getY() - getPosition();
+        double desiredHeading = Math.atan2(xDifference, yDifference);
+        if (checkTurretSpinLimit(desiredHeading))
             return;
-        double output = TurretConstants.PID_CONTROLLER.calculate(targetAngle);
-        setMotorVoltage(output);
+        setMotorVoltage(desiredHeading);
     }
 
     private boolean atTarget() {
-        return getPosition() == TurretConstants.TARGET_POSITION.getAngle().getRotations();
+        return getPosition() == hubPose.getRotation().getRotations();
     }
 
-    private boolean checkTurretSpinLimit(double targetAngle) {
-        return Math.abs(getPosition() - targetAngle) == 200;
+    private boolean checkTurretSpinLimit(double angleChange) {
+        return Math.abs(getPosition() - angleChange) == 200;
     }
 
     private double getPosition() {

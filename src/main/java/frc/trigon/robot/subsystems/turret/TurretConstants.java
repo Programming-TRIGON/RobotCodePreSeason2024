@@ -11,6 +11,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 
 public class TurretConstants {
@@ -23,16 +24,19 @@ public class TurretConstants {
     private static final SensorDirectionValue ENCODER_DIRECTION = SensorDirectionValue.CounterClockwise_Positive;
     private static final double ENCODER_OFFSET = 0;
     private static final double
-            TRANSLATION_X = 8.2296,
-            TRANSLATION_Y = 0.5121;
+            HUB_X = 8.2296,
+            HUB_Y = 0.5121;
+
+    private static final Translation2d HUB_POSITION = new Translation2d(HUB_X, HUB_Y);
+    private static final Rotation2d HUB_ROTATION = Rotation2d.fromRotations(0);
     static final TalonFX MOTOR = new TalonFX(MOTOR_ID);
     static final CANcoder ENCODER = new CANcoder(ENCODER_ID);
-    static final Translation2d TARGET_POSITION = new Translation2d(TRANSLATION_X, TRANSLATION_Y);
-    static final Pose2d POSE = new Pose2d();
     static final double GEAR_RATIO = 100;
     static final double MOMENT_OF_INERTIA = 0.003;
     static final boolean FOC_ENABLED = true;
     static final StatusSignal<Double> STATUS_SIGNAL = ENCODER.getPosition();
+    static final Pose2d HUB_POSE = new Pose2d(HUB_POSITION, HUB_ROTATION);
+    static final Pose2d ROBOT_POSE = new Pose2d();
 
     private static final double
             P = 1,
