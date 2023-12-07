@@ -17,19 +17,19 @@ public class SimulationArmConstants {
             ANGLE_MOTOR_GEARBOX = DCMotor.getNEO(ANGLE_MOTOR_AMOUNT),
             ELEVATOR_MOTOR_GEARBOX = DCMotor.getNEO(ELEVATOR_MOTOR_AMOUNT);
     private static final double
-            ANGLE_GEAR_RATIO = 12.4,
-            ELEVATOR_GEAR_RATIO = 23952853.3;
+            ANGLE_GEAR_RATIO = 95.2,
+            ELEVATOR_GEAR_RATIO = 13.29;
     private static final double
-            MINIMUM_ARM_LENGTH_METERS = 5,
-            MAXIMUM_ARM_LENGTH_METERS = 20;
-    private static final double ARM_MASS = 2;
+            MINIMUM_ARM_LENGTH_METERS = 0.65,
+            MAXIMUM_ARM_LENGTH_METERS = 1.7;
+    private static final double ARM_MASS = 12;
     private static final Rotation2d
             MINIMUM_ANGLE = Rotation2d.fromDegrees(0),
             MAXIMUM_ANGLE = Rotation2d.fromDegrees(90);
     private static final boolean
             ANGLE_SIMULATE_GRAVITY = true,
             ELEVATOR_SIMULATE_GRAVITY = true;
-    private static final double ARM_DRUM_RADIUS_METERS = 3;
+    private static final double ARM_DRUM_RADIUS_METERS = 0.1256 / 2;
 
     static final SingleJointedArmSim ANGLE_MOTOR = new SingleJointedArmSim(
             ANGLE_MOTOR_GEARBOX,
