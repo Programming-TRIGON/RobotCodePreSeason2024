@@ -9,6 +9,8 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
 
 public class TurretConstants {
     private static final int
@@ -19,8 +21,12 @@ public class TurretConstants {
     private static final AbsoluteSensorRangeValue ENCODER_RANGE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
     private static final SensorDirectionValue ENCODER_DIRECTION = SensorDirectionValue.CounterClockwise_Positive;
     private static final double ENCODER_OFFSET = 0;
+    private static final double
+            TRANSLATION_X = 8.2296,
+            TRANSLATION_Y = 0.5121;
     static final TalonFX MOTOR = new TalonFX(MOTOR_ID);
-    static final CANcoder encoder = new CANcoder(ENCODER_ID);
+    static final CANcoder ENCODER = new CANcoder(ENCODER_ID);
+    static final Translation2d TARGET_POSITION = new Translation2d(TRANSLATION_X, TRANSLATION_Y);
     static final double GEAR_RATIO = 100;
     static final double MOMENT_OF_INERTIA = 0.003;
 
@@ -29,6 +35,8 @@ public class TurretConstants {
             I = 0,
             D = 0;
     static final PIDController PID_CONTROLLER = new PIDController(P, I, D);
+
+    static final Pose2d POSE = new Pose2d();
 
     static {
         configureMotor();
@@ -49,6 +57,6 @@ public class TurretConstants {
         config.MagnetSensor.AbsoluteSensorRange = ENCODER_RANGE;
         config.MagnetSensor.SensorDirection = ENCODER_DIRECTION;
         config.MagnetSensor.MagnetOffset = ENCODER_OFFSET;
-        encoder.getConfigurator().apply(config);
+        ENCODER.getConfigurator().apply(config);
     }
 }
