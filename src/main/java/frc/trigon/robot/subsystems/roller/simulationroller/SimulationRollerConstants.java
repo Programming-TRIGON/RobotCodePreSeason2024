@@ -21,7 +21,7 @@ public class SimulationRollerConstants {
             ROLLER_MASS = 10;
     private static final Rotation2d
             MINIMUM_ANGLE = Rotation2d.fromDegrees(0),
-            MAXIMUM_ANGLE = Rotation2d.fromDegrees(90);
+            MAXIMUM_ANGLE = Rotation2d.fromDegrees(180);
     private static final boolean ANGLE_SIMULATE_GRAVITY = true;
     private static final double COLLECTOR_MOMENT_OF_INERTIA = 0.0003;
 

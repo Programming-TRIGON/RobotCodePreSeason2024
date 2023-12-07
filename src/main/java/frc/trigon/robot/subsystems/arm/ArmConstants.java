@@ -7,14 +7,13 @@ import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
-import org.littletonrobotics.junction.Logger;
 
 public class ArmConstants {
     private static final double
             MAX_ANGLE_VELOCITY = 100,
             MAX_ELEVATOR_VELOCITY = 100,
-            MAX_ANGLE_ACCELERATION = 100,
-            MAX_ELEVATOR_ACCELERATION = 100;
+            MAX_ANGLE_ACCELERATION = 30,
+            MAX_ELEVATOR_ACCELERATION = 30;
 
     static final TrapezoidProfile.Constraints
             ANGLE_CONSTRAINTS = new TrapezoidProfile.Constraints(MAX_ANGLE_VELOCITY, MAX_ANGLE_ACCELERATION),
@@ -23,20 +22,24 @@ public class ArmConstants {
             ANGLE_TOLERANCE = 0.5,
             ELEVATOR_TOLERANCE = 0.7;
     static final double
-            ARM_WIDTH_METERS = 2,
-            ARM_HEIGHT_METERS = 300;
+            ARM_WIDTH_METERS = 20,
+            ARM_HEIGHT_METERS = 20;
 
     private static final double
-            ARM_MECHANISM_ROOT_X = 2,
-            ARM_MECHANISM_ROOT_Y = 0.00001;
-    private static final double ARM_LENGTH_METERS = 0.00201;
+            ARM_MECHANISM_ROOT_X = 10,
+            ARM_MECHANISM_ROOT_Y = 10;
+    private static final double ARM_LENGTH_METERS = 3;
     private static final Rotation2d ARM_ANGLE = Rotation2d.fromDegrees(2);
     static final Mechanism2d ARM_MECHANISM = new Mechanism2d(
             ARM_WIDTH_METERS,
             ARM_HEIGHT_METERS
     );
-    private static final MechanismRoot2d ARM_ROOT = ARM_MECHANISM.getRoot("ArmMechanismRoot", ARM_MECHANISM_ROOT_X, ARM_MECHANISM_ROOT_Y);
-    static final MechanismLigament2d ARM_LIGAMENT = ARM_ROOT.append(new MechanismLigament2d("ArmLigament", ARM_LENGTH_METERS, ARM_ANGLE.getDegrees(), 5, new Color8Bit(Color.kForestGreen)));
+    private static final MechanismRoot2d
+            ARM_ROOT = ARM_MECHANISM.getRoot("ArmRoot", ARM_MECHANISM_ROOT_X, ARM_MECHANISM_ROOT_Y),
+            TARGET_ARM_POSITION_ROOT = ARM_MECHANISM.getRoot("TargetArmPositionRoot", ARM_MECHANISM_ROOT_X, ARM_MECHANISM_ROOT_Y);
+    static final MechanismLigament2d
+            ARM_LIGAMENT = ARM_ROOT.append(new MechanismLigament2d("ArmLigament", ARM_LENGTH_METERS, ARM_ANGLE.getDegrees(), 5, new Color8Bit(Color.kCyan))),
+            TARGET_ARM_POSITION_LIGAMENT = TARGET_ARM_POSITION_ROOT.append(new MechanismLigament2d("TargetArmPositionLigament", ARM_LENGTH_METERS, ARM_ANGLE.getDegrees(), 3, new Color8Bit(Color.kWhite)));
 
     public enum ArmState {
         DEFAULT(Rotation2d.fromDegrees(0), 0),

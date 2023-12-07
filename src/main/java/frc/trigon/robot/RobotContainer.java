@@ -30,10 +30,10 @@ public class RobotContainer {
 
     private void configureBindings() {
         arm.setDefaultCommand(ArmCommands.getSetTargetArmStateCommand(ArmConstants.ArmState.DEFAULT));
-        controller.a().whileTrue(ArmCommands.getSetTargetArmStateCommand(ArmConstants.ArmState.TAKE_HIGH_CONE));
-        controller.b().whileTrue(ArmCommands.getSetTargetArmStateCommand(ArmConstants.ArmState.TAKE_GROUND_CONE));
-        controller.x().whileTrue(ArmCommands.getSetTargetArmStateCommand(ArmConstants.ArmState.PLACE_HIGH_CONE));
-        controller.y().whileTrue(ArmCommands.getSetTargetArmStateCommand(ArmConstants.ArmState.PLACE_LOW_CONE));
-        controller.rightBumper().whileTrue(ArmCommands.getSetTargetArmStateCommand(ArmConstants.ArmState.PLACE_MEDIUM_CONE));
+        controller.a().toggleOnTrue(ArmCommands.getSetTargetArmStateCommand(ArmConstants.ArmState.TAKE_HIGH_CONE));
+        controller.b().toggleOnTrue(ArmCommands.getSetTargetArmStateCommand(ArmConstants.ArmState.TAKE_GROUND_CONE));
+        controller.x().toggleOnTrue(ArmCommands.getSetTargetArmStateCommand(ArmConstants.ArmState.PLACE_HIGH_CONE));
+        controller.y().toggleOnTrue(ArmCommands.getSetTargetArmStateCommand(ArmConstants.ArmState.PLACE_LOW_CONE));
+        controller.rightBumper().toggleOnTrue(ArmCommands.getSetTargetArmStateCommand(ArmConstants.ArmState.PLACE_MEDIUM_CONE));
     }
 }
