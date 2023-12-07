@@ -50,9 +50,9 @@ public class Turret extends SubsystemBase {
         double robotX = robotPose.getX();
         double robotY = robotPose.getY();
         double robotHeading = robotPose.getRotation().getRadians();
-        double hubVecX = hubPose.getX() - robotX;
-        double hubVecY = hubPose.getY() - robotY;
-        double theta = Math.atan2(hubVecY, hubVecX);
+        double differenceX = hubPose.getX() - robotX;
+        double differenceY = hubPose.getY() - robotY;
+        double theta = Math.atan2(differenceY, differenceX);
         double targetAngle = theta - robotHeading;
         return targetAngle;
     }
@@ -67,13 +67,13 @@ public class Turret extends SubsystemBase {
     }
 
     private double calculateError(double targetAngle) {
-        double currentAngleDegrees = Units.rotationsToDegrees(getPosition());
+        double currentAngleDegrees = getPositionDegrees();
         double error = targetAngle - currentAngleDegrees;
         return error;
     }
 
-    private double getPosition() {
-        return TurretConstants.STATUS_SIGNAL.refresh().getValue();
+    private double getPositionDegrees() {
+        return Units.rotationsToDegrees(TurretConstants.STATUS_SIGNAL.refresh().getValue());
     }
 
     private void setMotorVoltage(double voltage) {
