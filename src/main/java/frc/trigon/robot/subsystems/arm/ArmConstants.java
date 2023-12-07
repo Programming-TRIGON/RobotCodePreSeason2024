@@ -5,6 +5,9 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
+import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj.util.Color8Bit;
+import org.littletonrobotics.junction.Logger;
 
 public class ArmConstants {
     private static final double
@@ -19,7 +22,7 @@ public class ArmConstants {
     static final double
             ANGLE_TOLERANCE = 0.5,
             ELEVATOR_TOLERANCE = 0.7;
-    private static final double
+    static final double
             ARM_WIDTH_METERS = 2,
             ARM_HEIGHT_METERS = 300;
 
@@ -33,7 +36,7 @@ public class ArmConstants {
             ARM_HEIGHT_METERS
     );
     private static final MechanismRoot2d ARM_ROOT = ARM_MECHANISM.getRoot("ArmMechanismRoot", ARM_MECHANISM_ROOT_X, ARM_MECHANISM_ROOT_Y);
-    static final MechanismLigament2d ARM_LIGAMENT = ARM_ROOT.append(new MechanismLigament2d("ArmLigament", ARM_LENGTH_METERS, ARM_ANGLE.getDegrees()));
+    static final MechanismLigament2d ARM_LIGAMENT = ARM_ROOT.append(new MechanismLigament2d("ArmLigament", ARM_LENGTH_METERS, ARM_ANGLE.getDegrees(), 5, new Color8Bit(Color.kForestGreen)));
 
     public enum ArmState {
         DEFAULT(Rotation2d.fromDegrees(0), 0),

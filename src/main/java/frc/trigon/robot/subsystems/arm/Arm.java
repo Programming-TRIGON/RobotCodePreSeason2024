@@ -30,6 +30,7 @@ public class Arm extends SubsystemBase {
     public void periodic() {
         armIO.updateInputs(armInputs);
         Logger.processInputs("Arm", armInputs);
+        updateMechanism();
     }
 
     void generateAngleMotorProfile(Rotation2d targetAngle, double speedPercentage) {
@@ -67,6 +68,7 @@ public class Arm extends SubsystemBase {
         }
 
         TrapezoidProfile.State targetState = elevatorMotorProfile.calculate(getElevatorProfileTime());
+
         armIO.setTargetElevatorState(targetState);
     }
 
@@ -92,5 +94,11 @@ public class Arm extends SubsystemBase {
 
     private double getElevatorProfileTime() {
         return Timer.getFPGATimestamp() - lastElevatorMotorProfileGenerationTime;
+    }
+
+    private void updateMechanism() {
+        ArmConstants.ARM_LIGAMENT.setLength(armInputs.elevatorPositionMeters + ArmConstants.ARM_HEIGHT_METERS);
+        ArmConstants.ARM_LIGAMENT.setAngle(armInputs.anglePositionDegrees);
+        Logger.recordOutput("ArmMechanism", ArmConstants.ARM_MECHANISM);
     }
 }
