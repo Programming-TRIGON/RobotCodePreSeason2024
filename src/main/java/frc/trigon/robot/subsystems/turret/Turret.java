@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import java.util.function.Supplier;
+
 public class Turret extends SubsystemBase {
     private final static Turret INSTANCE = new Turret();
     private final TalonFX motor = TurretConstants.MOTOR;
@@ -23,24 +25,20 @@ public class Turret extends SubsystemBase {
     private Turret() {
     }
 
-    public Command getSetMotorOutputCommand(Pose2d robotPose) {
+    public Command getSetMotorOutputCommand(Supplier<Pose2d> robotPose) {
         return new FunctionalCommand(
                 () -> {
                 },
-                () -> setMotorOutput(robotPose),
+                () -> setMotorVoltage(calculateMotorOutput(robotPose.get())),
                 (interrupted) -> stop(),
                 () -> false,
                 this
         );
     }
 
-    private void setMotorOutput(Pose2d robotPose) {
-        setMotorVoltage(calculateMotorOutput(robotPose));
-    }
-
     private double calculateMotorOutput(Pose2d robotPose) {
-        double targetAngle = calculateTargetAngle(robotPose);
-        double targetAngleAfterLimitCheck = limitCheck(targetAngle);
+        double targetAngleRadians = calculateTargetAngle(robotPose);
+        double targetAngleAfterLimitCheck = limitCheck(Units.radiansToDegrees(targetAngleRadians));
         double error = calculateError(targetAngleAfterLimitCheck);
         double output = TurretConstants.PID_CONTROLLER.calculate(error);
         return output;
@@ -57,18 +55,17 @@ public class Turret extends SubsystemBase {
         return targetAngle;
     }
 
-    private double limitCheck(double targetAngle) {
-        if (targetAngle > 200) {
-            targetAngle -= 360;
-        } else if (targetAngle < -200) {
-            targetAngle += 360;
+    private double limitCheck(double targetAngleDegrees) {
+        if (targetAngleDegrees > 200) {
+            targetAngleDegrees -= 360;
+        } else if (targetAngleDegrees < -200) {
+            targetAngleDegrees += 360;
         }
-        return targetAngle;
+        return targetAngleDegrees;
     }
 
-    private double calculateError(double targetAngle) {
-        double currentAngleDegrees = getPositionDegrees();
-        double error = targetAngle - currentAngleDegrees;
+    private double calculateError(double targetAngleDegrees) {
+        double error = targetAngleDegrees - getPositionDegrees();
         return error;
     }
 
