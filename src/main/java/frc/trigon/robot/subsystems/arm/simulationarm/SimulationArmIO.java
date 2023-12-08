@@ -54,7 +54,7 @@ public class SimulationArmIO extends ArmIO {
                 elevatorSimulation.getPositionMeters(),
                 targetState.position
         );
-        double feedforward = SimulationArmConstants.ELEVATOR_FEEDFORWARD.calculate(targetState.velocity) * SimulationArmConstants.VOLTAGE_COMPENSATION_SATURATION;
+        double feedforward = SimulationArmConstants.ELEVATOR_FEEDFORWARD.calculate(targetState.velocity);
         return pidOutput + feedforward;
     }
 

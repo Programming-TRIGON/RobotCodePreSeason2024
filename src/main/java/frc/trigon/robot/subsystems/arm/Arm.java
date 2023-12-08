@@ -2,6 +2,7 @@ package frc.trigon.robot.subsystems.arm;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.AnalogOutput;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.trigon.robot.utilities.Conversions;
@@ -78,11 +79,11 @@ public class Arm extends SubsystemBase {
     }
 
     boolean atAngle(Rotation2d targetAngle) {
-        return Math.abs(armInputs.anglePositionDegrees - targetAngle.getDegrees()) <= ArmConstants.ANGLE_TOLERANCE;
+        return Math.abs(armInputs.anglePositionDegrees - targetAngle.getDegrees()) <= ArmConstants.ANGLE_TOLERANCE_DEGREES;
     }
 
     boolean atElevatorPositionMeters(double targetElevatorPositionMeters) {
-        return Math.abs(armInputs.elevatorPositionMeters - targetElevatorPositionMeters) <= ArmConstants.ELEVATOR_TOLERANCE;
+        return Math.abs(armInputs.elevatorPositionMeters - targetElevatorPositionMeters) <= ArmConstants.ELEVATOR_TOLERANCE_METERS;
     }
 
     private double getElevatorPositionMeters() {

@@ -15,7 +15,7 @@ import edu.wpi.first.math.controller.PIDController;
 import frc.trigon.robot.utilities.Conversions;
 
 public class ToohardArmConstants {
-    static final double ELEVATOR_METERS_PER_REVOLUTION = 1;
+    static final double ELEVATOR_METERS_PER_REVOLUTION = 0.1256;
     private static final int
             MASTER_ANGLE_MOTOR_ID = 0,
             FOLLOWER_ANGLE_MOTOR_ID = 1,
@@ -48,10 +48,10 @@ public class ToohardArmConstants {
     static final TalonSRX ELEVATOR_ENCODER = new TalonSRX(ELEVATOR_ENCODER_ID);
 
     private static final double
-            ANGLE_P = 0,
+            ANGLE_P = 1,
             ANGLE_I = 0,
             ANGLE_D = 0,
-            ELEVATOR_P = 0,
+            ELEVATOR_P = 5,
             ELEVATOR_I = 0,
             ELEVATOR_D = 0;
     static final PIDController
@@ -59,14 +59,14 @@ public class ToohardArmConstants {
             ELEVATOR_PID_CONTROLLER = new PIDController(ELEVATOR_P, ELEVATOR_I, ELEVATOR_D);
 
     private static final double
-            ANGLE_MOTOR_KS = 1,
-            ANGLE_MOTOR_KG = 1,
-            ANGLE_MOTOR_KV = 1,
-            ANGLE_MOTOR_KA = 1,
-            ELEVATOR_MOTOR_KS = 1,
-            ELEVATOR_MOTOR_KG = 1,
-            ELEVATOR_MOTOR_KV = 1,
-            ELEVATOR_MOTOR_KA = 1;
+            ANGLE_MOTOR_KS = 0,
+            ANGLE_MOTOR_KG = 0,
+            ANGLE_MOTOR_KV = 0,
+            ANGLE_MOTOR_KA = 0,
+            ELEVATOR_MOTOR_KS = 0,
+            ELEVATOR_MOTOR_KG = 0,
+            ELEVATOR_MOTOR_KV = 0,
+            ELEVATOR_MOTOR_KA = 0;
     static final ArmFeedforward ANGLE_FEEDFORWARD = new ArmFeedforward(
             ANGLE_MOTOR_KS,
             ANGLE_MOTOR_KG,

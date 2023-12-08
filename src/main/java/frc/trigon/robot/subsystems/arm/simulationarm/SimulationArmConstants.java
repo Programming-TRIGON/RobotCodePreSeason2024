@@ -34,8 +34,8 @@ public class SimulationArmConstants {
     static final SingleJointedArmSim ANGLE_MOTOR = new SingleJointedArmSim(
             ANGLE_MOTOR_GEARBOX,
             ANGLE_GEAR_RATIO,
-            SingleJointedArmSim.estimateMOI(MAXIMUM_ARM_LENGTH_METERS, ARM_MASS),
-            MAXIMUM_ARM_LENGTH_METERS,
+            SingleJointedArmSim.estimateMOI(ArmConstants.RETRACTED_ARM_LENGTH_METERS, ARM_MASS),
+            ArmConstants.RETRACTED_ARM_LENGTH_METERS,
             MINIMUM_ANGLE.getRadians(),
             MAXIMUM_ANGLE.getRadians(),
             ANGLE_SIMULATE_GRAVITY,
@@ -53,10 +53,10 @@ public class SimulationArmConstants {
     );
 
     private static final double
-            ANGLE_P = 0,
+            ANGLE_P = 1,
             ANGLE_I = 0,
             ANGLE_D = 0,
-            ELEVATOR_P = 30,
+            ELEVATOR_P = 1,
             ELEVATOR_I = 0,
             ELEVATOR_D = 0;
     static final PIDController
