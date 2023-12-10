@@ -1,22 +1,19 @@
 package frc.trigon.robot.subsystems.turret;
 
-import com.ctre.phoenix6.controls.VoltageOut;
-import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import org.littletonrobotics.junction.Logger;
 
 import java.util.function.Supplier;
 
 public class Turret extends SubsystemBase {
     private final static Turret INSTANCE = new Turret();
-    private final TalonFX motor = TurretConstants.MOTOR;
-    private final Pose2d
-            hubPose = TurretConstants.HUB_POSE,
-            robotPose = TurretConstants.ROBOT_POSE;
-    private final VoltageOut voltageRequest = new VoltageOut(0, TurretConstants.FOC_ENABLED, false);
+    private final TurretIO turretIO = TurretIO.generateIO();
+    private final TurretInputsAutoLogged turretInputs = new TurretInputsAutoLogged();
+    private final Pose2d hubPose = TurretConstants.HUB_POSE;
 
     public static Turret getInstance() {
         return INSTANCE;
@@ -25,12 +22,18 @@ public class Turret extends SubsystemBase {
     private Turret() {
     }
 
+    @Override
+    public void periodic() {
+        turretIO.updateInputs(turretInputs);
+        Logger.processInputs("Turret", turretInputs);
+    }
+
     public Command getSetMotorOutputCommand(Supplier<Pose2d> robotPose) {
         return new FunctionalCommand(
                 () -> {
                 },
-                () -> setMotorVoltage(calculateMotorOutput(robotPose.get())),
-                (interrupted) -> stop(),
+                () -> turretIO.setMotorVoltage(calculateMotorOutput(robotPose.get())),
+                (interrupted) -> turretIO.stop(),
                 () -> false,
                 this
         );
@@ -65,19 +68,8 @@ public class Turret extends SubsystemBase {
     }
 
     private double calculateError(double targetAngleDegrees) {
-        double error = targetAngleDegrees - getPositionDegrees();
+        double error = targetAngleDegrees - turretInputs.motorPositionDegrees;
         return error;
     }
 
-    private double getPositionDegrees() {
-        return Units.rotationsToDegrees(TurretConstants.STATUS_SIGNAL.refresh().getValue());
-    }
-
-    private void setMotorVoltage(double voltage) {
-        motor.setControl(voltageRequest.withOutput(voltage));
-    }
-
-    private void stop() {
-        motor.stopMotor();
-    }
 }
