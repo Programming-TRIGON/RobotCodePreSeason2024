@@ -1,5 +1,6 @@
 package frc.trigon.robot.subsystems.turret;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.subsystems.turret.kablamaturret.KablamaTurretIO;
 import org.littletonrobotics.junction.AutoLog;
@@ -18,7 +19,7 @@ public class TurretIO {
     protected void updateInputs(TurretInputsAutoLogged inputs) {
     }
 
-    protected void setMotorVoltage(double voltage) {
+    protected void calculateMotorOutput(Pose2d robotPose) {
     }
 
     protected void stop() {
