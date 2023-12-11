@@ -9,6 +9,7 @@ import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.subsystems.arm.ArmConstants;
 import frc.trigon.robot.subsystems.arm.ArmIO;
 import frc.trigon.robot.subsystems.arm.ArmInputsAutoLogged;
+import org.littletonrobotics.junction.Logger;
 
 public class SimulationArmIO extends ArmIO {
     private final SingleJointedArmSim angleSimulation = SimulationArmConstants.ANGLE_MOTOR;
@@ -37,6 +38,7 @@ public class SimulationArmIO extends ArmIO {
     @Override
     protected void setTargetElevatorState(TrapezoidProfile.State targetState) {
         setElevatorMotorsVoltage(calculateElevatorVoltageFromState(targetState));
+        Logger.recordOutput("ElevatorVoltage", calculateElevatorVoltageFromState(targetState));
     }
 
     @Override
@@ -51,7 +53,7 @@ public class SimulationArmIO extends ArmIO {
 
     private double calculateElevatorVoltageFromState(TrapezoidProfile.State targetState) {
         double pidOutput = SimulationArmConstants.ELEVATOR_PID_CONTROLLER.calculate(
-                elevatorSimulation.getPositionMeters(),
+                elevatorSimulation.getPositionMeters() - ArmConstants.RETRACTED_ARM_LENGTH_METERS,
                 targetState.position
         );
         double feedforward = SimulationArmConstants.ELEVATOR_FEEDFORWARD.calculate(targetState.velocity);

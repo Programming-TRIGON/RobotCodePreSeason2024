@@ -43,11 +43,11 @@ public class ArmConstants {
 
     public enum ArmState {
         DEFAULT(Rotation2d.fromDegrees(0), 0),
-        TAKE_HIGH_CONE(Rotation2d.fromDegrees(60), 0.7),
-        TAKE_GROUND_CONE(Rotation2d.fromDegrees(5), 0.5),
-        PLACE_LOW_CONE(Rotation2d.fromDegrees(20), 0.3),
+        TAKE_HIGH_CONE(Rotation2d.fromDegrees(60), 1),
+        TAKE_GROUND_CONE(Rotation2d.fromDegrees(5), 0.8),
+        PLACE_LOW_CONE(Rotation2d.fromDegrees(20), 0.1),
         PLACE_MEDIUM_CONE(Rotation2d.fromDegrees(45), 0.6),
-        PLACE_HIGH_CONE(Rotation2d.fromDegrees(90), 0.9);
+        PLACE_HIGH_CONE(Rotation2d.fromDegrees(90), 1.1);
 
         final Rotation2d angle;
         final double elevatorPositionMeters;
