@@ -30,7 +30,6 @@ public class SimulationArmConstants {
             ANGLE_SIMULATE_GRAVITY = true,
             ELEVATOR_SIMULATE_GRAVITY = true;
     private static final double ARM_DRUM_RADIUS_METERS = 0.1256 / 2;
-
     static final SingleJointedArmSim ANGLE_MOTOR = new SingleJointedArmSim(
             ANGLE_MOTOR_GEARBOX,
             ANGLE_GEAR_RATIO,

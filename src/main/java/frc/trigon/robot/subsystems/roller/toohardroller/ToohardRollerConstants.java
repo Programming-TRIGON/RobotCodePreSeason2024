@@ -12,7 +12,6 @@ public class ToohardRollerConstants {
             COLLECTION_MOTOR_ID = 1,
             FORWARD_LIMIT_SWITCH_CHANNEL = 0,
             BACKWARD_LIMIT_SWITCH_CHANNEL = 1;
-
     private static final boolean
             ANGLE_MOTOR_INVERTED = false,
             COLLECTION_MOTOR_INVERTED = false;

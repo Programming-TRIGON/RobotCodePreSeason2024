@@ -38,7 +38,6 @@ public class SimulationArmIO extends ArmIO {
     @Override
     protected void setTargetElevatorState(TrapezoidProfile.State targetState) {
         setElevatorMotorsVoltage(calculateElevatorVoltageFromState(targetState));
-        Logger.recordOutput("ElevatorVoltage", calculateElevatorVoltageFromState(targetState));
     }
 
     @Override

@@ -58,7 +58,7 @@ public class ArmCommands {
             );
         }
         return new SequentialCommandGroup(
-                getSetTargetElevatorPositionCommand(targetElevatorPositionMeters, elevatorSpeedPercentage).until(() -> ARM.atElevatorPositionMeters(targetElevatorPositionMeters)),
+                getSetTargetElevatorPositionCommand(targetElevatorPositionMeters, elevatorSpeedPercentage).until(() -> ARM.atElevatorPosition(targetElevatorPositionMeters)),
                 getSetTargetAngleCommand(targetAngle, angleSpeedPercentage).alongWith(
                         Commands.removeRequirements(getSetTargetElevatorPositionCommand(targetElevatorPositionMeters, elevatorSpeedPercentage))
                 )

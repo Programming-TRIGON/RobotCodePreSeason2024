@@ -24,7 +24,6 @@ public class SimulationRollerConstants {
             MAXIMUM_ANGLE = Rotation2d.fromDegrees(180);
     private static final boolean ANGLE_SIMULATE_GRAVITY = true;
     private static final double COLLECTOR_MOMENT_OF_INERTIA = 0.0003;
-
     static final SingleJointedArmSim ANGLE_MOTOR = new SingleJointedArmSim(
             ANGLE_MOTOR_GEARBOX,
             ANGLE_GEAR_RATIO,
