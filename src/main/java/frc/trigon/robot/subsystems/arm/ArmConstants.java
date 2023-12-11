@@ -24,7 +24,7 @@ public class ArmConstants {
     public static final double
             ARM_MECHANISM_WIDTH_METERS = 3,
             ARM_MECHANISM_HEIGHT_METERS = 3,
-            ARM_LIGAMENT_LENGTH_METERS = 1,
+            ARM_LIGAMENT_LENGTH_METERS = 0.64,
             ARM_LIGAMENT_ANGLE_DEGREES = 0,
             RETRACTED_ARM_LENGTH_METERS = 0.64;
     private static final double
@@ -45,7 +45,7 @@ public class ArmConstants {
         DEFAULT(Rotation2d.fromDegrees(0), 0),
         TAKE_HIGH_CONE(Rotation2d.fromDegrees(60), 1),
         TAKE_GROUND_CONE(Rotation2d.fromDegrees(5), 0.8),
-        PLACE_LOW_CONE(Rotation2d.fromDegrees(20), 0.1),
+        PLACE_LOW_CONE(Rotation2d.fromDegrees(20), 0.4),
         PLACE_MEDIUM_CONE(Rotation2d.fromDegrees(45), 0.6),
         PLACE_HIGH_CONE(Rotation2d.fromDegrees(90), 1.1);
 
