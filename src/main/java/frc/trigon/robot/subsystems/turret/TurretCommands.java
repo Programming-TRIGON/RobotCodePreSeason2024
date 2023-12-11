@@ -9,12 +9,11 @@ import java.util.function.Supplier;
 public class TurretCommands {
     private static Turret TURRET = Turret.getInstance();
 
-
     public static Command getSetMotorOutputCommand(Supplier<Pose2d> robotPose) {
         return new FunctionalCommand(
                 () -> {
                 },
-                () -> TURRET.calculateMotorOutput(robotPose.get()),
+                () -> TURRET.calculateMotorVoltage(robotPose.get()),
                 (interrupted) -> TURRET.stop(),
                 () -> false,
                 TURRET

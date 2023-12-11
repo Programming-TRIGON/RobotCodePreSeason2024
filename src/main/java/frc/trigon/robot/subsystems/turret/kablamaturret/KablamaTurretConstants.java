@@ -9,10 +9,6 @@ import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 
 public class KablamaTurretConstants {
     private static final int
@@ -23,23 +19,15 @@ public class KablamaTurretConstants {
     private static final AbsoluteSensorRangeValue ENCODER_RANGE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
     private static final SensorDirectionValue ENCODER_DIRECTION = SensorDirectionValue.CounterClockwise_Positive;
     private static final double ENCODER_OFFSET = 0;
-    private static final double
-            HUB_X = 8.2296,
-            HUB_Y = 0.5121;
-
-    private static final Translation2d HUB_POSITION = new Translation2d(HUB_X, HUB_Y);
-    private static final Rotation2d HUB_ROTATION = Rotation2d.fromRotations(0);
     private static final CANcoder ENCODER = new CANcoder(ENCODER_ID);
     static final TalonFX MOTOR = new TalonFX(MOTOR_ID);
     static final boolean FOC_ENABLED = true;
-    static final StatusSignal<Double> STATUS_SIGNAL = ENCODER.getPosition();
-    static final Pose2d HUB_POSE = new Pose2d(HUB_POSITION, HUB_ROTATION);
+    static final StatusSignal<Double> TURRET_POSITION_SIGNAL = ENCODER.getPosition();
 
     private static final double
             P = 1,
             I = 0,
             D = 0;
-    static final PIDController PID_CONTROLLER = new PIDController(P, I, D);
 
     static {
         configureMotor();
@@ -52,6 +40,9 @@ public class KablamaTurretConstants {
         config.MotorOutput.NeutralMode = NEUTRAL_MODE_VALUE;
         config.Audio.BeepOnConfig = false;
         config.Audio.BeepOnBoot = false;
+        config.Slot0.kP = P;
+        config.Slot0.kI = I;
+        config.Slot0.kD = D;
         MOTOR.getConfigurator().apply(config);
     }
 
@@ -62,7 +53,7 @@ public class KablamaTurretConstants {
         config.MagnetSensor.MagnetOffset = ENCODER_OFFSET;
         ENCODER.getConfigurator().apply(config);
 
-        STATUS_SIGNAL.setUpdateFrequency(100);
+        TURRET_POSITION_SIGNAL.setUpdateFrequency(100);
         ENCODER.optimizeBusUtilization();
     }
 }

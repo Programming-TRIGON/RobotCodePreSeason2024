@@ -1,6 +1,8 @@
 package frc.trigon.robot.subsystems.turret;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
@@ -8,7 +10,7 @@ public class Turret extends SubsystemBase {
     private final static Turret INSTANCE = new Turret();
     private final TurretIO turretIO = TurretIO.generateIO();
     private final TurretInputsAutoLogged turretInputs = new TurretInputsAutoLogged();
-    private final Pose2d hubPose = TurretConstants.HUB_POSE;
+    private final Translation2d hubPose = TurretConstants.HUB_POSE;
 
     public static Turret getInstance() {
         return INSTANCE;
@@ -23,8 +25,33 @@ public class Turret extends SubsystemBase {
         Logger.processInputs("Turret", turretInputs);
     }
 
-    void calculateMotorOutput(Pose2d robotPose) {
-        turretIO.calculateMotorOutput(robotPose);
+    public void calculateMotorVoltage(Pose2d robotPose) {
+        double targetAngleRadians = calculateTargetAngle(robotPose);
+        double targetAngleAfterLimitCheck = spinLimitCheck(Units.radiansToDegrees(targetAngleRadians));
+        double error = calculateError(targetAngleAfterLimitCheck);
+        turretIO.calculateMotorVoltage(error);
+    }
+
+    private double calculateTargetAngle(Pose2d robotPose) {
+        double robotHeading = robotPose.getRotation().getRadians();
+        Translation2d difference = hubPose.minus(robotPose.getTranslation());
+        double theta = Math.atan2(difference.getY(), difference.getX());
+        double targetAngle = theta - robotHeading;
+        return targetAngle;
+    }
+
+    private double spinLimitCheck(double targetAngleDegrees) {
+        if (targetAngleDegrees > TurretConstants.DEGREES_LIMIT) {
+            targetAngleDegrees -= 360;
+        } else if (targetAngleDegrees < -TurretConstants.DEGREES_LIMIT) {
+            targetAngleDegrees += 360;
+        }
+        return targetAngleDegrees;
+    }
+
+    private double calculateError(double targetAngleDegrees) {
+        double error = targetAngleDegrees - turretInputs.motorPositionDegrees;
+        return error;
     }
 
     void stop() {

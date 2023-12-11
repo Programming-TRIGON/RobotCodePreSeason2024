@@ -5,6 +5,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.trigon.robot.utilities.Conversions;
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 public class Arm extends SubsystemBase {
@@ -33,11 +34,11 @@ public class Arm extends SubsystemBase {
     }
 
     boolean atAngle(Rotation2d targetAngle) {
-        return Math.abs(armInputs.anglePositionDegrees - targetAngle.getDegrees()) <= ArmConstants.ANGLE_TOLERANCE;
+        return Math.abs(armInputs.anglePositionDegrees - targetAngle.getDegrees()) <= ArmConstants.ANGLE_TOLERANCE_DEGREES;
     }
 
     boolean atTargetElevatorPosition(double targetElevatorPositionMeters) {
-        return Math.abs(armInputs.elevatorPositionMeters - targetElevatorPositionMeters) <= ArmConstants.ELEVATOR_TOLERANCE;
+        return Math.abs(armInputs.elevatorPositionMeters - targetElevatorPositionMeters) <= ArmConstants.ELEVATOR_TOLERANCE_METERS;
     }
 
     boolean isElevatorOpening(double targetElevatorPositionMeters) {
@@ -94,6 +95,7 @@ public class Arm extends SubsystemBase {
         return Timer.getFPGATimestamp() - lastElevatorMotorProfileGenerationTime;
     }
 
+    @AutoLogOutput(key = "Arm/ArmMechanism")
     private void updateMechanism() {
         ArmConstants.ARM_LIGAMENT.setLength(armInputs.elevatorPositionMeters + ArmConstants.RETRACTED_ARM_LENGTH_METERS);
         ArmConstants.ARM_LIGAMENT.setAngle(armInputs.anglePositionDegrees);

@@ -1,12 +1,10 @@
 package frc.trigon.robot.subsystems.turret;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.subsystems.turret.kablamaturret.KablamaTurretIO;
 import org.littletonrobotics.junction.AutoLog;
 
 public class TurretIO {
-
     static TurretIO generateIO() {
         if (RobotConstants.IS_REPLAY)
             return new TurretIO();
@@ -19,14 +17,13 @@ public class TurretIO {
     protected void updateInputs(TurretInputsAutoLogged inputs) {
     }
 
-    protected void calculateMotorOutput(Pose2d robotPose) {
+    protected void calculateMotorVoltage(double voltage) {
     }
 
     protected void stop() {
     }
 
     @AutoLog
-
     protected static class TurretInputs {
         public double motorPositionDegrees = 0;
     }

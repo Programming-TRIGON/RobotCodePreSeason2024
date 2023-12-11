@@ -34,19 +34,21 @@ public class ArmConstants {
     private static final double MECHANISM_LINE_WIDTH = 10;
     static final Mechanism2d ARM_MECHANISM = new Mechanism2d(ARM_MECHANISM_WIDTH, ARM_MECHANISM_HEIGHT);
     private static final MechanismRoot2d
-            ARM_ROOT = ARM_MECHANISM.getRoot("ArmRoot", ARM_ROOT_X, ARM_ROOT_Y),
+            ZArmRoot = ARM_MECHANISM.getRoot("ArmRoot", ARM_ROOT_X, ARM_ROOT_Y),
             TARGET_POSITION_ROOT = ARM_MECHANISM.getRoot("TargetPositionRoot", ARM_ROOT_X, ARM_ROOT_Y);
     static final MechanismLigament2d
-            ARM_LIGAMENT = ARM_ROOT.append(new MechanismLigament2d("ArmLigament", ARM_LIGAMENT_LENGTH, ARM_LIGAMENT_ANGLE, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kBlue))),
+            ARM_LIGAMENT = ZArmRoot.append(new MechanismLigament2d("ArmLigament", ARM_LIGAMENT_LENGTH, ARM_LIGAMENT_ANGLE, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kBlue))),
             TARGET_POSITION_LIGAMENT = TARGET_POSITION_ROOT.append(new MechanismLigament2d("TargetPositionLigament", ARM_LIGAMENT_LENGTH, ARM_LIGAMENT_ANGLE, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kGray)));
     static final double
-            ANGLE_TOLERANCE = 1,
-            ELEVATOR_TOLERANCE = 1;
+            ANGLE_TOLERANCE_DEGREES = 1,
+            ELEVATOR_TOLERANCE_METERS = 1;
     public static final double RETRACTED_ARM_LENGTH_METERS = 0.64;
 
     public enum ArmState {
-        FIRST_STATE(Rotation2d.fromDegrees(100), 7),
-        SECOND_STATE(Rotation2d.fromDegrees(70), 5);
+        DEFAULT_STATE(Rotation2d.fromDegrees(50), 0.9),
+        CONE_COLLECTION(Rotation2d.fromDegrees(15), 1),
+        HIGH_CONE(Rotation2d.fromDegrees(85), 1.6),
+        LOW_CONE(Rotation2d.fromDegrees(25), 0.4);
 
         final Rotation2d angle;
         final double elevatorPositionMeters;
