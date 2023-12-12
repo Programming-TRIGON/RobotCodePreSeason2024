@@ -9,7 +9,6 @@ import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.subsystems.arm.ArmConstants;
 import frc.trigon.robot.subsystems.arm.ArmIO;
 import frc.trigon.robot.subsystems.arm.ArmInputsAutoLogged;
-import org.littletonrobotics.junction.Logger;
 
 public class SimulationArmIO extends ArmIO {
     private final SingleJointedArmSim angleSimulation = SimulationArmConstants.ANGLE_MOTOR;

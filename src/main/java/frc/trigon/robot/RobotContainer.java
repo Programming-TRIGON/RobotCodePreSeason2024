@@ -11,6 +11,7 @@ import frc.trigon.robot.subsystems.arm.Arm;
 import frc.trigon.robot.subsystems.arm.ArmCommands;
 import frc.trigon.robot.subsystems.arm.ArmConstants;
 import frc.trigon.robot.subsystems.roller.Roller;
+import frc.trigon.robot.subsystems.roller.RollerCommands;
 
 public class RobotContainer {
     private final Arm arm = Arm.getInstance();
@@ -29,11 +30,13 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-        arm.setDefaultCommand(ArmCommands.getSetTargetArmStateCommand(ArmConstants.ArmState.DEFAULT));
-        controller.a().whileTrue(ArmCommands.getSetTargetArmStateCommand(ArmConstants.ArmState.TAKE_HIGH_CONE));
-        controller.b().whileTrue(ArmCommands.getSetTargetArmStateCommand(ArmConstants.ArmState.TAKE_GROUND_CONE));
-        controller.x().whileTrue(ArmCommands.getSetTargetArmStateCommand(ArmConstants.ArmState.PLACE_HIGH_CONE));
-        controller.y().whileTrue(ArmCommands.getSetTargetArmStateCommand(ArmConstants.ArmState.PLACE_LOW_CONE));
-        controller.rightBumper().whileTrue(ArmCommands.getSetTargetArmStateCommand(ArmConstants.ArmState.PLACE_MEDIUM_CONE));
+//        arm.setDefaultCommand(ArmCommands.getSetTargetArmStateCommand(ArmConstants.ArmState.DEFAULT));
+//        controller.a().whileTrue(ArmCommands.getSetTargetArmStateCommand(ArmConstants.ArmState.TAKE_HIGH_CONE));
+//        controller.b().whileTrue(ArmCommands.getSetTargetArmStateCommand(ArmConstants.ArmState.TAKE_GROUND_CONE));
+//        controller.x().whileTrue(ArmCommands.getSetTargetArmStateCommand(ArmConstants.ArmState.PLACE_HIGH_CONE));
+//        controller.y().whileTrue(ArmCommands.getSetTargetArmStateCommand(ArmConstants.ArmState.PLACE_LOW_CONE));
+//        controller.rightBumper().whileTrue(ArmCommands.getSetTargetArmStateCommand(ArmConstants.ArmState.PLACE_MEDIUM_CONE));
+//        roller.setDefaultCommand(RollerCommands.getFullStopCommand());
+        controller.a().whileTrue(RollerCommands.getFullOpeningCommand());
     }
 }

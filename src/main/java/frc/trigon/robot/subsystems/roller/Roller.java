@@ -19,6 +19,7 @@ public class Roller extends SubsystemBase {
     public void periodic() {
         rollerIO.updateInputs(rollerInputs);
         Logger.processInputs("Roller", rollerInputs);
+        updateMechanism();
     }
 
     void openRoller() {
@@ -47,5 +48,14 @@ public class Roller extends SubsystemBase {
 
     void stopCollectionMotor() {
         rollerIO.stopCollectionMotor();
+    }
+
+    private void updateMechanism() {
+        if (isOpen()) {
+            RollerConstants.ROLLER_ANGLE_LIGAMENT.setAngle(0);
+        } else if (isClosed()) {
+            RollerConstants.ROLLER_ANGLE_LIGAMENT.setAngle(90);
+        }
+        Logger.recordOutput("RollerMechanism", RollerConstants.ROLLER_ANGLE_MECHANISM);
     }
 }

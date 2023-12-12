@@ -29,7 +29,8 @@ public class RollerCommands {
                 () -> {
                 },
                 (interrupted) -> ROLLER.stopAngleMotor(),
-                ROLLER::isClosed
+                ROLLER::isClosed,
+                ROLLER
         );
     }
 
