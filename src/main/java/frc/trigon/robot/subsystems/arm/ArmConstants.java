@@ -34,7 +34,7 @@ public class ArmConstants {
     private static final double MECHANISM_LINE_WIDTH = 10;
     static final Mechanism2d ARM_MECHANISM = new Mechanism2d(ARM_MECHANISM_WIDTH, ARM_MECHANISM_HEIGHT);
     private static final MechanismRoot2d
-            ZArmRoot = ARM_MECHANISM.getRoot("ArmRoot", ARM_ROOT_X, ARM_ROOT_Y),
+            ZArmRoot = ARM_MECHANISM.getRoot("ZArmRoot", ARM_ROOT_X, ARM_ROOT_Y),
             TARGET_POSITION_ROOT = ARM_MECHANISM.getRoot("TargetPositionRoot", ARM_ROOT_X, ARM_ROOT_Y);
     static final MechanismLigament2d
             ARM_LIGAMENT = ZArmRoot.append(new MechanismLigament2d("ArmLigament", ARM_LIGAMENT_LENGTH, ARM_LIGAMENT_ANGLE, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kBlue))),
