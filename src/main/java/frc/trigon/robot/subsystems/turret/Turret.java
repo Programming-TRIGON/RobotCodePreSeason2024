@@ -10,7 +10,7 @@ public class Turret extends SubsystemBase {
     private final static Turret INSTANCE = new Turret();
     private final TurretIO turretIO = TurretIO.generateIO();
     private final TurretInputsAutoLogged turretInputs = new TurretInputsAutoLogged();
-    private final Translation2d hubPose = TurretConstants.HUB_POSE;
+    private final Translation2d hubPosition = TurretConstants.HUB_POSITION;
 
     public static Turret getInstance() {
         return INSTANCE;
@@ -33,10 +33,9 @@ public class Turret extends SubsystemBase {
     }
 
     private double calculateTargetAngle(Pose2d robotPose) {
-        double robotHeading = robotPose.getRotation().getRadians();
-        Translation2d difference = hubPose.minus(robotPose.getTranslation());
+        Translation2d difference = hubPosition.minus(robotPose.getTranslation());
         double theta = Math.atan2(difference.getY(), difference.getX());
-        double targetAngle = theta - robotHeading;
+        double targetAngle = theta - Units.degreesToRadians(turretInputs.motorPositionDegrees);
         return targetAngle;
     }
 
