@@ -37,7 +37,7 @@ public class RollerIO {
         public double collectionMotorCurrent = 0;
         public double collectionMotorVoltage = 0;
 
-        public boolean forwardLimitSwitch = false;
-        public boolean backwardLimitSwitch = false;
+        public boolean forwardLimitSwitchPressed = false;
+        public boolean backwardLimitSwitchPressed = false;
     }
 }

@@ -30,13 +30,14 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-//        arm.setDefaultCommand(ArmCommands.getSetTargetArmStateCommand(ArmConstants.ArmState.DEFAULT));
+        arm.setDefaultCommand(ArmCommands.getSetTargetArmStateCommand(ArmConstants.ArmState.DEFAULT));
+        controller.b().whileTrue(ArmCommands.getSetTargetArmStateCommand(ArmConstants.ArmState.TAKE_GROUND_CONE));
+        controller.x().whileTrue(ArmCommands.getSetTargetArmStateCommand(ArmConstants.ArmState.PLACE_HIGH_CONE));
+        controller.y().whileTrue(ArmCommands.getSetTargetArmStateCommand(ArmConstants.ArmState.PLACE_LOW_CONE));
+        controller.rightBumper().whileTrue(ArmCommands.getSetTargetArmStateCommand(ArmConstants.ArmState.PLACE_MEDIUM_CONE));
 //        controller.a().whileTrue(ArmCommands.getSetTargetArmStateCommand(ArmConstants.ArmState.TAKE_HIGH_CONE));
-//        controller.b().whileTrue(ArmCommands.getSetTargetArmStateCommand(ArmConstants.ArmState.TAKE_GROUND_CONE));
-//        controller.x().whileTrue(ArmCommands.getSetTargetArmStateCommand(ArmConstants.ArmState.PLACE_HIGH_CONE));
-//        controller.y().whileTrue(ArmCommands.getSetTargetArmStateCommand(ArmConstants.ArmState.PLACE_LOW_CONE));
-//        controller.rightBumper().whileTrue(ArmCommands.getSetTargetArmStateCommand(ArmConstants.ArmState.PLACE_MEDIUM_CONE));
-//        roller.setDefaultCommand(RollerCommands.getFullStopCommand());
+        
+        roller.setDefaultCommand(RollerCommands.getFullStopCommand());
         controller.a().whileTrue(RollerCommands.getFullOpeningCommand());
     }
 }

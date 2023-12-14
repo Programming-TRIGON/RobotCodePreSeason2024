@@ -1,12 +1,14 @@
 package frc.trigon.robot.subsystems.roller.simulationroller;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.subsystems.roller.RollerIO;
 import frc.trigon.robot.subsystems.roller.RollerInputsAutoLogged;
 import frc.trigon.robot.utilities.Conversions;
+import org.littletonrobotics.junction.Logger;
 
 public class SimulationRollerIO extends RollerIO {
     private final SingleJointedArmSim angleSimulation = SimulationRollerConstants.ANGLE_MOTOR;
@@ -23,8 +25,10 @@ public class SimulationRollerIO extends RollerIO {
         inputs.angleMotorCurrent = angleSimulation.getCurrentDrawAmps();
         inputs.collectionMotorVoltage = collectorMotorVoltage;
         inputs.collectionMotorCurrent = collectorSimulation.getCurrentDrawAmps();
-        inputs.forwardLimitSwitch = angleSimulation.hasHitUpperLimit();
-        inputs.backwardLimitSwitch = angleSimulation.hasHitLowerLimit();
+        inputs.forwardLimitSwitchPressed = isForwardLimitSwitchPressed();
+        inputs.backwardLimitSwitchPressed = isBackwardLimitSwitchPressed();
+
+        Logger.recordOutput("Roller/RollerAngle", Units.radiansToDegrees(angleSimulation.getAngleRads()));
     }
 
     @Override
@@ -39,12 +43,12 @@ public class SimulationRollerIO extends RollerIO {
 
     @Override
     protected void stopAngleMotor() {
-        angleSimulation.setInputVoltage(0);
+        setAngleMotorVoltage(0);
     }
 
     @Override
     protected void stopCollectionMotor() {
-        collectorSimulation.setInputVoltage(0);
+        setCollectorMotorVoltage(0);
     }
 
     private double powerToVoltage(double power) {
@@ -67,5 +71,13 @@ public class SimulationRollerIO extends RollerIO {
                 SimulationRollerConstants.VOLTAGE_COMPENSATION_SATURATION
         );
         collectorSimulation.setInputVoltage(collectorMotorVoltage);
+    }
+
+    private boolean isForwardLimitSwitchPressed() {
+        return !angleSimulation.hasHitUpperLimit();
+    }
+
+    private boolean isBackwardLimitSwitchPressed() {
+        return !angleSimulation.hasHitLowerLimit();
     }
 }

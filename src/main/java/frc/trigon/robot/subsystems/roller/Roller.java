@@ -35,11 +35,11 @@ public class Roller extends SubsystemBase {
     }
 
     boolean isOpen() {
-        return !rollerInputs.forwardLimitSwitch;
+        return !rollerInputs.forwardLimitSwitchPressed;
     }
 
     boolean isClosed() {
-        return !rollerInputs.backwardLimitSwitch;
+        return !rollerInputs.backwardLimitSwitchPressed;
     }
 
     void stopAngleMotor() {
@@ -51,11 +51,12 @@ public class Roller extends SubsystemBase {
     }
 
     private void updateMechanism() {
-        if (isOpen()) {
+        if (isOpen())
             RollerConstants.ROLLER_ANGLE_LIGAMENT.setAngle(0);
-        } else if (isClosed()) {
+        else if (isClosed())
             RollerConstants.ROLLER_ANGLE_LIGAMENT.setAngle(90);
-        }
+        else
+            RollerConstants.ROLLER_ANGLE_LIGAMENT.setAngle(45);
         Logger.recordOutput("RollerMechanism", RollerConstants.ROLLER_ANGLE_MECHANISM);
     }
 }

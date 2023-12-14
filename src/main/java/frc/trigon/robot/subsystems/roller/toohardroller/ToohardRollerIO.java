@@ -16,8 +16,8 @@ public class ToohardRollerIO extends RollerIO {
         inputs.angleMotorVoltage = angleMotor.getMotorOutputVoltage();
         inputs.collectionMotorCurrent = collectionMotor.getOutputCurrent();
         inputs.collectionMotorVoltage = collectionMotor.getBusVoltage();
-        inputs.forwardLimitSwitch = ToohardRollerConstants.FORWARD_LIMIT_SWITCH.get();
-        inputs.backwardLimitSwitch = ToohardRollerConstants.BACKWARD_LIMIT_SWITCH.get();
+        inputs.forwardLimitSwitchPressed = ToohardRollerConstants.FORWARD_LIMIT_SWITCH.get();
+        inputs.backwardLimitSwitchPressed = ToohardRollerConstants.BACKWARD_LIMIT_SWITCH.get();
     }
 
     @Override
