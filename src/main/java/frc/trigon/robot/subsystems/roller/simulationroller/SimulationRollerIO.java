@@ -1,34 +1,36 @@
 package frc.trigon.robot.subsystems.roller.simulationroller;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.subsystems.roller.RollerIO;
 import frc.trigon.robot.subsystems.roller.RollerInputsAutoLogged;
 import frc.trigon.robot.utilities.Conversions;
-import org.littletonrobotics.junction.Logger;
 
 public class SimulationRollerIO extends RollerIO {
-    private final SingleJointedArmSim angleSimulation = SimulationRollerConstants.ANGLE_MOTOR;
-    private final DCMotorSim collectorSimulation = SimulationRollerConstants.COLLECTOR_MOTOR;
+    private final SingleJointedArmSim angleMotor = SimulationRollerConstants.ANGLE_MOTOR;
+    private final DCMotorSim collectorMotor = SimulationRollerConstants.COLLECTOR_MOTOR;
 
     private double angleMotorVoltage, collectorMotorVoltage;
 
     @Override
     protected void updateInputs(RollerInputsAutoLogged inputs) {
-        angleSimulation.update(RobotConstants.PERIODIC_TIME_SECONDS);
-        collectorSimulation.update(RobotConstants.PERIODIC_TIME_SECONDS);
+        angleMotor.update(RobotConstants.PERIODIC_TIME_SECONDS);
+        collectorMotor.update(RobotConstants.PERIODIC_TIME_SECONDS);
 
         inputs.angleMotorVoltage = angleMotorVoltage;
-        inputs.angleMotorCurrent = angleSimulation.getCurrentDrawAmps();
+        inputs.angleMotorCurrent = angleMotor.getCurrentDrawAmps();
         inputs.collectionMotorVoltage = collectorMotorVoltage;
-        inputs.collectionMotorCurrent = collectorSimulation.getCurrentDrawAmps();
-        inputs.forwardLimitSwitchPressed = isForwardLimitSwitchPressed();
-        inputs.backwardLimitSwitchPressed = isBackwardLimitSwitchPressed();
-
-        Logger.recordOutput("Roller/RollerAngle", Units.radiansToDegrees(angleSimulation.getAngleRads()));
+        inputs.collectionMotorCurrent = collectorMotor.getCurrentDrawAmps();
+        inputs.forwardLimitSwitchPressed = angleMotor.hasHitUpperLimit();
+        inputs.backwardLimitSwitchPressed = angleMotor.hasHitLowerLimit();
+        
+        if (DriverStation.isDisabled()) {
+            stopAngleMotor();
+            stopCollectionMotor();
+        }
     }
 
     @Override
@@ -61,7 +63,7 @@ public class SimulationRollerIO extends RollerIO {
                 -SimulationRollerConstants.VOLTAGE_COMPENSATION_SATURATION,
                 SimulationRollerConstants.VOLTAGE_COMPENSATION_SATURATION
         );
-        angleSimulation.setInputVoltage(angleMotorVoltage);
+        angleMotor.setInputVoltage(angleMotorVoltage);
     }
 
     private void setCollectorMotorVoltage(double voltage) {
@@ -70,14 +72,6 @@ public class SimulationRollerIO extends RollerIO {
                 -SimulationRollerConstants.VOLTAGE_COMPENSATION_SATURATION,
                 SimulationRollerConstants.VOLTAGE_COMPENSATION_SATURATION
         );
-        collectorSimulation.setInputVoltage(collectorMotorVoltage);
-    }
-
-    private boolean isForwardLimitSwitchPressed() {
-        return angleSimulation.hasHitUpperLimit();
-    }
-
-    private boolean isBackwardLimitSwitchPressed() {
-        return angleSimulation.hasHitLowerLimit();
+        collectorMotor.setInputVoltage(collectorMotorVoltage);
     }
 }

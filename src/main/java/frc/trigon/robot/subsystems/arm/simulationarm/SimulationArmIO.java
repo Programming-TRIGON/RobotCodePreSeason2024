@@ -3,6 +3,7 @@ package frc.trigon.robot.subsystems.arm.simulationarm;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import frc.trigon.robot.constants.RobotConstants;
@@ -27,6 +28,11 @@ public class SimulationArmIO extends ArmIO {
         inputs.elevatorMotorVoltage = elevatorMotorVoltage;
         inputs.elevatorPositionMeters = elevatorMotor.getPositionMeters() - ArmConstants.RETRACTED_ARM_LENGTH_METERS;
         inputs.elevatorVelocityMetersPerSecond = elevatorMotor.getVelocityMetersPerSecond();
+
+        if (DriverStation.isDisabled()) {
+            stopAngleMotors();
+            stopElevatorMotors();
+        }
     }
 
     @Override
