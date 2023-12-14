@@ -31,11 +31,11 @@ public class ArmConstants {
     private static final double
             ARM_MECHANISM_ROOT_X = 1,
             ARM_MECHANISM_ROOT_Y = 1;
+    @AutoLogOutput(key = "Arm/ArmMechanism")
     static final Mechanism2d ARM_MECHANISM = new Mechanism2d(
             ARM_MECHANISM_WIDTH_METERS,
             ARM_MECHANISM_HEIGHT_METERS
     );
-    @AutoLogOutput
     private static final MechanismRoot2d
             ARM_ROOT = ARM_MECHANISM.getRoot("ZArmRoot", ARM_MECHANISM_ROOT_X, ARM_MECHANISM_ROOT_Y),
             TARGET_ARM_POSITION_ROOT = ARM_MECHANISM.getRoot("TargetArmPositionRoot", ARM_MECHANISM_ROOT_X, ARM_MECHANISM_ROOT_Y);

@@ -100,6 +100,5 @@ public class Arm extends SubsystemBase {
     private void updateMechanism() {
         ArmConstants.ARM_LIGAMENT.setLength(armInputs.elevatorPositionMeters + ArmConstants.RETRACTED_ARM_LENGTH_METERS);
         ArmConstants.ARM_LIGAMENT.setAngle(armInputs.anglePositionDegrees);
-        Logger.recordOutput("ArmMechanism", ArmConstants.ARM_MECHANISM);
     }
 }

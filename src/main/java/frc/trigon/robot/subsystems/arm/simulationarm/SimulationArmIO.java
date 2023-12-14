@@ -11,22 +11,22 @@ import frc.trigon.robot.subsystems.arm.ArmIO;
 import frc.trigon.robot.subsystems.arm.ArmInputsAutoLogged;
 
 public class SimulationArmIO extends ArmIO {
-    private final SingleJointedArmSim angleSimulation = SimulationArmConstants.ANGLE_MOTOR;
-    private final ElevatorSim elevatorSimulation = SimulationArmConstants.ELEVATOR_MOTOR;
+    private final SingleJointedArmSim angleMotor = SimulationArmConstants.ANGLE_MOTOR;
+    private final ElevatorSim elevatorMotor = SimulationArmConstants.ELEVATOR_MOTOR;
 
     private double angleMotorVoltage, elevatorMotorVoltage;
 
     @Override
     protected void updateInputs(ArmInputsAutoLogged inputs) {
-        angleSimulation.update(RobotConstants.PERIODIC_TIME_SECONDS);
-        elevatorSimulation.update(RobotConstants.PERIODIC_TIME_SECONDS);
+        angleMotor.update(RobotConstants.PERIODIC_TIME_SECONDS);
+        elevatorMotor.update(RobotConstants.PERIODIC_TIME_SECONDS);
 
         inputs.angleMotorVoltage = angleMotorVoltage;
         inputs.anglePositionDegrees = getAnglePositionDegrees();
         inputs.angleVelocityDegreesPerSecond = getAngleVelocityDegreesPerSecond();
         inputs.elevatorMotorVoltage = elevatorMotorVoltage;
-        inputs.elevatorPositionMeters = elevatorSimulation.getPositionMeters() - ArmConstants.RETRACTED_ARM_LENGTH_METERS;
-        inputs.elevatorVelocityMetersPerSecond = elevatorSimulation.getVelocityMetersPerSecond();
+        inputs.elevatorPositionMeters = elevatorMotor.getPositionMeters() - ArmConstants.RETRACTED_ARM_LENGTH_METERS;
+        inputs.elevatorVelocityMetersPerSecond = elevatorMotor.getVelocityMetersPerSecond();
     }
 
     @Override
@@ -51,7 +51,7 @@ public class SimulationArmIO extends ArmIO {
 
     private double calculateElevatorVoltageFromState(TrapezoidProfile.State targetState) {
         double pidOutput = SimulationArmConstants.ELEVATOR_PID_CONTROLLER.calculate(
-                elevatorSimulation.getPositionMeters() - ArmConstants.RETRACTED_ARM_LENGTH_METERS,
+                elevatorMotor.getPositionMeters() - ArmConstants.RETRACTED_ARM_LENGTH_METERS,
                 targetState.position
         );
         double feedforward = SimulationArmConstants.ELEVATOR_FEEDFORWARD.calculate(targetState.velocity);
@@ -71,11 +71,11 @@ public class SimulationArmIO extends ArmIO {
     }
 
     private double getAnglePositionDegrees() {
-        return Units.radiansToDegrees(angleSimulation.getAngleRads());
+        return Units.radiansToDegrees(angleMotor.getAngleRads());
     }
 
     private double getAngleVelocityDegreesPerSecond() {
-        return Units.radiansToDegrees(angleSimulation.getVelocityRadPerSec());
+        return Units.radiansToDegrees(angleMotor.getVelocityRadPerSec());
     }
 
     private void setAngleMotorsVoltage(double voltage) {
@@ -84,7 +84,7 @@ public class SimulationArmIO extends ArmIO {
                 -SimulationArmConstants.VOLTAGE_COMPENSATION_SATURATION,
                 SimulationArmConstants.VOLTAGE_COMPENSATION_SATURATION
         );
-        angleSimulation.setInputVoltage(voltage);
+        angleMotor.setInputVoltage(voltage);
     }
 
     private void setElevatorMotorsVoltage(double voltage) {
@@ -93,6 +93,6 @@ public class SimulationArmIO extends ArmIO {
                 -SimulationArmConstants.VOLTAGE_COMPENSATION_SATURATION,
                 SimulationArmConstants.VOLTAGE_COMPENSATION_SATURATION
         );
-        elevatorSimulation.setInputVoltage(elevatorMotorVoltage);
+        elevatorMotor.setInputVoltage(elevatorMotorVoltage);
     }
 }

@@ -74,10 +74,10 @@ public class SimulationRollerIO extends RollerIO {
     }
 
     private boolean isForwardLimitSwitchPressed() {
-        return !angleSimulation.hasHitUpperLimit();
+        return angleSimulation.hasHitUpperLimit();
     }
 
     private boolean isBackwardLimitSwitchPressed() {
-        return !angleSimulation.hasHitLowerLimit();
+        return angleSimulation.hasHitLowerLimit();
     }
 }
