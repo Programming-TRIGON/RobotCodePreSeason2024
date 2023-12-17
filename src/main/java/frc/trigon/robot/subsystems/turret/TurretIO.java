@@ -2,6 +2,7 @@ package frc.trigon.robot.subsystems.turret;
 
 import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.subsystems.turret.kablamaturret.KablamaTurretIO;
+import frc.trigon.robot.subsystems.turret.simulationturret.SimulationTurretIO;
 import org.littletonrobotics.junction.AutoLog;
 
 public class TurretIO {
@@ -10,8 +11,7 @@ public class TurretIO {
             return new TurretIO();
         if (RobotConstants.ROBOT_TYPE == RobotConstants.RobotType.KABLAMA)
             return new KablamaTurretIO();
-        // return new SimulationTurretIO;
-        return new TurretIO();
+        return new SimulationTurretIO();
     }
 
     protected void updateInputs(TurretInputsAutoLogged inputs) {

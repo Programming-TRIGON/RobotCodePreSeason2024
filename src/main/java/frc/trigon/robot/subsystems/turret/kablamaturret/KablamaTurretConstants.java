@@ -11,6 +11,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 public class KablamaTurretConstants {
+    static final boolean FOC_ENABLED = true;
     private static final int
             MOTOR_ID = 1,
             ENCODER_ID = 2;
@@ -19,15 +20,14 @@ public class KablamaTurretConstants {
     private static final AbsoluteSensorRangeValue ENCODER_RANGE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
     private static final SensorDirectionValue ENCODER_DIRECTION = SensorDirectionValue.CounterClockwise_Positive;
     private static final double ENCODER_OFFSET = 0;
-    private static final CANcoder ENCODER = new CANcoder(ENCODER_ID);
-    static final TalonFX MOTOR = new TalonFX(MOTOR_ID);
-    static final boolean FOC_ENABLED = true;
-    static final StatusSignal<Double> TURRET_POSITION_SIGNAL = ENCODER.getPosition();
 
     private static final double
             P = 1,
             I = 0,
             D = 0;
+    private static final CANcoder ENCODER = new CANcoder(ENCODER_ID);
+    static final TalonFX MOTOR = new TalonFX(MOTOR_ID);
+    static final StatusSignal<Double> TURRET_POSITION_SIGNAL = ENCODER.getPosition();
 
     static {
         configureMotor();

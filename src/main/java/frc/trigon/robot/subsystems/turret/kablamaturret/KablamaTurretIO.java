@@ -16,8 +16,8 @@ public class KablamaTurretIO extends TurretIO {
     }
 
     @Override
-    protected void calculateMotorVoltage(double voltage) {
-        motor.setControl(voltageRequest.withPosition(voltage));
+    protected void calculateMotorVoltage(double targetPosition) {
+        motor.setControl(voltageRequest.withPosition(targetPosition));
     }
 
     @Override
