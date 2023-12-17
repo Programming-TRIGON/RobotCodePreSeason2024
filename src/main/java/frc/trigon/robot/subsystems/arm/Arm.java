@@ -37,7 +37,14 @@ public class Arm extends SubsystemBase {
 
     public Command getSetTargetArmPositionCommand(ArmConstants.ArmState targetState) {
         return new DeferredCommand(
-                () -> getCurrentSetTargetStateCommand(targetState.elevatorPosition, targetState.angle, 100, 100),
+                () -> getSetTargetArmPositionCommand(targetState.elevatorPosition, targetState.angle, 100, 100),
+                Set.of(this)
+        );
+    }
+
+    public Command getSetTargetArmPositionCommand(ArmConstants.ArmState targetState, double angleSpeedPercentage, double elevatorSpeedPercentage) {
+        return new DeferredCommand(
+                () -> getSetTargetArmPositionCommand(targetState.elevatorPosition, targetState.angle, angleSpeedPercentage, elevatorSpeedPercentage),
                 Set.of(this)
         );
     }
@@ -50,24 +57,13 @@ public class Arm extends SubsystemBase {
     }
 
     public Command getSetTargetArmPositionCommand(double elevatorPosition, Rotation2d angle) {
-        return new SequentialCommandGroup(
-                getSetTargetAngleCommand(angle, 100),
-                getSetTargetElevatorPositionCommand(elevatorPosition, 100)
-        );
+        return new DeferredCommand(
+                () -> getCurrentSetTargetStateCommand(elevatorPosition, angle, 100, 100),
+                Set.of(this)
+                );
     }
 
-    public Command getSetTargetElevatorPositionCommand(double targetElevatorPosition, double speedPercentage) {
-        return new FunctionalCommand(
-                () -> generateElevatorMotorProfile(targetElevatorPosition, speedPercentage),
-                this::setTargetElevatorFromProfile,
-                (interrupted) -> {
-                },
-                () -> false,
-                this
-        );
-    }
-
-    public Command getCurrentSetTargetStateCommand(double elevatorPosition, Rotation2d angle, double angleSpeedPercentage, double elevatorSpeedPercentage) {
+    private Command getCurrentSetTargetStateCommand(double elevatorPosition, Rotation2d angle, double angleSpeedPercentage, double elevatorSpeedPercentage) {
         if (isElevatorOpening(elevatorPosition)) {
             return new SequentialCommandGroup(
                     getSetTargetAngleCommand(angle, angleSpeedPercentage),
@@ -80,9 +76,20 @@ public class Arm extends SubsystemBase {
         );
     }
 
-    public Command getSetTargetAngleCommand(Rotation2d angle, double anglePercentage) {
+    private Command getSetTargetElevatorPositionCommand(double targetElevatorPosition, double speedPercentage) {
         return new FunctionalCommand(
-                () -> generateAngleMotorProfile(angle, anglePercentage),
+                () -> generateElevatorMotorProfile(targetElevatorPosition, speedPercentage),
+                this::setTargetElevatorFromProfile,
+                (interrupted) -> {
+                },
+                () -> false,
+                this
+        );
+    }
+
+    private Command getSetTargetAngleCommand(Rotation2d angle, double angleSpeedPercentage) {
+        return new FunctionalCommand(
+                () -> generateAngleMotorProfile(angle, angleSpeedPercentage),
                 this::setTargetAngleFromProfile,
                 (interrupted) -> {
                 },
