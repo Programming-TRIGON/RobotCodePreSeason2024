@@ -8,6 +8,4 @@ public class TurretConstants {
             HUB_Y = 4.176;
     static final Translation2d HUB_POSITION = new Translation2d(HUB_X, HUB_Y);
     static final double DEGREES_LIMIT = 200;
-    static final double GEAR_RATIO = 100;
-    static final double MOMENT_OF_INERTIA = 0.003;
 }
