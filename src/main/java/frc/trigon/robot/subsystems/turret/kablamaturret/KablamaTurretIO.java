@@ -2,7 +2,7 @@ package frc.trigon.robot.subsystems.turret.kablamaturret;
 
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
-import edu.wpi.first.math.util.Units;
+import edu.wpi.first.math.geometry.Rotation2d;
 import frc.trigon.robot.subsystems.turret.TurretIO;
 import frc.trigon.robot.subsystems.turret.TurretInputsAutoLogged;
 
@@ -12,12 +12,12 @@ public class KablamaTurretIO extends TurretIO {
 
     @Override
     protected void updateInputs(TurretInputsAutoLogged inputs) {
-        inputs.motorPositionDegrees = getPositionDegrees();
+        inputs.motorPositionDegrees = getPosition().getDegrees();
     }
 
     @Override
-    protected void calculateMotorVoltage(double targetPosition) {
-        motor.setControl(voltageRequest.withPosition(targetPosition));
+    protected void setTargetAngle(Rotation2d targetAngle) {
+        motor.setControl(voltageRequest.withPosition(targetAngle.getDegrees()));
     }
 
     @Override
@@ -25,7 +25,7 @@ public class KablamaTurretIO extends TurretIO {
         motor.stopMotor();
     }
 
-    private double getPositionDegrees() {
-        return Units.rotationsToDegrees(KablamaTurretConstants.TURRET_POSITION_SIGNAL.refresh().getValue());
+    private Rotation2d getPosition() {
+        return Rotation2d.fromRotations(KablamaTurretConstants.TURRET_POSITION_SIGNAL.refresh().getValue());
     }
 }

@@ -25,11 +25,11 @@ public class Turret extends SubsystemBase {
         Logger.processInputs("Turret", turretInputs);
     }
 
-    void setMotorVoltage(Pose2d robotPose) {
+    void alignTurretToHub(Pose2d robotPose) {
         Rotation2d targetAngle = calculateTargetAngle(robotPose);
-        Rotation2d targetAngleAfterLimitCheck = angleLimitCorrection(targetAngle.getDegrees());
+        Rotation2d targetAngleAfterLimitCheck = limitAngle(targetAngle);
         Rotation2d error = calculateError(targetAngleAfterLimitCheck.getDegrees());
-        turretIO.calculateMotorVoltage(error.getDegrees());
+        turretIO.setTargetAngle(error);
     }
 
     void stop() {
@@ -38,18 +38,17 @@ public class Turret extends SubsystemBase {
 
     private Rotation2d calculateTargetAngle(Pose2d robotPose) {
         Translation2d difference = TurretConstants.HUB_POSITION.minus(robotPose.getTranslation());
-        double theta = Math.atan2(difference.getY(), difference.getX());
-        double targetAngle = theta - Units.degreesToRadians(turretInputs.motorPositionDegrees) - robotPose.getRotation().getRadians();
+        double theta = Math.atan2(Math.abs(difference.getY()), Math.abs(difference.getX()));
+        double targetAngle = theta - Units.degreesToRadians(turretInputs.motorPositionDegrees);
         return Rotation2d.fromRadians(targetAngle);
     }
 
-    private Rotation2d angleLimitCorrection(double targetAngleDegrees) {
-        if (targetAngleDegrees > TurretConstants.DEGREES_LIMIT)
-            targetAngleDegrees -= 360;
-        else if (targetAngleDegrees < -TurretConstants.DEGREES_LIMIT)
-            targetAngleDegrees += 360;
-
-        return Rotation2d.fromDegrees(targetAngleDegrees);
+    private Rotation2d limitAngle(Rotation2d targetAngle) {
+        if (targetAngle.getDegrees() > TurretConstants.DEGREES_LIMIT)
+            return Rotation2d.fromDegrees(targetAngle.getDegrees() - 360);
+        if (targetAngle.getDegrees() < -TurretConstants.DEGREES_LIMIT)
+            return Rotation2d.fromDegrees(targetAngle.getDegrees() + 360);
+        return targetAngle;
     }
 
     private Rotation2d calculateError(double targetAngleDegrees) {

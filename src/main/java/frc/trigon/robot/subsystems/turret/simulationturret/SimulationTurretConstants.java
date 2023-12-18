@@ -21,6 +21,5 @@ public class SimulationTurretConstants extends TurretIO {
             P = 1,
             I = 0,
             D = 0;
-
     static final PIDController PID_CONTROLLER = new PIDController(P, I, D);
 }

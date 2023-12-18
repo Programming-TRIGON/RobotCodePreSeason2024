@@ -1,5 +1,6 @@
 package frc.trigon.robot.subsystems.turret;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.subsystems.turret.kablamaturret.KablamaTurretIO;
 import frc.trigon.robot.subsystems.turret.simulationturret.SimulationTurretIO;
@@ -17,7 +18,7 @@ public class TurretIO {
     protected void updateInputs(TurretInputsAutoLogged inputs) {
     }
 
-    protected void calculateMotorVoltage(double voltage) {
+    protected void setTargetAngle(Rotation2d targetAngle) {
     }
 
     protected void stop() {

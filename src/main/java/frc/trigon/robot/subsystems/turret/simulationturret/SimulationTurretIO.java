@@ -1,5 +1,6 @@
 package frc.trigon.robot.subsystems.turret.simulationturret;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import frc.trigon.robot.subsystems.turret.TurretIO;
@@ -14,8 +15,8 @@ public class SimulationTurretIO extends TurretIO {
     }
 
     @Override
-    protected void calculateMotorVoltage(double voltage) {
-        motor.setInputVoltage(SimulationTurretConstants.PID_CONTROLLER.calculate(voltage));
+    protected void setTargetAngle(Rotation2d targetAngle) {
+        motor.setInputVoltage(SimulationTurretConstants.PID_CONTROLLER.calculate(targetAngle.getDegrees()));
     }
 
     @Override

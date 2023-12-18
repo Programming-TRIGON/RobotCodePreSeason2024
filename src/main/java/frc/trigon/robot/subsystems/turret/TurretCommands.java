@@ -7,13 +7,13 @@ import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import java.util.function.Supplier;
 
 public class TurretCommands {
-    private static Turret TURRET = Turret.getInstance();
+    private static final Turret TURRET = Turret.getInstance();
 
-    public static Command getSetMotorVoltageCommand(Supplier<Pose2d> robotPose) {
+    public static Command getAlignTurretToHubCommand(Supplier<Pose2d> robotPose) {
         return new FunctionalCommand(
                 () -> {
                 },
-                () -> TURRET.setMotorVoltage(robotPose.get()),
+                () -> TURRET.alignTurretToHub(robotPose.get()),
                 (interrupted) -> TURRET.stop(),
                 () -> false,
                 TURRET
