@@ -1,5 +1,6 @@
 package frc.trigon.robot.subsystems.turret.toohardturret;
 
+import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -8,18 +9,36 @@ import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
+import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.controller.PIDController;
 
 public class ToohardTurretConstants {
     private static final int
             MOTOR_ID = 0,
             ENCODER_ID = 0;
-    private static final TalonFX MOTOR = new TalonFX(MOTOR_ID);
-    private static final CANcoder CANCODER = new CANcoder(ENCODER_ID);
+    static final TalonFX MOTOR = new TalonFX(MOTOR_ID);
+    static final CANcoder ENCODER = new CANcoder(ENCODER_ID);
     private static final InvertedValue INVERTED_VALUE = InvertedValue.Clockwise_Positive;
     private static final NeutralModeValue NEUTRAL_MODE_VALUE = NeutralModeValue.Brake;
     private static final double ENCODER_OFFSET = 0;
     private static final SensorDirectionValue ENCODER_DIRECTION_VALUE = SensorDirectionValue.Clockwise_Positive;
     private static final AbsoluteSensorRangeValue ENCODER_SENSOR_RANGE_VALUE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
+
+    private static final double
+            P = 0,
+            I = 0,
+            D = 0;
+    static final PIDController PID_CONTROLLER = new PIDController(P, I, D);
+
+    private static final double
+            S = 0,
+            G = 0,
+            V = 0,
+            A = 0;
+    static final ArmFeedforward FEEDFORWARD = new ArmFeedforward(S, G, V, A);
+    static final StatusSignal<Double>
+            ENCODER_POSITION_SIGNAL = ENCODER.getPosition(),
+            ENCODER_VELOCITY_SIGNAL = ENCODER.getVelocity();
 
     static {
         configureMotor();
@@ -40,6 +59,6 @@ public class ToohardTurretConstants {
         config.MagnetSensor.MagnetOffset = ENCODER_OFFSET;
         config.MagnetSensor.SensorDirection = ENCODER_DIRECTION_VALUE;
         config.MagnetSensor.AbsoluteSensorRange = ENCODER_SENSOR_RANGE_VALUE;
-        CANCODER.getConfigurator().apply(config);
+        ENCODER.getConfigurator().apply(config);
     }
 }
