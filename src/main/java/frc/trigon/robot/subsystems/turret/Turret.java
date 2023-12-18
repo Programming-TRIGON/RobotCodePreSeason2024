@@ -39,7 +39,7 @@ public class Turret extends SubsystemBase {
     private Rotation2d calculateTargetAngle(Pose2d robotPose) {
         Translation2d difference = TurretConstants.HUB_POSITION.minus(robotPose.getTranslation());
         double theta = Math.atan2(difference.getY(), difference.getX());
-        double targetAngle = theta - Units.degreesToRadians(turretInputs.motorPositionDegrees);
+        double targetAngle = theta - Units.degreesToRadians(turretInputs.motorPositionDegrees) - robotPose.getRotation().getRadians();
         return Rotation2d.fromRadians(targetAngle);
     }
 
