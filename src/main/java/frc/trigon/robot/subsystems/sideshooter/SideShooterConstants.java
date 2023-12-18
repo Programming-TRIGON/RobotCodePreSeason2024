@@ -11,6 +11,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -28,11 +29,11 @@ public class SideShooterConstants {
     private static final double ENCODER_OFFSET = 0;
     private static final AbsoluteSensorRangeValue ENCODER_RANGE_VALUE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
     private static final double VOLTAGE_COMPENSATION_SATURATION = 12;
-    static double angleTolerance = 1;
     static final boolean FOC_ENABLED = true;
     static final CANcoder ANGLE_ENCODER = new CANcoder(ANGLE_ENCODER_ID);
     static final TalonFX SHOOTING_MOTOR = new TalonFX(SHOOTING_MOTOR_ID);
     static final CANSparkMax ANGLE_MOTOR = new CANSparkMax(ANGLE_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless);
+    static final double ANGLE_TOLERANCE = 1;
 
     private static final double
             MAX_ANGLE_VELOCITY = 0,
@@ -54,6 +55,18 @@ public class SideShooterConstants {
             ANGLE_P,
             ANGLE_I,
             ANGLE_D
+    );
+
+    private static final double
+            ANGLE_MOTOR_KS = 0,
+            ANGLE_MOTOR_KV = 0,
+            ANGLE_MOTOR_KA = 0,
+            ANGLE_MOTOR_KG = 0;
+    static final ArmFeedforward ANGLE_MOTOR_FEEDFORWARD = new ArmFeedforward(
+            ANGLE_MOTOR_KS,
+            ANGLE_MOTOR_KV,
+            ANGLE_MOTOR_KA,
+            ANGLE_MOTOR_KG
     );
 
     static {

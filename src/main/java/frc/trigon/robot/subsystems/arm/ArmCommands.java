@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 public class ArmCommands {
     private static final Arm ARM = Arm.getInstance();
 
-    public static Command setTargetState(Rotation2d targetAngle, double targetElevatorMeters) {
+    public static Command getSetTargetStateCommand(Rotation2d targetAngle, double targetElevatorMeters) {
         if (ARM.isElevatorOpening(targetElevatorMeters)) {
             return new SequentialCommandGroup(
                     getSetTargetAngleCommand(targetAngle).until(() -> ARM.atAngle(targetAngle)),

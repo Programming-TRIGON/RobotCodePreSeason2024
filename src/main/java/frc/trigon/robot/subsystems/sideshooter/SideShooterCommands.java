@@ -1,21 +1,18 @@
 package frc.trigon.robot.subsystems.sideshooter;
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.FunctionalCommand;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
+import edu.wpi.first.wpilibj2.command.*;
 import frc.trigon.robot.utilities.Commands;
 
 public class SideShooterCommands {
     private static final SideShooter SIDE_SHOOTER = SideShooter.getInstance();
 
     /**
-     * goes to the wanted state.
-     * @param byOrder causing it to be in parallel or one after the other
+     * Creates a command that goes to the wanted state.
+     *
+     * @param byOrder     should the side shooter move parallel commands or sequential commands
      * @param targetState the wanted state
-     * @return a command that goes to the wanted state
+     * @return the command
      */
     public static Command getSetTargetStateCommand(boolean byOrder, SideShooterConstants.SideShooterState targetState) {
         if (!byOrder) {

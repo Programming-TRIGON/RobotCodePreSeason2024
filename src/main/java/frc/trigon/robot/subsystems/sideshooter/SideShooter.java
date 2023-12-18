@@ -5,8 +5,10 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.trigon.robot.subsystems.arm.ArmConstants;
 import frc.trigon.robot.utilities.Conversions;
 
 public class SideShooter extends SubsystemBase {
@@ -45,8 +47,7 @@ public class SideShooter extends SubsystemBase {
         }
 
         TrapezoidProfile.State targetState = angleMotorProfile.calculate(getAngleProfileTime());
-        double output = SideShooterConstants.ANGLE_PID_CONTROLLER.calculate(getAnglePosition().getDegrees(), targetState.position);
-        angleMotor.setVoltage(output);
+        angleMotor.setVoltage(calculateAngleOutput(targetState));
     }
 
     void stopShooting() {
@@ -54,7 +55,21 @@ public class SideShooter extends SubsystemBase {
     }
 
     boolean atAngle(Rotation2d angle){
-        return  Math.abs(angle.getDegrees() - getAnglePosition().getDegrees()) < SideShooterConstants.angleTolerance;
+        return  Math.abs(angle.getDegrees() - getAnglePosition().getDegrees()) < SideShooterConstants.ANGLE_TOLERANCE;
+    }
+
+    private double calculateAngleOutput(TrapezoidProfile.State targetState){
+        double pidOutput = SideShooterConstants.ANGLE_PID_CONTROLLER.calculate(
+                getAnglePosition().getDegrees(),
+                targetState.position
+        );
+
+        double feedforward = SideShooterConstants.ANGLE_MOTOR_FEEDFORWARD.calculate(
+                Units.degreesToRadians(targetState.position),
+                Units.degreesToRadians(targetState.velocity)
+        );
+
+        return pidOutput + feedforward;
     }
 
     private Rotation2d getAnglePosition() {

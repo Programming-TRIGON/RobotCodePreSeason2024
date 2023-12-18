@@ -9,6 +9,8 @@ import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -51,24 +53,13 @@ public class ArmConstants {
     private static final double
             MAX_ELEVATOR_VELOCITY = 0,
             MAX_ELEVATOR_ACCELERATION = 0;
+    private static final double
+            MAX_ANGLE_VELOCITY = 0,
+            MAX_ANGLE_ACCELERATION = 0;
     static final TrapezoidProfile.Constraints ELEVATOR_CONSTRAINTS = new TrapezoidProfile.Constraints(
             MAX_ELEVATOR_VELOCITY,
             MAX_ELEVATOR_ACCELERATION
     );
-
-    private static final double
-            ELEVATOR_P = 0,
-            ELEVATOR_I = 0,
-            ELEVATOR_D = 0;
-    static final PIDController ELEVATOR_PID_CONTROLLER = new PIDController(
-            ELEVATOR_P,
-            ELEVATOR_I,
-            ELEVATOR_D
-    );
-
-    private static final double
-            MAX_ANGLE_VELOCITY = 0,
-            MAX_ANGLE_ACCELERATION = 0;
     static final TrapezoidProfile.Constraints ANGLE_CONSTRAINTS = new TrapezoidProfile.Constraints(
             MAX_ANGLE_VELOCITY,
             MAX_ANGLE_ACCELERATION
@@ -86,6 +77,40 @@ public class ArmConstants {
             ANGLE_P,
             ANGLE_I,
             ANGLE_D
+    );
+
+    private static final double
+            ELEVATOR_P = 0,
+            ELEVATOR_I = 0,
+            ELEVATOR_D = 0;
+    static final PIDController ELEVATOR_PID_CONTROLLER = new PIDController(
+            ELEVATOR_P,
+            ELEVATOR_I,
+            ELEVATOR_D
+    );
+
+    private static final double
+            ANGLE_MOTOR_KS = 0,
+            ANGLE_MOTOR_KV = 0,
+            ANGLE_MOTOR_KA = 0,
+            ANGLE_MOTOR_KG = 0;
+    static final ArmFeedforward ANGLE_MOTOR_FEEDFORWARD = new ArmFeedforward(
+            ANGLE_MOTOR_KS,
+            ANGLE_MOTOR_KV,
+            ANGLE_MOTOR_KA,
+            ANGLE_MOTOR_KG
+    );
+
+    private static final double
+            ELEVATOR_MOTOR_KS = 0,
+            ELEVATOR_MOTOR_KV = 0,
+            ELEVATOR_MOTOR_KA = 0,
+            ELEVATOR_MOTOR_KG = 0;
+    static final ElevatorFeedforward ELEVATOR_MOTOR_FEEDFORWARD = new ElevatorFeedforward(
+            ELEVATOR_MOTOR_KS,
+            ELEVATOR_MOTOR_KG,
+            ELEVATOR_MOTOR_KV,
+            ELEVATOR_MOTOR_KA
     );
 
     static {
@@ -143,11 +168,11 @@ public class ArmConstants {
         CONE_LOW_STATE(Rotation2d.fromDegrees(0), 0);
 
         final Rotation2d angle;
-        final double elevatorMeters;
+        final double elevatorPositionMeters;
 
-        ArmState(Rotation2d angle, double elevatorPosition) {
+        ArmState(Rotation2d angle, double elevatorPositionMeters) {
             this.angle = angle;
-            this.elevatorMeters = elevatorPosition;
+            this.elevatorPositionMeters = elevatorPositionMeters;
         }
     }
 }
