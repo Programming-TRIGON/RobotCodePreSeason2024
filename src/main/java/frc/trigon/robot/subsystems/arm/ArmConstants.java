@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
-import org.littletonrobotics.junction.AutoLogOutput;
 
 public class ArmConstants {
 
@@ -33,10 +32,9 @@ public class ArmConstants {
             ARM_ROOT_Y = 1;
     private static final double MECHANISM_LINE_WIDTH = 10;
 
-    @AutoLogOutput(key = "Arm/ArmMechanism")
     static final Mechanism2d ARM_MECHANISM = new Mechanism2d(ARM_MECHANISM_WIDTH, ARM_MECHANISM_HEIGHT);
     private static final MechanismRoot2d
-            ARM_ROOT = ARM_MECHANISM.getRoot("ARM_ROOT", ARM_ROOT_X, ARM_ROOT_Y),
+            ARM_ROOT = ARM_MECHANISM.getRoot("Z_ARM_ROOT", ARM_ROOT_X, ARM_ROOT_Y),
             TARGET_POSITION_ROOT = ARM_MECHANISM.getRoot("TargetPositionRoot", ARM_ROOT_X, ARM_ROOT_Y);
     static final MechanismLigament2d
             ARM_LIGAMENT = ARM_ROOT.append(new MechanismLigament2d("ArmLigament", 0, 0, MECHANISM_LINE_WIDTH, new Color8Bit(Color.kBlue))),
