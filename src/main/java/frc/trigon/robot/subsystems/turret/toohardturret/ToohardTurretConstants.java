@@ -14,19 +14,14 @@ import edu.wpi.first.math.controller.ArmFeedforward;
 public class ToohardTurretConstants {
     static final boolean FOC_ENABLED = true;
 
-    static final double VOLTAGE_COMPENSATION_SATURATION = 12;
-
     private static final int
             MOTOR_ID = 0,
             ENCODER_ID = 0;
-    static final TalonFX MOTOR = new TalonFX(MOTOR_ID);
-    static final CANcoder ENCODER = new CANcoder(ENCODER_ID);
     private static final InvertedValue INVERTED_VALUE = InvertedValue.Clockwise_Positive;
     private static final NeutralModeValue NEUTRAL_MODE_VALUE = NeutralModeValue.Brake;
     private static final double ENCODER_OFFSET = 0;
     private static final SensorDirectionValue ENCODER_DIRECTION_VALUE = SensorDirectionValue.Clockwise_Positive;
     private static final AbsoluteSensorRangeValue ENCODER_SENSOR_RANGE_VALUE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
-
     private static final double
             P = 0,
             I = 0,
@@ -38,6 +33,8 @@ public class ToohardTurretConstants {
             KV = 0,
             KA = 0;
     static final ArmFeedforward FEEDFORWARD = new ArmFeedforward(KS, KG, KV, KA);
+    static final TalonFX MOTOR = new TalonFX(MOTOR_ID);
+    static final CANcoder ENCODER = new CANcoder(ENCODER_ID);
     static final StatusSignal<Double>
             ENCODER_POSITION_SIGNAL = ENCODER.getPosition(),
             ENCODER_VELOCITY_SIGNAL = ENCODER.getVelocity();
@@ -60,6 +57,7 @@ public class ToohardTurretConstants {
         config.Slot0.kG = KG;
         config.Slot0.kV = KV;
         config.Slot0.kA = KA;
+        config.DifferentialSensors.DifferentialTalonFXSensorID = ENCODER_ID;
         MOTOR.getConfigurator().apply(config);
     }
 

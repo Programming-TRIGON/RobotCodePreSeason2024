@@ -24,18 +24,15 @@ public class Turret extends SubsystemBase {
         Logger.processInputs("Turret", turretInputs);
     }
 
-    /**
-     * @param robotPosition position of the robot on the field
-     * @return a command that sets the turret to look at the centre hub
-     */
-    void setMotorPowerFromPosition(Pose2d robotPosition) {
+    void setMotorAngleToHub(Pose2d robotPosition) {
         Rotation2d targetAngle = calculateAngleToHub(robotPosition);
-        Rotation2d robotAngle = robotPosition.getRotation();
-        if (Math.abs(targetAngle.getDegrees() - robotAngle.getCos()) > TurretConstants.TOLERANCE) {
-            if (Math.abs(targetAngle.getDegrees() + robotAngle.getDegrees()) < 200) {
-                turretIO.setTargetAnglePower(1);
-            } else if (Math.abs(targetAngle.getDegrees() + robotAngle.getDegrees()) > 200) {
-                turretIO.setTargetAnglePower(-1);
+        if (Math.abs(targetAngle.getDegrees() - robotPosition.getRotation().getDegrees()) > TurretConstants.TOLERANCE) {
+            if (targetAngle.getDegrees() > 200) {
+                turretIO.setTargetAnglePosition(targetAngle.minus(Rotation2d.fromDegrees(360)));
+            } else if (targetAngle.getDegrees() < -200) {
+                turretIO.setTargetAnglePosition(targetAngle.plus(Rotation2d.fromDegrees(360)));
+            } else {
+                turretIO.setTargetAnglePosition(targetAngle);
             }
         }
     }
@@ -44,7 +41,7 @@ public class Turret extends SubsystemBase {
         double
                 yDistance = Math.abs(robotPosition.getY() - TurretConstants.HUB_POSITION.getY()),
                 xDistance = Math.abs(robotPosition.getX() - TurretConstants.HUB_POSITION.getX());
-        return Rotation2d.fromDegrees(Math.atan(xDistance / yDistance));
+        return Rotation2d.fromRadians(Math.atan(yDistance / xDistance));
     }
 }
 
