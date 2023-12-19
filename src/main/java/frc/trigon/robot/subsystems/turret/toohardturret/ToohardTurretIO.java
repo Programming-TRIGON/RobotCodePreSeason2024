@@ -1,13 +1,21 @@
 package frc.trigon.robot.subsystems.turret.toohardturret;
 
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.util.Units;
+import edu.wpi.first.math.MathUtil;
 import frc.trigon.robot.subsystems.turret.TurretIO;
 import frc.trigon.robot.subsystems.turret.TurretInputsAutoLogged;
 
 public class ToohardTurretIO extends TurretIO {
     private final TalonFX motor = ToohardTurretConstants.MOTOR;
+    private final PositionVoltage positionRequest = new PositionVoltage(
+            0,
+            0,
+            ToohardTurretConstants.FOC_ENABLED,
+            0,
+            0,
+            false
+    );
 
     @Override
     protected void updateInputs(TurretInputsAutoLogged inputs) {
@@ -17,24 +25,21 @@ public class ToohardTurretIO extends TurretIO {
     }
 
     @Override
-    protected void setTargetAngleState(TrapezoidProfile.State targetState) {
-        motor.setVoltage(calculateVoltageFromState(targetState));
+    protected void setTargetAnglePower(double power) {
+        setMotorVoltageFromPower(power);
     }
 
     @Override
     protected void stopMotor() {
-
+        motor.stopMotor();
     }
 
-    private double calculateVoltageFromState(TrapezoidProfile.State targetState) {
-        double pidOutput = ToohardTurretConstants.PID_CONTROLLER.calculate(
-                ToohardTurretConstants.ENCODER_POSITION_SIGNAL.refresh().getValue(),
-                targetState.position
+    private void setMotorVoltageFromPower(double power) {
+        double voltage = MathUtil.clamp(
+                power * ToohardTurretConstants.VOLTAGE_COMPENSATION_SATURATION,
+                -ToohardTurretConstants.VOLTAGE_COMPENSATION_SATURATION,
+                ToohardTurretConstants.VOLTAGE_COMPENSATION_SATURATION
         );
-        double feedforward = ToohardTurretConstants.FEEDFORWARD.calculate(
-                Units.degreesToRadians(targetState.position),
-                targetState.velocity
-        );
-        return pidOutput + feedforward;
+        motor.setVoltage(voltage);
     }
 }

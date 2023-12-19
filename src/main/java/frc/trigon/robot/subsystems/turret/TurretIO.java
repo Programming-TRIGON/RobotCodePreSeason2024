@@ -1,6 +1,5 @@
 package frc.trigon.robot.subsystems.turret;
 
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.subsystems.turret.simulationturret.SimulationTurretIO;
 import frc.trigon.robot.subsystems.turret.toohardturret.ToohardTurretIO;
@@ -18,7 +17,7 @@ public class TurretIO {
     protected void updateInputs(TurretInputsAutoLogged inputs) {
     }
 
-    protected void setTargetAngleState(TrapezoidProfile.State targetState) {
+    protected void setTargetAnglePower(double power) {
     }
 
     protected void stopMotor() {

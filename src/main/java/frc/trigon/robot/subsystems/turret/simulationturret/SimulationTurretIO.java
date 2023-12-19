@@ -1,7 +1,6 @@
 package frc.trigon.robot.subsystems.turret.simulationturret;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import frc.trigon.robot.constants.RobotConstants;
@@ -23,30 +22,18 @@ public class SimulationTurretIO extends TurretIO {
     }
 
     @Override
-    protected void setTargetAngleState(TrapezoidProfile.State targetState) {
-        setMotorVoltage(calculateVoltageFromState(targetState));
+    protected void setTargetAnglePower(double power) {
+        setMotorVoltageFromPower(power);
     }
 
     @Override
     protected void stopMotor() {
-        setMotorVoltage(0);
+        setMotorVoltageFromPower(0);
     }
 
-    private double calculateVoltageFromState(TrapezoidProfile.State targetState) {
-        double pidOutput = SimulationTurretConstants.PID_CONTROLLER.calculate(
-                Units.radiansToDegrees(motor.getAngleRads()),
-                targetState.position
-        );
-        double feedforward = SimulationTurretConstants.FEEDFORWARD.calculate(
-                Units.degreesToRadians(targetState.position),
-                targetState.velocity
-        );
-        return pidOutput + feedforward;
-    }
-
-    private void setMotorVoltage(double voltage) {
+    private void setMotorVoltageFromPower(double power) {
         motorVoltage = MathUtil.clamp(
-                voltage,
+                power * SimulationTurretConstants.VOLTAGE_COMPENSATION_SATURATION,
                 -SimulationTurretConstants.VOLTAGE_COMPENSATION_SATURATION,
                 SimulationTurretConstants.VOLTAGE_COMPENSATION_SATURATION
         );

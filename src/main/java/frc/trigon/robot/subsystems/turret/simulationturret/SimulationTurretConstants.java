@@ -36,9 +36,9 @@ public class SimulationTurretConstants {
     static final PIDController PID_CONTROLLER = new PIDController(P, I, D);
 
     private static final double
-            S = 0,
-            G = 0,
-            V = 0,
-            A = 0;
-    static final ArmFeedforward FEEDFORWARD = new ArmFeedforward(S, G, V, A);
+            KS = 0,
+            KG = 0,
+            KV = 0,
+            KA = 0;
+    static final ArmFeedforward FEEDFORWARD = new ArmFeedforward(KS, KG, KV, KA);
 }

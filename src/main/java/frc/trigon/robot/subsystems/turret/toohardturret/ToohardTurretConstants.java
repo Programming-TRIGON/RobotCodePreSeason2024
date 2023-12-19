@@ -10,9 +10,12 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import edu.wpi.first.math.controller.ArmFeedforward;
-import edu.wpi.first.math.controller.PIDController;
 
 public class ToohardTurretConstants {
+    static final boolean FOC_ENABLED = true;
+
+    static final double VOLTAGE_COMPENSATION_SATURATION = 12;
+
     private static final int
             MOTOR_ID = 0,
             ENCODER_ID = 0;
@@ -28,14 +31,13 @@ public class ToohardTurretConstants {
             P = 0,
             I = 0,
             D = 0;
-    static final PIDController PID_CONTROLLER = new PIDController(P, I, D);
 
     private static final double
-            S = 0,
-            G = 0,
-            V = 0,
-            A = 0;
-    static final ArmFeedforward FEEDFORWARD = new ArmFeedforward(S, G, V, A);
+            KS = 0,
+            KG = 0,
+            KV = 0,
+            KA = 0;
+    static final ArmFeedforward FEEDFORWARD = new ArmFeedforward(KS, KG, KV, KA);
     static final StatusSignal<Double>
             ENCODER_POSITION_SIGNAL = ENCODER.getPosition(),
             ENCODER_VELOCITY_SIGNAL = ENCODER.getVelocity();
@@ -51,6 +53,13 @@ public class ToohardTurretConstants {
         config.MotorOutput.NeutralMode = NEUTRAL_MODE_VALUE;
         config.Audio.BeepOnBoot = false;
         config.Audio.BeepOnConfig = false;
+        config.Slot0.kP = P;
+        config.Slot0.kI = I;
+        config.Slot0.kD = D;
+        config.Slot0.kS = KS;
+        config.Slot0.kG = KG;
+        config.Slot0.kV = KV;
+        config.Slot0.kA = KA;
         MOTOR.getConfigurator().apply(config);
     }
 
