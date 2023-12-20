@@ -47,23 +47,23 @@ public class ArmConstants {
     static final CANcoder ANGLE_ENCODER = new CANcoder(ANGLE_ENCODER_ID);
     static final WPI_TalonSRX ELEVATOR_ENCODER = new WPI_TalonSRX(ELEVATOR_ENCODER_ID);
     static final double ELEVATOR_METERS_PER_REVOLUTION = 1;
-    static final double ANGLE_TOLERANCE = 1;
-    static final double ELEVATOR_TOLERANCE = 1;
+    static final double
+            ANGLE_TOLERANCE_DEGREES = 1,
+            ELEVATOR_TOLERANCE_DEGREES = 1;
 
     private static final double
             MAX_ELEVATOR_VELOCITY = 0,
-            MAX_ELEVATOR_ACCELERATION = 0;
-    private static final double
+            MAX_ELEVATOR_ACCELERATION = 0,
             MAX_ANGLE_VELOCITY = 0,
             MAX_ANGLE_ACCELERATION = 0;
     static final TrapezoidProfile.Constraints ELEVATOR_CONSTRAINTS = new TrapezoidProfile.Constraints(
             MAX_ELEVATOR_VELOCITY,
             MAX_ELEVATOR_ACCELERATION
-    );
-    static final TrapezoidProfile.Constraints ANGLE_CONSTRAINTS = new TrapezoidProfile.Constraints(
-            MAX_ANGLE_VELOCITY,
-            MAX_ANGLE_ACCELERATION
-    );
+    ),
+            ANGLE_CONSTRAINTS = new TrapezoidProfile.Constraints(
+                    MAX_ANGLE_VELOCITY,
+                    MAX_ANGLE_ACCELERATION
+            );
 
     static final StatusSignal<Double>
             ANGLE_ENCODER_POSITION_SIGNAL = ANGLE_ENCODER.getPosition(),
@@ -72,18 +72,18 @@ public class ArmConstants {
     private static final double
             ANGLE_P = 0,
             ANGLE_I = 0,
-            ANGLE_D = 0;
-    static final PIDController ANGLE_PID_CONTROLLER = new PIDController(
-            ANGLE_P,
-            ANGLE_I,
-            ANGLE_D
-    );
-
-    private static final double
+            ANGLE_D = 0,
             ELEVATOR_P = 0,
             ELEVATOR_I = 0,
             ELEVATOR_D = 0;
-    static final PIDController ELEVATOR_PID_CONTROLLER = new PIDController(
+
+    static final PIDController
+            ANGLE_PID_CONTROLLER = new PIDController(
+            ANGLE_P,
+            ANGLE_I,
+            ANGLE_D
+    ),
+            ELEVATOR_PID_CONTROLLER = new PIDController(
             ELEVATOR_P,
             ELEVATOR_I,
             ELEVATOR_D
@@ -93,19 +93,18 @@ public class ArmConstants {
             ANGLE_MOTOR_KS = 0,
             ANGLE_MOTOR_KV = 0,
             ANGLE_MOTOR_KA = 0,
-            ANGLE_MOTOR_KG = 0;
-    static final ArmFeedforward ANGLE_MOTOR_FEEDFORWARD = new ArmFeedforward(
+            ANGLE_MOTOR_KG = 0,
+            ELEVATOR_MOTOR_KS = 0,
+            ELEVATOR_MOTOR_KV = 0,
+            ELEVATOR_MOTOR_KA = 0,
+            ELEVATOR_MOTOR_KG = 0;
+    static final ArmFeedforward
+            ANGLE_MOTOR_FEEDFORWARD = new ArmFeedforward(
             ANGLE_MOTOR_KS,
             ANGLE_MOTOR_KV,
             ANGLE_MOTOR_KA,
             ANGLE_MOTOR_KG
     );
-
-    private static final double
-            ELEVATOR_MOTOR_KS = 0,
-            ELEVATOR_MOTOR_KV = 0,
-            ELEVATOR_MOTOR_KA = 0,
-            ELEVATOR_MOTOR_KG = 0;
     static final ElevatorFeedforward ELEVATOR_MOTOR_FEEDFORWARD = new ElevatorFeedforward(
             ELEVATOR_MOTOR_KS,
             ELEVATOR_MOTOR_KG,
