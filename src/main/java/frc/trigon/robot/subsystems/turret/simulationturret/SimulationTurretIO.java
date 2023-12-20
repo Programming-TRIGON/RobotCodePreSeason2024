@@ -18,13 +18,16 @@ public class SimulationTurretIO extends TurretIO {
         motor.update(RobotConstants.PERIODIC_TIME_SECONDS);
 
         inputs.motorVoltage = motorVoltage;
-        inputs.motorAngleDegrees = Units.radiansToDegrees(motor.getAngularPositionRad());
-        inputs.motorVelocityDegreesPerSecond = Units.radiansToDegrees(motor.getAngularVelocityRadPerSec());
+        inputs.motorAngleDegrees = getMotorAngleDegrees();
+        inputs.motorVelocityDegreesPerSecond = getMotorVelocityDegreesPerSecond();
     }
 
     @Override
     protected void setTargetAngle(Rotation2d targetAngle) {
-        setMotorVoltageFromPower(SimulationTurretConstants.PID_CONTROLLER.calculate(targetAngle.getDegrees()));
+        double
+                pid = SimulationTurretConstants.PROFILED_PID_CONTROLLER.calculate(targetAngle.getDegrees()),
+                feedforward = SimulationTurretConstants.FEEDFORWARD.calculate(motor.getAngularPositionRad(), motor.getAngularVelocityRadPerSec(), SimulationTurretConstants.PROFILED_PID_CONTROLLER.getGoal().velocity);
+        setMotorVoltageFromPower(pid + feedforward);
     }
 
     private void setMotorVoltageFromPower(double power) {
@@ -34,5 +37,13 @@ public class SimulationTurretIO extends TurretIO {
                 SimulationTurretConstants.VOLTAGE_COMPENSATION_SATURATION
         );
         motor.setInputVoltage(motorVoltage);
+    }
+
+    private double getMotorAngleDegrees() {
+        return Units.radiansToDegrees(motor.getAngularPositionRad());
+    }
+
+    private double getMotorVelocityDegreesPerSecond() {
+        return Units.radiansToDegrees(motor.getAngularVelocityRadPerSec());
     }
 }

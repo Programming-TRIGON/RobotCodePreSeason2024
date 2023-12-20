@@ -12,8 +12,6 @@ import com.ctre.phoenix6.signals.SensorDirectionValue;
 import edu.wpi.first.math.controller.ArmFeedforward;
 
 public class ToohardTurretConstants {
-    static final boolean FOC_ENABLED = true;
-
     private static final int
             MOTOR_ID = 0,
             ENCODER_ID = 0;
