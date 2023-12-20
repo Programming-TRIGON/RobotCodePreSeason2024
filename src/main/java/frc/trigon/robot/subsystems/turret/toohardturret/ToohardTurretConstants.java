@@ -65,5 +65,8 @@ public class ToohardTurretConstants {
         config.MagnetSensor.SensorDirection = ENCODER_DIRECTION_VALUE;
         config.MagnetSensor.AbsoluteSensorRange = ENCODER_SENSOR_RANGE_VALUE;
         ENCODER.getConfigurator().apply(config);
+
+        ENCODER_POSITION_SIGNAL.setUpdateFrequency(100);
+        ENCODER.optimizeBusUtilization();
     }
 }

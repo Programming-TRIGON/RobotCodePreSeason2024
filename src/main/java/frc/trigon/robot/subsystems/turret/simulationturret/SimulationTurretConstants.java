@@ -1,6 +1,5 @@
 package frc.trigon.robot.subsystems.turret.simulationturret;
 
-import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -15,7 +14,7 @@ public class SimulationTurretConstants {
             MAX_MOTOR_ACCELERATION = 3;
     private static final TrapezoidProfile.Constraints CONSTRAINTS = new TrapezoidProfile.Constraints(MAX_MOTOR_VELOCITY, MAX_MOTOR_ACCELERATION);
     private static final int MOTOR_AMOUNT = 1;
-    private static final DCMotor MOTOR_GEARBOX = DCMotor.getFalcon500(MOTOR_AMOUNT);
+    private static final DCMotor MOTOR_GEARBOX = DCMotor.getFalcon500Foc(MOTOR_AMOUNT);
     private static final double GEAR_RATIO = 100;
     private static final double MOMENT_OF_INERTIA = 0.003;
     static final DCMotorSim MOTOR = new DCMotorSim(

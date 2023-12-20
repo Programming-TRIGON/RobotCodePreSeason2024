@@ -45,6 +45,6 @@ public class RobotContainer {
         roller.setDefaultCommand(RollerCommands.getFullStopCommand());
         controller.a().whileTrue(RollerCommands.getFullOpeningCommand());
 
-        turret.setDefaultCommand(TurretCommands.getSetMotorPowerFromPositionCommand(new Pose2d(0, 0, Rotation2d.fromDegrees(0))));
+        turret.setDefaultCommand(TurretCommands.getAlignToHubCommand(() -> new Pose2d(0, 0, Rotation2d.fromDegrees(0))));
     }
 }
