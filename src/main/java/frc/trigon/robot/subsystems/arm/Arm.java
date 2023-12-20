@@ -35,21 +35,21 @@ public class Arm extends SubsystemBase {
     private Arm() {
     }
 
-    public Command getSetTargetArmPositionCommand(ArmConstants.ArmState targetState) {
+    public Command getSetTargetArmStateCommand(ArmConstants.ArmState targetState) {
         return new DeferredCommand(
-                () -> getSetTargetArmPositionCommand(targetState.elevatorPosition, targetState.angle, 100, 100),
+                () -> getSetTargetArmStateCommand(targetState.elevatorPosition, targetState.angle, 100, 100),
                 Set.of(this)
         );
     }
 
-    public Command getSetTargetArmPositionCommand(ArmConstants.ArmState targetState, double angleSpeedPercentage, double elevatorSpeedPercentage) {
+    public Command getSetTargetArmStateCommand(ArmConstants.ArmState targetState, double angleSpeedPercentage, double elevatorSpeedPercentage) {
         return new DeferredCommand(
-                () -> getSetTargetArmPositionCommand(targetState.elevatorPosition, targetState.angle, angleSpeedPercentage, elevatorSpeedPercentage),
+                () -> getSetTargetArmStateCommand(targetState.elevatorPosition, targetState.angle, angleSpeedPercentage, elevatorSpeedPercentage),
                 Set.of(this)
         );
     }
 
-    public Command getSetTargetArmPositionCommand(double elevatorPosition, Rotation2d angle, double angleSpeedPercentage, double elevatorSpeedPercentage) {
+    public Command getSetTargetArmStateCommand(double elevatorPosition, Rotation2d angle, double angleSpeedPercentage, double elevatorSpeedPercentage) {
         return new DeferredCommand(
                 () -> getCurrentSetTargetStateCommand(elevatorPosition, angle, angleSpeedPercentage, elevatorSpeedPercentage),
                 Set.of(this)
