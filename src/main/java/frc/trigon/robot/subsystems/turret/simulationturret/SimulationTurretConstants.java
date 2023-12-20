@@ -9,7 +9,7 @@ public class SimulationTurretConstants extends TurretIO {
     private static final int MOTOR_AMOUNT = 1;
     private static final DCMotor MOTOR_GEARBOX = DCMotor.getFalcon500Foc(MOTOR_AMOUNT);
     private static final double MOMENT_OF_INERTIA = 0.003;
-    private static final double GEAR_RATIO = 12.8;
+    private static final double GEAR_RATIO = 100;
 
     static final DCMotorSim MOTOR = new DCMotorSim(
             MOTOR_GEARBOX,

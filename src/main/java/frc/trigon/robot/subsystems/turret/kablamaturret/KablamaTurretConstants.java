@@ -21,6 +21,10 @@ public class KablamaTurretConstants {
     private static final SensorDirectionValue ENCODER_DIRECTION = SensorDirectionValue.CounterClockwise_Positive;
     private static final double ENCODER_OFFSET = 0;
     private static final double
+            MOTION_MAGIC_VELOCITY = 80,
+            MOTION_MAGIC_ACCELERATION = 160,
+            MOTION_MAGIC_JERK = 1600;
+    private static final double
             P = 1,
             I = 0,
             D = 0,
@@ -51,6 +55,9 @@ public class KablamaTurretConstants {
         config.Slot0.kS = KS;
         config.Slot0.kV = KV;
         config.Feedback.FeedbackRemoteSensorID = ENCODER_ID;
+        config.MotionMagic.MotionMagicCruiseVelocity = MOTION_MAGIC_VELOCITY;
+        config.MotionMagic.MotionMagicAcceleration = MOTION_MAGIC_ACCELERATION;
+        config.MotionMagic.MotionMagicJerk = MOTION_MAGIC_JERK;
         MOTOR.getConfigurator().apply(config);
     }
 

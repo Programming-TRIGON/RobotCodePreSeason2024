@@ -1,6 +1,6 @@
 package frc.trigon.robot.subsystems.turret.kablamaturret;
 
-import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.trigon.robot.subsystems.turret.TurretIO;
@@ -8,7 +8,7 @@ import frc.trigon.robot.subsystems.turret.TurretInputsAutoLogged;
 
 public class KablamaTurretIO extends TurretIO {
     private final TalonFX motor = KablamaTurretConstants.MOTOR;
-    private final PositionVoltage PositionVoltageRequest = new PositionVoltage(0);
+    private final MotionMagicVoltage PositionVoltageRequest = new MotionMagicVoltage(0).withSlot(0);
 
     @Override
     protected void updateInputs(TurretInputsAutoLogged inputs) {
