@@ -20,7 +20,7 @@ public class ToohardTurretIO extends TurretIO {
     }
 
     @Override
-    protected void setTargetAnglePosition(Rotation2d targetAngle) {
+    protected void setTargetAngle(Rotation2d targetAngle) {
         motor.setControl(positionRequest.withPosition(targetAngle.getDegrees()));
     }
 }

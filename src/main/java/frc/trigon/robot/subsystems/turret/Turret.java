@@ -28,11 +28,11 @@ public class Turret extends SubsystemBase {
         Rotation2d targetAngle = calculateAngleToHub(robotPosition);
         if (Math.abs(targetAngle.getDegrees() - robotPosition.getRotation().getDegrees()) > TurretConstants.TOLERANCE_DEGREES) {
             if (isTargetAngleOverLimit(targetAngle)) {
-                turretIO.setTargetAnglePosition(targetAngle.minus(Rotation2d.fromDegrees(360)));
+                turretIO.setTargetAngle(targetAngle.minus(Rotation2d.fromDegrees(360)));
             } else if (isTargetAngleUnderLimit(targetAngle)) {
-                turretIO.setTargetAnglePosition(targetAngle.plus(Rotation2d.fromDegrees(360)));
+                turretIO.setTargetAngle(targetAngle.plus(Rotation2d.fromDegrees(360)));
             } else {
-                turretIO.setTargetAnglePosition(targetAngle);
+                turretIO.setTargetAngle(targetAngle);
             }
         }
     }

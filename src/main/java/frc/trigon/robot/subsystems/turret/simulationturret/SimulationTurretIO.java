@@ -23,7 +23,7 @@ public class SimulationTurretIO extends TurretIO {
     }
 
     @Override
-    protected void setTargetAnglePosition(Rotation2d targetAngle) {
+    protected void setTargetAngle(Rotation2d targetAngle) {
         setMotorVoltageFromPower(SimulationTurretConstants.PID_CONTROLLER.calculate(targetAngle.getDegrees()));
     }
 
