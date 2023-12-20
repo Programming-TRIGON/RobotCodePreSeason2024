@@ -32,16 +32,16 @@ public class ToohardTurretConstants {
             KG = 0,
             KV = 0,
             KA = 0;
-    static final ArmFeedforward FEEDFORWARD = new ArmFeedforward(KS, KG, KV, KA);
     static final TalonFX MOTOR = new TalonFX(MOTOR_ID);
     static final CANcoder ENCODER = new CANcoder(ENCODER_ID);
+
     static final StatusSignal<Double>
             ENCODER_POSITION_SIGNAL = ENCODER.getPosition(),
             ENCODER_VELOCITY_SIGNAL = ENCODER.getVelocity();
 
     static {
-        configureMotor();
         configureEncoder();
+        configureMotor();
     }
 
     private static void configureMotor() {
@@ -57,7 +57,7 @@ public class ToohardTurretConstants {
         config.Slot0.kG = KG;
         config.Slot0.kV = KV;
         config.Slot0.kA = KA;
-        config.DifferentialSensors.DifferentialTalonFXSensorID = ENCODER_ID;
+        config.Feedback.FeedbackRemoteSensorID = ENCODER_ID;
         MOTOR.getConfigurator().apply(config);
     }
 

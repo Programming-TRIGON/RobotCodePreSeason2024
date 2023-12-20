@@ -24,12 +24,12 @@ public class Turret extends SubsystemBase {
         Logger.processInputs("Turret", turretInputs);
     }
 
-    void setMotorAngleToHub(Pose2d robotPosition) {
+    void alignToHub(Pose2d robotPosition) {
         Rotation2d targetAngle = calculateAngleToHub(robotPosition);
-        if (Math.abs(targetAngle.getDegrees() - robotPosition.getRotation().getDegrees()) > TurretConstants.TOLERANCE) {
-            if (targetAngle.getDegrees() > 200) {
+        if (Math.abs(targetAngle.getDegrees() - robotPosition.getRotation().getDegrees()) > TurretConstants.TOLERANCE_DEGREES) {
+            if (isTargetAngleOverLimit(targetAngle)) {
                 turretIO.setTargetAnglePosition(targetAngle.minus(Rotation2d.fromDegrees(360)));
-            } else if (targetAngle.getDegrees() < -200) {
+            } else if (isTargetAngleUnderLimit(targetAngle)) {
                 turretIO.setTargetAnglePosition(targetAngle.plus(Rotation2d.fromDegrees(360)));
             } else {
                 turretIO.setTargetAnglePosition(targetAngle);
@@ -40,8 +40,17 @@ public class Turret extends SubsystemBase {
     Rotation2d calculateAngleToHub(Pose2d robotPosition) {
         double
                 yDistance = Math.abs(robotPosition.getY() - TurretConstants.HUB_POSITION.getY()),
-                xDistance = Math.abs(robotPosition.getX() - TurretConstants.HUB_POSITION.getX());
-        return Rotation2d.fromRadians(Math.atan(yDistance / xDistance));
+                xDistance = Math.abs(robotPosition.getX() - TurretConstants.HUB_POSITION.getX()),
+                targetAngle = Math.atan2(yDistance, xDistance);
+        return Rotation2d.fromRadians(targetAngle + robotPosition.getRotation().getDegrees());
+    }
+
+    private static boolean isTargetAngleOverLimit(Rotation2d targetAngle) {
+        return targetAngle.getDegrees() > 200;
+    }
+
+    private static boolean isTargetAngleUnderLimit(Rotation2d targetAngle) {
+        return targetAngle.getDegrees() < -200;
     }
 }
 
