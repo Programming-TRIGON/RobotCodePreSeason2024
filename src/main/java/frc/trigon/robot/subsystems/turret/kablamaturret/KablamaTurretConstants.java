@@ -24,10 +24,10 @@ public class KablamaTurretConstants {
             P = 1,
             I = 0,
             D = 0,
-            A = 0,
-            G = 1,
-            S = 0,
-            V = 0;
+            KA = 0,
+            KG = 1,
+            KS = 0,
+            KV = 0;
     private static final CANcoder ENCODER = new CANcoder(ENCODER_ID);
     static final TalonFX MOTOR = new TalonFX(MOTOR_ID);
     static final StatusSignal<Double> TURRET_POSITION_SIGNAL = ENCODER.getPosition();
@@ -46,11 +46,11 @@ public class KablamaTurretConstants {
         config.Slot0.kP = P;
         config.Slot0.kI = I;
         config.Slot0.kD = D;
-        config.Slot0.kA = A;
-        config.Slot0.kG = G;
-        config.Slot0.kS = S;
-        config.Slot0.kV = V;
-        config.DifferentialSensors.DifferentialRemoteSensorID = ENCODER_ID;
+        config.Slot0.kA = KA;
+        config.Slot0.kG = KG;
+        config.Slot0.kS = KS;
+        config.Slot0.kV = KV;
+        config.Feedback.FeedbackRemoteSensorID = ENCODER_ID;
         MOTOR.getConfigurator().apply(config);
     }
 
