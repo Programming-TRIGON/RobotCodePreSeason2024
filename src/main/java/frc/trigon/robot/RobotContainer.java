@@ -18,11 +18,6 @@ import frc.trigon.robot.subsystems.turret.Turret;
 import frc.trigon.robot.subsystems.turret.TurretCommands;
 
 public class RobotContainer {
-    private final Arm arm = Arm.getInstance();
-    private final Roller roller = Roller.getInstance();
-    private final Turret turret = Turret.getInstance();
-    private final CommandXboxController controller = new CommandXboxController(0);
-
     public RobotContainer() {
         configureBindings();
     }
@@ -35,16 +30,6 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-        arm.setDefaultCommand(ArmCommands.getSetTargetArmStateCommand(ArmConstants.ArmState.DEFAULT));
-        controller.b().whileTrue(ArmCommands.getSetTargetArmStateCommand(ArmConstants.ArmState.TAKE_GROUND_CONE));
-        controller.x().whileTrue(ArmCommands.getSetTargetArmStateCommand(ArmConstants.ArmState.PLACE_HIGH_CONE));
-        controller.y().whileTrue(ArmCommands.getSetTargetArmStateCommand(ArmConstants.ArmState.PLACE_LOW_CONE));
-        controller.rightBumper().whileTrue(ArmCommands.getSetTargetArmStateCommand(ArmConstants.ArmState.PLACE_MEDIUM_CONE));
-//        controller.a().whileTrue(ArmCommands.getSetTargetArmStateCommand(ArmConstants.ArmState.TAKE_HIGH_CONE));
 
-        roller.setDefaultCommand(RollerCommands.getFullStopCommand());
-        controller.a().whileTrue(RollerCommands.getFullOpeningCommand());
-
-        turret.setDefaultCommand(TurretCommands.getAlignToHubCommand(() -> new Pose2d(0, 0, Rotation2d.fromDegrees(0))));
     }
 }
