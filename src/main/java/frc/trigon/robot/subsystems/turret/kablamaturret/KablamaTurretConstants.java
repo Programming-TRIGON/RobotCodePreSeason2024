@@ -34,7 +34,10 @@ public class KablamaTurretConstants {
             KV = 0;
     private static final CANcoder ENCODER = new CANcoder(ENCODER_ID);
     static final TalonFX MOTOR = new TalonFX(MOTOR_ID);
-    static final StatusSignal<Double> TURRET_POSITION_SIGNAL = ENCODER.getPosition();
+
+    static final StatusSignal<Double>
+            TURRET_POSITION_SIGNAL = ENCODER.getPosition(),
+            TURRET_VELOCITY_SIGNAL = ENCODER.getVelocity();
 
     static {
         configureMotor();
@@ -47,6 +50,7 @@ public class KablamaTurretConstants {
         config.MotorOutput.NeutralMode = NEUTRAL_MODE_VALUE;
         config.Audio.BeepOnConfig = false;
         config.Audio.BeepOnBoot = false;
+
         config.Slot0.kP = P;
         config.Slot0.kI = I;
         config.Slot0.kD = D;
@@ -55,10 +59,14 @@ public class KablamaTurretConstants {
         config.Slot0.kS = KS;
         config.Slot0.kV = KV;
         config.Feedback.FeedbackRemoteSensorID = ENCODER_ID;
+        config.Feedback.FeedbackRotorOffset = ENCODER_OFFSET;
+
         config.MotionMagic.MotionMagicCruiseVelocity = MOTION_MAGIC_VELOCITY;
         config.MotionMagic.MotionMagicAcceleration = MOTION_MAGIC_ACCELERATION;
         config.MotionMagic.MotionMagicJerk = MOTION_MAGIC_JERK;
+
         MOTOR.getConfigurator().apply(config);
+        MOTOR.optimizeBusUtilization();
     }
 
     private static void configureEncoder() {
@@ -69,6 +77,7 @@ public class KablamaTurretConstants {
         ENCODER.getConfigurator().apply(config);
 
         TURRET_POSITION_SIGNAL.setUpdateFrequency(100);
+        TURRET_VELOCITY_SIGNAL.setUpdateFrequency(100);
         ENCODER.optimizeBusUtilization();
     }
 }

@@ -9,18 +9,18 @@ import frc.trigon.robot.subsystems.turret.TurretInputsAutoLogged;
 
 public class KablamaTurretIO extends TurretIO {
     private final TalonFX motor = KablamaTurretConstants.MOTOR;
-    private final MotionMagicVoltage PositionVoltageRequest = new MotionMagicVoltage(0).withSlot(0);
+    private final MotionMagicVoltage PositionVoltageRequest = new MotionMagicVoltage(0).withEnableFOC(KablamaTurretConstants.FOC_ENABLED);
 
     @Override
     protected void updateInputs(TurretInputsAutoLogged inputs) {
         inputs.motorPositionDegrees = getPosition().getDegrees();
-        inputs.motorVelocityDegreesPerSecond = motor.getVelocity().getValue();
-        inputs.motorVoltage = getVelocityDegreesPerSecond();
+        inputs.motorVelocityDegreesPerSecond = getVelocityDegreesPerSecond();
+        inputs.motorVoltage = motor.getMotorVoltage().getValue();
     }
 
     @Override
     protected void setTargetAngle(Rotation2d targetAngle) {
-        motor.setControl(PositionVoltageRequest.withPosition(targetAngle.getDegrees()));
+        motor.setControl(PositionVoltageRequest.withPosition(targetAngle.getRotations()));
     }
 
     @Override
@@ -29,10 +29,10 @@ public class KablamaTurretIO extends TurretIO {
     }
 
     private Rotation2d getPosition() {
-        return Rotation2d.fromRotations(motor.getPosition().refresh().getValue());
+        return Rotation2d.fromRotations(KablamaTurretConstants.TURRET_POSITION_SIGNAL.refresh().getValue());
     }
 
     private double getVelocityDegreesPerSecond() {
-        return Units.rotationsToDegrees(motor.getVelocity().refresh().getValue());
+        return Units.rotationsToDegrees(KablamaTurretConstants.TURRET_VELOCITY_SIGNAL.refresh().getValue());
     }
 }

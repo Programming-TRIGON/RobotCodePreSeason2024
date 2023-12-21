@@ -34,7 +34,7 @@ public class Turret extends SubsystemBase {
         this.robotY = robotPose.getY();
         Rotation2d targetAngle = calculateTargetAngle(robotPose);
         Rotation2d targetAngleAfterLimitCheck = limitAngle(targetAngle);
-        turretIO.setTargetAngle(calculateError(targetAngleAfterLimitCheck.getDegrees()));
+        turretIO.setTargetAngle((targetAngleAfterLimitCheck));
     }
 
     void stop() {
@@ -54,10 +54,6 @@ public class Turret extends SubsystemBase {
         if (targetAngle.getDegrees() < -TurretConstants.DEGREES_LIMIT)
             return Rotation2d.fromDegrees(targetAngle.getDegrees() + 360);
         return targetAngle;
-    }
-
-    private Rotation2d calculateError(double targetAngleDegrees) {
-        return Rotation2d.fromDegrees(targetAngleDegrees - turretInputs.motorPositionDegrees);
     }
 
     private void updateMechanism() {
