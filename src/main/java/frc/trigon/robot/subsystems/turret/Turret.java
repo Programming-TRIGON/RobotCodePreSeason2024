@@ -37,11 +37,10 @@ public class Turret extends SubsystemBase {
     }
 
     private static Rotation2d limitAngle(Rotation2d targetAngle) {
-        if (isOverMaximumAngle(targetAngle)) {
+        if (isOverMaximumAngle(targetAngle))
             return targetAngle.minus(Rotation2d.fromDegrees(360));
-        } else if (isUnderMinimumAngle(targetAngle)) {
+        else if (isUnderMinimumAngle(targetAngle))
             return targetAngle.plus(Rotation2d.fromDegrees(360));
-        }
         return targetAngle;
     }
 
