@@ -9,10 +9,6 @@ import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 public class SimulationTurretConstants {
     static final double VOLTAGE_COMPENSATION_SATURATION = 12;
 
-    private static final double
-            MAX_MOTOR_VELOCITY = 200,
-            MAX_MOTOR_ACCELERATION = 3;
-    private static final TrapezoidProfile.Constraints CONSTRAINTS = new TrapezoidProfile.Constraints(MAX_MOTOR_VELOCITY, MAX_MOTOR_ACCELERATION);
     private static final int MOTOR_AMOUNT = 1;
     private static final DCMotor MOTOR_GEARBOX = DCMotor.getFalcon500Foc(MOTOR_AMOUNT);
     private static final double GEAR_RATIO = 100;
@@ -22,6 +18,11 @@ public class SimulationTurretConstants {
             GEAR_RATIO,
             MOMENT_OF_INERTIA
     );
+
+    private static final double
+            MAX_MOTOR_VELOCITY = 5,
+            MAX_MOTOR_ACCELERATION = 3;
+    private static final TrapezoidProfile.Constraints CONSTRAINTS = new TrapezoidProfile.Constraints(MAX_MOTOR_VELOCITY, MAX_MOTOR_ACCELERATION);
 
     private static final double
             P = 0,

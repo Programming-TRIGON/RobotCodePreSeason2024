@@ -5,13 +5,10 @@ import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
-import com.ctre.phoenix6.signals.InvertedValue;
-import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.ctre.phoenix6.signals.SensorDirectionValue;
-import edu.wpi.first.math.controller.ArmFeedforward;
+import com.ctre.phoenix6.signals.*;
 
 public class ToohardTurretConstants {
+    static final boolean IS_FOC_ENABLED = true;
     private static final int
             MOTOR_ID = 0,
             ENCODER_ID = 0;
@@ -20,6 +17,7 @@ public class ToohardTurretConstants {
     private static final double ENCODER_OFFSET = 0;
     private static final SensorDirectionValue ENCODER_DIRECTION_VALUE = SensorDirectionValue.Clockwise_Positive;
     private static final AbsoluteSensorRangeValue ENCODER_SENSOR_RANGE_VALUE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
+    private static final FeedbackSensorSourceValue ENCODER_SENSOR_SOURCE_VALUE = FeedbackSensorSourceValue.RemoteCANcoder;
     private static final double
             P = 0,
             I = 0,
@@ -34,8 +32,12 @@ public class ToohardTurretConstants {
     static final CANcoder ENCODER = new CANcoder(ENCODER_ID);
 
     static final StatusSignal<Double>
-            ENCODER_POSITION_SIGNAL = ENCODER.getPosition(),
-            ENCODER_VELOCITY_SIGNAL = ENCODER.getVelocity();
+            ENCODER_POSITION_SIGNAL_ANGLE = ENCODER.getPosition(),
+            ENCODER_VELOCITY_SIGNAL_ANGLE = ENCODER.getVelocity();
+    static final double
+            MOTION_MAGIC_JERK = 2,
+            MOTION_MAGIC_ACCELERATION = 3,
+            MOTION_MAGIC_CRUISE_VELOCITY = 5;
 
     static {
         configureEncoder();
@@ -48,6 +50,7 @@ public class ToohardTurretConstants {
         config.MotorOutput.NeutralMode = NEUTRAL_MODE_VALUE;
         config.Audio.BeepOnBoot = false;
         config.Audio.BeepOnConfig = false;
+
         config.Slot0.kP = P;
         config.Slot0.kI = I;
         config.Slot0.kD = D;
@@ -55,8 +58,17 @@ public class ToohardTurretConstants {
         config.Slot0.kG = KG;
         config.Slot0.kV = KV;
         config.Slot0.kA = KA;
+
         config.Feedback.FeedbackRemoteSensorID = ENCODER_ID;
+        config.Feedback.FeedbackRotorOffset = ENCODER_OFFSET;
+        config.Feedback.FeedbackSensorSource = ENCODER_SENSOR_SOURCE_VALUE;
+
+        config.MotionMagic.MotionMagicJerk = MOTION_MAGIC_JERK;
+        config.MotionMagic.MotionMagicAcceleration = MOTION_MAGIC_ACCELERATION;
+        config.MotionMagic.MotionMagicCruiseVelocity = MOTION_MAGIC_CRUISE_VELOCITY;
+
         MOTOR.getConfigurator().apply(config);
+        MOTOR.optimizeBusUtilization();
     }
 
     private static void configureEncoder() {
@@ -66,7 +78,7 @@ public class ToohardTurretConstants {
         config.MagnetSensor.AbsoluteSensorRange = ENCODER_SENSOR_RANGE_VALUE;
         ENCODER.getConfigurator().apply(config);
 
-        ENCODER_POSITION_SIGNAL.setUpdateFrequency(100);
+        ENCODER_POSITION_SIGNAL_ANGLE.setUpdateFrequency(ENCODER_VELOCITY_SIGNAL_ANGLE.refresh().getValue());
         ENCODER.optimizeBusUtilization();
     }
 }

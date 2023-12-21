@@ -21,6 +21,9 @@ public class TurretIO {
     protected void setTargetAngle(Rotation2d targetAngle) {
     }
 
+    protected void stop() {
+    }
+
     @AutoLog
     protected static class TurretInputs {
         public double motorVoltage = 0;

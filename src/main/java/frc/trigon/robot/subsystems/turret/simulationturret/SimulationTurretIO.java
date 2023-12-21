@@ -24,10 +24,18 @@ public class SimulationTurretIO extends TurretIO {
 
     @Override
     protected void setTargetAngle(Rotation2d targetAngle) {
-        double
-                pidOutput = SimulationTurretConstants.PROFILED_PID_CONTROLLER.calculate(targetAngle.getDegrees()),
-                feedforward = SimulationTurretConstants.FEEDFORWARD.calculate(motor.getAngularPositionRad(), motor.getAngularVelocityRadPerSec(), SimulationTurretConstants.PROFILED_PID_CONTROLLER.getGoal().velocity);
-        setMotorVoltageFromPower(pidOutput + feedforward);
+        setMotorVoltageFromPower(calculateMotorPower(targetAngle));
+    }
+
+    @Override
+    protected void stop() {
+        setMotorVoltageFromPower(0);
+    }
+
+    private double calculateMotorPower(Rotation2d targetAngle) {
+        double pidOutput = SimulationTurretConstants.PROFILED_PID_CONTROLLER.calculate(targetAngle.getDegrees());
+        double feedforward = SimulationTurretConstants.FEEDFORWARD.calculate(motor.getAngularPositionRad(), motor.getAngularVelocityRadPerSec(), SimulationTurretConstants.PROFILED_PID_CONTROLLER.getGoal().velocity);
+        return pidOutput + feedforward;
     }
 
     private void setMotorVoltageFromPower(double power) {
