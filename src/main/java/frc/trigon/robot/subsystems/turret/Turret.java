@@ -23,8 +23,7 @@ public class Turret extends SubsystemBase {
     public void periodic() {
         turretIO.updateInputs(turretInputs);
         Logger.processInputs("Turret", turretInputs);
-        TurretConstants.TURRET_LIGAMENT.setAngle(turretInputs.motorPositionDegrees);
-        Logger.recordOutput("TurretMechanism", TurretConstants.TURRET_MECHANISM);
+        updateMechanism();
     }
 
     void alignTurretToHub(Pose2d robotPose) {
@@ -54,5 +53,10 @@ public class Turret extends SubsystemBase {
 
     private Rotation2d calculateError(double targetAngleDegrees) {
         return Rotation2d.fromDegrees(targetAngleDegrees - turretInputs.motorPositionDegrees);
+    }
+
+    private void updateMechanism() {
+        TurretConstants.TURRET_LIGAMENT.setAngle(turretInputs.motorPositionDegrees);
+        Logger.recordOutput("TurretMechanism", TurretConstants.TURRET_MECHANISM);
     }
 }

@@ -1,8 +1,9 @@
 package frc.trigon.robot.subsystems.turret.simulationturret;
 
-import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import frc.trigon.robot.subsystems.turret.TurretIO;
 
@@ -11,7 +12,6 @@ public class SimulationTurretConstants extends TurretIO {
     private static final DCMotor MOTOR_GEARBOX = DCMotor.getFalcon500Foc(MOTOR_AMOUNT);
     private static final double MOMENT_OF_INERTIA = 0.003;
     private static final double GEAR_RATIO = 100;
-
     static final DCMotorSim MOTOR = new DCMotorSim(
             MOTOR_GEARBOX,
             GEAR_RATIO,
@@ -25,6 +25,12 @@ public class SimulationTurretConstants extends TurretIO {
             KS = 0,
             KV = 0,
             KA = 0;
-    static final PIDController PID_CONTROLLER = new PIDController(P, I, D);
+    private static final double
+            MAX_MOTOR_VELOCITY = 500,
+            MAX_MOTOR_ACCELERATION = 600;
+    private static final TrapezoidProfile.Constraints CONSTRAINTS = new TrapezoidProfile.Constraints(
+            MAX_MOTOR_VELOCITY, MAX_MOTOR_ACCELERATION
+    );
     static final SimpleMotorFeedforward FEEDFORWARD = new SimpleMotorFeedforward(KS, KV, KA);
+    static final ProfiledPIDController PROFILED_PID_CONTROLLER = new ProfiledPIDController(P, I, D, CONSTRAINTS);
 }
