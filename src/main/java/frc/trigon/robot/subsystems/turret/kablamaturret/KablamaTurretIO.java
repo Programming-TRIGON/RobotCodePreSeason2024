@@ -15,7 +15,7 @@ public class KablamaTurretIO extends TurretIO {
     protected void updateInputs(TurretInputsAutoLogged inputs) {
         inputs.motorPositionDegrees = getPosition().getDegrees();
         inputs.motorVelocityDegreesPerSecond = getVelocityDegreesPerSecond();
-        inputs.motorVoltage = motor.getMotorVoltage().getValue();
+        inputs.motorVoltage = motor.getMotorVoltage().refresh().getValue();
     }
 
     @Override

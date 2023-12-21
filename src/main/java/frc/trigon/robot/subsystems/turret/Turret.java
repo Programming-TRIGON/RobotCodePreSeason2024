@@ -11,9 +11,6 @@ public class Turret extends SubsystemBase {
     private final static Turret INSTANCE = new Turret();
     private final TurretIO turretIO = TurretIO.generateIO();
     private final TurretInputsAutoLogged turretInputs = new TurretInputsAutoLogged();
-    private double
-            robotX = 1,
-            robotY = 1;
 
     public static Turret getInstance() {
         return INSTANCE;
@@ -30,10 +27,9 @@ public class Turret extends SubsystemBase {
     }
 
     void alignTurretToHub(Pose2d robotPose) {
-        this.robotX = robotPose.getX();
-        this.robotY = robotPose.getY();
         Rotation2d targetAngle = calculateTargetAngle(robotPose);
         Rotation2d targetAngleAfterLimitCheck = limitAngle(targetAngle);
+        TurretConstants.TARGET_ANGLE_LIGAMENT.setAngle(targetAngleAfterLimitCheck);
         turretIO.setTargetAngle((targetAngleAfterLimitCheck));
     }
 
@@ -57,7 +53,6 @@ public class Turret extends SubsystemBase {
     }
 
     private void updateMechanism() {
-        TurretConstants.TURRET_ROOT.setPosition(robotX, robotY);
         TurretConstants.TURRET_LIGAMENT.setAngle(turretInputs.motorPositionDegrees);
         Logger.recordOutput("TurretMechanism", TurretConstants.TURRET_MECHANISM);
     }

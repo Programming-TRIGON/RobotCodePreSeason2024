@@ -15,6 +15,7 @@ public class SimulationTurretIO extends TurretIO {
     @Override
     protected void updateInputs(TurretInputsAutoLogged inputs) {
         motor.update(RobotConstants.PERIODIC_TIME_SECONDS);
+
         inputs.motorPositionDegrees = Units.radiansToDegrees(motor.getAngularPositionRad());
         inputs.motorVelocityDegreesPerSecond = Units.radiansToDegrees(motor.getAngularVelocityRadPerSec());
         inputs.motorVoltage = voltage;
@@ -22,13 +23,11 @@ public class SimulationTurretIO extends TurretIO {
 
     @Override
     protected void setTargetAngle(Rotation2d targetAngle) {
-        this.voltage = calculateTargetAngle(targetAngle);
         setTargetVoltage(calculateTargetAngle(targetAngle));
     }
 
     @Override
     protected void stop() {
-        this.voltage = 0;
         setTargetVoltage(0);
     }
 
@@ -38,12 +37,13 @@ public class SimulationTurretIO extends TurretIO {
                 -SimulationTurretConstants.VOLTAGE_COMPENSATION_SATURATION,
                 SimulationTurretConstants.VOLTAGE_COMPENSATION_SATURATION
         );
+        this.voltage = compensatedVoltage;
         motor.setInputVoltage(compensatedVoltage);
     }
 
     private double calculateTargetAngle(Rotation2d targetAngle) {
-        double pidOutput = SimulationTurretConstants.PROFILED_PID_CONTROLLER.calculate((targetAngle.getDegrees()));
-        double feedforwardOutput = SimulationTurretConstants.FEEDFORWARD.calculate(motor.getAngularVelocityRadPerSec());
+        double pidOutput = SimulationTurretConstants.PROFILED_PID_CONTROLLER.calculate((targetAngle.getRotations()));
+        double feedforwardOutput = SimulationTurretConstants.FEEDFORWARD.calculate(Units.radiansToRotations(motor.getAngularVelocityRadPerSec()));
         return pidOutput + feedforwardOutput;
     }
 }
