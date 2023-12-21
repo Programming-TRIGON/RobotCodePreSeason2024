@@ -27,5 +27,8 @@ public class TurretIO {
     @AutoLog
     protected static class TurretInputs {
         public double motorPositionDegrees = 0;
+
+        public double motorVelocityDegreesPerSecond = 0;
+        public double motorVoltage = 0;
     }
 }

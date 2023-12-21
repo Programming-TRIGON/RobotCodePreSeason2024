@@ -1,6 +1,7 @@
 package frc.trigon.robot.subsystems.turret.simulationturret;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import frc.trigon.robot.subsystems.turret.TurretIO;
@@ -20,6 +21,10 @@ public class SimulationTurretConstants extends TurretIO {
     private static final double
             P = 1,
             I = 0,
-            D = 0;
+            D = 0,
+            KS = 0,
+            KV = 0,
+            KA = 0;
     static final PIDController PID_CONTROLLER = new PIDController(P, I, D);
+    static final SimpleMotorFeedforward FEEDFORWARD = new SimpleMotorFeedforward(KS, KV, KA);
 }
