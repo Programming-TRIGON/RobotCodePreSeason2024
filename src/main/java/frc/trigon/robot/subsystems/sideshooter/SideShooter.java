@@ -18,7 +18,9 @@ public class SideShooter extends SubsystemBase {
 
     private final VoltageOut shootingVoltageRequest = new VoltageOut(0, SideShooterConstants.FOC_ENABLED, false);
 
-    private TrapezoidProfile angleMotorProfile = null;
+    private TrapezoidProfile
+            angleMotorProfile = null;
+
     private double lastAngleMotorProfileGenerationTime;
 
     public static SideShooter getInstance() {

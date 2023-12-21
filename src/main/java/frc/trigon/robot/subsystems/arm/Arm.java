@@ -1,6 +1,7 @@
 package frc.trigon.robot.subsystems.arm;
 
 
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -10,12 +11,18 @@ import frc.trigon.robot.utilities.Conversions;
 
 public class Arm extends SubsystemBase {
 
-    private final CANSparkMax MASTER_ANGLE_MOTOR = ArmConstants.MASTER_ELEVATOR_MOTOR;
-    private final CANSparkMax FOLLOWER_ANGLE_MOTOR = ArmConstants.FOLLOWER_ELEVATOR_MOTOR;
+    private final CANSparkMax
+            MASTER_ELEVATOR_MOTOR = ArmConstants.MASTER_ELEVATOR_MOTOR,
+            FOLLOWER_ELEVATOR_MOTOR = ArmConstants.MASTER_ELEVATOR_MOTOR,
+            MASTER_ANGLE_MOTOR = ArmConstants.MASTER_ELEVATOR_MOTOR,
+            FOLLOWER_ANGLE_MOTOR = ArmConstants.FOLLOWER_ELEVATOR_MOTOR;
+    private final TalonSRX ELEVATOR_TALON_SRX_ENCODER = ArmConstants.ELEVATOR_TALON_SRX_ENCODER;
     private final static Arm INSTANCE = new Arm();
 
-    private TrapezoidProfile angleMotorProfile = null;
-    private double lastAngleMotorProfileGenerationTime;
+    private TrapezoidProfile
+            elevatorMotorProfile = null,
+            angleMotorProfile = null;
+    private double lastAngleMotorProfileGenerationTime,lastElevatorMotorProfileGenerationTime;
 
     public static Arm getInstance() {
         return INSTANCE;
@@ -23,7 +30,9 @@ public class Arm extends SubsystemBase {
 
     private Arm(){}
 
-    private void generateAngleMotorProfile(Rotation2d targetAngle){
+
+
+    void generateAngleMotorProfile(Rotation2d targetAngle){
         angleMotorProfile = new TrapezoidProfile(
                 ArmConstants.ANGLE_CONSTRAINTS,
                 new TrapezoidProfile.State(targetAngle.getDegrees(),0),
@@ -32,7 +41,7 @@ public class Arm extends SubsystemBase {
         lastAngleMotorProfileGenerationTime  = Timer.getFPGATimestamp();
     }
 
-    private void setTargetAngleFromProfile(){
+    void setTargetAngleFromProfile(){
         if (angleMotorProfile == null){
             stopAngleMotors();
             return;
@@ -55,6 +64,48 @@ public class Arm extends SubsystemBase {
         return pidOutput + feedforward;
     }
 
+    void generateElevatorMotorProfile(Rotation2d targetElevatorPosition){
+        elevatorMotorProfile = new TrapezoidProfile(
+                ArmConstants.ELEVATOR_CONSTRAINTS,
+                new TrapezoidProfile.State(targetElevatorPosition.getDegrees(),0),
+                new TrapezoidProfile.State(getElevatorPositionSecondPerMeter(),getElevatorVelocityRevolutionPerSecond())
+        );
+        lastElevatorMotorProfileGenerationTime = Timer.getFPGATimestamp();
+    }
+
+    void setTargetElevatorFromProfile(){
+        if (elevatorMotorProfile == null) {
+            stopElevatorMotors();
+            return;
+        }
+        MASTER_ELEVATOR_MOTOR.setVoltage(calculateElevatorMotorOutput());
+        FOLLOWER_ELEVATOR_MOTOR.setVoltage(calculateElevatorMotorOutput());
+    }
+
+    private double calculateElevatorMotorOutput(){
+        TrapezoidProfile.State targetState = elevatorMotorProfile.calculate(getElevatorMotorProfileTime());
+        double pidOutput = ArmConstants.ELEVATOR_PID_CONTROLLER.calculate(
+                getElevatorPositionSecondPerMeter(),
+                targetState.position
+        );
+        double feedforward = ArmConstants.ELEVATOR_MOTOR_FEEDFORWARD.calculate(
+                Units.degreesToRadians(targetState.position),
+                Units.degreesToRadians(targetState.velocity)
+        );
+        return pidOutput + feedforward;
+    }
+
+    private double getElevatorMotorProfileTime(){
+        return timer.getFPGATimestamp() - lastElevatorMotorProfileGenerationTime;
+    }
+
+    private double getElevatorPositionSecondPerMeter(){
+        return Conversions.perHundredMsToPerSecond(Conversions.magTicksToRevolutions(ArmConstants.METER_PER_REVOLUTION*ELEVATOR_TALON_SRX_ENCODER.getSelectedSensorPosition()));
+    }
+    private double getElevatorVelocityRevolutionPerSecond(){
+        return Conversions.perHundredMsToPerSecond(Conversions.magTicksToRevolutions(ELEVATOR_TALON_SRX_ENCODER.getSelectedSensorVelocity()));
+    }
+
     private double getAngleMotorProfileTime(){
         return Timer.getFPGATimestamp() - lastAngleMotorProfileGenerationTime;
     }
@@ -70,6 +121,11 @@ public class Arm extends SubsystemBase {
     private void stopAngleMotors(){
         MASTER_ANGLE_MOTOR.stopMotor();
         FOLLOWER_ANGLE_MOTOR.stopMotor();
+    }
+
+    private void stopElevatorMotors(){
+        MASTER_ELEVATOR_MOTOR.stopMotor();
+        FOLLOWER_ELEVATOR_MOTOR.stopMotor();
     }
 }
 

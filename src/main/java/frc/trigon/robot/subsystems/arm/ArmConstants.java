@@ -47,6 +47,7 @@ public class ArmConstants {
     static final CANcoder ANGLE_ENCODER = new CANcoder(ANGLE_ENCODER_ID);
     static final TalonSRX ELEVATOR_TALON_SRX_ENCODER = new TalonSRX(ELEVATOR_TALON_SRX_ENCODER_ID);
     private static final double MAG_ENCODER_OFF_SET = 0;
+    static final double METER_PER_REVOLUTION = 1;
 
     private static final double
             ANGLE_P = 1,
@@ -61,8 +62,12 @@ public class ArmConstants {
 
     private static final double
             MAX_ANGLE_VELOCITY = 600,
-            MAX_ANGLE_ACCELERATION = 500;
-    static final TrapezoidProfile.Constraints ANGLE_CONSTRAINTS = new TrapezoidProfile.Constraints(MAX_ANGLE_VELOCITY,MAX_ANGLE_ACCELERATION);
+            MAX_ANGLE_ACCELERATION = 500,
+            MAX_ELEVATOR_VELOCITY = 600,
+            MAX_ELEVATOR_ACCELERATION = 500;
+    static final TrapezoidProfile.Constraints
+            ANGLE_CONSTRAINTS = new TrapezoidProfile.Constraints(MAX_ANGLE_VELOCITY,MAX_ANGLE_ACCELERATION),
+            ELEVATOR_CONSTRAINTS = new TrapezoidProfile.Constraints(MAX_ELEVATOR_VELOCITY,MAX_ELEVATOR_ACCELERATION);
     static final StatusSignal<Double> ANGEL_ENCODER_POSITION_SIGNAL = ANGLE_ENCODER.getPosition();
     static final StatusSignal<Double> ANGLE_ENCODER_VELOCITY_SIGNAL = ANGLE_ENCODER.getVelocity();
 
@@ -70,9 +75,14 @@ public class ArmConstants {
             ANGLE_MOTOR_KS = 0.5990,
             ANGLE_MOTOR_KV = 0.5990,
             ANGLE_MOTOR_KA = 0.5990,
-            ANGLE_MOTOR_KG = 0.5990;
-    static final ArmFeedforward ANGLE_MOTOR_FEEDFORWARD = new ArmFeedforward(ANGLE_MOTOR_KS, ANGLE_MOTOR_KG, ANGLE_MOTOR_KV, ANGLE_MOTOR_KA );
-
+            ANGLE_MOTOR_KG = 0.5990,
+            ELEVATOR_MOTOR_KS = 0.5990,
+            ELEVATOR_MOTOR_KV = 0.5990,
+            ELEVATOR_MOTOR_KA = 0.5990,
+            ELEVATOR_MOTOR_KG = 0.5990;
+    static final ArmFeedforward
+            ANGLE_MOTOR_FEEDFORWARD = new ArmFeedforward(ANGLE_MOTOR_KS, ANGLE_MOTOR_KG, ANGLE_MOTOR_KV, ANGLE_MOTOR_KA ),
+            ELEVATOR_MOTOR_FEEDFORWARD = new ArmFeedforward(ELEVATOR_MOTOR_KS, ELEVATOR_MOTOR_KG, ELEVATOR_MOTOR_KV, ELEVATOR_MOTOR_KA );
     private static void configureMasterAngleMotor() {
         MASTER_ANGLE_MOTOR.restoreFactoryDefaults();
         MASTER_ANGLE_MOTOR.setIdleMode(MASTER_ANGLE_MOTOR_IDLE_MODE);
