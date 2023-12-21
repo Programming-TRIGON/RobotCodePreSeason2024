@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import frc.trigon.robot.constants.RobotConstants;
 import frc.trigon.robot.subsystems.turret.TurretIO;
 import frc.trigon.robot.subsystems.turret.TurretInputsAutoLogged;
+import frc.trigon.robot.utilities.Conversions;
 
 public class SimulationTurretIO extends TurretIO {
     private final DCMotorSim motor = SimulationTurretConstants.MOTOR;
@@ -23,7 +24,7 @@ public class SimulationTurretIO extends TurretIO {
     }
 
     @Override
-    protected void setTargetAngle(Rotation2d targetAngle) {
+    protected void setTargetAngleDegrees(Rotation2d targetAngle) {
         setMotorVoltageFromPower(calculateMotorPower(targetAngle));
     }
 
@@ -33,8 +34,9 @@ public class SimulationTurretIO extends TurretIO {
     }
 
     private double calculateMotorPower(Rotation2d targetAngle) {
-        double pidOutput = SimulationTurretConstants.PROFILED_PID_CONTROLLER.calculate(targetAngle.getDegrees());
-        double feedforward = SimulationTurretConstants.FEEDFORWARD.calculate(motor.getAngularPositionRad(), motor.getAngularVelocityRadPerSec(), SimulationTurretConstants.PROFILED_PID_CONTROLLER.getGoal().velocity);
+        double pidOutput = SimulationTurretConstants.PROFILED_PID_CONTROLLER.calculate(targetAngle.getRotations());
+        double motorVelocityDegrees = Units.radiansToDegrees(motor.getAngularVelocityRadPerSec());
+        double feedforward = SimulationTurretConstants.FEEDFORWARD.calculate(Conversions.degreesToRevolutions(motorVelocityDegrees), SimulationTurretConstants.PROFILED_PID_CONTROLLER.getGoal().velocity);
         return pidOutput + feedforward;
     }
 

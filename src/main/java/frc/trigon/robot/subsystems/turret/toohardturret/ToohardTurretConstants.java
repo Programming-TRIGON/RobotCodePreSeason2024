@@ -8,7 +8,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.*;
 
 public class ToohardTurretConstants {
-    static final boolean IS_FOC_ENABLED = true;
+    static final boolean FOC_ENABLED = true;
     private static final int
             MOTOR_ID = 0,
             ENCODER_ID = 0;
@@ -22,7 +22,6 @@ public class ToohardTurretConstants {
             P = 0,
             I = 0,
             D = 0;
-
     private static final double
             KS = 0,
             KG = 0,
@@ -32,8 +31,9 @@ public class ToohardTurretConstants {
     static final CANcoder ENCODER = new CANcoder(ENCODER_ID);
 
     static final StatusSignal<Double>
-            ENCODER_POSITION_SIGNAL_ANGLE = ENCODER.getPosition(),
-            ENCODER_VELOCITY_SIGNAL_ANGLE = ENCODER.getVelocity();
+            ENCODER_POSITION_SIGNAL_DEGREES = ENCODER.getPosition(),
+            ENCODER_VELOCITY_SIGNAL_DEGREES_PER_SECOND = ENCODER.getVelocity();
+
     static final double
             MOTION_MAGIC_JERK = 2,
             MOTION_MAGIC_ACCELERATION = 3,
@@ -60,7 +60,6 @@ public class ToohardTurretConstants {
         config.Slot0.kA = KA;
 
         config.Feedback.FeedbackRemoteSensorID = ENCODER_ID;
-        config.Feedback.FeedbackRotorOffset = ENCODER_OFFSET;
         config.Feedback.FeedbackSensorSource = ENCODER_SENSOR_SOURCE_VALUE;
 
         config.MotionMagic.MotionMagicJerk = MOTION_MAGIC_JERK;
@@ -78,7 +77,7 @@ public class ToohardTurretConstants {
         config.MagnetSensor.AbsoluteSensorRange = ENCODER_SENSOR_RANGE_VALUE;
         ENCODER.getConfigurator().apply(config);
 
-        ENCODER_POSITION_SIGNAL_ANGLE.setUpdateFrequency(ENCODER_VELOCITY_SIGNAL_ANGLE.refresh().getValue());
+        ENCODER_POSITION_SIGNAL_DEGREES.setUpdateFrequency(ENCODER_VELOCITY_SIGNAL_DEGREES_PER_SECOND.refresh().getValue());
         ENCODER.optimizeBusUtilization();
     }
 }

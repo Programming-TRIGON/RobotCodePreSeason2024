@@ -8,17 +8,17 @@ import frc.trigon.robot.subsystems.turret.TurretInputsAutoLogged;
 
 public class ToohardTurretIO extends TurretIO {
     private final TalonFX motor = ToohardTurretConstants.MOTOR;
-    private final MotionMagicVoltage positionRequest = new MotionMagicVoltage(0).withEnableFOC(ToohardTurretConstants.IS_FOC_ENABLED);
+    private final MotionMagicVoltage positionRequest = new MotionMagicVoltage(0).withEnableFOC(ToohardTurretConstants.FOC_ENABLED);
 
     @Override
     protected void updateInputs(TurretInputsAutoLogged inputs) {
         inputs.motorVoltage = motor.getMotorVoltage().refresh().getValue();
-        inputs.motorAngleDegrees = ToohardTurretConstants.ENCODER_POSITION_SIGNAL_ANGLE.refresh().getValue();
-        inputs.motorVelocityDegreesPerSecond = ToohardTurretConstants.ENCODER_VELOCITY_SIGNAL_ANGLE.refresh().getValue();
+        inputs.motorAngleDegrees = ToohardTurretConstants.ENCODER_POSITION_SIGNAL_DEGREES.refresh().getValue();
+        inputs.motorVelocityDegreesPerSecond = ToohardTurretConstants.ENCODER_VELOCITY_SIGNAL_DEGREES_PER_SECOND.refresh().getValue();
     }
 
     @Override
-    protected void setTargetAngle(Rotation2d targetAngle) {
+    protected void setTargetAngleDegrees(Rotation2d targetAngle) {
         motor.setControl(positionRequest.withPosition(targetAngle.getDegrees()));
     }
 

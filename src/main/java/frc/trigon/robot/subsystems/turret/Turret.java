@@ -25,15 +25,15 @@ public class Turret extends SubsystemBase {
     }
 
     void alignToHub(Pose2d robotPosition) {
-        Rotation2d targetAngle = calculateAngleToHub(robotPosition);
-        turretIO.setTargetAngle(limitAngle(targetAngle));
+        Rotation2d targetAngle = calculateDegreesToHub(robotPosition);
+        turretIO.setTargetAngleDegrees(limitAngle(targetAngle));
     }
 
-    Rotation2d calculateAngleToHub(Pose2d robotPosition) {
+    Rotation2d calculateDegreesToHub(Pose2d robotPosition) {
         double yDistance = Math.abs(robotPosition.getY() - TurretConstants.HUB_POSITION.getY());
         double xDistance = Math.abs(robotPosition.getX() - TurretConstants.HUB_POSITION.getX());
-        double targetAngle = Math.atan2(yDistance, xDistance);
-        return Rotation2d.fromDegrees(targetAngle + robotPosition.getRotation().getDegrees());
+        double targetAngleDegrees = Math.atan2(yDistance, xDistance);
+        return Rotation2d.fromDegrees(targetAngleDegrees + robotPosition.getRotation().getDegrees());
     }
 
     private static Rotation2d limitAngle(Rotation2d targetAngle) {
@@ -41,7 +41,8 @@ public class Turret extends SubsystemBase {
             return targetAngle.minus(Rotation2d.fromDegrees(360));
         } else if (isUnderMinimumAngle(targetAngle)) {
             return targetAngle.plus(Rotation2d.fromDegrees(360));
-        } else return targetAngle;
+        }
+        return targetAngle;
     }
 
     private static boolean isOverMaximumAngle(Rotation2d targetAngle) {
