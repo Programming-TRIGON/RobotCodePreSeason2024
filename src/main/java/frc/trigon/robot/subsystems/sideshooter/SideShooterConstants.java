@@ -17,17 +17,15 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 public class SideShooterConstants {
-    private static final int SHOOTING_MOTOR_ID = 0;
-    private static final int ANGLE_MOTOR_ID = 0;
-    private static final int ENCODER_ID = 0;
+    private static final int SHOOTING_MOTOR_ID = 0, ANGLE_MOTOR_ID = 0, ENCODER_ID = 0;
     private static final double ANGLE_ENCODER_OFFSET = 0;
     private static final CANSparkMax.IdleMode ANGLE_MOTOR_IDLE_MODE = CANSparkMax.IdleMode.kBrake;
     private static final AbsoluteSensorRangeValue ANGLE_ENCODER_VALUE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
     private static final SensorDirectionValue ANGLE_ENCODER_SENSOR_DIRECTION = SensorDirectionValue.CounterClockwise_Positive;
     private static final InvertedValue SHOOTER_INVERTED_VALUE = InvertedValue.CounterClockwise_Positive;
+    private static final boolean ANGLE_MOTOR_INVERTED = false;
     private static final NeutralModeValue SHOOTING_NEUTRAL_MODE_VALUE = NeutralModeValue.Coast;
     private static final double VOLTAGE_COMPENSATION_SATURATION = 12;
-    private static final boolean ANGLE_MOTOR_INVERTED = false;
     static final TalonFX SHOOTING_MOTOR = new TalonFX(SHOOTING_MOTOR_ID);
     static final CANSparkMax ANGLE_MOTOR = new CANSparkMax(ANGLE_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless);
     private static final CANcoder ANGLE_ENCODER = new CANcoder(ENCODER_ID);
@@ -56,9 +54,7 @@ public class SideShooterConstants {
             ANGLE_MOTOR_KS, ANGLE_MOTOR_KG, ANGLE_MOTOR_KV, ANGLE_MOTOR_KA
     );
 
-    static final StatusSignal<Double>
-            ANGLE_ENCODER_POSITION_SIGNAL = ANGLE_ENCODER.getPosition();
-    static final StatusSignal<Double> ANGLE_ENCODER_VELOCITY_SIGNAL = ANGLE_ENCODER.getVelocity();
+    static final StatusSignal<Double> ANGLE_ENCODER_POSITION_SIGNAL = ANGLE_ENCODER.getPosition(), ANGLE_ENCODER_VELOCITY_SIGNAL = ANGLE_ENCODER.getVelocity();
 
     static {
         configureAngleEncoder();
@@ -89,6 +85,7 @@ public class SideShooterConstants {
         configureAngleMotor.MagnetSensor.MagnetOffset = ANGLE_ENCODER_OFFSET;
         configureAngleMotor.MagnetSensor.SensorDirection = ANGLE_ENCODER_SENSOR_DIRECTION;
         ANGLE_ENCODER.getConfigurator().apply(configureAngleMotor);
+
         ANGLE_ENCODER_VELOCITY_SIGNAL.setUpdateFrequency(100);
         ANGLE_ENCODER_POSITION_SIGNAL.setUpdateFrequency(100);
         ANGLE_ENCODER.optimizeBusUtilization();
