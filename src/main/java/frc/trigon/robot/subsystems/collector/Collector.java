@@ -1,15 +1,13 @@
 package frc.trigon.robot.subsystems.collector;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.trigon.robot.utilities.CurrentWatcher;
+import org.littletonrobotics.junction.Logger;
 
 public class Collector extends SubsystemBase {
     private final static Collector INSTANCE = new Collector();
-    private final TalonSRX motor = CollectorConstants.MOTOR;
+    private final CollectorInputsAutoLogged collectorInputs = new CollectorInputsAutoLogged();
+    private final CollectorIO collectorIO = CollectorIO.generateIO();
 
     public static Collector getInstance() {
         return INSTANCE;
@@ -19,22 +17,20 @@ public class Collector extends SubsystemBase {
         startCurrentWatcher();
     }
 
-    public Command getSetTargetStateCommand(CollectorConstants.CollectorStates state) {
-        return new StartEndCommand(
-                () -> motor.set(ControlMode.PercentOutput, state.power),
-                () -> {},
-                this
-        );
+    @Override
+    public void periodic() {
+        collectorIO.updateInputs(collectorInputs);
+        Logger.processInputs("Collector", collectorInputs);
     }
 
-    private void stop() {
-        motor.set(ControlMode.Disabled, 0);
+    void setPower(double power) {
+        collectorIO.setPower(power);
     }
 
-    private void startCurrentWatcher(){
+    private void startCurrentWatcher() {
         new CurrentWatcher(
-                this::stop,
-                motor::getSupplyCurrent,
+                collectorIO::stop,
+                () -> collectorInputs.motorCurrent,
                 CollectorConstants.MAX_CURRENT,
                 CollectorConstants.MAX_CURRENT_TIME
         );
