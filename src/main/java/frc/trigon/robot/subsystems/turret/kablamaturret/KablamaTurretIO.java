@@ -9,7 +9,7 @@ import frc.trigon.robot.subsystems.turret.TurretInputsAutoLogged;
 
 public class KablamaTurretIO extends TurretIO {
     private final TalonFX motor = KablamaTurretConstants.MOTOR;
-    private final MotionMagicVoltage PositionVoltageRequest = new MotionMagicVoltage(0).withEnableFOC(KablamaTurretConstants.FOC_ENABLED);
+    private final MotionMagicVoltage positionVoltageRequest = new MotionMagicVoltage(0).withEnableFOC(KablamaTurretConstants.FOC_ENABLED);
 
     @Override
     protected void updateInputs(TurretInputsAutoLogged inputs) {
@@ -20,7 +20,7 @@ public class KablamaTurretIO extends TurretIO {
 
     @Override
     protected void setTargetAngle(Rotation2d targetAngle) {
-        motor.setControl(PositionVoltageRequest.withPosition(targetAngle.getRotations()));
+        motor.setControl(positionVoltageRequest.withPosition(targetAngle.getRotations()));
     }
 
     @Override

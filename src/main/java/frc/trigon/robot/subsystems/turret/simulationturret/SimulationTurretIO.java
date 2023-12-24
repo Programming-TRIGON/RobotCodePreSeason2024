@@ -42,8 +42,9 @@ public class SimulationTurretIO extends TurretIO {
     }
 
     private double calculateTargetAngle(Rotation2d targetAngle) {
-        double pidOutput = SimulationTurretConstants.PROFILED_PID_CONTROLLER.calculate((targetAngle.getRotations()));
-        double feedforwardOutput = SimulationTurretConstants.FEEDFORWARD.calculate(Units.radiansToRotations(motor.getAngularVelocityRadPerSec()));
+        SimulationTurretConstants.PROFILED_PID_CONTROLLER.setGoal(targetAngle.getRotations());
+        double pidOutput = SimulationTurretConstants.PROFILED_PID_CONTROLLER.calculate(targetAngle.getRotations());
+        double feedforwardOutput = SimulationTurretConstants.FEEDFORWARD.calculate(targetAngle.getRotations());
         return pidOutput + feedforwardOutput;
     }
 }
