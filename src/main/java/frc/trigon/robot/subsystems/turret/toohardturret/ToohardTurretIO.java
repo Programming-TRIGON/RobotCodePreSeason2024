@@ -15,13 +15,13 @@ public class ToohardTurretIO extends TurretIO {
     @Override
     protected void updateInputs(TurretInputsAutoLogged inputs) {
         inputs.motorVoltage = MOTOR_VOLTAGE_STATUS_SIGNAL.refresh().getValue();
-        inputs.motorAngleDegrees = ToohardTurretConstants.ENCODER_POSITION_SIGNAL_DEGREES.refresh().getValue();
-        inputs.motorVelocityDegreesPerSecond = ToohardTurretConstants.ENCODER_VELOCITY_SIGNAL_DEGREES_PER_SECOND.refresh().getValue();
+        inputs.motorAngleDegrees = ToohardTurretConstants.ENCODER_POSITION_SIGNAL.refresh().getValue();
+        inputs.motorVelocityDegreesPerSecond = ToohardTurretConstants.ENCODER_VELOCITY_SIGNAL.refresh().getValue();
     }
 
     @Override
-    protected void setTargetAngleDegrees(Rotation2d targetAngle) {
-        motor.setControl(positionRequest.withPosition(targetAngle.getDegrees()));
+    protected void setTargetAngle(Rotation2d targetAngle) {
+        motor.setControl(positionRequest.withPosition(targetAngle.getRotations()));
     }
 
     @Override

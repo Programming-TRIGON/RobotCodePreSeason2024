@@ -31,8 +31,8 @@ public class ToohardTurretConstants {
     static final CANcoder ENCODER = new CANcoder(ENCODER_ID);
 
     static final StatusSignal<Double>
-            ENCODER_POSITION_SIGNAL_DEGREES = ENCODER.getPosition(),
-            ENCODER_VELOCITY_SIGNAL_DEGREES_PER_SECOND = ENCODER.getVelocity();
+            ENCODER_POSITION_SIGNAL = ENCODER.getPosition(),
+            ENCODER_VELOCITY_SIGNAL = ENCODER.getVelocity();
 
     static final double
             MOTION_MAGIC_JERK = 2,
@@ -77,7 +77,7 @@ public class ToohardTurretConstants {
         config.MagnetSensor.AbsoluteSensorRange = ENCODER_SENSOR_RANGE_VALUE;
         ENCODER.getConfigurator().apply(config);
 
-        ENCODER_POSITION_SIGNAL_DEGREES.setUpdateFrequency(ENCODER_VELOCITY_SIGNAL_DEGREES_PER_SECOND.refresh().getValue());
+        ENCODER_POSITION_SIGNAL.setUpdateFrequency(ENCODER_VELOCITY_SIGNAL.refresh().getValue());
         ENCODER.optimizeBusUtilization();
     }
 }

@@ -18,7 +18,7 @@ public class TurretIO {
     protected void updateInputs(TurretInputsAutoLogged inputs) {
     }
 
-    protected void setTargetAngleDegrees(Rotation2d targetAngle) {
+    protected void setTargetAngle(Rotation2d targetAngle) {
     }
 
     protected void stop() {

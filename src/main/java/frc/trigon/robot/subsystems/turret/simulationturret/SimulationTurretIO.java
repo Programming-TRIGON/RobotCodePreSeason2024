@@ -24,8 +24,8 @@ public class SimulationTurretIO extends TurretIO {
     }
 
     @Override
-    protected void setTargetAngleDegrees(Rotation2d targetAngle) {
-        setMotorVoltageFromPower(calculateMotorPower(targetAngle));
+    protected void setTargetAngle(Rotation2d targetAngle) {
+        setMotorVoltageFromPower(calculateMotorVoltage(targetAngle));
     }
 
     @Override
@@ -33,16 +33,16 @@ public class SimulationTurretIO extends TurretIO {
         setMotorVoltageFromPower(0);
     }
 
-    private double calculateMotorPower(Rotation2d targetAngle) {
+    private double calculateMotorVoltage(Rotation2d targetAngle) {
         double pidOutput = SimulationTurretConstants.PROFILED_PID_CONTROLLER.calculate(targetAngle.getRotations());
-        double motorVelocityDegrees = Units.radiansToDegrees(motor.getAngularVelocityRadPerSec());
-        double feedforward = SimulationTurretConstants.FEEDFORWARD.calculate(Conversions.degreesToRevolutions(motorVelocityDegrees), SimulationTurretConstants.PROFILED_PID_CONTROLLER.getGoal().velocity);
+        SimulationTurretConstants.PROFILED_PID_CONTROLLER.setGoal(0);
+        double feedforward = SimulationTurretConstants.FEEDFORWARD.calculate(SimulationTurretConstants.PROFILED_PID_CONTROLLER.getGoal().velocity);
         return pidOutput + feedforward;
     }
 
     private void setMotorVoltageFromPower(double power) {
         motorVoltage = MathUtil.clamp(
-                power * SimulationTurretConstants.VOLTAGE_COMPENSATION_SATURATION,
+                Conversions.compensatedPowerToVoltage(power, SimulationTurretConstants.VOLTAGE_COMPENSATION_SATURATION),
                 -SimulationTurretConstants.VOLTAGE_COMPENSATION_SATURATION,
                 SimulationTurretConstants.VOLTAGE_COMPENSATION_SATURATION
         );

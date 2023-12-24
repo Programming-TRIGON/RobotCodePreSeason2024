@@ -26,7 +26,7 @@ public class Turret extends SubsystemBase {
 
     void alignToHub(Pose2d robotPosition) {
         Rotation2d targetAngle = calculateDegreesToHub(robotPosition);
-        turretIO.setTargetAngleDegrees(limitAngle(targetAngle));
+        turretIO.setTargetAngle(limitAngle(targetAngle));
     }
 
     Rotation2d calculateDegreesToHub(Pose2d robotPosition) {
