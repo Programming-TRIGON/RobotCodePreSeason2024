@@ -66,8 +66,8 @@ public class ArmConstants {
             MAX_ELEVATOR_VELOCITY = 600,
             MAX_ELEVATOR_ACCELERATION = 500;
     static final TrapezoidProfile.Constraints
-            ANGLE_CONSTRAINTS = new TrapezoidProfile.Constraints(MAX_ANGLE_VELOCITY,MAX_ANGLE_ACCELERATION),
-            ELEVATOR_CONSTRAINTS = new TrapezoidProfile.Constraints(MAX_ELEVATOR_VELOCITY,MAX_ELEVATOR_ACCELERATION);
+            ANGLE_CONSTRAINTS = new TrapezoidProfile.Constraints(MAX_ANGLE_VELOCITY, MAX_ANGLE_ACCELERATION),
+            ELEVATOR_CONSTRAINTS = new TrapezoidProfile.Constraints(MAX_ELEVATOR_VELOCITY, MAX_ELEVATOR_ACCELERATION);
     static final StatusSignal<Double> ANGEL_ENCODER_POSITION_SIGNAL = ANGLE_ENCODER.getPosition();
     static final StatusSignal<Double> ANGLE_ENCODER_VELOCITY_SIGNAL = ANGLE_ENCODER.getVelocity();
 
@@ -81,8 +81,9 @@ public class ArmConstants {
             ELEVATOR_MOTOR_KA = 0.5990,
             ELEVATOR_MOTOR_KG = 0.5990;
     static final ArmFeedforward
-            ANGLE_MOTOR_FEEDFORWARD = new ArmFeedforward(ANGLE_MOTOR_KS, ANGLE_MOTOR_KG, ANGLE_MOTOR_KV, ANGLE_MOTOR_KA ),
-            ELEVATOR_MOTOR_FEEDFORWARD = new ArmFeedforward(ELEVATOR_MOTOR_KS, ELEVATOR_MOTOR_KG, ELEVATOR_MOTOR_KV, ELEVATOR_MOTOR_KA );
+            ANGLE_MOTOR_FEEDFORWARD = new ArmFeedforward(ANGLE_MOTOR_KS, ANGLE_MOTOR_KG, ANGLE_MOTOR_KV, ANGLE_MOTOR_KA),
+            ELEVATOR_MOTOR_FEEDFORWARD = new ArmFeedforward(ELEVATOR_MOTOR_KS, ELEVATOR_MOTOR_KG, ELEVATOR_MOTOR_KV, ELEVATOR_MOTOR_KA);
+
     private static void configureMasterAngleMotor() {
         MASTER_ANGLE_MOTOR.restoreFactoryDefaults();
         MASTER_ANGLE_MOTOR.setIdleMode(MASTER_ANGLE_MOTOR_IDLE_MODE);
@@ -145,11 +146,11 @@ public class ArmConstants {
         HIGH(Rotation2d.fromDegrees(60), 45);
 
         final Rotation2d angle;
-        final double elevatorPosition;
+        final double elevatorPositionMeters;
 
-        ArmState(Rotation2d angle, double elevatorPosition) {
+        ArmState(Rotation2d angle, double elevatorPositionMeters) {
             this.angle = angle;
-            this.elevatorPosition = elevatorPosition;
+            this.elevatorPositionMeters = elevatorPositionMeters;
         }
     }
 }

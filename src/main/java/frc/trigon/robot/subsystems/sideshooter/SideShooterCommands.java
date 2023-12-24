@@ -15,7 +15,7 @@ public class SideShooterCommands {
             );
         }
         return new SequentialCommandGroup(
-                getSetTargetShooterAngleCommand(targetAngle).until(()-> SIDE_SHOOTER.ifGotToAngle(targetAngle.getDegrees())),
+                getSetTargetShooterAngleCommand(targetAngle).until(()-> SIDE_SHOOTER.atAngle(Rotation2d.fromRadians(targetAngle.getDegrees()))),
                 getSetTargetShootingVoltageCommand(targetVoltage)
         );
     }

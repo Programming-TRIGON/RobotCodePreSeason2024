@@ -20,8 +20,8 @@ public class ArmCommands {
 
     public static Command getSetTargetArmElevatorCommand(Rotation2d targetAngle) {
         return new FunctionalCommand(
-                () -> ARM.generateAngleMotorProfile(targetAngle),
-                () -> ARM.setTargetAngleFromProfile(),
+                () -> ARM.generateElevatorMotorProfile(targetAngle),
+                () -> ARM.setTargetElevatorFromProfile(),
                 (interrupted) -> {
                 },
                 () -> false,

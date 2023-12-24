@@ -16,11 +16,9 @@ public class SideShooter extends SubsystemBase {
     private final CANSparkMax angleMotor = SideShooterConstants.ANGLE_MOTOR;
     private final CANcoder angleEncoder = SideShooterConstants.ANGLE_ENCODER;
 
-    private final VoltageOut shootingVoltageRequest = new VoltageOut(0, SideShooterConstants.FOC_ENABLED, false);
-
+    private static final VoltageOut driveVoltageRequest = new VoltageOut(0).withEnableFOC(SideShooterConstants.FOC_ENABLED);
     private TrapezoidProfile
             angleMotorProfile = null;
-
     private double lastAngleMotorProfileGenerationTime;
 
     public static SideShooter getInstance() {
@@ -30,11 +28,8 @@ public class SideShooter extends SubsystemBase {
     private SideShooter() {
     }
 
-    boolean ifGotToAngle(double atAngle){
-        if (Math.abs(atAngle - getAnglePosition().getDegrees()) <= 1){
-            return true;
-        };
-        return false;
+    boolean atAngle(Rotation2d atAngle){
+        return Math.abs(atAngle.getDegrees() - getAnglePosition().getDegrees()) <= 1;
     }
 
     void generateAngleMotorProfile(Rotation2d targetAngle) {
@@ -57,7 +52,7 @@ public class SideShooter extends SubsystemBase {
     }
 
     void setTargetShootingVoltage(double targetVoltage) {
-        shootingMotor.setControl(shootingVoltageRequest.withOutput(targetVoltage));
+        shootingMotor.setControl(driveVoltageRequest.withOutput(targetVoltage));
     }
 
     void stopAngleMotor() {
