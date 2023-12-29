@@ -14,6 +14,7 @@ import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import frc.trigon.robot.utilities.Conversions;
 
 public class ArmConstants {
     private static final double VOLTAGE_COMPENSATION_SATURATION = 12;
@@ -83,10 +84,9 @@ public class ArmConstants {
             ANGLE_CONSTRAINS = new TrapezoidProfile.Constraints(MAX_ANGLE_VELOCITY, MAX_ANGLE_ACCELERATION),
             ELEVATOR_CONSTRAINS = new TrapezoidProfile.Constraints(MAX_ELEVATOR_VELOCITY, MAX_ELEVATOR_ACCELERATION);
 
-
     static final StatusSignal<Double>
-            ANGLE_MOTOR_POSITION_SIGNAL = ANGLE_ENCODER.getPosition(),
-            ANGLE_MOTOR_VELOCITY_SIGNAL = ANGLE_ENCODER.getVelocity();
+            ANGLE_POSITION_SIGNAL = ANGLE_ENCODER.getPosition(),
+            ANGLE_VELOCITY_SIGNAL = ANGLE_ENCODER.getVelocity();
 
     static {
         configureAngleMotors();
@@ -112,7 +112,7 @@ public class ArmConstants {
     private static void configureElevatorEncoder() {
         ELEVATOR_ENCODER.configFactoryDefault();
         ELEVATOR_ENCODER.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0, 10);
-        ELEVATOR_ENCODER.setSelectedSensorPosition(ELEVATOR_ENCODER.getSelectedSensorPosition() - ELEVATOR_ENCODER_OFFSET);
+        ELEVATOR_ENCODER.setSelectedSensorPosition(Conversions.offsetRead(ELEVATOR_ENCODER.getSelectedSensorPosition() - ELEVATOR_ENCODER_OFFSET, ELEVATOR_ENCODER_OFFSET));
         ELEVATOR_ENCODER.setSensorPhase(ELEVATOR_ENCODER_PHASE);
     }
 
@@ -136,8 +136,9 @@ public class ArmConstants {
         configureAngleEncoder.MagnetSensor.AbsoluteSensorRange = ANGLE_ENCODER_SENSOR_RANGE;
         configureAngleEncoder.MagnetSensor.SensorDirection = ANGLE_ENCODER_SENSOR_DIRECTION;
         ANGLE_ENCODER.getConfigurator().apply(configureAngleEncoder);
-        ANGLE_MOTOR_POSITION_SIGNAL.setUpdateFrequency(111);
-        ANGLE_MOTOR_VELOCITY_SIGNAL.setUpdateFrequency(111);
+
+        ANGLE_POSITION_SIGNAL.setUpdateFrequency(111);
+        ANGLE_VELOCITY_SIGNAL.setUpdateFrequency(111);
         ANGLE_ENCODER.optimizeBusUtilization();
     }
 
@@ -147,10 +148,10 @@ public class ArmConstants {
         THIRD_STATE(Rotation2d.fromDegrees(100), 3);
 
         final Rotation2d angle;
-        final double elevatorPosition;
+        final double elevatorPositionMeters;
 
         ArmState(Rotation2d angle, double elevatorPosition) {
-            this.elevatorPosition = elevatorPosition;
+            this.elevatorPositionMeters = elevatorPosition;
             this.angle = angle;
         }
     }

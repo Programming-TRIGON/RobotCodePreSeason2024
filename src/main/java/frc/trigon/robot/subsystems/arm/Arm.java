@@ -35,35 +35,7 @@ public class Arm extends SubsystemBase {
     private Arm() {
     }
 
-    public Command getSetTargetArmStateCommand(ArmConstants.ArmState targetState) {
-        return new DeferredCommand(
-                () -> getSetTargetArmStateCommand(targetState.elevatorPosition, targetState.angle, 100, 100),
-                Set.of(this)
-        );
-    }
-
-    public Command getSetTargetArmStateCommand(ArmConstants.ArmState targetState, double angleSpeedPercentage, double elevatorSpeedPercentage) {
-        return new DeferredCommand(
-                () -> getSetTargetArmStateCommand(targetState.elevatorPosition, targetState.angle, angleSpeedPercentage, elevatorSpeedPercentage),
-                Set.of(this)
-        );
-    }
-
-    public Command getSetTargetArmStateCommand(double elevatorPosition, Rotation2d angle, double angleSpeedPercentage, double elevatorSpeedPercentage) {
-        return new DeferredCommand(
-                () -> getCurrentSetTargetStateCommand(elevatorPosition, angle, angleSpeedPercentage, elevatorSpeedPercentage),
-                Set.of(this)
-        );
-    }
-
-    public Command getSetTargetArmPositionCommand(double elevatorPosition, Rotation2d angle) {
-        return new DeferredCommand(
-                () -> getCurrentSetTargetStateCommand(elevatorPosition, angle, 100, 100),
-                Set.of(this)
-                );
-    }
-
-    private Command getCurrentSetTargetStateCommand(double elevatorPosition, Rotation2d angle, double angleSpeedPercentage, double elevatorSpeedPercentage) {
+    Command getCurrentSetTargetStateCommand(double elevatorPosition, Rotation2d angle, double angleSpeedPercentage, double elevatorSpeedPercentage) {
         if (isElevatorOpening(elevatorPosition)) {
             return new SequentialCommandGroup(
                     getSetTargetAngleCommand(angle, angleSpeedPercentage),
@@ -168,7 +140,7 @@ public class Arm extends SubsystemBase {
     }
 
     private double getAngleVelocityDegreesPerSecond() {
-        double positionRevolutions = ArmConstants.ANGLE_MOTOR_VELOCITY_SIGNAL.refresh().getValue();
+        double positionRevolutions = ArmConstants.ANGLE_VELOCITY_SIGNAL.refresh().getValue();
         return Conversions.revolutionsToDegrees(positionRevolutions);
     }
 
@@ -178,7 +150,7 @@ public class Arm extends SubsystemBase {
     }
 
     private Rotation2d getAnglePosition() {
-        double positionRevolutions = ArmConstants.ANGLE_MOTOR_POSITION_SIGNAL.refresh().getValue();
+        double positionRevolutions = ArmConstants.ANGLE_POSITION_SIGNAL.refresh().getValue();
         return Rotation2d.fromRotations(positionRevolutions);
     }
 
