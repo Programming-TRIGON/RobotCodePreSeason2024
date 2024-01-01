@@ -41,15 +41,15 @@ public class ArmConstants {
     private static final AbsoluteSensorRangeValue ANGLE_ENCODER_RANGE_VALUE = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
     static final CANSparkMax
             MASTER_ELEVATOR_MOTOR = new CANSparkMax(MASTER_ELEVATOR_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless),
-            FOLLOWER_ELEVATOR_MOTOR = new CANSparkMax(FOLLOWER_ANGLE_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless),
+            FOLLOWER_ELEVATOR_MOTOR = new CANSparkMax(FOLLOWER_ELEVATOR_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless),
             MASTER_ANGLE_MOTOR = new CANSparkMax(MASTER_ANGLE_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless),
-            FOLLOWER_ANGLE_MOTOR = new CANSparkMax(FOLLOWER_ELEVATOR_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless);
+            FOLLOWER_ANGLE_MOTOR = new CANSparkMax(FOLLOWER_ANGLE_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless);
     static final CANcoder ANGLE_ENCODER = new CANcoder(ANGLE_ENCODER_ID);
     static final WPI_TalonSRX ELEVATOR_ENCODER = new WPI_TalonSRX(ELEVATOR_ENCODER_ID);
     static final double ELEVATOR_METERS_PER_REVOLUTION = 1;
     static final double
             ANGLE_TOLERANCE_DEGREES = 1,
-            ELEVATOR_TOLERANCE_DEGREES = 1;
+            ELEVATOR_TOLERANCE_METERS = 1;
 
     private static final double
             MAX_ELEVATOR_VELOCITY = 0,
@@ -84,10 +84,10 @@ public class ArmConstants {
             ANGLE_D
     ),
             ELEVATOR_PID_CONTROLLER = new PIDController(
-            ELEVATOR_P,
-            ELEVATOR_I,
-            ELEVATOR_D
-    );
+                    ELEVATOR_P,
+                    ELEVATOR_I,
+                    ELEVATOR_D
+            );
 
     private static final double
             ANGLE_MOTOR_KS = 0,

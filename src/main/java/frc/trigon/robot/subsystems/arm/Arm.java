@@ -13,9 +13,9 @@ public class Arm extends SubsystemBase {
     private final static Arm INSTANCE = new Arm();
     private final CANSparkMax
             masterElevatorMotor = ArmConstants.MASTER_ELEVATOR_MOTOR,
-            followerElevatorMotor = ArmConstants.MASTER_ELEVATOR_MOTOR,
+            followerElevatorMotor = ArmConstants.FOLLOWER_ELEVATOR_MOTOR,
             masterAngleMotor = ArmConstants.MASTER_ELEVATOR_MOTOR,
-            followerAngleMotor = ArmConstants.MASTER_ELEVATOR_MOTOR;
+            followerAngleMotor = ArmConstants.FOLLOWER_ANGLE_MOTOR;
     private final TalonSRX elevatorEncoder = ArmConstants.ELEVATOR_ENCODER;
     private TrapezoidProfile
             angleMotorProfile = null,
@@ -53,8 +53,7 @@ public class Arm extends SubsystemBase {
 
     void setTargetAngleFromProfile() {
         if (angleMotorProfile == null) {
-            masterAngleMotor.stopMotor();
-            followerAngleMotor.stopMotor();
+            stopAngleMotors();
             return;
         }
 
@@ -64,8 +63,7 @@ public class Arm extends SubsystemBase {
 
     void setTargetElevatorPositionFromProfile() {
         if (angleMotorProfile == null) {
-            masterElevatorMotor.stopMotor();
-            followerElevatorMotor.stopMotor();
+            stopElevatorMotors();
             return;
         }
 
@@ -78,7 +76,7 @@ public class Arm extends SubsystemBase {
     }
 
     boolean atElevatorMeters(double PositionMeters) {
-        return Math.abs(PositionMeters - getElevatorPositionMeters()) < ArmConstants.ELEVATOR_TOLERANCE_DEGREES;
+        return Math.abs(PositionMeters - getElevatorPositionMeters()) < ArmConstants.ELEVATOR_TOLERANCE_METERS;
     }
 
     boolean isElevatorOpening(double targetMeters) {
@@ -151,5 +149,15 @@ public class Arm extends SubsystemBase {
 
     private double getElevatorProfileTime() {
         return Timer.getFPGATimestamp() - lastElevatorMotorProfileGeneration;
+    }
+
+    private void stopElevatorMotors() {
+        masterElevatorMotor.stopMotor();
+        followerElevatorMotor.stopMotor();
+    }
+
+    private void stopAngleMotors() {
+        masterAngleMotor.stopMotor();
+        followerAngleMotor.stopMotor();
     }
 }

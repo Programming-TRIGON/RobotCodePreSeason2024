@@ -15,27 +15,27 @@ public class ArmCommands {
         return getSetTargetPositionCommand(state.angle, state.elevatorPositionMeters, 100, 100);
     }
 
-    public static Command getsetTargetStateCommand(ArmConstants.ArmState state, double elevatorSpeedPercentages, double angleSpeedPercentages) {
-        return getSetTargetPositionCommand(state.angle, state.elevatorPositionMeters, elevatorSpeedPercentages, angleSpeedPercentages);
+    public static Command getsetTargetStateCommand(ArmConstants.ArmState state, double elevatorSpeedPercentage, double angleSpeedPercentage) {
+        return getSetTargetPositionCommand(state.angle, state.elevatorPositionMeters, elevatorSpeedPercentage, angleSpeedPercentage);
     }
 
     public static Command getSetTargetPositionCommand(Rotation2d targetAngle, double targetElevatorPositionMeters) {
         return getSetTargetPositionCommand(targetAngle, targetElevatorPositionMeters, 100, 100);
     }
 
-    public static Command getSetTargetPositionCommand(Rotation2d targetAngle, double targetElevatorPositionMeters, double elevatorSpeedPercentages, double angleSpeedPercentages) {
-        return new DeferredCommand(() -> getSetCurrentTargetPositionCommand(targetAngle, targetElevatorPositionMeters, elevatorSpeedPercentages, angleSpeedPercentages), Set.of());
+    public static Command getSetTargetPositionCommand(Rotation2d targetAngle, double targetElevatorPositionMeters, double elevatorSpeedPercentage, double angleSpeedPercentage) {
+        return new DeferredCommand(() -> getSetCurrentTargetPositionCommand(targetAngle, targetElevatorPositionMeters, elevatorSpeedPercentage, angleSpeedPercentage), Set.of());
     }
 
-    public static Command getSetCurrentTargetPositionCommand(Rotation2d targetAngle, double targetElevatorPositionMeters, double elevatorSpeedPercentages, double angleSpeedPercentage) {
+    public static Command getSetCurrentTargetPositionCommand(Rotation2d targetAngle, double targetElevatorPositionMeters, double elevatorSpeedPercentage, double angleSpeedPercentage) {
         if (ARM.isElevatorOpening(targetElevatorPositionMeters)) {
             return new SequentialCommandGroup(
                     getSetTargetAngleCommand(targetAngle, angleSpeedPercentage).until(() -> ARM.atAngle(targetAngle)),
-                    getSetTargetElevatorPositionCommand(targetElevatorPositionMeters, elevatorSpeedPercentages)
+                    getSetTargetElevatorPositionCommand(targetElevatorPositionMeters, elevatorSpeedPercentage)
             );
         }
         return new SequentialCommandGroup(
-                getSetTargetElevatorPositionCommand(targetElevatorPositionMeters, elevatorSpeedPercentages).until(() -> ARM.atElevatorMeters(targetElevatorPositionMeters)),
+                getSetTargetElevatorPositionCommand(targetElevatorPositionMeters, elevatorSpeedPercentage).until(() -> ARM.atElevatorMeters(targetElevatorPositionMeters)),
                 getSetTargetAngleCommand(targetAngle, angleSpeedPercentage)
         );
     }
