@@ -46,6 +46,7 @@ public class ArmConstants {
             FOLLOWER_ANGLE_MOTOR = new CANSparkMax(FOLLOWER_ANGLE_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless);
     static final CANcoder ANGLE_ENCODER = new CANcoder(ANGLE_ENCODER_ID);
     static final WPI_TalonSRX ELEVATOR_ENCODER = new WPI_TalonSRX(ELEVATOR_ENCODER_ID);
+
     static final double ELEVATOR_METERS_PER_REVOLUTION = 1;
     static final double
             ANGLE_TOLERANCE_DEGREES = 1,
@@ -76,7 +77,6 @@ public class ArmConstants {
             ELEVATOR_P = 0,
             ELEVATOR_I = 0,
             ELEVATOR_D = 0;
-
     static final PIDController
             ANGLE_PID_CONTROLLER = new PIDController(
             ANGLE_P,
