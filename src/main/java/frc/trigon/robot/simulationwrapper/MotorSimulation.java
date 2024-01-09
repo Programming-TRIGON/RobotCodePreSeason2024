@@ -1,43 +1,27 @@
 package frc.trigon.robot.simulationwrapper;
 
-import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
-import frc.trigon.robot.subsystems.turret.simulationturret.SimulationTurretConstants;
-import frc.trigon.robot.utilities.Conversions;
 
-public class DCMotorSimulation {
+public class MotorSimulation {
     public DCMotorSim motorSim;
-    public TrapezoidProfile.Constraints constraints = new TrapezoidProfile.Constraints(0, 0);
-    private ProfiledPIDController pid;
-    private SimpleMotorFeedforward feedforward;
+    public TrapezoidProfile.Constraints constraints;
+    public ProfiledPIDController profiledPIDController;
+    public PIDController pidController;
+    public SimpleMotorFeedforward feedforward;
 
-    public void setPID(double p, double i, double d) {
-        pid = new ProfiledPIDController(p, i, d, constraints);
+    public void applyConfigurations(MotorSimulationConfiguration config) {
+        if (config.maxVelocity > 0 && config.maxAcceleration > 0)
+            this.constraints = new TrapezoidProfile.Constraints(config.maxVelocity, config.maxAcceleration);
+        else
+            this.constraints = new TrapezoidProfile.Constraints(0, 0);
+        this.pidController = new PIDController(config.p, config.i, config.d);
+        this.profiledPIDController = new ProfiledPIDController(config.p, config.i, config.d, constraints);
     }
 
-    public void setFeedforward(double kS, double kV, double kA) {
-        feedforward = new SimpleMotorFeedforward(kS, kV, kA);
-    }
-
-    public double calculateTargetMotorVoltage(Rotation2d targetAngle) {
-        double pidOutput = pid.calculate(targetAngle.getRotations());
-        pid.setGoal(0);
-        double feedforward = pid.calculate(pid.getGoal().velocity);
-        return pidOutput + feedforward;
-    }
-
-    public void setMotorVoltageFromPower(double power) {
-        double motorVoltage = MathUtil.clamp(
-                Conversions.compensatedPowerToVoltage(power, SimulationTurretConstants.VOLTAGE_COMPENSATION_SATURATION),
-                -SimulationTurretConstants.VOLTAGE_COMPENSATION_SATURATION,
-                SimulationTurretConstants.VOLTAGE_COMPENSATION_SATURATION
-        );
-        motorSim.setInputVoltage(motorVoltage);
-    }
     /*public static DCMotorSim MOTOR;
     public static TrapezoidProfile.Constraints CONSTRAINTS;
     public static ProfiledPIDController PROFILED_PID_CONTROLLER;
